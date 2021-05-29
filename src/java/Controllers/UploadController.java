@@ -2,8 +2,6 @@ package Controllers;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +16,9 @@ public class UploadController {
     private String basementDirectory;
 
     public UploadController() {
-        // String rootDirectory = new File("").getAbsolutePath();
-        if (getApplicationHostName().equals("LAPTOP")) {
-            this.basementDirectory = "C:\\Users\\Michail Sitmalidis\\berishvili";
-        } else {
-              this.basementDirectory = "/home/admin/basement";
-        }
+        BasementController basementController = new BasementController();
+        this.basementDirectory = basementController.getBasementDirectory();
+
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.GET)
@@ -33,8 +28,7 @@ public class UploadController {
 
     @RequestMapping(value = "/savefile", method = RequestMethod.POST)
     public ModelAndView upload(@RequestParam CommonsMultipartFile file, HttpSession session) {
-        String filename = file.getOriginalFilename();
-        System.out.println(this.basementDirectory + "/uploads" + filename);
+        String filename = "uploadedExcelFile.xlsx";
         try {
             byte barr[] = file.getBytes();
 
@@ -43,37 +37,12 @@ public class UploadController {
             bout.write(barr);
             bout.flush();
             bout.close();
-            /*
-            File folder = new File(userDirectory);
-            File[] listOfFiles = folder.listFiles();
 
-            for (File fileItem : listOfFiles) {
-                if (fileItem.isFile()) {
-                    System.out.println(fileItem.getName());
-                }
-            }
-             */
         } catch (Exception e) {
             System.out.println(e);
             return new ModelAndView("upload-success", "uploadStatus", "Upload could not been completed:" + e);
         }
         return new ModelAndView("upload-success", "uploadStatus", "Upload completed");
-    }
-
-    private String getApplicationHostName() {
-        InetAddress ip;
-        String hostname = "Ν/Α";
-        try {
-            ip = InetAddress.getLocalHost();
-            hostname = ip.getHostName();
-            System.out.println("Your current IP address : " + ip);
-            System.out.println("Your current Hostname : " + hostname);
-
-        } catch (UnknownHostException e) {
-
-            e.printStackTrace();
-        }
-        return hostname;
     }
 
 }

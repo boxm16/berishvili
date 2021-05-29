@@ -1,8 +1,6 @@
 package Controllers;
 
 import java.io.File;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,21 +11,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class TechController {
 
     private String basementDirectory;
+    private BasementController basementController;
 
     public TechController() {
-        String rootDirectory = new File("").getAbsolutePath();
-        if (getApplicationHostName().equals("LAPTOP")) {
-            this.basementDirectory = "C:\\Users\\Michail Sitmalidis\\berishvili";
-        } else {
-            this.basementDirectory = "/home/admin/basement";
-        }
+        this.basementController = new BasementController();
+        this.basementDirectory = basementController.getBasementDirectory();
     }
 
     @RequestMapping(value = "/techMan")
     public String rerouteToTechManJsp(ModelMap model) {
         Boolean uploadsDirectoryExists = uploadsDirectoryExists();
         //  ArrayList uploadedFilesList = getUploadedFilesList();
-        String hostName = getApplicationHostName();
+        String hostName = this.basementController.getApplicationHostName();
         model.addAttribute("hostName", hostName);
         model.addAttribute("uploadsDirectoryExists", uploadsDirectoryExists);
         //model.addAttribute("uploadedFilesList", uploadedFilesList);
@@ -73,19 +68,4 @@ public class TechController {
         return files;
     }
 
-    private String getApplicationHostName() {
-        InetAddress ip;
-        String hostname = "Ν/Α";
-        try {
-            ip = InetAddress.getLocalHost();
-            hostname = ip.getHostName();
-            System.out.println("Your current IP address : " + ip);
-            System.out.println("Your current Hostname : " + hostname);
-
-        } catch (UnknownHostException e) {
-
-            e.printStackTrace();
-        }
-        return hostname;
-    }
 }

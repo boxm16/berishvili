@@ -1,186 +1,141 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Controllers;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
-import org.apache.poi.ooxml.util.SAXHelper;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.openxml4j.opc.PackageAccess;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.util.CellAddress;
-import org.apache.poi.ss.util.CellReference;
-import org.apache.poi.xssf.eventusermodel.ReadOnlySharedStringsTable;
+import org.apache.poi.util.XMLHelper;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
-import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler;
-import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler.SheetContentsHandler;
-import org.apache.poi.xssf.model.StylesTable;
-import org.apache.poi.xssf.usermodel.XSSFComment;
+import org.apache.poi.xssf.model.SharedStringsTable;
+import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
+/**
+ * XSSF and SAX (Event API) basic example. See {@link XLSX2CSV} for a fuller
+ * example of doing XSLX processing with the XSSF Event code.
+ */
+@SuppressWarnings({"java:S106", "java:S4823", "java:S1192"})
 public class ExcelReader {
 
-	private List<ExcelReader.Row> excelData;
-	private int minColumns;
-	private String excelFile;
+    private String cellLocation;
+    private String cellData;
+    private HashMap<String, String> cells = new HashMap();
 
-	public ExcelReader(String excelFile) {
-		this.excelFile = excelFile;
-	}
+    public HashMap<String, String> getCellsFromExcelFile(String filename) throws Exception {
+        try (OPCPackage pkg = OPCPackage.open(filename, PackageAccess.READ)) {
+            XSSFReader r = new XSSFReader(pkg);
+            SharedStringsTable sst = r.getSharedStringsTable();
 
-	public List<ExcelReader.Row> readExcel() throws Exception {
+            XMLReader parser = fetchSheetParser(sst);
+            // process the first sheet
+            try (InputStream sheet = r.getSheetsData().next()) {
+                InputSource sheetSource = new InputSource(sheet);
+                parser.parse(sheetSource);
+            }
+        }
+        return this.cells;
+    }
 
-		File xlsxFile = new File(excelFile);
-		if (!xlsxFile.exists()) {
-			throw new FileNotFoundException("Not found or not a file: " + xlsxFile.getPath());
-		}
+    public XMLReader fetchSheetParser(SharedStringsTable sst) throws SAXException, ParserConfigurationException {
+        XMLReader parser = XMLHelper.newXMLReader();
+        ContentHandler handler = new SheetHandler(sst);
+        parser.setContentHandler(handler);
+        return parser;
+    }
 
-		try (OPCPackage opcPackage = OPCPackage.open(xlsxFile.getPath(), PackageAccess.READ)) {
+    /**
+     * See org.xml.sax.helpers.DefaultHandler javadocs
+     */
+    private class SheetHandler extends DefaultHandler {
 
-			ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(opcPackage);
-			XSSFReader xssfReader = new XSSFReader(opcPackage);
-			StylesTable styles = xssfReader.getStylesTable();
-			XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();
+        private final SharedStringsTable sst;
+        private String lastContents;
+        private boolean nextIsString;
+        private boolean inlineStr;
 
-			// get the first sheet
-			if (iter.hasNext()) {
-				try (InputStream stream = iter.next()) {
+        private final LruCache<Integer, String> lruCache = new LruCache<>(50);
 
-					excelData = new ArrayList<>();
+        private class LruCache<A, B> extends LinkedHashMap<A, B> {
 
-					DataFormatter formatter = new DataFormatter();
-					InputSource sheetSource = new InputSource(stream);
-					try {
-						XMLReader sheetParser = SAXHelper.newXMLReader();
-						ContentHandler handler = new XSSFSheetXMLHandler(styles, null, strings, new SheetToCSV(),
-								formatter, false);
-						sheetParser.setContentHandler(handler);
-						sheetParser.parse(sheetSource);
-					} catch (ParserConfigurationException e) {
-						throw new RuntimeException("SAX parser appears to be broken - " + e.getMessage());
-					}
-				}//try
-			}//if
-		}//try
-		return excelData;
-	}
-	private class SheetToCSV implements SheetContentsHandler {
-		ExcelReader.Row rowData;
-		private int currentRow = -1;
-		private int currentCol = -1;
+            private final int maxEntries;
 
-		@Override
-		public void startRow(int rowNum) {
-			rowData = new ExcelReader.Row();
-			currentRow = rowNum;
-			currentCol = -1;
-		}
-		@Override
-		public void endRow(int rowNum) {
-			for (int i = currentCol; i < minColumns; i++) {
-				rowData.addCell(getBlankCell());
-			}
-			excelData.add(rowData);
-		}
-		@Override
-		public void cell(String cellReference, String formattedValue, XSSFComment comment) {
-			if (cellReference == null) {
-				cellReference = new CellAddress(currentRow, currentCol).formatAsString();
-			}
+            public LruCache(final int maxEntries) {
+                super(maxEntries + 1, 1.0f, true);
+                this.maxEntries = maxEntries;
 
-			int thisCol = (new CellReference(cellReference)).getCol();
-			int missedCols = thisCol - currentCol - 1;
-			for (int i = 0; i < missedCols; i++) {
-				rowData.addCell(getBlankCell());
-			}
-			currentCol = thisCol;
+            }
 
-			if (minColumns < currentCol) {
-				minColumns = currentCol;
-			}
-			rowData.addCell(getCell(formattedValue));
+            @Override
+            protected boolean removeEldestEntry(final Map.Entry<A, B> eldest) {
+                return super.size() > maxEntries;
+            }
+        }
 
-		}
-		@Override
-		public void headerFooter(String text, boolean isHeader, String tagName) {
-       			//codes for reading header/footer if required
-		}
-		private ExcelReader.Cell getCell(String formattedValue) {
+        private SheetHandler(SharedStringsTable sst) {
+            this.sst = sst;
+        }
 
-			ExcelReader.Cell cell;
+        @Override
+        public void startElement(String uri, String localName, String name,
+                Attributes attributes) throws SAXException {
+            // r => reference
+            /*
+            if (name.equals("row")) {
+                // System.out.print("row-");
+                //System.out.println(attributes.getValue("r"));
+            }*/
+            // c => cell
+            if (name.equals("c")) {
+                // Print the cell reference
+                //  System.out.print(attributes.getValue("r") + " - ");
+                cellLocation = attributes.getValue("r");
+                // Figure out if the value is an index in the SST
+                String cellType = attributes.getValue("t");
+                nextIsString = cellType != null && cellType.equals("s");
+                inlineStr = cellType != null && cellType.equals("inlineStr");
+            }
+            // Clear contents cache
+            lastContents = "";
 
-			if (isNumeric(formattedValue)) {
-				cell = new ExcelReader.Cell(CellType.NUMERIC, Double.parseDouble(formattedValue));
-			} else if (isBoolean(formattedValue)) {
-				cell = new ExcelReader.Cell(CellType.BOOLEAN, Boolean.parseBoolean(formattedValue));
-			} else {
-				cell = new ExcelReader.Cell(CellType.STRING, formattedValue);
-			}
+        }
 
-			return cell;
-		}
-		private boolean isNumeric(String value) {
-			try {
-				Double.parseDouble(value);
-				return true;
-			} catch (NumberFormatException e) {
-				return false;
-			}
-		}
-		private boolean isBoolean(String value) {
-			return value != null
-					&& Arrays.stream(new String[] { "true", "false" }).anyMatch(b -> b.equalsIgnoreCase(value));
-		}
-		private ExcelReader.Cell getBlankCell() {
-			return new ExcelReader.Cell(CellType.BLANK, null);
-		}
-	}
+        @Override
+        public void endElement(String uri, String localName, String name)
+                throws SAXException {
+            // Process the last contents as required.
+            // Do now, as characters() may be called more than once
+            if (nextIsString && !lastContents.trim().isEmpty()) {
+                Integer idx = Integer.valueOf(lastContents);
+                lastContents = lruCache.get(idx);
+                if (lastContents == null && !lruCache.containsKey(idx)) {
+                    lastContents = sst.getItemAt(idx).getString();
+                    lruCache.put(idx, lastContents);
+                }
+                nextIsString = false;
+            }
 
-	class Row {
-		private List<ExcelReader.Cell> cells;
+            // v => contents of a cell
+            // Output after we've seen the string contents
+            if (name.equals("v") || (inlineStr && name.equals("c"))) {
+                cellData = lastContents;
+                //adding cell to cel
+                cells.put(cellLocation, cellData);
+                // System.out.println(lastContents);
+            }
+        }
 
-		public Row() {
-			this.cells = new ArrayList<>();
-		}
-		public List<ExcelReader.Cell> getCells() {
-			return cells;
-		}
-		public void addCell(ExcelReader.Cell cell) {
-			cells.add(cell);
-		}
-	}
+        @Override
+        public void characters(char[] ch, int start, int length) throws SAXException { // NOSONAR
+            lastContents += new String(ch, start, length);
+        }
 
-	class Cell {
-		private CellType type;
-		private Object data;
+    }
 
-		public Cell(CellType type, Object data) {
-			super();
-			this.type = type;
-			this.data = data;
-		}
-		public CellType getType() {
-			return type;
-		}
-		public String getStringCellValue() {
-			return (String) data;
-		}
-		public double getNumericCellValue() {
-			return (double) data;
-		}
-		public boolean getBooleanCellValue() {
-			return (boolean) data;
-		}
-	}
 }

@@ -21,7 +21,6 @@ package Controllers;
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -52,7 +51,6 @@ public class FromHowTo {
             SharedStringsTable sst = r.getSharedStringsTable();
 
             XMLReader parser = fetchSheetParser(sst);
-
             // process the first sheet
             try (InputStream sheet = r.getSheetsData().next()) {
                 InputSource sheetSource = new InputSource(sheet);
@@ -105,6 +103,7 @@ public class FromHowTo {
             public LruCache(final int maxEntries) {
                 super(maxEntries + 1, 1.0f, true);
                 this.maxEntries = maxEntries;
+
             }
 
             @Override
@@ -123,7 +122,7 @@ public class FromHowTo {
             // c => cell
             if (name.equals("c")) {
                 // Print the cell reference
-                System.out.print(attributes.getValue("r") + " - ");
+                // System.out.print(attributes.getValue("r") + " - ");
                 // Figure out if the value is an index in the SST
                 String cellType = attributes.getValue("t");
                 nextIsString = cellType != null && cellType.equals("s");
@@ -151,7 +150,7 @@ public class FromHowTo {
             // v => contents of a cell
             // Output after we've seen the string contents
             if (name.equals("v") || (inlineStr && name.equals("c"))) {
-                System.out.println(lastContents);
+                //   System.out.println(lastContents);
             }
         }
 
@@ -161,5 +160,4 @@ public class FromHowTo {
         }
     }
 
-   
 }

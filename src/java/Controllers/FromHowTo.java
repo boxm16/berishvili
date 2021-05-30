@@ -22,6 +22,8 @@ package Controllers;
    limitations under the License.
 ==================================================================== */
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -44,6 +46,19 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 @SuppressWarnings({"java:S106", "java:S4823", "java:S1192"})
 public class FromHowTo {
+
+    private String cellLocation;
+    private String cellData;
+    private HashMap<String, String> data = new HashMap();
+    private ArrayList<String> dataList = new ArrayList();
+
+    public HashMap<String, String> getData() {
+        return this.data;
+    }
+
+    public ArrayList<String> getDataList() {
+        return this.dataList;
+    }
 
     public void processFirstSheet(String filename) throws Exception {
         try (OPCPackage pkg = OPCPackage.open(filename, PackageAccess.READ)) {
@@ -68,12 +83,12 @@ public class FromHowTo {
 
             Iterator<InputStream> sheets = r.getSheetsData();
             while (sheets.hasNext()) {
-                System.out.println("Processing new sheet:\n");
+                //   System.out.println("Processing new sheet:\n");
                 try (InputStream sheet = sheets.next()) {
                     InputSource sheetSource = new InputSource(sheet);
                     parser.parse(sheetSource);
                 }
-                System.out.println();
+                // System.out.println();
             }
         }
     }
@@ -124,12 +139,13 @@ public class FromHowTo {
             if (name.equals("row")) {
                 // System.out.print("row-");
                 //System.out.println(attributes.getValue("r"));
-              
+
             }
             // c => cell
             if (name.equals("c")) {
                 // Print the cell reference
-                System.out.print(attributes.getValue("r") + " - ");
+                cellLocation = attributes.getValue("r");
+                //  System.out.print(attributes.getValue("r") + " - ");
                 // Figure out if the value is an index in the SST
                 String cellType = attributes.getValue("t");
                 nextIsString = cellType != null && cellType.equals("s");
@@ -158,7 +174,10 @@ public class FromHowTo {
             // v => contents of a cell
             // Output after we've seen the string contents
             if (name.equals("v") || (inlineStr && name.equals("c"))) {
-                System.out.println(lastContents);
+                cellData = lastContents;
+                //data.put(cellLocation, cellData);
+                dataList.add(cellLocation + ":" + cellData);
+                // System.out.println(lastContents);
             }
         }
 

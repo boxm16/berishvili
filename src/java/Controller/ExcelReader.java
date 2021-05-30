@@ -1,4 +1,4 @@
-package Controllers;
+package Controller;
 
 import java.io.InputStream;
 import java.util.HashMap;

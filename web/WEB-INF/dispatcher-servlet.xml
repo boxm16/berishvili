@@ -24,7 +24,7 @@
     <mvc:annotation-driven/>
     <mvc:resources mapping="/resources/**" location="/resources/" />
     
-    <context:component-scan base-package="Controllers"/>
+    <context:component-scan base-package="Controller"/>
     <!-- this part is for uploading-->
     <bean id="multipartResolver"   
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/> 

@@ -19,10 +19,10 @@
         </jsp:text>
         <hr>
         <c:forEach items="${list}" var="student">
-            <p>${student}</p><br/>
-            <p>${student}</p><br/>
-            <p>${student}</p><br/>
-            <p>${student}</p><br/>
+            <p>${student}</p>
+            <p>${student}</p>
+            <p>${student}</p>
+            <p>${student}</p>
         </c:forEach>
     </body>
 </html>

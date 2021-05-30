@@ -1,4 +1,4 @@
-package Controllers;
+package Controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,13 +22,11 @@ public class ExcelController {
         } catch (Exception ex) {
             Logger.getLogger(ExcelController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(data.size());
-        System.out.println(data.get("E35"));
         int rowIndex = 10;
         ArrayList<String> list = new ArrayList();
         while (rowIndex < 60000) {
             String key = "E" + String.valueOf(rowIndex);
-          //  System.out.println(data.get(key));
+            //  System.out.println(data.get(key));
             list.add(data.get(key));
             rowIndex++;
         }

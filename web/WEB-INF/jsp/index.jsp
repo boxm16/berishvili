@@ -13,5 +13,7 @@
         <a href="upload.htm">Go to upload</a>
         <hr>
         <a href="techMan.htm">Go to TechMan</a>
+        <hr>
+        <a href="readUploadedExcelFile.htm">Read Uploaded Excel File</a>
     </body>
 </html>

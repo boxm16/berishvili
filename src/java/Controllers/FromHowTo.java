@@ -88,15 +88,16 @@ public class FromHowTo {
     /**
      * See org.xml.sax.helpers.DefaultHandler javadocs
      */
-    private static class SheetHandler extends DefaultHandler {
+    public class SheetHandler extends DefaultHandler {
 
         private final SharedStringsTable sst;
         private String lastContents;
         private boolean nextIsString;
         private boolean inlineStr;
+
         private final LruCache<Integer, String> lruCache = new LruCache<>(50);
 
-        private static class LruCache<A, B> extends LinkedHashMap<A, B> {
+        private class LruCache<A, B> extends LinkedHashMap<A, B> {
 
             private final int maxEntries;
 
@@ -119,10 +120,16 @@ public class FromHowTo {
         @Override
         public void startElement(String uri, String localName, String name,
                 Attributes attributes) throws SAXException {
+            // r => reference
+            if (name.equals("row")) {
+                // System.out.print("row-");
+                //System.out.println(attributes.getValue("r"));
+              
+            }
             // c => cell
             if (name.equals("c")) {
                 // Print the cell reference
-                // System.out.print(attributes.getValue("r") + " - ");
+                System.out.print(attributes.getValue("r") + " - ");
                 // Figure out if the value is an index in the SST
                 String cellType = attributes.getValue("t");
                 nextIsString = cellType != null && cellType.equals("s");
@@ -130,6 +137,7 @@ public class FromHowTo {
             }
             // Clear contents cache
             lastContents = "";
+
         }
 
         @Override
@@ -150,7 +158,7 @@ public class FromHowTo {
             // v => contents of a cell
             // Output after we've seen the string contents
             if (name.equals("v") || (inlineStr && name.equals("c"))) {
-                //   System.out.println(lastContents);
+                System.out.println(lastContents);
             }
         }
 
@@ -158,6 +166,7 @@ public class FromHowTo {
         public void characters(char[] ch, int start, int length) throws SAXException { // NOSONAR
             lastContents += new String(ch, start, length);
         }
+
     }
 
 }

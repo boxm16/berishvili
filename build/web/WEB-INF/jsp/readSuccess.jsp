@@ -18,12 +18,11 @@
             List Size : ${data.size()}
         </jsp:text>
         <hr>
-        <jsp:text>
-            List Size : ${data["A35"]}
-            List Size : ${data["B35"]}
-            List Size : ${data["c35"]}
-            List Size : ${data["D35"]}
-            List Size : ${data["E35"]}
-        </jsp:text>
+        <c:forEach items="${list}" var="student">
+            <p>${student}</p><br/>
+            <p>${student}</p><br/>
+            <p>${student}</p><br/>
+            <p>${student}</p><br/>
+        </c:forEach>
     </body>
 </html>

@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.Route;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -23,14 +24,13 @@ public class ExcelController {
             Logger.getLogger(ExcelController.class.getName()).log(Level.SEVERE, null, ex);
         }
         int rowIndex = 10;
-        ArrayList<String> list = new ArrayList();
+        ArrayList<Route> routes = new ArrayList();
         while (rowIndex < 60000) {
-            String key = "E" + String.valueOf(rowIndex);
-            //  System.out.println(data.get(key));
-            list.add(data.get(key));
+            String key = "H" + String.valueOf(rowIndex);
+
             rowIndex++;
         }
-        model.addAttribute("list", list);
+       // model.addAttribute("list", list);
         return "readSuccess";
     }
 }

@@ -1,11 +1,15 @@
 package Model;
 
-import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class Exodus {
 
     private short number;
-    private ArrayList<TripVoucher> tripVouchers;
+    private TreeMap<String, TripVoucher> tripVouchers;
+
+    public Exodus() {
+        this.tripVouchers = new TreeMap();
+    }
 
     public short getNumber() {
         return number;
@@ -15,11 +19,11 @@ public class Exodus {
         this.number = number;
     }
 
-    public ArrayList<TripVoucher> getTripVouchers() {
+    public TreeMap<String, TripVoucher> getTripVouchers() {
         return tripVouchers;
     }
 
-    public void setTripVouchers(ArrayList<TripVoucher> tripVouchers) {
+    public void setTripVouchers(TreeMap<String, TripVoucher> tripVouchers) {
         this.tripVouchers = tripVouchers;
     }
 

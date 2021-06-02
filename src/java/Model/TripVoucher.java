@@ -12,8 +12,8 @@ public class TripVoucher {
     private String notes;
     private ArrayList<TripPeriod> tripPeriods;
 
-    public TripVoucher(ArrayList tripPeriods) {
-        this.tripPeriods = tripPeriods;
+    public TripVoucher() {
+        this.tripPeriods = new ArrayList();
     }
 
     public String getNumber() {

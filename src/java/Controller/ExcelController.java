@@ -3,6 +3,7 @@ package Controller;
 import Model.Day;
 import Model.Exodus;
 import Model.Route;
+import Model.TripVoucher;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
@@ -62,31 +63,37 @@ public class ExcelController {
                 break;
             }
             Float routeNumberFloat = this.converter.convertRouteNumber(routeNumberString);
+            Route route = new Route();
             if (routes.containsKey(routeNumberFloat)) {
-                //add row items to existing route
-                Route route = routes.get(routeNumberFloat);
-                route = addRowElementsToRoute(route, data, rowIndex);
-                route.setNumber(routeNumberString);
-                routes.put(routeNumberFloat, route);
-
-            } else {
-                //create new route and insert into it items of the row, and add to routes
-                Route route = new Route();
-                route = addRowElementsToRoute(route, data, rowIndex);
-                route.setNumber(routeNumberString);
-                routes.put(routeNumberFloat, route);
-
+                route = routes.get(routeNumberFloat);
             }
+            route.setNumber(routeNumberString);
+            route = addRowElementsToRoute(route, data, rowIndex);
+            routes.put(routeNumberFloat, route);
             rowIndex++;
         }
 
         for (Map.Entry<Float, Route> routeEntry : routes.entrySet()) {
             Route route = routeEntry.getValue();
             System.out.println("RouteNumber:" + route);
+
             TreeMap<Date, Day> days = route.getDays();
             for (Map.Entry<Date, Day> dayEntry : days.entrySet()) {
                 Day day = dayEntry.getValue();
                 System.out.println("Date Stamp:" + day.getDateStamp());
+
+                TreeMap<Short, Exodus> exoduses = day.getExoduses();
+                for (Map.Entry<Short, Exodus> exodusEntry : exoduses.entrySet()) {
+                    Exodus exodus = exodusEntry.getValue();
+                    System.out.println("Exodus Number:" + exodus.getNumber());
+
+                    TreeMap<String, TripVoucher> tripVouchers = exodus.getTripVouchers();
+                    for (Map.Entry<String, TripVoucher> tripVoucherEntry : tripVouchers.entrySet()) {
+                        TripVoucher tripVoucher = tripVoucherEntry.getValue();
+                        System.out.println("TripVoucher Number:" + tripVoucher.getNumber());
+                    }
+                }
+
             }
         }
 
@@ -105,38 +112,29 @@ public class ExcelController {
         String dateStamp = this.converter.convertDateStampExcelFormatToDatabaseFormat(dateStampExcelFormat);
 
         TreeMap<Date, Day> days = route.getDays();
+        Day day = new Day();
         if (days.containsKey(date)) {
-            Day day = days.get(date);
-            day.setDateStamp(dateStamp);
-            day = addRowElementsToDay(day, data, rowIndex);
-            days.put(date, day);
-        } else {
-            Day day = new Day();
-            day.setDateStamp(dateStamp);
-            day = addRowElementsToDay(day, data, rowIndex);
-            days.put(date, day);
+            day = days.get(date);
         }
+        day.setDateStamp(dateStamp);
+        day = addRowElementsToDay(day, data, rowIndex);
+        days.put(date, day);
+
         route.setDays(days);
         return route;
     }
 
     private Day addRowElementsToDay(Day day, HashMap<String, String> data, int rowIndex) {
         String exodusNumberLocationInTheRow = new StringBuilder("I").append(String.valueOf(rowIndex)).toString();
-
         short exodusNumber = Float.valueOf(data.remove(exodusNumberLocationInTheRow)).shortValue();
         TreeMap<Short, Exodus> exoduses = day.getExoduses();
+        Exodus exodus = new Exodus();
         if (exoduses.containsKey(exodusNumber)) {
-            Exodus exodus = exoduses.get(exodusNumber);
-            exodus.setNumber(exodusNumber);
-            exodus = addRowElementsToExodus(exodus, data, rowIndex);
-            exoduses.put(exodusNumber, exodus);
-
-        } else {
-            Exodus exodus = new Exodus();
-            exodus.setNumber(exodusNumber);
-            exodus = addRowElementsToExodus(exodus, data, rowIndex);
-            exoduses.put(exodusNumber, exodus);
+            exodus = exoduses.get(exodusNumber);
         }
+        exodus.setNumber(exodusNumber);
+        exodus = addRowElementsToExodus(exodus, data, rowIndex);
+        exoduses.put(exodusNumber, exodus);
 
         day.setExoduses(exoduses);
 
@@ -144,7 +142,24 @@ public class ExcelController {
     }
 
     private Exodus addRowElementsToExodus(Exodus exodus, HashMap<String, String> data, int rowIndex) {
+        String tripVoucherNumberLocationInTheRow = new StringBuilder("G").append(String.valueOf(rowIndex)).toString();
+        String tripVoucherNumber = data.remove(tripVoucherNumberLocationInTheRow);
+        TreeMap<String, TripVoucher> tripVouchers = exodus.getTripVouchers();
+        TripVoucher tripVoucher = new TripVoucher();
+        if (tripVouchers.containsKey(tripVoucherNumber)) {
+            tripVoucher = tripVouchers.get(tripVoucherNumber);
+        }
+        tripVoucher.setNumber(tripVoucherNumber);
+        //add another elements
+        tripVoucher = addRowElementsToTripVoucher(tripVoucher, data, rowIndex);
+        tripVouchers.put(tripVoucherNumber, tripVoucher);
+        exodus.setTripVouchers(tripVouchers);
         return exodus;
+    }
+
+    private TripVoucher addRowElementsToTripVoucher(TripVoucher tripVoucher, HashMap<String, String> data, int rowIndex) {
+
+        return tripVoucher;
     }
 
 }

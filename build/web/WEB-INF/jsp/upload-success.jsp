@@ -14,7 +14,7 @@
     <body>
         <h1>
             <jsp:text>
-                Upload Status : ${uploadStatus}
+                Upload Status : ${uploadStatus};
             </jsp:text>
         </h1>  
     </body>

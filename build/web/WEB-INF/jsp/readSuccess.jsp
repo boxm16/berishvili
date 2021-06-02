@@ -15,14 +15,12 @@
     <body>
         <h1>Excel file has been read successfully</h1>
         <jsp:text>
-            List Size : ${data.size()}
+            Routes Size : ${routes.size()}
         </jsp:text>
         <hr>
-        <c:forEach items="${list}" var="student">
-            <p>${student}</p>
-            <p>${student}</p>
-            <p>${student}</p>
-            <p>${student}</p>
+        <c:forEach items="${routes.values()}" var="route">
+            <p>${route.number}</p>
+
         </c:forEach>
     </body>
 </html>

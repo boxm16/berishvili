@@ -2,17 +2,19 @@ package Controller;
 
 public class RouteNumberConverter {
 
-    public Double convertRouteNumber(String routeNumber) {
+    public float convertRouteNumber(String routeNumber) {
         if (routeNumber.contains("-")) {
-            routeNumber.replace("-", ".");
-            return Double.valueOf(routeNumber);
+           
+
+            routeNumber = routeNumber.replace("-", ".");
+            return Float.parseFloat(routeNumber);
 
         } else {
-            return Double.valueOf(routeNumber);
+            return Float.parseFloat(routeNumber);
         }
     }
 
-    public String convertRouteNumber(Double routeNumber) {
+    public String convertRouteNumber(float routeNumber) {
         if (routeNumber % 1 == 0) {
             int routeNumberInt = (int) Math.round(routeNumber);
             return String.valueOf(routeNumberInt);

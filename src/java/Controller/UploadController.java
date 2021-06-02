@@ -22,7 +22,7 @@ public class UploadController {
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.GET)
-    public String rerouteUploadReques() {
+    public String rerouteUploadRequest() {
         return "upload";
     }
 
@@ -42,7 +42,7 @@ public class UploadController {
             System.out.println(e);
             return new ModelAndView("upload-success", "uploadStatus", "Upload could not been completed:" + e);
         }
-        return new ModelAndView("upload-success", "uploadStatus", "Upload completed");
+        return new ModelAndView("upload-success", "uploadStatus", "Upload completed successfully");
     }
 
 }

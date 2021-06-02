@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.Day;
+import Model.Exodus;
 import Model.Route;
 import java.time.Duration;
 import java.time.Instant;
@@ -107,20 +108,43 @@ public class ExcelController {
         if (days.containsKey(date)) {
             Day day = days.get(date);
             day.setDateStamp(dateStamp);
-            day = addElementsToDay(day, data, rowIndex);
+            day = addRowElementsToDay(day, data, rowIndex);
             days.put(date, day);
         } else {
             Day day = new Day();
             day.setDateStamp(dateStamp);
-            day = addElementsToDay(day, data, rowIndex);
+            day = addRowElementsToDay(day, data, rowIndex);
             days.put(date, day);
         }
         route.setDays(days);
         return route;
     }
 
-    private Day addElementsToDay(Day day, HashMap<String, String> data, int rowIndex) {
+    private Day addRowElementsToDay(Day day, HashMap<String, String> data, int rowIndex) {
+        String exodusNumberLocationInTheRow = new StringBuilder("I").append(String.valueOf(rowIndex)).toString();
+
+        short exodusNumber = Float.valueOf(data.remove(exodusNumberLocationInTheRow)).shortValue();
+        TreeMap<Short, Exodus> exoduses = day.getExoduses();
+        if (exoduses.containsKey(exodusNumber)) {
+            Exodus exodus = exoduses.get(exodusNumber);
+            exodus.setNumber(exodusNumber);
+            exodus = addRowElementsToExodus(exodus, data, rowIndex);
+            exoduses.put(exodusNumber, exodus);
+
+        } else {
+            Exodus exodus = new Exodus();
+            exodus.setNumber(exodusNumber);
+            exodus = addRowElementsToExodus(exodus, data, rowIndex);
+            exoduses.put(exodusNumber, exodus);
+        }
+
+        day.setExoduses(exoduses);
+
         return day;
+    }
+
+    private Exodus addRowElementsToExodus(Exodus exodus, HashMap<String, String> data, int rowIndex) {
+        return exodus;
     }
 
 }

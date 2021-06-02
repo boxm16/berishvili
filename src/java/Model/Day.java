@@ -1,11 +1,15 @@
 package Model;
 
-import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class Day {
 
     private String dateStamp;
-    private ArrayList<Exodus> exoduses;
+    private TreeMap<Short, Exodus> exoduses;
+
+    public Day() {
+        this.exoduses = new TreeMap<>();
+    }
 
     public String getDateStamp() {
         return dateStamp;
@@ -15,11 +19,11 @@ public class Day {
         this.dateStamp = dateStamp;
     }
 
-    public ArrayList<Exodus> getExoduses() {
+    public TreeMap<Short, Exodus> getExoduses() {
         return exoduses;
     }
 
-    public void setExoduses(ArrayList<Exodus> exoduses) {
+    public void setExoduses(TreeMap<Short, Exodus> exoduses) {
         this.exoduses = exoduses;
     }
 

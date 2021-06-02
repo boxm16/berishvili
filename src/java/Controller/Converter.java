@@ -42,7 +42,7 @@ public class Converter {
     public String convertDateStampExcelFormatToDatabaseFormat(String excelFormatDateStamp) {
         try {
             Date date = new SimpleDateFormat("dd/MM/yyyy").parse(excelFormatDateStamp);
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             return dateFormat.format(date);
         } catch (ParseException ex) {
             Logger.getLogger(Converter.class.getName()).log(Level.SEVERE, null, ex);
@@ -52,13 +52,25 @@ public class Converter {
 
     public String convertDateStampDatabaseFormatToExcelFormat(String databaseFormatDateStamp) {
         try {
-            Date date = new SimpleDateFormat("yyyy-mm-dd").parse(databaseFormatDateStamp);
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(databaseFormatDateStamp);
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             return dateFormat.format(date);
         } catch (ParseException ex) {
             Logger.getLogger(Converter.class.getName()).log(Level.SEVERE, null, ex);
             return "";
         }
+    }
+
+    Date convertDateStampExcelFormatToDate(String dateStampExcelFormat) {
+        Date date;
+        try {
+            date = new SimpleDateFormat("dd/MM/yyyy").parse(dateStampExcelFormat);
+            return date;
+        } catch (ParseException ex) {
+            Logger.getLogger(Converter.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+
     }
 
 }

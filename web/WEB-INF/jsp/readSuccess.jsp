@@ -17,6 +17,7 @@
         <jsp:text>
             Routes Size : ${routes.size()}
         </jsp:text>
+
         <hr>
         <c:forEach items="${routes.values()}" var="route">
             <p>${route.number}</p>

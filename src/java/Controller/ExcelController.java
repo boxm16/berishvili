@@ -1,9 +1,12 @@
 package Controller;
 
+import Model.Day;
 import Model.Route;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,13 +39,10 @@ public class ExcelController {
             Logger.getLogger(ExcelController.class.getName()).log(Level.SEVERE, null, ex);
         }
         int rowIndex = 10;
-
         while (rowIndex < 60000) {
             String key = "H" + String.valueOf(rowIndex);
-
             rowIndex++;
         }
-
         Instant inst2 = Instant.now();
         System.out.println("Time needed for reading excel file and making routes for it: " + Duration.between(inst1, inst2).toString());
         model.addAttribute("data", data);//will be deleted later
@@ -79,6 +79,16 @@ public class ExcelController {
             rowIndex++;
         }
 
+        for (Map.Entry<Float, Route> routeEntry : routes.entrySet()) {
+            Route route = routeEntry.getValue();
+            System.out.println("RouteNumber:" + route);
+            TreeMap<Date, Day> days = route.getDays();
+            for (Map.Entry<Date, Day> dayEntry : days.entrySet()) {
+                Day day = dayEntry.getValue();
+                System.out.println("Date Stamp:" + day.getDateStamp());
+            }
+        }
+
         return routes;
     }
 
@@ -89,9 +99,28 @@ public class ExcelController {
         route.setBaseNumber(baseNumber);
         //now see the date
         String dateStampLocationInTheRow = new StringBuilder("F").append(String.valueOf(rowIndex)).toString();
-        String dateStamp = data.remove(dateStampLocationInTheRow);
+        String dateStampExcelFormat = data.remove(dateStampLocationInTheRow);
+        Date date = this.converter.convertDateStampExcelFormatToDate(dateStampExcelFormat);
+        String dateStamp = this.converter.convertDateStampExcelFormatToDatabaseFormat(dateStampExcelFormat);
 
+        TreeMap<Date, Day> days = route.getDays();
+        if (days.containsKey(date)) {
+            Day day = days.get(date);
+            day.setDateStamp(dateStamp);
+            day = addElementsToDay(day, data, rowIndex);
+            days.put(date, day);
+        } else {
+            Day day = new Day();
+            day.setDateStamp(dateStamp);
+            day = addElementsToDay(day, data, rowIndex);
+            days.put(date, day);
+        }
+        route.setDays(days);
         return route;
+    }
+
+    private Day addElementsToDay(Day day, HashMap<String, String> data, int rowIndex) {
+        return day;
     }
 
 }

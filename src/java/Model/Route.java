@@ -1,15 +1,16 @@
 package Model;
 
-import java.util.HashMap;
+import java.util.Date;
+import java.util.TreeMap;
 
 public class Route {
 
     private String number;
     private short baseNumber;
-    private HashMap<String, Day> days;
+    private TreeMap<Date, Day> days;
 
     public Route() {
-        days = new HashMap();
+        days = new TreeMap();
     }
 
     public String getNumber() {
@@ -28,11 +29,11 @@ public class Route {
         this.baseNumber = baseNumber;
     }
 
-    public HashMap<String, Day> getDays() {
+    public TreeMap<Date, Day> getDays() {
         return days;
     }
 
-    public void setDays(HashMap<String, Day> days) {
+    public void setDays(TreeMap<Date, Day> days) {
         this.days = days;
     }
 

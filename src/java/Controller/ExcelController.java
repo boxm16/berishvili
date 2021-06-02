@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ExcelController {
 
-    private RouteNumberConverter routeNumberConverter;
+    private Converter converter;
 
     public ExcelController() {
-        this.routeNumberConverter = new RouteNumberConverter();
+        this.converter = new Converter();
     }
 
     @RequestMapping(value = "readUploadedExcelFile")//request name will be changed
@@ -56,20 +56,22 @@ public class ExcelController {
         int rowIndex = 8;
         while (!data.isEmpty()) {
             String routeNumberLocationInTheRow = new StringBuilder("H").append(String.valueOf(rowIndex)).toString();
-            String routeNumberString = data.get(routeNumberLocationInTheRow);
+            String routeNumberString = data.remove(routeNumberLocationInTheRow);//at the same time reading and removing the cell from hash Map
             if (routeNumberString == null) {//in theory this means that you reached the end of rows with data
                 break;
             }
-            Float routeNumberFloat = this.routeNumberConverter.convertRouteNumber(routeNumberString);
+            Float routeNumberFloat = this.converter.convertRouteNumber(routeNumberString);
             if (routes.containsKey(routeNumberFloat)) {
                 //add row items to existing route
+                Route route = routes.get(routeNumberFloat);
+                route = addRowElementsToRoute(route, data, rowIndex);
+                route.setNumber(routeNumberString);
+                routes.put(routeNumberFloat, route);
+
             } else {
                 //create new route and insert into it items of the row, and add to routes
-
                 Route route = new Route();
-                String baseNumberLocationInTheRow = new StringBuilder("A").append(String.valueOf(rowIndex)).toString();
-                short baseNumber = Short.valueOf(data.get(baseNumberLocationInTheRow));
-                route.setBaseNumber(baseNumber);
+                route = addRowElementsToRoute(route, data, rowIndex);
                 route.setNumber(routeNumberString);
                 routes.put(routeNumberFloat, route);
 
@@ -78,6 +80,18 @@ public class ExcelController {
         }
 
         return routes;
+    }
+
+    private Route addRowElementsToRoute(Route route, HashMap<String, String> data, int rowIndex) {
+        //----first baseNumber
+        String baseNumberLocationInTheRow = new StringBuilder("A").append(String.valueOf(rowIndex)).toString();
+        short baseNumber = Short.valueOf(data.remove(baseNumberLocationInTheRow));
+        route.setBaseNumber(baseNumber);
+        //now see the date
+        String dateStampLocationInTheRow = new StringBuilder("F").append(String.valueOf(rowIndex)).toString();
+        String dateStamp = data.remove(dateStampLocationInTheRow);
+
+        return route;
     }
 
 }

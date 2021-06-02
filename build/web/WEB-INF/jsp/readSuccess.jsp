@@ -20,7 +20,6 @@
         <hr>
         <c:forEach items="${routes.values()}" var="route">
             <p>${route.number}</p>
-
         </c:forEach>
     </body>
 </html>

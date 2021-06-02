@@ -1,15 +1,15 @@
 package Model;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Route {
 
     private String number;
     private short baseNumber;
-    private ArrayList<Day> days;
+    private HashMap<String, Day> days;
 
     public Route() {
-        days = new ArrayList();
+        days = new HashMap();
     }
 
     public String getNumber() {
@@ -20,14 +20,6 @@ public class Route {
         this.number = number;
     }
 
-    public ArrayList<Day> getDays() {
-        return days;
-    }
-
-    public void setDays(ArrayList<Day> days) {
-        this.days = days;
-    }
-
     public short getBaseNumber() {
         return baseNumber;
     }
@@ -35,7 +27,13 @@ public class Route {
     public void setBaseNumber(short baseNumber) {
         this.baseNumber = baseNumber;
     }
-    
 
+    public HashMap<String, Day> getDays() {
+        return days;
+    }
+
+    public void setDays(HashMap<String, Day> days) {
+        this.days = days;
+    }
 
 }

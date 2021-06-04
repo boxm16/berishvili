@@ -8,6 +8,8 @@ package Controller;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,7 +63,7 @@ public class Converter {
         }
     }
 
-    Date convertDateStampExcelFormatToDate(String dateStampExcelFormat) {
+    public Date convertDateStampExcelFormatToDate(String dateStampExcelFormat) {
         Date date;
         try {
             date = new SimpleDateFormat("dd/MM/yyyy").parse(dateStampExcelFormat);
@@ -71,6 +73,29 @@ public class Converter {
             return null;
         }
 
+    }
+
+    public LocalDateTime convertStringTimeToDate(String stringTime) {
+        if (stringTime == null) {
+            return null;
+        }
+        SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("hh:mm");
+        String turnOverStringTime = "03:00";
+        Date dateTime = null;
+        try {
+            dateTime = dateTimeFormatter.parse(stringTime);
+            Date turnOverDateTime = dateTimeFormatter.parse(turnOverStringTime);
+            LocalDateTime localDateTime = dateTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            LocalDateTime turnOverLocalDateTime = turnOverDateTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            if (localDateTime.isAfter(turnOverLocalDateTime)) {
+                return localDateTime;
+            } else {
+                return localDateTime.plusDays(1);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

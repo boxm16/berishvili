@@ -1,16 +1,21 @@
 package Model;
 
+import java.time.LocalDateTime;
+
 public class TripPeriod {
 
     private String type;
-    private String startTimeScheduled;
-    private String startTimeActual;
+    private LocalDateTime startTimeScheduled;
+    private LocalDateTime startTimeActual;
     private String startTimeDifference;
-    private String arrivalTimeScheduled;
-    private String arrivalTimeActual;
+    private LocalDateTime arrivalTimeScheduled;
+    private LocalDateTime arrivalTimeActual;
     private String arrivalTimeDifference;
 
-    public TripPeriod(String type, String startTimeScheduled, String startTimeActual, String startTimeDifference, String arrivalTimeScheduled, String arrivalTimeActual, String arrivalTimeDifference) {
+    public TripPeriod() {
+    }
+
+    public TripPeriod(String type, LocalDateTime startTimeScheduled, LocalDateTime startTimeActual, String startTimeDifference, LocalDateTime arrivalTimeScheduled, LocalDateTime arrivalTimeActual, String arrivalTimeDifference) {
         this.type = type;
         this.startTimeScheduled = startTimeScheduled;
         this.startTimeActual = startTimeActual;
@@ -19,6 +24,7 @@ public class TripPeriod {
         this.arrivalTimeActual = arrivalTimeActual;
         this.arrivalTimeDifference = arrivalTimeDifference;
     }
+    
 
     public String getType() {
         return type;
@@ -28,19 +34,19 @@ public class TripPeriod {
         this.type = type;
     }
 
-    public String getStartTimeScheduled() {
+    public LocalDateTime getStartTimeScheduled() {
         return startTimeScheduled;
     }
 
-    public void setStartTimeScheduled(String startTimeScheduled) {
+    public void setStartTimeScheduled(LocalDateTime startTimeScheduled) {
         this.startTimeScheduled = startTimeScheduled;
     }
 
-    public String getStartTimeActual() {
+    public LocalDateTime getStartTimeActual() {
         return startTimeActual;
     }
 
-    public void setStartTimeActual(String startTimeActual) {
+    public void setStartTimeActual(LocalDateTime startTimeActual) {
         this.startTimeActual = startTimeActual;
     }
 
@@ -52,19 +58,19 @@ public class TripPeriod {
         this.startTimeDifference = startTimeDifference;
     }
 
-    public String getArrivalTimeScheduled() {
+    public LocalDateTime getArrivalTimeScheduled() {
         return arrivalTimeScheduled;
     }
 
-    public void setArrivalTimeScheduled(String arrivalTimeScheduled) {
+    public void setArrivalTimeScheduled(LocalDateTime arrivalTimeScheduled) {
         this.arrivalTimeScheduled = arrivalTimeScheduled;
     }
 
-    public String getArrivalTimeActual() {
+    public LocalDateTime getArrivalTimeActual() {
         return arrivalTimeActual;
     }
 
-    public void setArrivalTimeActual(String arrivalTimeActual) {
+    public void setArrivalTimeActual(LocalDateTime arrivalTimeActual) {
         this.arrivalTimeActual = arrivalTimeActual;
     }
 
@@ -75,5 +81,7 @@ public class TripPeriod {
     public void setArrivalTimeDifference(String arrivalTimeDifference) {
         this.arrivalTimeDifference = arrivalTimeDifference;
     }
+
+   
 
 }

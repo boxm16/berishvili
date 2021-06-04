@@ -39,6 +39,7 @@ public class ExcelController {
             ExcelReader excelReader = new ExcelReader();
             data = excelReader.getCellsFromExcelFile(filePath);
             routes = convertExcelDataToRoutes(data);
+            data = null;//well we dotn have destructor in java, and i just dont need this thing anymore, i`m not waiting for garbage collector
         } catch (Exception ex) {
             Logger.getLogger(ExcelController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -51,6 +52,8 @@ public class ExcelController {
         System.out.println("Time needed for reading excel file and making routes for it: " + Duration.between(inst1, inst2).toString());
         model.addAttribute("data", data);//will be deleted later
         model.addAttribute("routes", routes);
+        MemoryUsage mu=new MemoryUsage();
+        mu.showMemoryUsage();
         return "readSuccess";
     }
 

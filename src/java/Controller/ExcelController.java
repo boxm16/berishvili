@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ExcelController {
 
     private Converter converter;
+    private MemoryUsage mu;
 
     public ExcelController() {
         this.converter = new Converter();
+        this.mu = new MemoryUsage();
     }
 
     @RequestMapping(value = "readUploadedExcelFile")//request name will be changed
@@ -35,25 +37,39 @@ public class ExcelController {
         String filePath = basementController.getBasementDirectory() + "/uploads/uploadedExcelFile.xlsx";
         HashMap<String, String> data = new HashMap();
         TreeMap<Float, Route> routes = new TreeMap();
+
+        System.out.println();
+        System.out.println("----- MEMORY USAGE ---BEFORE----  FILE READING---------");
+        mu.showMemoryUsage();
+        System.out.println("----END OF MEMORY USAGE ---BEFORE----  FILE READING---------");
+
         try {
             ExcelReader excelReader = new ExcelReader();
             data = excelReader.getCellsFromExcelFile(filePath);
             routes = convertExcelDataToRoutes(data);
-            data = null;//well we dotn have destructor in java, and i just dont need this thing anymore, i`m not waiting for garbage collector
         } catch (Exception ex) {
             Logger.getLogger(ExcelController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        int rowIndex = 10;
-        while (rowIndex < 60000) {
-            String key = "H" + String.valueOf(rowIndex);
-            rowIndex++;
+
+        //tring to deallocate memmory
+        /* for (Iterator<Map.Entry<String, String>> it = data.entrySet().iterator(); it.hasNext();) {
+            Map.Entry<String, String> entry = it.next();
+            entry = null;
         }
+        System.out.println("DATA size:" + data.size());
+        data = null;*/
+        //end of triaing
         Instant inst2 = Instant.now();
+        System.out.println();
         System.out.println("Time needed for reading excel file and making routes for it: " + Duration.between(inst1, inst2).toString());
+        System.out.println();
         model.addAttribute("data", data);//will be deleted later
         model.addAttribute("routes", routes);
-        MemoryUsage mu=new MemoryUsage();
+        System.out.println();
+        System.out.println("++++++++++++++++ MEMORY USAGE AFTER FILE READING+++++++++++");
         mu.showMemoryUsage();
+        System.out.println("++++++++++++++++END OF MEMORY USAGE AFTER FILE READING+++++++++++");
+
         return "readSuccess";
     }
 
@@ -75,6 +91,10 @@ public class ExcelController {
             route.setNumber(routeNumberString);
             route = addRowElementsToRoute(route, data, rowIndex);
             routes.put(routeNumberFloat, route);
+            if (rowIndex % 1000 == 0) {
+                System.out.print("RowIndex:" + rowIndex + " #");
+                mu.printMemoryUsage();
+            }
             rowIndex++;
         }
 

@@ -12,6 +12,7 @@
         <title>Tech Man Page</title>
     </head>
     <body>
+        <a hreflang="index.htm" >GO TO INDEX</a>
 
         <jsp:text>
             Uploads Directory Exists At Path  ${directoryPath}:  ${uploadsDirectoryExists} :
@@ -24,6 +25,11 @@
         <jsp:text>
             Host Name : ${hostName}
         </jsp:text>
+        <hr>
+        <form  action="runTest.htm" method="POST">
+            <input type="number" name="routesQuantity">
+            <input type="submit">
+        </form>
 
     </body>
 </html>

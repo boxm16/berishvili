@@ -52,6 +52,13 @@ public class TechController {
 
     }
 
+    @RequestMapping(value = "runTest", method = RequestMethod.POST)
+    public String runTest(ModelMap model, int routesQuantity) {
+        MemoryUsage mu = new MemoryUsage();
+        mu.runTest(routesQuantity);
+        return "techMan";
+    }
+
     private Boolean uploadsDirectoryExists() {
         File dir = new File(this.basementDirectory + "/uploads");
         // Tests whether the directory denoted by this abstract pathname exists.

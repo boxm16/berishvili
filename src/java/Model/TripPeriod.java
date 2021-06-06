@@ -1,6 +1,7 @@
 package Model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class TripPeriod {
 
@@ -24,7 +25,6 @@ public class TripPeriod {
         this.arrivalTimeActual = arrivalTimeActual;
         this.arrivalTimeDifference = arrivalTimeDifference;
     }
-    
 
     public String getType() {
         return type;
@@ -82,6 +82,15 @@ public class TripPeriod {
         this.arrivalTimeDifference = arrivalTimeDifference;
     }
 
-   
+    public String getStartTimeScheduledString() {
+        return startTimeScheduled.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    public String getStartTimeActualString() {
+        if (startTimeActual == null) {
+            return "";
+        }
+        return startTimeActual.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
 
 }

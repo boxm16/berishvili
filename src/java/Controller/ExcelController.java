@@ -365,4 +365,12 @@ public class ExcelController {
         return new TripPeriod(tripPeriodType, startTimeScheduled, startTimeActual, startTimeDifference, arrivalTimeScheduled, arrivalTimeActual, arrivalTimeDifference);
     }
 
+    //------------writing--------
+    @RequestMapping(value = "writeExcelFile")
+    public String writeExcelFile() {
+        ExcelWriter excelWriter = new ExcelWriter();
+        excelWriter.write();
+        return "index";
+    }
+
 }

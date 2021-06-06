@@ -21,10 +21,13 @@ public class TechController {
     @RequestMapping(value = "/techMan")
     public String rerouteToTechManJsp(ModelMap model) {
         Boolean uploadsDirectoryExists = uploadsDirectoryExists();
+        Boolean downloadsDirectoryExists = downloadsDirectoryExists();
         //  ArrayList uploadedFilesList = getUploadedFilesList();
         String hostName = this.basementController.getApplicationHostName();
         model.addAttribute("hostName", hostName);
         model.addAttribute("uploadsDirectoryExists", uploadsDirectoryExists);
+        model.addAttribute("downloadsDirectoryExists", downloadsDirectoryExists);
+
         //model.addAttribute("uploadedFilesList", uploadedFilesList);
         return "techMan";
     }
@@ -52,6 +55,28 @@ public class TechController {
 
     }
 
+    @RequestMapping(value = "createDownloadDirecotry", method = RequestMethod.GET)
+    public String createDownloadDirectory(ModelMap model) {
+        Boolean downloadsDirectoryExists = downloadsDirectoryExists();
+        if (downloadsDirectoryExists) {
+            model.addAttribute("downloadsDirectoryExists", downloadsDirectoryExists);
+            model.addAttribute("directoryPath", this.basementDirectory + "/downloads");
+            return "techMan";
+        }
+        //Creating a File object
+        File file = new File(this.basementDirectory + "/downloads");
+        //Creating the directory
+        boolean bool = file.mkdir();
+        System.out.println(bool);
+        String status = "Downloads directory could not been created.";
+        if (bool) {
+            status = "Downloads directroy has just been created";
+        }
+        model.addAttribute("downloadsDirectoryExists", status);
+        model.addAttribute("directoryPath", this.basementDirectory);
+        return "techMan";
+    }
+
     @RequestMapping(value = "runTest", method = RequestMethod.POST)
     public String runTest(ModelMap model, int routesQuantity) {
         MemoryUsage mu = new MemoryUsage();
@@ -73,6 +98,12 @@ public class TechController {
             files.add(file);
         }
         return files;
+    }
+
+    private Boolean downloadsDirectoryExists() {
+        File dir = new File(this.basementDirectory + "/downloads");
+        // Tests whether the directory denoted by this abstract pathname exists.
+        return dir.exists();
     }
 
 }

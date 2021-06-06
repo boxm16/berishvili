@@ -15,5 +15,7 @@
         <a href="techMan.htm">Go to TechMan</a>
         <hr>
         <a href="readUploadedExcelFile.htm">Read Uploaded Excel File</a>
+        <hr>
+        <a href="writeExcelFile.htm">Write Excel File</a>
     </body>
 </html>

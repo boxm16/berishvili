@@ -12,13 +12,19 @@
         <title>Tech Man Page</title>
     </head>
     <body>
-        <a hreflang="index.htm" >GO TO INDEX</a>
-
+        <a href="index.htm" >GO TO INDEX</a>
+        <hr>
         <jsp:text>
             Uploads Directory Exists At Path  ${directoryPath}:  ${uploadsDirectoryExists} :
         </jsp:text>
-        &nbsp; &nbsp;
         <a href="createUploadDirecotry.htm">Create Upload Directory</a>
+        <hr>
+        <jsp:text>
+            Downloads Directory Exists At Path  ${directoryPath}:  ${downloadsDirectoryExists} :
+        </jsp:text>
+        <a href="createDownloadDirecotry.htm">Create Download Directory</a>
+        &nbsp; &nbsp;
+
         <hr>
         ${uploadedFilesList}
         <hr>

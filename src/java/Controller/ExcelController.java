@@ -33,24 +33,13 @@ public class ExcelController {
     public String getRoutesFromUploadedFile(ModelMap model) {
         Instant inst1 = Instant.now();
 
-        BasementController basementController = new BasementController();
-        String filePath = basementController.getBasementDirectory() + "/uploads/uploadedExcelFile.xlsx";
-        HashMap<String, String> data = new HashMap();
         TreeMap<Float, Route> routes = new TreeMap();
 
         System.out.println();
         System.out.println("----- MEMORY USAGE ---BEFORE----  FILE READING---------");
         mu.showMemoryUsage();
         System.out.println("----END OF MEMORY USAGE ---BEFORE----  FILE READING---------");
-
-        try {
-            ExcelReader excelReader = new ExcelReader();
-            data = excelReader.getCellsFromExcelFile(filePath);
-            routes = convertExcelDataToRoutes(data);
-        } catch (Exception ex) {
-            Logger.getLogger(ExcelController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        routes = createRoutesFromUploadedFile();
         //tring to deallocate memmory
         /* for (Iterator<Map.Entry<String, String>> it = data.entrySet().iterator(); it.hasNext();) {
             Map.Entry<String, String> entry = it.next();
@@ -63,7 +52,6 @@ public class ExcelController {
         System.out.println();
         System.out.println("Time needed for reading excel file and making routes for it: " + Duration.between(inst1, inst2).toString());
         System.out.println();
-        model.addAttribute("data", data);//will be deleted later
         model.addAttribute("routes", routes);
         System.out.println();
         System.out.println("++++++++++++++++ MEMORY USAGE AFTER FILE READING+++++++++++");
@@ -71,6 +59,21 @@ public class ExcelController {
         System.out.println("++++++++++++++++END OF MEMORY USAGE AFTER FILE READING+++++++++++");
 
         return "readSuccess";
+    }
+
+    private TreeMap<Float, Route> createRoutesFromUploadedFile() {
+        TreeMap<Float, Route> routes = new TreeMap<>();
+        try {
+            HashMap<String, String> data = new HashMap();
+            BasementController basementController = new BasementController();
+            String filePath = basementController.getBasementDirectory() + "/uploads/uploadedExcelFile.xlsx";
+            ExcelReader excelReader = new ExcelReader();
+            data = excelReader.getCellsFromExcelFile(filePath);
+            routes = convertExcelDataToRoutes(data);
+        } catch (Exception ex) {
+            Logger.getLogger(ExcelController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return routes;
     }
 
     private TreeMap<Float, Route> convertExcelDataToRoutes(HashMap<String, String> data) {
@@ -369,7 +372,8 @@ public class ExcelController {
     @RequestMapping(value = "writeExcelFile")
     public String writeExcelFile() {
         ExcelWriter excelWriter = new ExcelWriter();
-        excelWriter.write();
+        TreeMap<Float, Route> routes = createRoutesFromUploadedFile();
+        excelWriter.write(routes);
         return "index";
     }
 

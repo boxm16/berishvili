@@ -5,92 +5,112 @@
  */
 package Controller;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import Model.Day;
+import Model.Route;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFDataFormat;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-/**
- *
- * @author Michail Sitmalidis
- */
 public class ExcelWriter {
-       private String basementDirectory;
-    private BasementController basementController;
+
+    private String basementDirectory;
 
     public ExcelWriter() {
-         this.basementController = new BasementController();
+        BasementController basementController = new BasementController();
         this.basementDirectory = basementController.getBasementDirectory();
-    }
-    
 
-    public void write() {
-        FileOutputStream outputStream = null;
-        try {
-            Workbook workbook = new XSSFWorkbook();
-            Sheet sheet = workbook.createSheet("Persons");
-            sheet.setColumnWidth(0, 6000);
-            sheet.setColumnWidth(1, 4000);
-            Row header = sheet.createRow(0);
-            CellStyle headerStyle = workbook.createCellStyle();
-            headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            XSSFFont font = ((XSSFWorkbook) workbook).createFont();
-            font.setFontName("Arial");
-            font.setFontHeightInPoints((short) 16);
-            font.setBold(true);
-            headerStyle.setFont(font);
-            Cell headerCell = header.createCell(0);
-            headerCell.setCellValue("Name");
-            headerCell.setCellStyle(headerStyle);
-            headerCell = header.createCell(1);
-            headerCell.setCellValue("Age");
-            headerCell.setCellStyle(headerStyle);
-            CellStyle style = workbook.createCellStyle();
-            style.setWrapText(true);
-            Row row = sheet.createRow(2);
-            Cell cell = row.createCell(0);
-            cell.setCellValue("John Smith");
+    }
+
+    public void write(TreeMap<Float, Route> routes) {
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("მარშრუტები");
+
+        XSSFDataFormat format = workbook.createDataFormat();
+        XSSFCellStyle style = workbook.createCellStyle();
+        style.setDataFormat(format.getFormat("Text"));
+
+        int rowIndex = 0;
+
+        for (Map.Entry<Float, Route> routeEntry : routes.entrySet()) {
+            Row row = sheet.createRow(rowIndex);
+            int columnIndex = 0;
+            float routeNumber = routeEntry.getKey();
+            Cell cell = row.createCell(columnIndex);
+
+            cell.setCellValue(routeNumber);
             cell.setCellStyle(style);
-            cell = row.createCell(1);
-            cell.setCellValue(20);
-            cell.setCellStyle(style);
-            BasementController basementController=new BasementController();
-            
-            File currDir = new File(".");
-            String path = currDir.getAbsolutePath();
-            String fileLocation = path.substring(0, path.length() - 1) + "temp.xlsx";
-            outputStream = new FileOutputStream(fileLocation);
-            try {
-                workbook.write(outputStream);
-            } catch (IOException ex) {
-                Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
+
+            Route route = routeEntry.getValue();
+            TreeMap<Date, Day> days = route.getDays();
+            for (Map.Entry<Date, Day> dayEntry : days.entrySet()) {
+                columnIndex++;
+                Date date = dayEntry.getKey();
+                cell = row.createCell(columnIndex);
+                cell.setCellValue(date.toString());
+                
+
             }
-            try {
-                workbook.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                outputStream.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            rowIndex++;
         }
+        /*
+        Workbook wb = new XSSFWorkbook();
+
+        Sheet sheet = wb.createSheet("format sheet");
+        CellStyle style;
+        DataFormat format = wb.createDataFormat();
+        Row row;
+        Cell cell;
+        short rowNum = 0;
+        short colNum = 0;
+
+        row = sheet.createRow(rowNum++);
+        cell = row.createCell(colNum);
+        cell.setCellValue(-337499.939437217); // general format
+
+        style = wb.createCellStyle();
+        style.setDataFormat(format.getFormat("#.###############")); // custom number format
+        row = sheet.createRow(rowNum++);
+        cell = row.createCell(colNum);
+        cell.setCellValue(-337499.939437217);
+        cell.setCellStyle(style);
+        
+        row = sheet.createRow(rowNum++);
+        cell = row.createCell(colNum);
+        cell.setCellValue(123.456789012345);
+        cell.setCellStyle(style);
+        
+        row = sheet.createRow(rowNum++);
+        cell = row.createCell(colNum);
+        cell.setCellValue(123456789.012345);
+        cell.setCellStyle(style);
+
+        style = wb.createCellStyle();
+        style.setDataFormat((short) 0x7); // builtin currency format
+        row = sheet.createRow(rowNum++);
+        cell = row.createCell(colNum);
+        cell.setCellValue(-1234.5678);
+        cell.setCellStyle(style);
+
+        sheet.autoSizeColumn(0);
+         */
+        Date date = new Date();
+        try (FileOutputStream outputStream = new FileOutputStream(this.basementDirectory + "/downloads/" + date.getTime() + ".xlsx")) {
+            workbook.write(outputStream);
+        } catch (IOException ex) {
+            Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
 }

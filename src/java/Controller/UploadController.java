@@ -40,7 +40,7 @@ public class UploadController {
 
         } catch (Exception e) {
             System.out.println(e);
-            return new ModelAndView("upload-success", "uploadStatus", "Upload could not been completed:" + e);
+            return new ModelAndView("guarantyTripsUploadPage", "uploadStatus", "Upload could not been completed:" + e);
         }
         return new ModelAndView("upload-success", "uploadStatus", "Upload completed successfully");
     }

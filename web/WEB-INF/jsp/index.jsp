@@ -19,5 +19,7 @@
         <a href="writeExcelFile.htm">Write Excel File</a>
         <hr>
         <a href="goDownloadsDirectory.htm">Go To Downloads Directory</a>
+        <hr>
+        <a href="guarantyTripsUploadPage.htm">Go To Guaranty Trips Upload Page</a>
     </body>
 </html>

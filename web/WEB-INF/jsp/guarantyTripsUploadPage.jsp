@@ -60,7 +60,7 @@
                     </form>
                     <center>
                         <c:if test = "${uploadedFileExists}">
-                            <a class="btn btn btn-outline-success" href="#" role="button">წინად ატვირთული ფაილის გამოყენება</a>
+                            <a class="btn btn btn-outline-success" href="gotGuarantyDashboard.htm" role="button">წინად ატვირთული ფაილის გამოყენება</a>
                         </c:if>
                     </center>
                 </div>

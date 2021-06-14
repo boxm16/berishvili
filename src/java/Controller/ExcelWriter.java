@@ -6,6 +6,7 @@
 package Controller;
 
 import Model.Day;
+import Model.GuarantyRoute;
 import Model.Route;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,8 +16,11 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFDataFormat;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -58,7 +62,6 @@ public class ExcelWriter {
                 Date date = dayEntry.getKey();
                 cell = row.createCell(columnIndex);
                 cell.setCellValue(date.toString());
-                
 
             }
             rowIndex++;
@@ -111,6 +114,36 @@ public class ExcelWriter {
             Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public void exportGuarantyRoutes(TreeMap<Float, GuarantyRoute> guarantyRoutes, String fileName) {
+        System.out.println(fileName);
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("საგარანტიო გასვლების ანალიზი");
+
+        int rowIndex = 0;
+        int columnIndex = 0;
+        sheet.addMergedRegion(new CellRangeAddress(0, 2, 0, 0));
+        Row row = sheet.createRow(rowIndex);
+        row.setHeightInPoints(50);
+        Cell cell = row.createCell(columnIndex);
+        cell.setCellValue("რიგითი №");
+
+        XSSFCellStyle style = workbook.createCellStyle();
+        style.setRotation((short) 90);
+        byte[] rgb = new byte[]{(byte) 222, (byte) 222, (byte) 222};
+        XSSFColor color = new XSSFColor(rgb, null); //IndexedColorMap has no usage until now. So it can be set null.
+
+        style.setFillForegroundColor(color);
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        cell.setCellStyle(style);
+
+        try (FileOutputStream outputStream = new FileOutputStream(this.basementDirectory + "/downloads/" + fileName + ".xlsx")) {
+            workbook.write(outputStream);
+        } catch (IOException ex) {
+            Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

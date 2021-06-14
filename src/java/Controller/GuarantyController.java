@@ -79,6 +79,10 @@ public class GuarantyController {
                     + "<a  href=\"guarantyTripsUploadPage.htm\">დაბრუნდი და ატვირთე ახალი ფაილი</a>");
 
         }
+        ExcelWriter excelWriter = new ExcelWriter();
+        excelWriter.exportGuarantyRoutes(guarantyRoutes, fileName);
+
+        model.addAttribute("fileName", fileName);
         return "guarantyTripsDashboard";
 
     }

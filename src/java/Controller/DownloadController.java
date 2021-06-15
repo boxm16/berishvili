@@ -3,6 +3,7 @@ package Controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.util.IOUtils;
@@ -41,15 +42,9 @@ public class DownloadController {
     }
 
     @RequestMapping(value = "downloadFile", method = RequestMethod.GET)
-    public void downloadRequestedFile(@RequestParam String fileIndex, HttpServletResponse response) {
-        int fileIndexInt = Integer.valueOf(fileIndex);
-        ArrayList<File> filesList = getDownloadsFilesURLList();
-        File file = filesList.get(fileIndexInt);
-        String path = file.getPath();
-        String fileName = path.substring(path.lastIndexOf('/') + 1);
-        if (this.basementController.getApplicationHostName().equals("LAPTOP")) {
-            fileName = path.substring(path.lastIndexOf('\\') + 1);
-        }
+    public void downloadRequestedFile(@RequestParam String fileName, HttpServletResponse response) {
+
+        File file = new File(this.basementDirectory + "/downloads/" + fileName);
         downloadFile(file, fileName, response);
     }
 
@@ -66,8 +61,13 @@ public class DownloadController {
     private void downloadFile(File file, String fileName, HttpServletResponse response) {
         try {
             InputStream inputStream = new FileInputStream(file);
-            response.setContentType("application/force-download");
-            response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+            //response.setContentType("application/force-download");
+            // response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+
+            response.setContentType("application/ms-excel; charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+
             IOUtils.copy(inputStream, response.getOutputStream());
             response.flushBuffer();
             inputStream.close();

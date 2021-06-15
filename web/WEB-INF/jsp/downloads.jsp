@@ -18,7 +18,7 @@
         </jsp:text>
         <hr>
         <c:forEach items="${downloadFilesList}" var="item" varStatus="theCount">
-            <a href="downloadFile.htm?fileIndex=${theCount.count-1}">${item}</a> <br>
+            <a href="downloadFile.htm?fileName=${item}">${item}</a> <br>
         </c:forEach>
 
     </body>

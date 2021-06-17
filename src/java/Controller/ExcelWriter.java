@@ -10,6 +10,7 @@ import Model.GuarantyRoute;
 import Model.Route;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
@@ -19,7 +20,9 @@ import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
@@ -127,6 +130,75 @@ public class ExcelWriter {
         int rowHeigth = 0;
         int columnWidth = 0;
 
+        //column width
+        //  sheet.setDefaultColumnWidth(2);
+        while (columnIndex < 20) {
+            switch (columnIndex) {
+                case 0:
+                    columnWidth = 1200;
+                    break;
+                case 1:
+                    columnWidth = 1200;
+                    break;
+                case 2:
+                    columnWidth = 1900;
+                    break;
+                case 3:
+                    columnWidth = 7000;
+                    break;
+                case 4:
+                    columnWidth = 3500;
+                    break;
+                case 5:
+                    columnWidth = 4500;
+                    break;
+                case 6:
+                    columnWidth = 2100;
+                    break;
+                case 7:
+                    columnWidth = 2100;
+                    break;
+                case 8:
+                    columnWidth = 2100;
+                    break;
+                case 9:
+                    columnWidth = 2100;
+                    break;
+                case 10:
+                    columnWidth = 2100;
+                    break;
+                case 11:
+                    columnWidth = 2100;
+                    break;
+                case 12:
+                    columnWidth = 2100;
+                    break;
+                case 13:
+                    columnWidth = 7000;
+                    break;
+                case 14:
+                    columnWidth = 2100;
+                    break;
+                case 15:
+                    columnWidth = 2100;
+                    break;
+                case 16:
+                    columnWidth = 7000;
+                    break;
+                case 17:
+                    columnWidth = 2100;
+                    break;
+                case 18:
+                    columnWidth = 2100;
+                    break;
+                case 19:
+                    columnWidth = 5000;
+                    break;
+            }
+            sheet.setColumnWidth(columnIndex, columnWidth);
+            columnIndex++;
+        }
+        //now headers
         //first header row
         Row headerRow1 = sheet.createRow(rowIndex);
         rowHeigth = 20;
@@ -135,122 +207,89 @@ public class ExcelWriter {
         XSSFCellStyle headerStyleVertical = getStyle(workbook, 221, 217, 195, 90);
         XSSFCellStyle headerStyleHorizontal = getStyle(workbook, 221, 217, 195, 0);
         XSSFCellStyle headerStyleHorizontalYellow = getStyle(workbook, 255, 255, 0, 0);
+
+        columnIndex = 0;
         while (columnIndex < 20) {
-
             Cell cell = headerRow1.createCell(columnIndex);
-
             switch (columnIndex) {
                 case 0:
                     cell.setCellValue("რიგითი №");
-
                     cell.setCellStyle(headerStyleVertical);
-                    columnWidth = 900;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
                     break;
                 case 1:
                     cell.setCellValue("ავტო ბაზა");
-
                     cell.setCellStyle(headerStyleVertical);
-                    columnWidth = 900;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
                     break;
                 case 2:
                     cell.setCellValue("მარშრუტის. № ");
                     cell.setCellStyle(headerStyleVertical);
-                    columnWidth = 900;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
                     break;
                 case 3:
                     cell.setCellValue("ავტობუსების მარშრუტების მოძრაობის სქემა");
                     cell.setCellStyle(headerStyleHorizontal);
-                    columnWidth = 9000;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
                     break;
                 case 4:
                     cell.setCellValue("მარშრუტის ბრუნის სიგრძე, კმ");
                     cell.setCellStyle(headerStyleVertical);
-                    columnWidth = 1300;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
                     break;
                 case 5:
                     cell.setCellValue("ავტობუსის ტიპი");
                     cell.setCellStyle(headerStyleVertical);
-                    columnWidth = 1300;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
                     break;
                 case 6:
                     cell.setCellValue("formula");
                     cell.setCellStyle(headerStyleHorizontalYellow);
-                    columnWidth = 1300;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     break;
                 case 7:
                     cell.setCellValue("ინტერვალი, წთ");
                     cell.setCellStyle(headerStyleVertical);
-                    columnWidth = 1300;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
 
                     break;
                 case 8:
                     cell.setCellValue("ბრუნის დრო");
                     cell.setCellStyle(headerStyleVertical);
-                    columnWidth = 1300;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
 
                     break;
                 case 9:
                     cell.setCellValue("ბრუნების ჯამური რაოდენობა");
                     cell.setCellStyle(headerStyleVertical);
-                    columnWidth = 1300;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
 
                     break;
                 case 10:
                     cell.setCellValue("დაწყების დრო");
                     cell.setCellStyle(headerStyleVertical);
-                    columnWidth = 1300;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
 
                     break;
                 case 11:
                     cell.setCellValue("დასრულების დრო");
                     cell.setCellStyle(headerStyleVertical);
-                    columnWidth = 1300;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
 
                     break;
                 case 12:
                     cell.setCellValue("ხაზზე დასრულების დრო");
                     cell.setCellStyle(headerStyleVertical);
-                    columnWidth = 1300;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
 
                     break;
                 case 13:
                     cell.setCellValue("საგარანტიო გასვლები");
                     cell.setCellStyle(headerStyleHorizontal);
-                    columnWidth = 1300;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 1, columnIndex, columnIndex + 5));
-
                     break;
                 case 19:
                     cell.setCellValue("შენიშვნა ");
                     cell.setCellStyle(headerStyleHorizontal);
-                    columnWidth = 1300;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
 
                     break;
@@ -287,34 +326,65 @@ public class ExcelWriter {
                 case 13:
                     cell.setCellValue("პუნქტი \"A\"");
                     cell.setCellStyle(headerStyleHorizontal);
-                    columnWidth = 1300;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     break;
                 case 14:
                     cell.setCellValue("გასვლები \"A\" პუნქტიდან");
                     cell.setCellStyle(headerStyleHorizontal);
-                    columnWidth = 1300;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
-                    // sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, columnIndex, columnIndex + 1));
+                    sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, columnIndex, columnIndex + 1));
                     break;
                 case 16:
                     cell.setCellValue("პუნქტი \"B\"");
                     cell.setCellStyle(headerStyleHorizontal);
-                    columnWidth = 1300;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
                     break;
                 case 17:
                     cell.setCellValue("გასვლები \"B\" პუნქტიდან");
                     cell.setCellStyle(headerStyleHorizontal);
-                    columnWidth = 1300;
-                    sheet.setColumnWidth(columnIndex, columnWidth);
-                    // sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, columnIndex, columnIndex + 1));
+                    sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, columnIndex, columnIndex + 1));
                     break;
                 default:
                     cell.setCellStyle(headerStyleHorizontal);
 
             }
             columnIndex++;
+        }
+        short AA = 0;
+
+        XSSFCellStyle rowStyleB = getStyle(workbook, 238, 236, 225, 0);
+        for (Map.Entry<Float, GuarantyRoute> entry : guarantyRoutes.entrySet()) {
+            GuarantyRoute guarantyRoute = entry.getValue();
+            Row row = sheet.createRow(++rowIndex);
+            Cell cell_0 = row.createCell(0);
+            cell_0.setCellValue(AA++);
+
+            Cell cell_1 = row.createCell(1);
+            cell_1.setCellValue(guarantyRoute.getBaseNumber());
+
+            Cell cell_2 = row.createCell(2);
+            cell_2.setCellValue(entry.getKey());
+
+            Cell cell_5 = row.createCell(5);
+            cell_5.setCellValue(guarantyRoute.getBusType());
+
+            Cell cell_6 = row.createCell(6);
+            cell_6.setCellValue(guarantyRoute.getBusCount());
+            cell_6.setCellStyle(rowStyleB);
+
+            Cell cell_14 = row.createCell(14);
+
+            XSSFCellStyle datetimeStyle = workbook.createCellStyle();
+            XSSFDataFormat fmt = workbook.createDataFormat();
+            datetimeStyle.setDataFormat(fmt.getFormat("[hh]:mm"));
+
+            LocalDateTime t = guarantyRoute.getAbGuarantyTripPeriodStartTimeScheduled();
+            long h = t.getHour();
+            long m = t.getMinute();
+            long s = t.getSecond();
+            double ss = (h * 3600) + (m * 60) + s;
+            System.out.println(ss);
+            System.out.println(ss/86400);
+            cell_14.setCellValue(ss / 86400);
+            cell_14.setCellStyle(datetimeStyle);
+
         }
 
         try (FileOutputStream outputStream = new FileOutputStream(this.basementDirectory + "/downloads/" + fileName + ".xlsx")) {
@@ -332,6 +402,11 @@ public class ExcelWriter {
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
         style.setRotation((short) rotation);
+
+        style.setWrapText(true);
+
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
 
         style.setBorderBottom(BorderStyle.THIN);
         style.setBorderTop(BorderStyle.THIN);

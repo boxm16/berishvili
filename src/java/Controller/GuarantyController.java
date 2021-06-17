@@ -1,8 +1,14 @@
 package Controller;
 
+import Model.GuarantyExodus;
 import Model.GuarantyRoute;
+import Model.GuarantyTripPeriod;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
 import java.util.TreeMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -79,11 +85,52 @@ public class GuarantyController {
                     + "<a  href=\"guarantyTripsUploadPage.htm\">დაბრუნდი და ატვირთე ახალი ფაილი</a>");
 
         }
+
+        //here we calculate given data to get some results inside guarantyRoutes
+        calculateData(guarantyRoutes);
+
+        //now write the results
         ExcelWriter excelWriter = new ExcelWriter();
         excelWriter.exportGuarantyRoutes(guarantyRoutes, fileName);
 
         model.addAttribute("fileName", fileName);
         return "guarantyTripsDashboard";
 
+    }
+
+    private void calculateData(TreeMap<Float, GuarantyRoute> guarantyRoutes) {
+        ArrayList<LocalDateTime> abTimeTable = new ArrayList();
+        ArrayList<LocalDateTime> baTimeTable = new ArrayList();
+        for (Map.Entry<Float, GuarantyRoute> routeEntry : guarantyRoutes.entrySet()) {
+
+            GuarantyRoute guarantyRoute = routeEntry.getValue();
+            TreeMap<Short, GuarantyExodus> exoduses = guarantyRoute.getExoduses();
+            for (Map.Entry<Short, GuarantyExodus> exodusEntry : exoduses.entrySet()) {
+                GuarantyExodus exodus = exodusEntry.getValue();
+                ArrayList<GuarantyTripPeriod> guarantyTripPeriods = exodus.getGuarantyTripPeriods();
+                for (GuarantyTripPeriod tripPeriod : guarantyTripPeriods) {
+                    String tripPeriodType = tripPeriod.getType();
+                    if (tripPeriodType.equals("ab")) {
+                        abTimeTable.add(tripPeriod.getStartTimeScheduled());
+                    }
+                    if (tripPeriodType.equals("ba")) {
+                        baTimeTable.add(tripPeriod.getStartTimeScheduled());
+                    }
+                }
+            }
+            Collections.sort(abTimeTable);
+            Collections.sort(baTimeTable);
+            if (abTimeTable.size() > 2) {
+                guarantyRoute.setAbGuarantyTripPeriodStartTimeScheduled(abTimeTable.get(abTimeTable.size() - 1));
+                guarantyRoute.setAbSubguarantyTripPeriodStartTimeScheduled(abTimeTable.get(abTimeTable.size() - 2));
+            }
+            if (baTimeTable.size() > 2) {
+                guarantyRoute.setBaGuarantyTripPeriodStartTimeScheduled(baTimeTable.get(baTimeTable.size() - 1));
+                guarantyRoute.setBaSubguarantyTripPeriodStartTimeScheduled(baTimeTable.get(baTimeTable.size() - 2));
+            }
+            abTimeTable.clear();
+            baTimeTable.clear();
+
+        }
     }
 }

@@ -79,7 +79,7 @@ public class Converter {
         if (stringTime == null) {
             return null;
         }
-        SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("hh:mm");
+        SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("HH:mm");
         String turnOverStringTime = "03:00";
         Date dateTime = null;
         try {

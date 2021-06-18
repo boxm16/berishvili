@@ -10,7 +10,6 @@ import Model.GuarantyRoute;
 import Model.Route;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
@@ -350,6 +349,9 @@ public class ExcelWriter {
         short AA = 0;
 
         XSSFCellStyle rowStyleB = getStyle(workbook, 238, 236, 225, 0);
+        XSSFCellStyle datetimeStyleHHmm = workbook.createCellStyle();
+        XSSFDataFormat fmt = workbook.createDataFormat();
+        datetimeStyleHHmm.setDataFormat(fmt.getFormat("[hh]:mm"));
         for (Map.Entry<Float, GuarantyRoute> entry : guarantyRoutes.entrySet()) {
             GuarantyRoute guarantyRoute = entry.getValue();
             Row row = sheet.createRow(++rowIndex);
@@ -370,20 +372,29 @@ public class ExcelWriter {
             cell_6.setCellStyle(rowStyleB);
 
             Cell cell_14 = row.createCell(14);
+            cell_14.setCellValue(guarantyRoute.getAbSubguarantyTripPeriodStartTimeScheduledExcelFormat());
+            cell_14.setCellStyle(datetimeStyleHHmm);
 
-            XSSFCellStyle datetimeStyle = workbook.createCellStyle();
-            XSSFDataFormat fmt = workbook.createDataFormat();
-            datetimeStyle.setDataFormat(fmt.getFormat("[hh]:mm"));
+            Cell cell_15 = row.createCell(15);
+            cell_15.setCellValue(guarantyRoute.getAbGuarantyTripPeriodStartTimeScheduledExcelFormat());
+            cell_15.setCellStyle(datetimeStyleHHmm);
 
-            LocalDateTime t = guarantyRoute.getAbGuarantyTripPeriodStartTimeScheduled();
-            long h = t.getHour();
-            long m = t.getMinute();
-            long s = t.getSecond();
-            double ss = (h * 3600) + (m * 60) + s;
-            System.out.println(ss);
-            System.out.println(ss/86400);
-            cell_14.setCellValue(ss / 86400);
-            cell_14.setCellStyle(datetimeStyle);
+            Cell cell_17 = row.createCell(17);
+
+            if (guarantyRoute.getBaSubguarantyTripPeriodStartTimeScheduledExcelFormat() == null) {
+                cell_17.setCellValue("");
+            } else {
+                cell_17.setCellValue(guarantyRoute.getBaSubguarantyTripPeriodStartTimeScheduledExcelFormat());
+            }
+            cell_17.setCellStyle(datetimeStyleHHmm);
+
+            Cell cell_18 = row.createCell(18);
+            if (guarantyRoute.getBaGuarantyTripPeriodStartTimeScheduledExcelFormat() == null) {
+                cell_18.setCellValue("");
+            } else {
+                cell_18.setCellValue(guarantyRoute.getBaGuarantyTripPeriodStartTimeScheduledExcelFormat());
+            }
+            cell_18.setCellStyle(datetimeStyleHHmm);
 
         }
 

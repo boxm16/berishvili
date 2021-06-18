@@ -88,4 +88,42 @@ public class GuarantyRoute extends Route {
         this.baSubguarantyTripPeriodStartTimeScheduled = baSubguarantyTripPeriodStartTimeScheduled;
     }
 
+    public Double getAbGuarantyTripPeriodStartTimeScheduledExcelFormat() {
+        long h = abGuarantyTripPeriodStartTimeScheduled.getHour();
+        long m = abGuarantyTripPeriodStartTimeScheduled.getMinute();
+        long s = abGuarantyTripPeriodStartTimeScheduled.getSecond();
+        double ss = (h * 3600) + (m * 60) + s;
+        return ss / 86400;
+    }
+
+    public Double getAbSubguarantyTripPeriodStartTimeScheduledExcelFormat() {
+        long h = abSubguarantyTripPeriodStartTimeScheduled.getHour();
+        long m = abSubguarantyTripPeriodStartTimeScheduled.getMinute();
+        long s = abSubguarantyTripPeriodStartTimeScheduled.getSecond();
+        double ss = (h * 3600) + (m * 60) + s;
+        return ss / 86400;
+    }
+
+    public Double getBaGuarantyTripPeriodStartTimeScheduledExcelFormat() {
+        if (baGuarantyTripPeriodStartTimeScheduled == null) {
+            return null;
+        }
+        long h = baGuarantyTripPeriodStartTimeScheduled.getHour();
+        long m = baGuarantyTripPeriodStartTimeScheduled.getMinute();
+        long s = baGuarantyTripPeriodStartTimeScheduled.getSecond();
+        double ss = (h * 3600) + (m * 60) + s;
+        return ss / 86400;
+    }
+
+    public Double getBaSubguarantyTripPeriodStartTimeScheduledExcelFormat() {
+        if (baSubguarantyTripPeriodStartTimeScheduled == null) {
+            return null;
+        }
+        long h = baSubguarantyTripPeriodStartTimeScheduled.getHour();
+        long m = baSubguarantyTripPeriodStartTimeScheduled.getMinute();
+        long s = baSubguarantyTripPeriodStartTimeScheduled.getSecond();
+        double ss = (h * 3600) + (m * 60) + s;
+        return ss / 86400;
+    }
+
 }

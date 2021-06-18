@@ -33,35 +33,35 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelWriter {
-    
+
     private String basementDirectory;
-    
+
     public ExcelWriter() {
         BasementController basementController = new BasementController();
         this.basementDirectory = basementController.getBasementDirectory();
-        
+
     }
-    
+
     public void write(TreeMap<Float, Route> routes) {
-        
+
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("მარშრუტები");
-        
+
         XSSFDataFormat format = workbook.createDataFormat();
         XSSFCellStyle style = workbook.createCellStyle();
         style.setDataFormat(format.getFormat("Text"));
-        
+
         int rowIndex = 0;
-        
+
         for (Map.Entry<Float, Route> routeEntry : routes.entrySet()) {
             Row row = sheet.createRow(rowIndex);
             int columnIndex = 0;
             float routeNumber = routeEntry.getKey();
             Cell cell = row.createCell(columnIndex);
-            
+
             cell.setCellValue(routeNumber);
             cell.setCellStyle(style);
-            
+
             Route route = routeEntry.getValue();
             TreeMap<Date, Day> days = route.getDays();
             for (Map.Entry<Date, Day> dayEntry : days.entrySet()) {
@@ -69,7 +69,7 @@ public class ExcelWriter {
                 Date date = dayEntry.getKey();
                 cell = row.createCell(columnIndex);
                 cell.setCellValue(date.toString());
-                
+
             }
             rowIndex++;
         }
@@ -120,14 +120,14 @@ public class ExcelWriter {
         } catch (IOException ex) {
             Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
+
     public void exportGuarantyRoutes(TreeMap<Float, GuarantyRoute> guarantyRoutes, String fileName) {
-        
+
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("საგარანტიო გასვლების ანალიზი");
-        
+
         int rowIndex = 0;
         int columnIndex = 0;
         int rowHeigth = 0;
@@ -206,12 +206,12 @@ public class ExcelWriter {
         Row headerRow1 = sheet.createRow(rowIndex);
         rowHeigth = 20;
         headerRow1.setHeightInPoints(rowHeigth);
-        
+
         XSSFCellStyle headerStyleVertical = getHeaderStyle(workbook, 221, 217, 195, 90, false);
         XSSFCellStyle headerStyleHorizontal = getHeaderStyle(workbook, 221, 217, 195, 0, false);
         XSSFCellStyle headerStyleHorizontalYellow = getHeaderStyle(workbook, 255, 255, 0, 0, false);
         XSSFCellStyle headerStyleHorizontalBold = getHeaderStyle(workbook, 221, 217, 195, 0, true);
-        
+
         columnIndex = 0;
         while (columnIndex < 20) {
             Cell cell = headerRow1.createCell(columnIndex);
@@ -254,37 +254,37 @@ public class ExcelWriter {
                     cell.setCellValue("ინტერვალი, წთ");
                     cell.setCellStyle(headerStyleVertical);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
-                    
+
                     break;
                 case 8:
                     cell.setCellValue("ბრუნის დრო");
                     cell.setCellStyle(headerStyleVertical);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
-                    
+
                     break;
                 case 9:
                     cell.setCellValue("ბრუნების ჯამური რაოდენობა");
                     cell.setCellStyle(headerStyleVertical);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
-                    
+
                     break;
                 case 10:
                     cell.setCellValue("დაწყების დრო");
                     cell.setCellStyle(headerStyleVertical);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
-                    
+
                     break;
                 case 11:
                     cell.setCellValue("დასრულების დრო");
                     cell.setCellStyle(headerStyleVertical);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
-                    
+
                     break;
                 case 12:
                     cell.setCellValue("ხაზზე დასრულების დრო");
                     cell.setCellStyle(headerStyleVertical);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
-                    
+
                     break;
                 case 13:
                     cell.setCellValue("საგარანტიო გასვლები");
@@ -295,10 +295,10 @@ public class ExcelWriter {
                     cell.setCellValue("შენიშვნა ");
                     cell.setCellStyle(headerStyleHorizontalBold);
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 2, columnIndex, columnIndex));
-                    
+
                     break;
             }
-            
+
             columnIndex++;
         }
 
@@ -347,41 +347,134 @@ public class ExcelWriter {
                     break;
                 default:
                     cell.setCellStyle(headerStyleHorizontal);
-                
+
             }
             columnIndex++;
         }
-        
-        XSSFCellStyle rowStyleWhiteItalic = getRowStyle(workbook, 255, 255, 255, true, false, "Text");
-        XSSFCellStyle rowStyleWhiteRegular = getRowStyle(workbook, 255, 255, 255, false, false, "Text");
-        XSSFCellStyle rowStyleWhiteBold = getRowStyle(workbook, 255, 255, 255, false, true, "Text");
-        XSSFCellStyle rowStyleGrayNumber = getRowStyle(workbook, 221, 217, 195, false, false, "Number");
+
+        Row middleRow = sheet.createRow(++rowIndex);
+        columnIndex = 0;
+        XSSFCellStyle middleRowStyle = getRowStyle(workbook, 146, 208, 80, false, false, "");
+        while (columnIndex < 20) {
+            Cell cell = middleRow.createCell(columnIndex);
+            switch (columnIndex) {
+                case 0:
+                    cell.setCellValue(1);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 1:
+                    cell.setCellValue(2);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 2:
+                    cell.setCellValue(3);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+
+                case 3:
+                    cell.setCellValue(4);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 4:
+                    cell.setCellValue(6);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 5:
+                    cell.setCellValue(7);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 6:
+                    cell.setCellValue(8);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 7:
+                    cell.setCellValue("");
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 8:
+                    cell.setCellValue("");
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+
+                case 9:
+                    cell.setCellValue(11);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 10:
+                    cell.setCellValue(12);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 11:
+                    cell.setCellValue(13);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 12:
+                    cell.setCellValue(15);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 13:
+                    cell.setCellValue(1);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 14:
+                    cell.setCellValue(11);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 15:
+                    cell.setCellValue(12);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 16:
+                    cell.setCellValue(13);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 17:
+                    cell.setCellValue(14);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 18:
+                    cell.setCellValue(15);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+                case 19:
+                    cell.setCellValue(16);
+                    cell.setCellStyle(middleRowStyle);
+                    break;
+
+            }
+            columnIndex++;
+        }
+
+        XSSFCellStyle rowStyleWhiteItalic = getRowStyle(workbook, 255, 255, 255, true, false, "");
+        XSSFCellStyle rowStyleWhiteRegular = getRowStyle(workbook, 255, 255, 255, false, false, "");
+        XSSFCellStyle rowStyleWhiteBold = getRowStyle(workbook, 255, 255, 255, false, true, "");
+        XSSFCellStyle rowStyleGrayNumber = getRowStyle(workbook, 221, 217, 195, false, false, "0.0"); //"0.0" makes cell numeric type
         XSSFCellStyle rowStyleGrayTimeMMss = getRowStyle(workbook, 221, 217, 195, false, false, "[mm]:ss");
         XSSFCellStyle rowStyleGrayTimeHHmm = getRowStyle(workbook, 221, 217, 195, false, false, "[hh]:mm");
-        
+
         short AA = 1;
         rowHeigth = 30;
         for (Map.Entry<Float, GuarantyRoute> entry : guarantyRoutes.entrySet()) {
             GuarantyRoute guarantyRoute = entry.getValue();
-            
+
             Row row = sheet.createRow(++rowIndex);
             row.setHeightInPoints(rowHeigth);
-            
+
             Cell cell_0 = row.createCell(0);
             cell_0.setCellValue(AA++);
             cell_0.setCellStyle(rowStyleWhiteItalic);
-            
+
             Cell cell_1 = row.createCell(1);
             cell_1.setCellValue(guarantyRoute.getBaseNumber());
             cell_1.setCellStyle(rowStyleWhiteRegular);
-            
+
             Cell cell_2 = row.createCell(2);
             cell_2.setCellValue(entry.getKey());
             cell_2.setCellStyle(rowStyleWhiteBold);
-            
+
             Cell cell_5 = row.createCell(5);
             cell_5.setCellValue(guarantyRoute.getBusType());
-            
+
             Cell cell_6 = row.createCell(6);
             cell_6.setCellValue(guarantyRoute.getBusCount());
             cell_6.setCellStyle(rowStyleGrayNumber);
@@ -390,14 +483,14 @@ public class ExcelWriter {
             String str = "2016-03-04 11:30";
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LocalDateTime start = LocalDateTime.parse(str, formatter);
-            
+
             String str2 = "2016-03-04 11:31";
             LocalDateTime end = LocalDateTime.parse(str2, formatter);
-            
+
             Duration duration = Duration.between(start, end);
-            
+
             long seconds = duration.getSeconds();
-            
+
             Cell cell_7 = row.createCell(7);
             cell_7.setCellValue(0.1 / 8640);
             // System.out.println(seconds / 86400);
@@ -408,20 +501,20 @@ public class ExcelWriter {
             Cell cell_14 = row.createCell(14);
             cell_14.setCellValue(guarantyRoute.getAbSubguarantyTripPeriodStartTimeScheduledExcelFormat());
             cell_14.setCellStyle(rowStyleGrayTimeHHmm);
-            
+
             Cell cell_15 = row.createCell(15);
             cell_15.setCellValue(guarantyRoute.getAbGuarantyTripPeriodStartTimeScheduledExcelFormat());
             cell_15.setCellStyle(rowStyleGrayTimeHHmm);
-            
+
             Cell cell_17 = row.createCell(17);
-            
+
             if (guarantyRoute.getBaSubguarantyTripPeriodStartTimeScheduledExcelFormat() == null) {
                 cell_17.setCellValue("");
             } else {
                 cell_17.setCellValue(guarantyRoute.getBaSubguarantyTripPeriodStartTimeScheduledExcelFormat());
             }
             cell_17.setCellStyle(rowStyleGrayTimeHHmm);
-            
+
             Cell cell_18 = row.createCell(18);
             if (guarantyRoute.getBaGuarantyTripPeriodStartTimeScheduledExcelFormat() == null) {
                 cell_18.setCellValue("");
@@ -429,32 +522,32 @@ public class ExcelWriter {
                 cell_18.setCellValue(guarantyRoute.getBaGuarantyTripPeriodStartTimeScheduledExcelFormat());
             }
             cell_18.setCellStyle(rowStyleGrayTimeHHmm);
-            
+
         }
-        
+
         try (FileOutputStream outputStream = new FileOutputStream(this.basementDirectory + "/downloads/" + fileName + ".xlsx")) {
             workbook.write(outputStream);
         } catch (IOException ex) {
             Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private XSSFCellStyle getHeaderStyle(XSSFWorkbook workbook, int rgbA, int rgbB, int rgbC, int rotation, boolean bold) {
         XSSFCellStyle style = workbook.createCellStyle();
         byte[] rgb = new byte[]{(byte) rgbA, (byte) rgbB, (byte) rgbC};
         XSSFColor color = new XSSFColor(rgb, null); //IndexedColorMap has no usage until now. So it can be set null.
         style.setFillForegroundColor(color);
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        
+
         style.setRotation((short) rotation);
-        
+
         style.setWrapText(true);
-        
+
         style.setRotation((short) rotation);
-        
+
         style.setAlignment(HorizontalAlignment.CENTER);
         style.setVerticalAlignment(VerticalAlignment.CENTER);
-        
+
         style.setBorderBottom(BorderStyle.THIN);
         style.setBorderTop(BorderStyle.THIN);
         style.setBorderLeft(BorderStyle.THIN);
@@ -466,23 +559,23 @@ public class ExcelWriter {
         font.setFontName("Sylfaen");
         font.setBold(bold);
         style.setFont(font);
-        
+
         return style;
     }
-    
+
     private XSSFCellStyle getRowStyle(XSSFWorkbook workbook, int rgbA, int rgbB, int rgbC, boolean italic, boolean bold, String format) {
-        
+
         XSSFCellStyle style = workbook.createCellStyle();
         byte[] rgb = new byte[]{(byte) rgbA, (byte) rgbB, (byte) rgbC};
         XSSFColor color = new XSSFColor(rgb, null); //IndexedColorMap has no usage until now. So it can be set null.
         style.setFillForegroundColor(color);
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        
+
         style.setWrapText(true);
-        
+
         style.setAlignment(HorizontalAlignment.CENTER);
         style.setVerticalAlignment(VerticalAlignment.CENTER);
-        
+
         style.setBorderBottom(BorderStyle.THIN);
         style.setBorderTop(BorderStyle.THIN);
         style.setBorderLeft(BorderStyle.THIN);
@@ -492,18 +585,13 @@ public class ExcelWriter {
         Font font = workbook.createFont();
         font.setFontHeightInPoints((short) 11);
         font.setFontName("Sylfaen");
-        
-        if (italic) {
-            System.out.println("true");
-            font.setItalic(true);
-        }
-
-        //font.setBold(bold);
+        font.setItalic(italic);
+        font.setBold(bold);
         style.setFont(font);
 
         //time formats "[hh]:mm"   "[mm]:ss"
-        //XSSFDataFormat fmts = workbook.createDataFormat();
-        // style.setDataFormat(fmts.getFormat(format));
+        XSSFDataFormat fmts = workbook.createDataFormat();
+        style.setDataFormat(fmts.getFormat(format));
         return style;
     }
 }

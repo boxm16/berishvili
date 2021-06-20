@@ -11,8 +11,6 @@ import Model.Route;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
@@ -448,9 +446,9 @@ public class ExcelWriter {
         XSSFCellStyle rowStyleWhiteItalic = getRowStyle(workbook, 255, 255, 255, true, false, "");
         XSSFCellStyle rowStyleWhiteRegular = getRowStyle(workbook, 255, 255, 255, false, false, "");
         XSSFCellStyle rowStyleWhiteBold = getRowStyle(workbook, 255, 255, 255, false, true, "");
-        XSSFCellStyle rowStyleGrayNumber = getRowStyle(workbook, 221, 217, 195, false, false, "0.0"); //"0.0" makes cell numeric type
-        XSSFCellStyle rowStyleGrayTimeMMss = getRowStyle(workbook, 221, 217, 195, false, false, "[mm]:ss");
-        XSSFCellStyle rowStyleGrayTimeHHmm = getRowStyle(workbook, 221, 217, 195, false, false, "[hh]:mm");
+        XSSFCellStyle rowStyleGrayNumber = getRowStyle(workbook, 238, 236, 225, false, false, "0"); //"0" makes cell numeric type
+        XSSFCellStyle rowStyleGrayTimeMMss = getRowStyle(workbook, 238, 236, 225, false, false, "[mm]:ss");
+        XSSFCellStyle rowStyleGrayTimeHHmm = getRowStyle(workbook, 238, 236, 225, false, false, "[hh]:mm");
 
         short AA = 1;
         rowHeigth = 30;
@@ -480,23 +478,18 @@ public class ExcelWriter {
             cell_6.setCellStyle(rowStyleGrayNumber);
 
             //-----------//----------//-----------//---------
-            String str = "2016-03-04 11:30";
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalDateTime start = LocalDateTime.parse(str, formatter);
-
-            String str2 = "2016-03-04 11:31";
-            LocalDateTime end = LocalDateTime.parse(str2, formatter);
-
-            Duration duration = Duration.between(start, end);
-
-            long seconds = duration.getSeconds();
-
+            Duration standardIntervalTime = guarantyRoute.getStandardIntervalTime();
+            long intervalSeconds = standardIntervalTime.getSeconds();
             Cell cell_7 = row.createCell(7);
-            cell_7.setCellValue(0.1 / 8640);
-            // System.out.println(seconds / 86400);
-
+            cell_7.setCellValue(intervalSeconds * 0.1 / 8640);
             cell_7.setCellStyle(rowStyleGrayTimeMMss);
-
+            //---+++--++--++--++--++--++--++
+            //-----------//----------//-----------//---------
+            Duration standardTripPeriodTime = guarantyRoute.getStandardTripPeriodTime();
+            long tripPeriodSeconds = standardTripPeriodTime.getSeconds();
+            Cell cell_8 = row.createCell(8);
+            cell_8.setCellValue(tripPeriodSeconds * 0.1 / 8640);
+            cell_8.setCellStyle(rowStyleGrayTimeHHmm);
             //---+++--++--++--++--++--++--++
             Cell cell_14 = row.createCell(14);
             cell_14.setCellValue(guarantyRoute.getAbSubguarantyTripPeriodStartTimeScheduledExcelFormat());

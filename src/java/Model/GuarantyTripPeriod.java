@@ -1,5 +1,6 @@
 package Model;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -8,13 +9,13 @@ public class GuarantyTripPeriod {
     private String type;
     private LocalDateTime startTimeScheduled;
     private LocalDateTime arrivalTimeScheduled;
+    private Duration tripPeriodTime;
 
     public GuarantyTripPeriod(String type, LocalDateTime startTimeScheduled, LocalDateTime arrivalTimeScheduled) {
         this.type = type;
         this.startTimeScheduled = startTimeScheduled;
         this.arrivalTimeScheduled = arrivalTimeScheduled;
     }
-    
 
     public void setType(String type) {
         this.type = type;
@@ -47,4 +48,14 @@ public class GuarantyTripPeriod {
     public String getArrivalTimeScheduledString() {
         return arrivalTimeScheduled.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
+
+    public Duration getTripPeriodTime() {
+        return tripPeriodTime;
+    }
+
+    public void setTripPeriodTime(Duration tripPeriodTime) {
+        this.tripPeriodTime = tripPeriodTime;
+    }
+    
+
 }

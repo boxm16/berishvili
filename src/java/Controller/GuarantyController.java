@@ -5,9 +5,11 @@ import Model.GuarantyRoute;
 import Model.GuarantyTripPeriod;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import org.springframework.stereotype.Controller;
@@ -99,8 +101,10 @@ public class GuarantyController {
     }
 
     private void calculateData(TreeMap<Float, GuarantyRoute> guarantyRoutes) {
+        //not very elegant code here, but i`m thinking about memory usage here ,man
         ArrayList<LocalDateTime> abTimeTable = new ArrayList();
         ArrayList<LocalDateTime> baTimeTable = new ArrayList();
+        ArrayList<GuarantyTripPeriod> tripPeriods;
         for (Map.Entry<Float, GuarantyRoute> routeEntry : guarantyRoutes.entrySet()) {
 
             GuarantyRoute guarantyRoute = routeEntry.getValue();
@@ -117,6 +121,24 @@ public class GuarantyController {
                         baTimeTable.add(tripPeriod.getStartTimeScheduled());
                     }
                 }
+
+                //here i set tripPeriodTime to tripPeriods, i know its not elegant, again, but thinking memory usage
+                /*becouse i use here only one arrayList for all exoduses, while if i put this code inside GuarantyROute(for example
+               there will be created arrayList for each route 
+                 */
+                tripPeriods = exodus.getGuarantyTripPeriods();
+
+                for (int x = 0; x < tripPeriods.size() - 1; x++) {//-1 because last trip period is base return
+                    GuarantyTripPeriod tripPeriod = tripPeriods.get(x);
+
+                    LocalDateTime tripPeriodStartTime = tripPeriod.getStartTimeScheduled();
+                    GuarantyTripPeriod nextTripPeriod = tripPeriods.get(x + 1);
+                    LocalDateTime nextTripPeriodStartTime = nextTripPeriod.getStartTimeScheduled();
+                    Duration difference = Duration.between(tripPeriodStartTime, nextTripPeriodStartTime);
+                    tripPeriod.setTripPeriodTime(difference);
+                }
+                //end of setting tripPeriodTimes to tripPeriods
+
             }
             Collections.sort(abTimeTable);
             Collections.sort(baTimeTable);
@@ -128,9 +150,102 @@ public class GuarantyController {
                 guarantyRoute.setBaGuarantyTripPeriodStartTimeScheduled(baTimeTable.get(baTimeTable.size() - 1));
                 guarantyRoute.setBaSubguarantyTripPeriodStartTimeScheduled(baTimeTable.get(baTimeTable.size() - 2));
             }
+
+            guarantyRoute.setStandardIntervalTime(calculateStandardIntervalTime(abTimeTable));
+            guarantyRoute.setStandardTripPeriodTime(calculateStandardTripPeriodTime(guarantyRoute));
             abTimeTable.clear();
             baTimeTable.clear();
 
         }
+    }
+
+    private Duration calculateStandardIntervalTime(ArrayList<LocalDateTime> timeTable) {
+        HashMap<Duration, Integer> intervals = new HashMap();
+        int index = 1;
+        if (timeTable.size() < 2) {
+            return null;
+        } else {
+            while (index < timeTable.size()) {
+                Duration interval = Duration.between(timeTable.get(index - 1), timeTable.get(index));
+                if (intervals.containsKey(interval)) {
+                    int count = intervals.get(interval);
+                    count++;
+                    intervals.put(interval, count);
+                } else {
+                    intervals.put(interval, 0);
+                }
+                index++;
+            }
+        }
+        //iterating map to find max value
+        Map.Entry<Duration, Integer> maxEntry = null;
+        for (Map.Entry<Duration, Integer> entry : intervals.entrySet()) {
+            if (maxEntry == null || entry.getValue() > maxEntry.getValue()) {
+                maxEntry = entry;
+            }
+        }
+        return maxEntry.getKey();
+    }
+
+    private Duration calculateStandardTripPeriodTime(GuarantyRoute guarantyRoute) {
+
+        HashMap<Duration, Integer> abTripPeriodTimes = new HashMap();
+        HashMap<Duration, Integer> baTripPeriodTimes = new HashMap();
+
+        TreeMap<Short, GuarantyExodus> exoduses = guarantyRoute.getExoduses();
+        for (GuarantyExodus exodus : exoduses.values()) {
+
+            for (GuarantyTripPeriod tripPeriod : exodus.getGuarantyTripPeriods()) {
+                //----------------ab-----------
+                if (tripPeriod.getType().equals("ab")) {
+
+                    Duration tripPeriodTime = tripPeriod.getTripPeriodTime();
+
+                    if (abTripPeriodTimes.containsKey(tripPeriodTime)) {
+                        int count = abTripPeriodTimes.get(tripPeriodTime);
+                        count++;
+                        abTripPeriodTimes.put(tripPeriodTime, count);
+                    } else {
+                        abTripPeriodTimes.put(tripPeriodTime, 0);
+                    }
+                }
+                //----------------ba-----------
+                if (tripPeriod.getType().equals("ba")) {
+                    Duration tripPeriodTime = tripPeriod.getTripPeriodTime();
+                    if (baTripPeriodTimes.containsKey(tripPeriodTime)) {
+                        int count = baTripPeriodTimes.get(tripPeriodTime);
+                        count++;
+                        baTripPeriodTimes.put(tripPeriodTime, count);
+                    } else {
+                        baTripPeriodTimes.put(tripPeriodTime, 0);
+                    }
+                }
+            }
+        }
+        Duration abStandartTripPeriodTime = Duration.ZERO;
+        Duration baStandartTripPeriodTime = Duration.ZERO;
+
+        if (abTripPeriodTimes.size() > 0) {
+            //iterating map to find max value
+            Map.Entry<Duration, Integer> maxEntry = null;
+            for (Map.Entry<Duration, Integer> entry : abTripPeriodTimes.entrySet()) {
+                if (maxEntry == null || entry.getValue() > maxEntry.getValue()) {
+                    maxEntry = entry;
+                }
+            }
+            abStandartTripPeriodTime = maxEntry.getKey();
+        }
+
+        if (baTripPeriodTimes.size() > 0) {
+            //iterating map to find max value
+            Map.Entry<Duration, Integer> maxEntry = null;
+            for (Map.Entry<Duration, Integer> entry : baTripPeriodTimes.entrySet()) {
+                if (maxEntry == null || entry.getValue() > maxEntry.getValue()) {
+                    maxEntry = entry;
+                }
+            }
+            baStandartTripPeriodTime = maxEntry.getKey();
+        }
+        return abStandartTripPeriodTime.plus(baStandartTripPeriodTime);
     }
 }

@@ -1,5 +1,6 @@
 package Model;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.TreeMap;
@@ -10,6 +11,8 @@ public class GuarantyRoute extends Route {
     private String busType;
     private TreeMap<Short, GuarantyExodus> exoduses;
     //-------------
+    private Duration standardIntervalTime;
+    private Duration standardTripPeriodTime;
     private LocalDateTime abGuarantyTripPeriodStartTimeScheduled;
     private LocalDateTime abSubguarantyTripPeriodStartTimeScheduled;
     private LocalDateTime baGuarantyTripPeriodStartTimeScheduled;
@@ -125,5 +128,23 @@ public class GuarantyRoute extends Route {
         double ss = (h * 3600) + (m * 60) + s;
         return ss / 86400;
     }
+
+    public Duration getStandardIntervalTime() {
+        return standardIntervalTime;
+    }
+
+    public void setStandardIntervalTime(Duration standardIntervalTime) {
+        this.standardIntervalTime = standardIntervalTime;
+    }
+
+    public Duration getStandardTripPeriodTime() {
+        return standardTripPeriodTime;
+    }
+
+    public void setStandardTripPeriodTime(Duration standardTripPeriodTime) {
+        this.standardTripPeriodTime = standardTripPeriodTime;
+    }
+    
+    
 
 }

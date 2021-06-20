@@ -102,6 +102,8 @@ public class GuarantyController {
 
     private void calculateData(TreeMap<Float, GuarantyRoute> guarantyRoutes) {
         //not very elegant code here, but i`m thinking about memory usage here ,man
+       
+        //man, its total mess, you would`t be able to find out anything here after 2 weeks
         ArrayList<LocalDateTime> abTimeTable = new ArrayList();
         ArrayList<LocalDateTime> baTimeTable = new ArrayList();
         ArrayList<GuarantyTripPeriod> tripPeriods;
@@ -153,6 +155,20 @@ public class GuarantyController {
 
             guarantyRoute.setStandardIntervalTime(calculateStandardIntervalTime(abTimeTable));
             guarantyRoute.setStandardTripPeriodTime(calculateStandardTripPeriodTime(guarantyRoute));
+
+            //here i set totalRaces
+            guarantyRoute.setTotalRaces(Float.valueOf(0));
+            if (abTimeTable.size() > 0 && baTimeTable.size() > 0) {
+               guarantyRoute.setTotalRaces((float)(abTimeTable.size() + (float)baTimeTable.size()) / 2);
+
+            }
+            if (abTimeTable.size() > 0 && baTimeTable.isEmpty()) {
+                guarantyRoute.setTotalRaces((float)abTimeTable.size());
+            }
+            if (abTimeTable.isEmpty() && baTimeTable.size() > 0) {
+                guarantyRoute.setTotalRaces((float)baTimeTable.size());
+            }
+
             abTimeTable.clear();
             baTimeTable.clear();
 

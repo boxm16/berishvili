@@ -17,6 +17,7 @@ public class GuarantyRoute extends Route {
     private LocalDateTime abSubguarantyTripPeriodStartTimeScheduled;
     private LocalDateTime baGuarantyTripPeriodStartTimeScheduled;
     private LocalDateTime baSubguarantyTripPeriodStartTimeScheduled;
+    private float totalRaces;
 
     public GuarantyRoute() {
         this.exoduses = new TreeMap<>();
@@ -144,7 +145,13 @@ public class GuarantyRoute extends Route {
     public void setStandardTripPeriodTime(Duration standardTripPeriodTime) {
         this.standardTripPeriodTime = standardTripPeriodTime;
     }
-    
-    
+
+    public float getTotalRaces() {
+        return totalRaces;
+    }
+
+    public void setTotalRaces(float totalRaces) {
+        this.totalRaces = totalRaces;
+    }
 
 }

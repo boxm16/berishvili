@@ -447,6 +447,7 @@ public class ExcelWriter {
         XSSFCellStyle rowStyleWhiteRegular = getRowStyle(workbook, 255, 255, 255, false, false, "");
         XSSFCellStyle rowStyleWhiteBold = getRowStyle(workbook, 255, 255, 255, false, true, "");
         XSSFCellStyle rowStyleGrayNumber = getRowStyle(workbook, 238, 236, 225, false, false, "0"); //"0" makes cell numeric type
+        XSSFCellStyle rowStyleGrayRegular = getRowStyle(workbook, 238, 236, 225, false, false, ""); 
         XSSFCellStyle rowStyleGrayTimeMMss = getRowStyle(workbook, 238, 236, 225, false, false, "[mm]:ss");
         XSSFCellStyle rowStyleGrayTimeHHmm = getRowStyle(workbook, 238, 236, 225, false, false, "[hh]:mm");
 
@@ -490,6 +491,12 @@ public class ExcelWriter {
             Cell cell_8 = row.createCell(8);
             cell_8.setCellValue(tripPeriodSeconds * 0.1 / 8640);
             cell_8.setCellStyle(rowStyleGrayTimeHHmm);
+            //---+++--++--++--++--++--++--++
+            //-----------//----------//-----------//---------
+            Cell cell_9 = row.createCell(9);
+            System.out.println(guarantyRoute.getTotalRaces());
+            cell_9.setCellValue(guarantyRoute.getTotalRaces());
+            cell_9.setCellStyle(rowStyleGrayRegular);
             //---+++--++--++--++--++--++--++
             Cell cell_14 = row.createCell(14);
             cell_14.setCellValue(guarantyRoute.getAbSubguarantyTripPeriodStartTimeScheduledExcelFormat());

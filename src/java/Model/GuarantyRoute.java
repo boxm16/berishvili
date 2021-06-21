@@ -2,7 +2,9 @@ package Model;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class GuarantyRoute extends Route {
@@ -18,9 +20,12 @@ public class GuarantyRoute extends Route {
     private LocalDateTime baGuarantyTripPeriodStartTimeScheduled;
     private LocalDateTime baSubguarantyTripPeriodStartTimeScheduled;
     private float totalRaces;
+    private LocalDateTime routeStartTime;
+    private LocalDateTime routeEndTime;
 
     public GuarantyRoute() {
         this.exoduses = new TreeMap<>();
+
     }
 
     public String getDateStamp() {
@@ -152,6 +157,62 @@ public class GuarantyRoute extends Route {
 
     public void setTotalRaces(float totalRaces) {
         this.totalRaces = totalRaces;
+    }
+
+    public LocalDateTime getRouteStartTime() {
+        return routeStartTime;
+    }
+
+    public Double getRouteStartTimeExcelFormat() {
+        if (routeStartTime == null) {
+            return null;
+        }
+        long h = routeStartTime.getHour();
+        long m = routeStartTime.getMinute();
+        long s = routeStartTime.getSecond();
+        double ss = (h * 3600) + (m * 60) + s;
+        return ss / 86400;
+
+    }
+
+    public void setRouteStartTime(LocalDateTime routeStartTime) {
+        this.routeStartTime = routeStartTime;
+    }
+
+    public LocalDateTime getRouteEndTime() {
+        return routeEndTime;
+    }
+
+    public Double getRouteEndTimeExcelFormat() {
+        if (routeEndTime == null) {
+            return null;
+        }
+        LocalDateTime pointZero = LocalDateTime.of(1970, Month.JANUARY, 01, 00, 00, 00);
+
+        long intervalSeconds = Duration.between(pointZero, routeEndTime).getSeconds();
+        return intervalSeconds * 0.1 / 8640;
+    }
+
+    public void setRouteEndTime(LocalDateTime routeEndTime) {
+        this.routeEndTime = routeEndTime;
+    }
+
+    public Double getLastBaseReturnTime() {
+        LocalDateTime lastBaseReturnTime = null;
+        for (GuarantyExodus exodus : this.exoduses.values()) {
+            if (lastBaseReturnTime == null) {
+                lastBaseReturnTime = LocalDateTime.of(1970, Month.JANUARY, 01, 00, 00, 00);
+            }
+            ArrayList<GuarantyTripPeriod> tripPeriods = exodus.getGuarantyTripPeriods();
+            GuarantyTripPeriod baseReturnTripPeriod = tripPeriods.get(tripPeriods.size() - 1);
+            LocalDateTime baseReturnTripPeriodArrialTime = baseReturnTripPeriod.getArrivalTimeScheduled();
+            if (lastBaseReturnTime.isBefore(baseReturnTripPeriodArrialTime)) {
+                lastBaseReturnTime = baseReturnTripPeriodArrialTime;
+            }
+        }
+        LocalDateTime pointZero = LocalDateTime.of(1970, Month.JANUARY, 01, 00, 00, 00);
+        long intervalSeconds = Duration.between(pointZero, lastBaseReturnTime).getSeconds();
+        return intervalSeconds * 0.1 / 8640;
     }
 
 }

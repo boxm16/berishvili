@@ -447,7 +447,7 @@ public class ExcelWriter {
         XSSFCellStyle rowStyleWhiteRegular = getRowStyle(workbook, 255, 255, 255, false, false, "");
         XSSFCellStyle rowStyleWhiteBold = getRowStyle(workbook, 255, 255, 255, false, true, "");
         XSSFCellStyle rowStyleGrayNumber = getRowStyle(workbook, 238, 236, 225, false, false, "0"); //"0" makes cell numeric type
-        XSSFCellStyle rowStyleGrayRegular = getRowStyle(workbook, 238, 236, 225, false, false, ""); 
+        XSSFCellStyle rowStyleGrayRegular = getRowStyle(workbook, 238, 236, 225, false, false, "");
         XSSFCellStyle rowStyleGrayTimeMMss = getRowStyle(workbook, 238, 236, 225, false, false, "[mm]:ss");
         XSSFCellStyle rowStyleGrayTimeHHmm = getRowStyle(workbook, 238, 236, 225, false, false, "[hh]:mm");
 
@@ -494,9 +494,24 @@ public class ExcelWriter {
             //---+++--++--++--++--++--++--++
             //-----------//----------//-----------//---------
             Cell cell_9 = row.createCell(9);
-            System.out.println(guarantyRoute.getTotalRaces());
             cell_9.setCellValue(guarantyRoute.getTotalRaces());
             cell_9.setCellStyle(rowStyleGrayRegular);
+            //---+++--++--++--++--++--++--++
+            //-----------//----------//-----------//---------
+            Cell cell_10 = row.createCell(10);
+            cell_10.setCellValue(guarantyRoute.getRouteStartTimeExcelFormat());
+            cell_10.setCellStyle(rowStyleGrayTimeHHmm);
+            //---+++--++--++--++--++--++--++
+
+            //-----------//----------//-----------//---------
+            Cell cell_11 = row.createCell(11);
+            cell_11.setCellValue(guarantyRoute.getLastBaseReturnTime());
+            cell_11.setCellStyle(rowStyleGrayTimeHHmm);
+            //---+++--++--++--++--++--++--++
+            //-----------//----------//-----------//---------
+            Cell cell_12 = row.createCell(12);
+            cell_12.setCellValue(guarantyRoute.getRouteEndTimeExcelFormat());
+            cell_12.setCellStyle(rowStyleGrayTimeHHmm);
             //---+++--++--++--++--++--++--++
             Cell cell_14 = row.createCell(14);
             cell_14.setCellValue(guarantyRoute.getAbSubguarantyTripPeriodStartTimeScheduledExcelFormat());

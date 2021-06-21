@@ -102,7 +102,7 @@ public class GuarantyController {
 
     private void calculateData(TreeMap<Float, GuarantyRoute> guarantyRoutes) {
         //not very elegant code here, but i`m thinking about memory usage here ,man
-       
+
         //man, its total mess, you would`t be able to find out anything here after 2 weeks
         ArrayList<LocalDateTime> abTimeTable = new ArrayList();
         ArrayList<LocalDateTime> baTimeTable = new ArrayList();
@@ -116,11 +116,24 @@ public class GuarantyController {
                 ArrayList<GuarantyTripPeriod> guarantyTripPeriods = exodus.getGuarantyTripPeriods();
                 for (GuarantyTripPeriod tripPeriod : guarantyTripPeriods) {
                     String tripPeriodType = tripPeriod.getType();
-                    if (tripPeriodType.equals("ab")) {
-                        abTimeTable.add(tripPeriod.getStartTimeScheduled());
-                    }
-                    if (tripPeriodType.equals("ba")) {
-                        baTimeTable.add(tripPeriod.getStartTimeScheduled());
+
+                    if (tripPeriodType.equals("A_baseReturn") || tripPeriodType.equals("B_baseReturn")) {
+                        LocalDateTime tripPeriodStartTime = tripPeriod.getStartTimeScheduled();
+                        LocalDateTime routeEndTime = guarantyRoute.getRouteEndTime();
+                        if (routeEndTime == null) {
+                            guarantyRoute.setRouteEndTime(tripPeriodStartTime);
+                        } else {
+                            if (tripPeriodStartTime.isAfter(routeEndTime)) {
+                                guarantyRoute.setRouteEndTime(tripPeriodStartTime);
+                            }
+                        }
+                    } else {
+                        if (tripPeriodType.equals("ab")) {
+                            abTimeTable.add(tripPeriod.getStartTimeScheduled());
+                        }
+                        if (tripPeriodType.equals("ba")) {
+                            baTimeTable.add(tripPeriod.getStartTimeScheduled());
+                        }
                     }
                 }
 
@@ -159,14 +172,23 @@ public class GuarantyController {
             //here i set totalRaces
             guarantyRoute.setTotalRaces(Float.valueOf(0));
             if (abTimeTable.size() > 0 && baTimeTable.size() > 0) {
-               guarantyRoute.setTotalRaces((float)(abTimeTable.size() + (float)baTimeTable.size()) / 2);
+                guarantyRoute.setTotalRaces((float) (abTimeTable.size() + (float) baTimeTable.size()) / 2);
 
             }
             if (abTimeTable.size() > 0 && baTimeTable.isEmpty()) {
-                guarantyRoute.setTotalRaces((float)abTimeTable.size());
+                guarantyRoute.setTotalRaces((float) abTimeTable.size());
             }
             if (abTimeTable.isEmpty() && baTimeTable.size() > 0) {
-                guarantyRoute.setTotalRaces((float)baTimeTable.size());
+                guarantyRoute.setTotalRaces((float) baTimeTable.size());
+            }
+
+            // here i set routeStartTime
+            if (baTimeTable.size() > 0) {
+                LocalDateTime abStartTime = abTimeTable.get(0);
+                LocalDateTime baStartTime = baTimeTable.get(0);
+                guarantyRoute.setRouteStartTime(abStartTime.isEqual(baStartTime) || abStartTime.isBefore(baStartTime) ? abStartTime : baStartTime);
+            } else {
+                guarantyRoute.setRouteStartTime(abTimeTable.get(0));
             }
 
             abTimeTable.clear();

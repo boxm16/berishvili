@@ -26,6 +26,7 @@
     
     <context:component-scan base-package="Controller"/>
     <context:component-scan base-package="Model"/>
+    <context:component-scan base-package="DAO"/>
     <!-- this part is for uploading-->
     <bean id="multipartResolver"   
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/> 

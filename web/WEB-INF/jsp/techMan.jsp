@@ -36,6 +36,12 @@
             <input type="number" name="routesQuantity">
             <input type="submit">
         </form>
-
+        <hr><hr>
+        <h1>Database Manipulations</h1>
+        <hr>
+        <h4>Step one, Create Database (Schema) (berishvili_db)</h4>
+        <a href="createSchema.htm" >Create Database Schema </a>
+        <br><br> ${creationStatus}
+        <hr>
     </body>
 </html>

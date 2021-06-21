@@ -1,7 +1,10 @@
 package Controller;
 
+import DAO.TechDao;
 import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class TechController {
+
+    @Autowired
+    private TechDao techDao;
 
     private String basementDirectory;
     private BasementController basementController;
@@ -106,4 +112,10 @@ public class TechController {
         return dir.exists();
     }
 
+    @RequestMapping(value = "createSchema", method = RequestMethod.GET)
+    public String createSchema(ModelMap model) throws SQLException {
+        String creationStatus = techDao.createSchema();
+        model.addAttribute("creationStatus", creationStatus);
+        return "techMan";
+    }
 }

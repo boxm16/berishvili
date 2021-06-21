@@ -470,10 +470,29 @@ public class ExcelWriter {
             Cell cell_2 = row.createCell(2);
             cell_2.setCellValue(entry.getKey());
             cell_2.setCellStyle(rowStyleWhiteBold);
-
+//-------------//-------------//---------------//---------
             Cell cell_5 = row.createCell(5);
             cell_5.setCellValue(guarantyRoute.getBusType());
-
+            XSSFCellStyle busTypeStyle = getRowStyle(workbook, 255, 0, 0, false, false, "");
+            switch (guarantyRoute.getBusType()) {
+                case "MAN A-47":
+                    busTypeStyle = getRowStyle(workbook, 204, 255, 204, false, false, "");
+                    break;
+                case "BMC Procity":
+                    busTypeStyle = getRowStyle(workbook, 0, 176, 80, false, false, "");
+                    break;
+                case "Isuzu Novociti Life":
+                    busTypeStyle = getRowStyle(workbook, 146, 206, 80, false, false, "");
+                    break;
+                case "MAN A-21":
+                    busTypeStyle = getRowStyle(workbook, 149, 179, 215, false, false, "");
+                    break;
+                case "ბოგდან А092, A093":
+                    busTypeStyle = getRowStyle(workbook, 255, 255, 0, false, false, "");
+                    break;
+            }
+            cell_5.setCellStyle(busTypeStyle);
+//+++++++//+++++++++++++++//+++++++++++++++//++++++++++++//+++++++++
             Cell cell_6 = row.createCell(6);
             cell_6.setCellValue(guarantyRoute.getBusCount());
             cell_6.setCellStyle(rowStyleGrayNumber);

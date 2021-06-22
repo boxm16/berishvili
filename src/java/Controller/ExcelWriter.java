@@ -470,6 +470,14 @@ public class ExcelWriter {
             Cell cell_2 = row.createCell(2);
             cell_2.setCellValue(entry.getKey());
             cell_2.setCellStyle(rowStyleWhiteBold);
+
+            Cell cell_3 = row.createCell(3);
+            cell_3.setCellValue(guarantyRoute.getScheme());
+            cell_3.setCellStyle(rowStyleWhiteRegular);
+
+            Cell cell_4 = row.createCell(4);
+            cell_4.setCellValue("");
+            cell_4.setCellStyle(rowStyleWhiteRegular);
 //-------------//-------------//---------------//---------
             Cell cell_5 = row.createCell(5);
             cell_5.setCellValue(guarantyRoute.getBusType());
@@ -532,6 +540,11 @@ public class ExcelWriter {
             cell_12.setCellValue(guarantyRoute.getRouteEndTimeExcelFormat());
             cell_12.setCellStyle(rowStyleGrayTimeHHmm);
             //---+++--++--++--++--++--++--++
+            Cell cell_13 = row.createCell(13);
+            cell_13.setCellValue(guarantyRoute.getaPoint());
+            cell_13.setCellStyle(rowStyleGrayRegular);
+            //---+++--++--++--++--++--++--++
+
             Cell cell_14 = row.createCell(14);
             cell_14.setCellValue(guarantyRoute.getAbSubguarantyTripPeriodStartTimeScheduledExcelFormat());
             cell_14.setCellStyle(rowStyleGrayTimeHHmm);
@@ -539,6 +552,11 @@ public class ExcelWriter {
             Cell cell_15 = row.createCell(15);
             cell_15.setCellValue(guarantyRoute.getAbGuarantyTripPeriodStartTimeScheduledExcelFormat());
             cell_15.setCellStyle(rowStyleGrayTimeHHmm);
+            //---+++--++--++--++--++--++--++
+            Cell cell_16 = row.createCell(16);
+            cell_16.setCellValue(guarantyRoute.getbPoint());
+            cell_16.setCellStyle(rowStyleGrayRegular);
+            //---+++--++--++--++--++--++--++
 
             Cell cell_17 = row.createCell(17);
 

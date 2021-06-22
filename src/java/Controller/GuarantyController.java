@@ -1,8 +1,10 @@
 package Controller;
 
+import DAO.RouteDao;
 import Model.GuarantyExodus;
 import Model.GuarantyRoute;
 import Model.GuarantyTripPeriod;
+import Model.RouteData;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.time.Duration;
@@ -21,22 +23,22 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @Controller
 public class GuarantyController {
-
+    
     private String basementDirectory;
-
+    
     public GuarantyController() {
         BasementController basementController = new BasementController();
         this.basementDirectory = basementController.getBasementDirectory();
-
+        
     }
-
+    
     @RequestMapping(value = "guarantyTripsUploadPage")
     public String goToGuarantyTripsUploadPage(ModelMap model) {
-
+        
         model.addAttribute("uploadedFileExists", true);
         return "guarantyTripsUploadPage";
     }
-
+    
     @RequestMapping(value = "/saveGuarantyExcelFile", method = RequestMethod.POST)
     public String upload(@RequestParam CommonsMultipartFile file, ModelMap model) {
         if (file.isEmpty()) {
@@ -47,13 +49,13 @@ public class GuarantyController {
         String filename = "uploadedGuarantyExcelFile.xlsx";
         try {
             byte barr[] = file.getBytes();
-
+            
             BufferedOutputStream bout = new BufferedOutputStream(
                     new FileOutputStream(this.basementDirectory + "/uploads/" + filename));
             bout.write(barr);
             bout.flush();
             bout.close();
-
+            
         } catch (Exception e) {
             System.out.println(e);
             model.addAttribute("status", "Upload could not been completed");
@@ -62,44 +64,58 @@ public class GuarantyController {
         }
         return "guarantyTripsDashboard";
     }
-
+    
     @RequestMapping(value = "/gotGuarantyDashboard", method = RequestMethod.GET)
     public String gotGuarantyDashboard() {
-
+        
         return "guarantyTripsDashboard";
     }
-
+    
     @RequestMapping(value = "guarantyExport", method = RequestMethod.POST)
     public String garantyExport(String fileName, ModelMap model) {
-
+        
         RouteFactory routeFactory = new RouteFactory();
         TreeMap<Float, GuarantyRoute> guarantyRoutes = new TreeMap();
         guarantyRoutes = routeFactory.createGuarantyRoutesFromUploadedFile();
+        
         if (guarantyRoutes.containsKey(0.001f)) {//0.001f is code for error when actualStartTimes exist in file,(it cant be, because this file have to be from futer dates
 
-            model.addAttribute("error", "ატვირთული ფაილი არ არის საგარანტიო გასცლების გამოსათვლელად გამოსადეგი (ფაილში იძებნება ფაქტიური გასვლის დრო, რაც აქ დაუშვებელია)"
+            model.addAttribute("error", "ატვირთული ფაილი არ არის საგარანტიო გასვლების გამოსათვლელად გამოსადეგი (ფაილში იძებნება ფაქტიური გასვლის დრო, რაც აქ დაუშვებელია)"
                     + "<a  href=\"guarantyTripsUploadPage.htm\">დაბრუნდი და ატვირთე ახალი ფაილი</a>");
-
+            
         }
         if (guarantyRoutes.containsKey(0.002f)) {//0.002 is a error code for error when uploaded file contains data with more than one datestamp
 
             model.addAttribute("dateStampError", "ატვირთული ფაილი არ არის საგარანტიო გასვლების გამოსათვლელად გამოსადეგი (ფაილში იძებნება სხვადასხვა რიცხვი, რაც აქ დაუშვებელია)&nbsp&nbsp"
                     + "<a  href=\"guarantyTripsUploadPage.htm\">დაბრუნდი და ატვირთე ახალი ფაილი</a>");
-
+            
         }
 
         //here we calculate given data to get some results inside guarantyRoutes
         calculateData(guarantyRoutes);
-
+        //now add route point names and schemes  from db
+        RouteDao routeDao = new RouteDao();
+        TreeMap<Float, RouteData> routesDataFromDB = routeDao.getRoutesDataFromDB();
+        for (Map.Entry<Float, GuarantyRoute> guarantyRoutesEntry : guarantyRoutes.entrySet()) {
+            RouteData routeData = routesDataFromDB.get(guarantyRoutesEntry.getKey());
+            if (routeData == null) {
+                //here i select new routes (routes that exist in excel file but dont exist in database)
+            } else {
+                GuarantyRoute guarantyRoute = guarantyRoutesEntry.getValue();
+                guarantyRoute.setaPoint(routeData.getaPoint());
+                guarantyRoute.setbPoint(routeData.getbPoint());
+                guarantyRoute.setScheme(routeData.getScheme());
+            }
+        }
         //now write the results
         ExcelWriter excelWriter = new ExcelWriter();
         excelWriter.exportGuarantyRoutes(guarantyRoutes, fileName);
-
+        
         model.addAttribute("fileName", fileName);
         return "guarantyTripsDashboard";
-
+        
     }
-
+    
     private void calculateData(TreeMap<Float, GuarantyRoute> guarantyRoutes) {
         //not very elegant code here, but i`m thinking about memory usage here ,man
 
@@ -108,7 +124,7 @@ public class GuarantyController {
         ArrayList<LocalDateTime> baTimeTable = new ArrayList();
         ArrayList<GuarantyTripPeriod> tripPeriods;
         for (Map.Entry<Float, GuarantyRoute> routeEntry : guarantyRoutes.entrySet()) {
-
+            
             GuarantyRoute guarantyRoute = routeEntry.getValue();
             TreeMap<Short, GuarantyExodus> exoduses = guarantyRoute.getExoduses();
             for (Map.Entry<Short, GuarantyExodus> exodusEntry : exoduses.entrySet()) {
@@ -116,7 +132,7 @@ public class GuarantyController {
                 ArrayList<GuarantyTripPeriod> guarantyTripPeriods = exodus.getGuarantyTripPeriods();
                 for (GuarantyTripPeriod tripPeriod : guarantyTripPeriods) {
                     String tripPeriodType = tripPeriod.getType();
-
+                    
                     if (tripPeriodType.equals("A_baseReturn") || tripPeriodType.equals("B_baseReturn")) {
                         LocalDateTime tripPeriodStartTime = tripPeriod.getStartTimeScheduled();
                         LocalDateTime routeEndTime = guarantyRoute.getRouteEndTime();
@@ -142,10 +158,10 @@ public class GuarantyController {
                there will be created arrayList for each route 
                  */
                 tripPeriods = exodus.getGuarantyTripPeriods();
-
+                
                 for (int x = 0; x < tripPeriods.size() - 1; x++) {//-1 because last trip period is base return
                     GuarantyTripPeriod tripPeriod = tripPeriods.get(x);
-
+                    
                     LocalDateTime tripPeriodStartTime = tripPeriod.getStartTimeScheduled();
                     GuarantyTripPeriod nextTripPeriod = tripPeriods.get(x + 1);
                     LocalDateTime nextTripPeriodStartTime = nextTripPeriod.getStartTimeScheduled();
@@ -165,7 +181,7 @@ public class GuarantyController {
                 guarantyRoute.setBaGuarantyTripPeriodStartTimeScheduled(baTimeTable.get(baTimeTable.size() - 1));
                 guarantyRoute.setBaSubguarantyTripPeriodStartTimeScheduled(baTimeTable.get(baTimeTable.size() - 2));
             }
-
+            
             guarantyRoute.setStandardIntervalTime(calculateStandardIntervalTime(abTimeTable));
             guarantyRoute.setStandardTripPeriodTime(calculateStandardTripPeriodTime(guarantyRoute));
 
@@ -173,7 +189,7 @@ public class GuarantyController {
             guarantyRoute.setTotalRaces(Float.valueOf(0));
             if (abTimeTable.size() > 0 && baTimeTable.size() > 0) {
                 guarantyRoute.setTotalRaces((float) (abTimeTable.size() + (float) baTimeTable.size()) / 2);
-
+                
             }
             if (abTimeTable.size() > 0 && baTimeTable.isEmpty()) {
                 guarantyRoute.setTotalRaces((float) abTimeTable.size());
@@ -190,13 +206,13 @@ public class GuarantyController {
             } else {
                 guarantyRoute.setRouteStartTime(abTimeTable.get(0));
             }
-
+            
             abTimeTable.clear();
             baTimeTable.clear();
-
+            
         }
     }
-
+    
     private Duration calculateStandardIntervalTime(ArrayList<LocalDateTime> timeTable) {
         HashMap<Duration, Integer> intervals = new HashMap();
         int index = 1;
@@ -224,21 +240,21 @@ public class GuarantyController {
         }
         return maxEntry.getKey();
     }
-
+    
     private Duration calculateStandardTripPeriodTime(GuarantyRoute guarantyRoute) {
-
+        
         HashMap<Duration, Integer> abTripPeriodTimes = new HashMap();
         HashMap<Duration, Integer> baTripPeriodTimes = new HashMap();
-
+        
         TreeMap<Short, GuarantyExodus> exoduses = guarantyRoute.getExoduses();
         for (GuarantyExodus exodus : exoduses.values()) {
-
+            
             for (GuarantyTripPeriod tripPeriod : exodus.getGuarantyTripPeriods()) {
                 //----------------ab-----------
                 if (tripPeriod.getType().equals("ab")) {
-
+                    
                     Duration tripPeriodTime = tripPeriod.getTripPeriodTime();
-
+                    
                     if (abTripPeriodTimes.containsKey(tripPeriodTime)) {
                         int count = abTripPeriodTimes.get(tripPeriodTime);
                         count++;
@@ -262,7 +278,7 @@ public class GuarantyController {
         }
         Duration abStandartTripPeriodTime = Duration.ZERO;
         Duration baStandartTripPeriodTime = Duration.ZERO;
-
+        
         if (abTripPeriodTimes.size() > 0) {
             //iterating map to find max value
             Map.Entry<Duration, Integer> maxEntry = null;
@@ -273,7 +289,7 @@ public class GuarantyController {
             }
             abStandartTripPeriodTime = maxEntry.getKey();
         }
-
+        
         if (baTripPeriodTimes.size() > 0) {
             //iterating map to find max value
             Map.Entry<Duration, Integer> maxEntry = null;

@@ -354,9 +354,13 @@ public class RouteFactory {
             ExcelReader excelReader = new ExcelReader();
             HashMap<String, String> data = excelReader.getCellsFromExcelFile(filePath);
             guarantyRoutes = convertExcelDataToGuarantyRoutes(data);
+            
         } catch (Exception ex) {
             Logger.getLogger(RouteFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
+        
         return guarantyRoutes;
     }
 
@@ -623,7 +627,7 @@ public class RouteFactory {
 
             String bPointLocationInTheRow = new StringBuilder("D").append(String.valueOf(rowIndex)).toString();
             String bPoint = data.remove(bPointLocationInTheRow);//at the same time reading and removing the cell from hash Map
-            routeData.setaPoint(bPoint);
+            routeData.setbPoint(bPoint);
 
             String schemaLocationInTheRow = new StringBuilder("B").append(String.valueOf(rowIndex)).toString();
             String scheme = data.remove(schemaLocationInTheRow);//at the same time reading and removing the cell from hash Map

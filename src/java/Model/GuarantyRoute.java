@@ -12,6 +12,9 @@ public class GuarantyRoute extends Route {
     private String dateStamp;
     private String busType;
     private TreeMap<Short, GuarantyExodus> exoduses;
+    private String aPoint;
+    private String bPoint;
+    private String scheme;
     //-------------
     private Duration standardIntervalTime;
     private Duration standardTripPeriodTime;
@@ -214,5 +217,31 @@ public class GuarantyRoute extends Route {
         long intervalSeconds = Duration.between(pointZero, lastBaseReturnTime).getSeconds();
         return intervalSeconds * 0.1 / 8640;
     }
+
+    public String getaPoint() {
+        return aPoint;
+    }
+
+    public void setaPoint(String aPoint) {
+        this.aPoint = aPoint;
+    }
+
+    public String getbPoint() {
+        return bPoint;
+    }
+
+    public void setbPoint(String bPoint) {
+        this.bPoint = bPoint;
+    }
+
+    public String getScheme() {
+        return scheme;
+    }
+
+    public void setScheme(String scheme) {
+        this.scheme = scheme;
+    }
+    
+    
 
 }

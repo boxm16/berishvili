@@ -1,14 +1,20 @@
 package Controller;
 
 import DAO.TechDao;
+import Model.RouteData;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @Controller
 public class TechController {
@@ -16,12 +22,15 @@ public class TechController {
     @Autowired
     private TechDao techDao;
 
+    private RouteFactory routeFactory;
+
     private String basementDirectory;
     private BasementController basementController;
 
     public TechController() {
         this.basementController = new BasementController();
         this.basementDirectory = basementController.getBasementDirectory();
+        this.routeFactory = new RouteFactory();
     }
 
     @RequestMapping(value = "/techMan")
@@ -114,8 +123,40 @@ public class TechController {
 
     @RequestMapping(value = "createSchema", method = RequestMethod.GET)
     public String createSchema(ModelMap model) throws SQLException {
-        String creationStatus = techDao.createSchema();
-        model.addAttribute("creationStatus", creationStatus);
+        String schemaCreationStatus = techDao.createSchema();
+        model.addAttribute("schemaCreationStatus", schemaCreationStatus);
+        return "techMan";
+    }
+
+    @RequestMapping(value = "createTables", method = RequestMethod.GET)
+    public String createTables(ModelMap model) throws SQLException {
+        String routeTableCreationStatus = techDao.createRouteTable();
+        model.addAttribute("routeTableCreationStatus", routeTableCreationStatus);
+
+        return "techMan";
+    }
+
+    @RequestMapping(value = "/uploadRoutesDataFile", method = RequestMethod.POST)
+    public String uploadRoutesDataFile(@RequestParam CommonsMultipartFile file, ModelMap model) {
+        String filename = "uploadedRoutesDataExcelFile.xlsx";
+        try {
+            byte barr[] = file.getBytes();
+
+            BufferedOutputStream bout = new BufferedOutputStream(
+                    new FileOutputStream(this.basementDirectory + "/uploads/" + filename));
+            bout.write(barr);
+            bout.flush();
+            bout.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+            model.addAttribute("uploadStatus", "Upload could not been completed:" + e);
+            return "techMan";
+        }
+
+        TreeMap<Float, RouteData> routesNamesData = routeFactory.getRoutesNamesDataFromUploadedFile();
+        techDao.uploadRoutesNamesData(routesNamesData);
+        model.addAttribute("uploadStatus", "Upload completed successfully");
         return "techMan";
     }
 }

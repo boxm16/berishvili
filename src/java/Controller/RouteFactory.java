@@ -11,6 +11,7 @@ import Model.GuarantyExodus;
 import Model.GuarantyRoute;
 import Model.GuarantyTripPeriod;
 import Model.Route;
+import Model.RouteData;
 import Model.TripPeriod;
 import Model.TripVoucher;
 import java.time.LocalDateTime;
@@ -589,4 +590,50 @@ public class RouteFactory {
         return new GuarantyTripPeriod(guarantyTripPeriodType, startTimeScheduled, arrivalTimeScheduled);
 
     }
+
+    TreeMap<Float, RouteData> getRoutesNamesDataFromUploadedFile() {
+        TreeMap<Float, RouteData> routes = new TreeMap<>();
+        try {
+            String filePath = this.basementController.getBasementDirectory() + "/uploads/uploadedRoutesDataExcelFile.xlsx";
+            ExcelReader excelReader = new ExcelReader();
+            HashMap<String, String> data = excelReader.getCellsFromExcelFile(filePath);
+            routes = convertExcelDataToRoutesNameData(data);
+        } catch (Exception ex) {
+            Logger.getLogger(ExcelController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return routes;
+    }
+
+    private TreeMap<Float, RouteData> convertExcelDataToRoutesNameData(HashMap<String, String> data) {
+        TreeMap<Float, RouteData> routes = new TreeMap<>();
+        int rowIndex = 2;
+        while (!data.isEmpty()) {
+            String routeNumberLocationInTheRow = new StringBuilder("A").append(String.valueOf(rowIndex)).toString();
+            String routeNumberString = data.remove(routeNumberLocationInTheRow);//at the same time reading and removing the cell from hash Map
+            if (routeNumberString == null) {//in theory this means that you reached the end of rows with data
+                break;
+            }
+            Float routeNumberFloat = this.converter.convertRouteNumber(routeNumberString);
+            RouteData routeData = new RouteData();
+            routeData.setNumber(routeNumberString);
+
+            String aPointLocationInTheRow = new StringBuilder("C").append(String.valueOf(rowIndex)).toString();
+            String aPoint = data.remove(aPointLocationInTheRow);//at the same time reading and removing the cell from hash Map
+            routeData.setaPoint(aPoint);
+
+            String bPointLocationInTheRow = new StringBuilder("D").append(String.valueOf(rowIndex)).toString();
+            String bPoint = data.remove(bPointLocationInTheRow);//at the same time reading and removing the cell from hash Map
+            routeData.setaPoint(bPoint);
+
+            String schemaLocationInTheRow = new StringBuilder("B").append(String.valueOf(rowIndex)).toString();
+            String scheme = data.remove(schemaLocationInTheRow);//at the same time reading and removing the cell from hash Map
+            routeData.setScheme(scheme);
+
+            routes.put(routeNumberFloat, routeData);
+
+            rowIndex++;
+        }
+        return routes;
+    }
+
 }

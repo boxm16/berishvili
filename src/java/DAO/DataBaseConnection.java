@@ -6,7 +6,9 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class DataBaseConnection {
 
     public static Connection getInitConnection() throws SQLException {

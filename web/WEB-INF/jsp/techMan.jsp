@@ -39,9 +39,18 @@
         <hr><hr>
         <h1>Database Manipulations</h1>
         <hr>
-        <h4>Step one, Create Database (Schema) (berishvili_db)</h4>
         <a href="createSchema.htm" >Create Database Schema </a>
-        <br><br> ${creationStatus}
+        <br> ${schemaCreationStatus}
         <hr>
+        <a href="createTables.htm" >Create Tables </a>
+        <br>${routeTableCreationStatus}
+        <h3>Upload Excel File With Routes Data </h3>
+        <h4>Careful, routes that exists in database but are not included in uploaded files will be deleted</h4>
+        <form action="uploadRoutesDataFile.htm" method="post" enctype="multipart/form-data">  
+            Select File: <input type="file" name="file"/>  
+            <input type="submit" value="Upload File"/>  
+        </form> 
+        ${uploadStatus}
+
     </body>
 </html>

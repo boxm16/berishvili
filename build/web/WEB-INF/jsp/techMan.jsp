@@ -51,6 +51,7 @@
             <input type="submit" value="Upload File"/>  
         </form> 
         ${uploadStatus}
-
+        <br>
+        ${dataBaseInsertionStatus}
     </body>
 </html>

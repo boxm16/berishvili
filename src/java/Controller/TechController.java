@@ -155,8 +155,9 @@ public class TechController {
         }
 
         TreeMap<Float, RouteData> routesNamesData = routeFactory.getRoutesNamesDataFromUploadedFile();
-        techDao.uploadRoutesNamesData(routesNamesData);
+        String dataBaseInsertionStatus = techDao.uploadRoutesNamesData(routesNamesData);
         model.addAttribute("uploadStatus", "Upload completed successfully");
+        model.addAttribute("dataBaseInsertionStatus", dataBaseInsertionStatus);
         return "techMan";
     }
 }

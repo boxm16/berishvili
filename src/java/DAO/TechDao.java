@@ -65,7 +65,7 @@ public class TechDao {
         }
     }
 
-    public void uploadRoutesNamesData(TreeMap<Float, RouteData> routesData) {
+    public String uploadRoutesNamesData(TreeMap<Float, RouteData> routesData) {
 
         try {
             connection = dataBaseConnection.getConnection();
@@ -76,9 +76,12 @@ public class TechDao {
 
             while (resultSet.next()) {
                 String routeNumber = resultSet.getString("number");
+
+                routeNumber = routeNumber.replace("-", ".");
+
                 RouteData routeData = routesData.remove(Float.valueOf(routeNumber));
                 if (routeData == null) {
-                    deleteStatement.setString(0, routeNumber);
+                    deleteStatement.setString(1, routeNumber);
                     deleteStatement.addBatch();
                 } else {
                     updateStatement.setString(1, routeData.getaPoint());
@@ -121,6 +124,8 @@ public class TechDao {
 
         } catch (SQLException ex) {
             Logger.getLogger(TechDao.class.getName()).log(Level.SEVERE, null, ex);
+            return ex.getMessage();
         }
+        return "Data from excel file has been inserted successfully into database";
     }
 }

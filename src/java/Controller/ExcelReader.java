@@ -1,10 +1,16 @@
 package Controller;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
+import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.openxml4j.opc.PackageAccess;
 import org.apache.poi.util.XMLHelper;
@@ -26,9 +32,18 @@ public class ExcelReader {
 
     private String cellLocation;
     private String cellData;
-    private HashMap<String, String> cells = new HashMap();
+    private HashMap<String, String> cells;
 
-    public HashMap<String, String> getCellsFromExcelFile(String filename) throws Exception {
+    public ExcelReader() {
+        cells = new HashMap();
+    }
+
+    public HashMap<String, String> getCellsFromExcelFile(String filename) {
+        read(filename);
+        return this.cells;
+    }
+
+    private void read(String filename) {
         try (OPCPackage pkg = OPCPackage.open(filename, PackageAccess.READ)) {
             XSSFReader r = new XSSFReader(pkg);
             SharedStringsTable sst = r.getSharedStringsTable();
@@ -39,8 +54,19 @@ public class ExcelReader {
                 InputSource sheetSource = new InputSource(sheet);
                 parser.parse(sheetSource);
             }
+        } catch (InvalidFormatException ex) {
+            Logger.getLogger(ExcelReader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidOperationException ex) {
+            Logger.getLogger(ExcelReader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ExcelReader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (OpenXML4JException ex) {
+            Logger.getLogger(ExcelReader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SAXException ex) {
+            Logger.getLogger(ExcelReader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(ExcelReader.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return this.cells;
     }
 
     public XMLReader fetchSheetParser(SharedStringsTable sst) throws SAXException, ParserConfigurationException {
@@ -128,6 +154,7 @@ public class ExcelReader {
                 //adding cell to cel
                 cells.put(cellLocation, cellData);
                 // System.out.println(lastContents);
+
             }
         }
 

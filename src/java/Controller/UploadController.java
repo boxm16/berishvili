@@ -2,13 +2,12 @@ package Controller;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
-import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class UploadController {
@@ -27,8 +26,13 @@ public class UploadController {
     }
 
     @RequestMapping(value = "/savefile", method = RequestMethod.POST)
-    public ModelAndView upload(@RequestParam CommonsMultipartFile file, HttpSession session) {
+    public String upload(@RequestParam CommonsMultipartFile file, ModelMap model) {
         String filename = "uploadedExcelFile.xlsx";
+        if (file.isEmpty()) {
+            model.addAttribute("uploadStatus", "Upload could not been completed");
+            model.addAttribute("errorMessage", "არცერთი ფაილი არ იყო არჩეული");
+            return "upload";
+        }
         try {
             byte barr[] = file.getBytes();
 
@@ -40,9 +44,10 @@ public class UploadController {
 
         } catch (Exception e) {
             System.out.println(e);
-            return new ModelAndView("guarantyTripsUploadPage", "uploadStatus", "Upload could not been completed:" + e);
+            model.addAttribute("uploadStatus", "Upload could not been completed:" + e);
+            return "upload";
         }
-        return new ModelAndView("upload-success", "uploadStatus", "Upload completed successfully");
+        return "redirect:/index.htm";
     }
 
 }

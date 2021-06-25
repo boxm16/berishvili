@@ -574,6 +574,12 @@ public class ExcelWriter {
                 cell_18.setCellValue(guarantyRoute.getBaGuarantyTripPeriodStartTimeScheduledExcelFormat());
             }
             cell_18.setCellStyle(rowStyleGrayTimeHHmm);
+            
+              //---+++--++--++--++--++--++--++
+            Cell cell_19 = row.createCell(19);
+            cell_19.setCellValue("");
+            cell_19.setCellStyle(rowStyleGrayRegular);
+            //---+++--++--++--++--++--++--++
 
         }
 

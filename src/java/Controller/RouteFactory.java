@@ -349,18 +349,12 @@ public class RouteFactory {
 
     public TreeMap<Float, GuarantyRoute> createGuarantyRoutesFromUploadedFile() {
         TreeMap<Float, GuarantyRoute> guarantyRoutes = new TreeMap();
-        try {
-            String filePath = this.basementController.getBasementDirectory() + "/uploads/uploadedGuarantyExcelFile.xlsx";
-            ExcelReader excelReader = new ExcelReader();
-            HashMap<String, String> data = excelReader.getCellsFromExcelFile(filePath);
-            guarantyRoutes = convertExcelDataToGuarantyRoutes(data);
-            
-        } catch (Exception ex) {
-            Logger.getLogger(RouteFactory.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
+
+        String filePath = this.basementController.getBasementDirectory() + "/uploads/uploadedGuarantyExcelFile.xlsx";
+        ExcelReader excelReader = new ExcelReader();
+        HashMap<String, String> data = excelReader.getCellsFromExcelFile(filePath);
+        guarantyRoutes = convertExcelDataToGuarantyRoutes(data);
+
         return guarantyRoutes;
     }
 
@@ -638,6 +632,58 @@ public class RouteFactory {
             rowIndex++;
         }
         return routes;
+    }
+
+    public TreeMap<Float, Route> getRoutesNumbersAndDatesFromUploadedExcelFile() {
+        String filePath = this.basementController.getBasementDirectory() + "/uploads/uploadedExcelFile.xlsx";
+        ExcelReader er = new ExcelReader();
+        HashMap<String, String> data = er.getCellsFromExcelFile(filePath);
+
+        TreeMap<Float, Route> routes = new TreeMap<>();
+        int rowIndex = 8;
+        while (!data.isEmpty()) {
+            String routeNumberLocationInTheRow = new StringBuilder("H").append(String.valueOf(rowIndex)).toString();
+            String routeNumberString = data.remove(routeNumberLocationInTheRow);//at the same time reading and removing the cell from hash Map
+            if (routeNumberString == null) {//in theory this means that you reached the end of rows with data
+                break;
+            }
+            Float routeNumberFloat = this.converter.convertRouteNumber(routeNumberString);
+
+            if (routes.containsKey(routeNumberFloat)) {
+                Route route = routes.get(routeNumberFloat);
+
+                String dateStampLocationInTheRow = new StringBuilder("F").append(String.valueOf(rowIndex)).toString();
+                String dateStampExcelFormat = data.remove(dateStampLocationInTheRow);
+                Date date = this.converter.convertDateStampExcelFormatToDate(dateStampExcelFormat);
+
+                TreeMap<Date, Day> days = route.getDays();
+                if (days.containsKey(date)) {
+                    //do nothing
+                } else {
+                    days.put(date, null);
+                }
+                route.setDays(days);
+            } else {
+                Route route = new Route();
+                route.setNumber(routeNumberString);
+
+                String dateStampLocationInTheRow = new StringBuilder("F").append(String.valueOf(rowIndex)).toString();
+                String dateStampExcelFormat = data.remove(dateStampLocationInTheRow);
+                Date date = this.converter.convertDateStampExcelFormatToDate(dateStampExcelFormat);
+                String dateStamp = this.converter.convertDateStampExcelFormatToDatabaseFormat(dateStampExcelFormat);
+
+                TreeMap<Date, Day> days = route.getDays();
+                Day day = new Day();
+
+                day.setDateStamp(dateStamp);
+                days.put(date, day);
+                routes.put(routeNumberFloat, route);
+            }
+            rowIndex++;
+        }
+        data = null;
+        return routes;
+
     }
 
 }

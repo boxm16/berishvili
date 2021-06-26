@@ -649,32 +649,29 @@ public class RouteFactory {
             }
             Float routeNumberFloat = this.converter.convertRouteNumber(routeNumberString);
 
+            String dateStampLocationInTheRow = new StringBuilder("F").append(String.valueOf(rowIndex)).toString();
+            String dateStampExcelFormat = data.remove(dateStampLocationInTheRow);
+            Date date = this.converter.convertDateStampExcelFormatToDate(dateStampExcelFormat);
+            String dateStamp = this.converter.convertDateStampExcelFormatToDatabaseFormat(dateStampExcelFormat);
+
             if (routes.containsKey(routeNumberFloat)) {
                 Route route = routes.get(routeNumberFloat);
-
-                String dateStampLocationInTheRow = new StringBuilder("F").append(String.valueOf(rowIndex)).toString();
-                String dateStampExcelFormat = data.remove(dateStampLocationInTheRow);
-                Date date = this.converter.convertDateStampExcelFormatToDate(dateStampExcelFormat);
 
                 TreeMap<Date, Day> days = route.getDays();
                 if (days.containsKey(date)) {
                     //do nothing
                 } else {
-                    days.put(date, null);
+                    Day day = new Day();
+                    day.setDateStamp(dateStamp);
+                    days.put(date, day);
                 }
                 route.setDays(days);
             } else {
                 Route route = new Route();
                 route.setNumber(routeNumberString);
 
-                String dateStampLocationInTheRow = new StringBuilder("F").append(String.valueOf(rowIndex)).toString();
-                String dateStampExcelFormat = data.remove(dateStampLocationInTheRow);
-                Date date = this.converter.convertDateStampExcelFormatToDate(dateStampExcelFormat);
-                String dateStamp = this.converter.convertDateStampExcelFormatToDatabaseFormat(dateStampExcelFormat);
-
                 TreeMap<Date, Day> days = route.getDays();
                 Day day = new Day();
-
                 day.setDateStamp(dateStamp);
                 days.put(date, day);
                 routes.put(routeNumberFloat, route);

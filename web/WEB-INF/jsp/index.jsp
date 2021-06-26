@@ -20,6 +20,7 @@
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
         <style>
+
             /*
         DEMO STYLE
             */
@@ -205,6 +206,17 @@
                     display: none;
                 }
             }
+            /* ---------------------------------------------------
+                          
+            ----------------------------------------------------- */
+            input[type="checkbox"]{
+                width: 20px; /*Desired width*/
+                height: 20px; /*Desired height*/
+            }
+
+            tr  {
+                border:solid black 1px;
+            }
         </style>
     </head>
 
@@ -213,13 +225,19 @@
         <div class="wrapper">
             <!-- Sidebar  -->
             <nav id="sidebar">
+                <div class="sidebar-header" style="background-color: coral">
+                    <h3> <a href="http://berishvili.eu5.org">ძველ სერვერზე გადასვლა</a> </h3>
+                </div>
                 <div class="sidebar-header">
                     <h3>ფუნქციები</h3>
                 </div>
 
                 <ul class="list-unstyled components">
-                    <p>Dummy Heading</p>
+                    <li>
+                        <a href="guarantyTripsUploadPage.htm"">ავტობუსების მარშრუტების ანალიზი</a>
+                    </li>
                     <li class="active">
+
                         <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
                             <li>
@@ -233,9 +251,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="#">About</a>
-                    </li>
+
                     <li>
                         <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
                         <ul class="collapse list-unstyled" id="pageSubmenu">
@@ -304,20 +320,40 @@
                 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
                     <div class="container-fluid">
 
-                        <button type="button" id="sidebarCollapse" class="btn btn-info">
-                            <i class="fas fa-align-left"></i>
-                            <span>გვერდითი მენიუს დამალვა/გამოჩენა</span>
-                        </button>
+                        <a class="btn btn-primary" href="upload.htm" style="font-size: 20px">ახალი ფაილის ატვირთვა</a>
+
+                        <!--
+                                                <button type="button" id="sidebarCollapse" class="btn btn-info">
+                                                    <i class="fas fa-align-left"></i>
+                                                    <span><></span>
+                                                </button>
+                        -->
+
+                        <div style="margin-left: 5%;"> 
+                            <table>
+                                <thead>
+                                <th>
+                                    <input type="checkbox" id="mainCheckBox" style="width:28px;height:28px"  checked="true" onclick="selectRouteAll(event)">
+                                </th>
+                                <th style="width:200px">
+                                    ყველა
+                                </th>
+                                <th>
+                                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#<?php echo $routeNumber; ?>" aria-expanded="false" aria-controls="<?php echo $routeNumber; ?>">
+                                        +
+                                    </button>
+                                </th>
+                                </thead>
+                            </table>
+                        </div>
+
+
                         <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <i class="fas fa-align-justify"></i>
                         </button>
 
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="nav navbar-nav ml-auto">
-                                <li class="nav-item active">
-                              <a class="btn btn-primary" href="upload.htm" style="font-size: 20px">ახალი ფაილის ატვირთვა</a>
-                           
-                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Page</a>
                                 </li>
@@ -331,58 +367,55 @@
                         </div>
                     </div>
                 </nav>
+                <div style="margin-left: 20%;">
+                    <h3>აირჩიე მარშრუტი და რიცხვები</h3>
+                    <br>
+                    <c:forEach var="entry" items="${routes}">
 
-
-                <hr>
-
-                <c:forEach var="entry" items="${routes}">
-
-                    <table style="text-align:center; font-size:25px">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <input type="checkbox" class="routes" style="width:28px;height:28px"  checked="true">
-                                </th>
-                                <th style="width:500px">
-                                    &nbsp&nbsp   მარშრუტი #${entry.value.number}    &nbsp&nbsp   &nbsp&nbsp 
-                                </th>
-                                <th>
-                                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#${entry.value.number} " aria-expanded="false" aria-controls="${entry.value.number}">
-                                        +
-                                    </button>
-                                </th>
-                            </tr>
-                        </thead>
-                    </table>
-
-                    <div class="collapse" id="${entry.value.number}">
-
-                        <table style="text-align:center; font-size:20px" id="daysOfRoute:${entry.value.number}">
-                            <tbody>
-
-                                <c:forEach var="dayEntry" items="${entry.value.days}">
-                                    <tr>
-                                        <td>
-                                            &nbsp&nbsp&nbsp
-                                        </td>
-                                        <td>
-                                            <input type="checkbox" class="dates" checked="true" value="${entry.value.number}:${dayEntry.key}" onclick="checkDayCheckBoxes(event)"> 
-                                        </td>
-                                        <td colspan="2">
-                                            &nbsp&nbsp ${dayEntry.key}
-                                        </td>
-                                    </tr>
-                                </c:forEach> 
-                            </tbody>
+                        <table style="text-align:center; font-size:25px">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" class="routes" id="routeCheckBox:${entry.value.number}"  onclick="selectRouteAllDates(event, '${entry.value.number}')" style="width:28px;height:28px"  checked="true">
+                                    </th>
+                                    <th style="width:400px">
+                                        მარშრუტი #${entry.value.number} 
+                                    </th>
+                                    <th>
+                                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#${entry.value.number} " aria-expanded="false" aria-controls="${entry.value.number}">
+                                            +
+                                        </button>
+                                    </th>
+                                </tr>
+                            </thead>
                         </table>
 
+                        <div class="collapse" id="${entry.value.number}">
 
-                    </div>
+                            <table style="text-align:center; font-size:20px" id="daysOfRoute:${entry.value.number}">
+                                <tbody>
 
-                </c:forEach> 
+                                    <c:forEach var="dayEntry" items="${entry.value.days}">
+                                        <tr>
+                                            <td>
+                                                &nbsp&nbsp&nbsp
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" class="dates" checked="true" value="${entry.value.number}:${dayEntry.key}" onclick="checkDayCheckBoxes(event)"> 
+                                            </td>
+                                            <td colspan="2">
+                                                &nbsp&nbsp ${dayEntry.value.getDateStampWeekFormat()}
+                                            </td>
+                                        </tr>
+                                    </c:forEach> 
+                                </tbody>
+                            </table>
 
 
+                        </div>
 
+                    </c:forEach> 
+                </div>
 
             </div>
         </div>
@@ -397,17 +430,79 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
         <script type="text/javascript">
-                                                $(document).ready(function () {
-                                                    $("#sidebar").mCustomScrollbar({
-                                                        theme: "minimal"
+                                                    $(document).ready(function () {
+                                                        $("#sidebar").mCustomScrollbar({
+                                                            theme: "minimal"
+                                                        });
+
+                                                        $('#sidebarCollapse').on('click', function () {
+                                                            $('#sidebar, #content').toggleClass('active');
+                                                            $('.collapse.in').toggleClass('in');
+                                                            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                                                        });
                                                     });
 
-                                                    $('#sidebarCollapse').on('click', function () {
-                                                        $('#sidebar, #content').toggleClass('active');
-                                                        $('.collapse.in').toggleClass('in');
-                                                        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-                                                    });
-                                                });
+
+                                                    function selectRouteAll(event) {
+
+                                                        var bigCheckBox = event.target;
+                                                        var allCheckBoxes = document.querySelectorAll("input[type=\"checkbox\"]");
+                                                        for (x = 0; x < allCheckBoxes.length; x++) {
+                                                            allCheckBoxes[x].checked = bigCheckBox.checked;
+                                                        }
+                                                    }
+
+                                                    function selectRouteAllDates(event, routeNumber) {
+                                                        console.log(routeNumber);
+                                                        var checkbox = event.target;
+                                                        var table = document.getElementById("daysOfRoute:" + routeNumber);
+                                                        var targetCheckBoxes = table.querySelectorAll("input[type=\"checkbox\"]");
+
+                                                        for (x = 0; x < targetCheckBoxes.length; x++) {
+                                                            targetCheckBoxes[x].checked = checkbox.checked;
+                                                        }
+                                                        checkRouteCheckBoxes();
+
+                                                    }
+
+                                                    function checkRouteCheckBoxes() {
+                                                        var targetCheckBoxes = document.querySelectorAll(".routes");
+                                                        for (x = 0; x < targetCheckBoxes.length; x++) {
+                                                            if (targetCheckBoxes[x].checked) {
+                                                                //do nothing
+                                                            } else {
+                                                                mainCheckBox.checked = false;
+                                                                return;
+                                                            }
+                                                        }
+                                                        mainCheckBox.checked = true;
+                                                    }
+                                                    
+                                                     function checkDayCheckBoxes(event) {
+                                                       
+                                                        var targetTable = event.target.parentNode.parentNode.parentNode.parentNode;
+                                                        
+                                                        var targetTableFullId = targetTable.id;
+                                                        var targetTableIdArray = targetTableFullId.split(":");
+                                                        var routeNumber = targetTableIdArray[1];
+                                                        
+                                                        var routeCheckBox = document.getElementById("routeCheckBox:" + routeNumber);
+                                                         
+                                                        var routeDatesCheckBoxes = targetTable.querySelectorAll(".dates");
+
+                                                        for (x = 0; x < routeDatesCheckBoxes.length; x++) {
+                                                            if (routeDatesCheckBoxes[x].checked) {
+                                                                //do nothing
+                                                            } else {
+                                                                routeCheckBox.checked = false;
+                                                                checkRouteCheckBoxes();
+                                                                return;
+                                                            }
+                                                        }
+                                                        routeCheckBox.checked = true;
+                                                        checkRouteCheckBoxes();
+
+                                                    }
         </script>
     </body>
 

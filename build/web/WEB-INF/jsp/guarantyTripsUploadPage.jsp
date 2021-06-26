@@ -18,7 +18,7 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <a href="http://berishvili.eu5.org">საწყის გვერდზე გადასვლა</a>
+                    <a href="index.htm">საწყის გვერდზე გადასვლა</a>
                     <hr>
                     <center>  <h1>საგარანტიო ბრუნები: ფაილის ატვირთვა</h1></center>
                     <form action="saveGuarantyExcelFile.htm" method="post" enctype="multipart/form-data">

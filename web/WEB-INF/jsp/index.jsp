@@ -233,12 +233,11 @@
                 </div>
 
                 <ul class="list-unstyled components">
-                    <li>
-                        <a href="guarantyTripsUploadPage.htm"">ავტობუსების მარშრუტების ანალიზი</a>
-                    </li>
                     <li class="active">
-
-                        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+                        <a href="#" onclick="requestRouter('excelForm.htm')">ექსელის ფორმა</a>
+                    </li>
+                    <li >
+                        <a href="#" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">საგარანტიოები</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
                             <li>
                                 <a href="#">Home 1</a>
@@ -247,7 +246,7 @@
                                 <a href="#">Home 2</a>
                             </li>
                             <li>
-                                <a href="#">Home 3</a>
+                                <a href="guarantyTripsUploadPage.htm"">ავტობუსების მარშრუტების ანალიზი</a>
                             </li>
                         </ul>
                     </li>
@@ -401,7 +400,7 @@
                                                 &nbsp&nbsp&nbsp
                                             </td>
                                             <td>
-                                                <input type="checkbox" class="dates" checked="true" value="${entry.value.number}:${dayEntry.key}" onclick="checkDayCheckBoxes(event)"> 
+                                                <input type="checkbox" class="dates" checked="true" value="${entry.value.number}:${dayEntry.value.getDateStamp()}" onclick="checkDayCheckBoxes(event)"> 
                                             </td>
                                             <td colspan="2">
                                                 &nbsp&nbsp ${dayEntry.value.getDateStampWeekFormat()}
@@ -419,6 +418,9 @@
 
             </div>
         </div>
+        <form id="form" action="#" method="POST">
+            <input hidden type="text" id="routes_dates" name="routes:dates">
+        </form>
 
         <!-- jQuery CDN - Slim version (=without AJAX) -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -477,17 +479,17 @@
                                                         }
                                                         mainCheckBox.checked = true;
                                                     }
-                                                    
-                                                     function checkDayCheckBoxes(event) {
-                                                       
+
+                                                    function checkDayCheckBoxes(event) {
+
                                                         var targetTable = event.target.parentNode.parentNode.parentNode.parentNode;
-                                                        
+
                                                         var targetTableFullId = targetTable.id;
                                                         var targetTableIdArray = targetTableFullId.split(":");
                                                         var routeNumber = targetTableIdArray[1];
-                                                        
+
                                                         var routeCheckBox = document.getElementById("routeCheckBox:" + routeNumber);
-                                                         
+
                                                         var routeDatesCheckBoxes = targetTable.querySelectorAll(".dates");
 
                                                         for (x = 0; x < routeDatesCheckBoxes.length; x++) {
@@ -502,6 +504,24 @@
                                                         routeCheckBox.checked = true;
                                                         checkRouteCheckBoxes();
 
+                                                    }
+                                                    ////--------------------
+                                                    function requestRouter(requestTarget) {
+                                                        form.target = "_blank";
+                                                        form.action = requestTarget;
+                                                        routes_dates.value = collectSellectedCheckBoxes();
+                                                        console.log(form.action);
+                                                        form.submit();
+                                                    }
+                                                    //this function collects all checked checkbox values, concatinates them in one string and returns that string to send it after by POST method to server
+                                                    function collectSellectedCheckBoxes() {
+                                                        var returnValue = "";
+                                                        var targetCheckBoxes = document.querySelectorAll(".dates");
+                                                        for (x = 0; x < targetCheckBoxes.length; x++) {
+                                                            if (targetCheckBoxes[x].checked)
+                                                                returnValue += targetCheckBoxes[x].value + ",";
+                                                        }
+                                                        return returnValue;
                                                     }
         </script>
     </body>

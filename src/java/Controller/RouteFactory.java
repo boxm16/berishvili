@@ -475,11 +475,9 @@ public class RouteFactory {
                 guarantyTripPeriods.add(guarantyTripPeriod);
                 break;
             case "break":
-                /*do nothing
                 guarantyTripPeriod = createGuarantyBreakPeriod(data, rowIndex);
                 guarantyTripPeriods.add(guarantyTripPeriod);
-                 */
-                break;
+
             case "round":
                 ArrayList<GuarantyTripPeriod> guarantyTripPeriodsOfRound = createGuarantyTripPeridsOfRound(data, rowIndex);
                 for (GuarantyTripPeriod gtp : guarantyTripPeriodsOfRound) {
@@ -490,10 +488,6 @@ public class RouteFactory {
         guarantyExodus.setGuarantyTripPeriods(guarantyTripPeriods);
         return guarantyExodus;
     }
-
-    ;
-
-  
 
     private GuarantyTripPeriod createGuarantyBaseLeavingPeriod(HashMap<String, String> data, int rowIndex) {
         GuarantyTripPeriod baseLeavingGuarantyTripPeriod;
@@ -523,6 +517,23 @@ public class RouteFactory {
 
         }
         return baseReturnGuarantyTripPeriod;
+    }
+
+    private GuarantyTripPeriod createGuarantyBreakPeriod(HashMap<String, String> data, int rowIndex) {
+
+        GuarantyTripPeriod breakTripPeriod;
+        String guarantyTripPeriodType;
+        String break_A_LocationInTheRow = new StringBuilder("Q").append(String.valueOf(rowIndex)).toString();
+        if (data.containsKey(break_A_LocationInTheRow)) {
+            guarantyTripPeriodType = "break";
+            breakTripPeriod = createGuarantyTripPeriodFromLeftSide(data, rowIndex, guarantyTripPeriodType);
+        } else {
+            guarantyTripPeriodType = "break";
+            breakTripPeriod = createGuarantyTripPeriodFromRightSide(data, rowIndex, guarantyTripPeriodType);
+
+        }
+        return breakTripPeriod;
+
     }
 
     private ArrayList<GuarantyTripPeriod> createGuarantyTripPeridsOfRound(HashMap<String, String> data, int rowIndex) {

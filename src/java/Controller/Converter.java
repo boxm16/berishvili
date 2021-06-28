@@ -63,6 +63,16 @@ public class Converter {
         }
     }
 
+    public Date convertDateStampDatabaseFormatToDate(String databaseFormatDateStamp) {
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(databaseFormatDateStamp);
+            return date;
+        } catch (ParseException ex) {
+            Logger.getLogger(Converter.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
     public Date convertDateStampExcelFormatToDate(String dateStampExcelFormat) {
         Date date;
         try {

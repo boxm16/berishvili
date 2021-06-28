@@ -18,11 +18,12 @@ public class GuarantyRoute extends Route {
     //-------------
     private Duration standardIntervalTime;
     private Duration standardTripPeriodTime;
+    private Duration standardBreakTime;
     private LocalDateTime abGuarantyTripPeriodStartTimeScheduled;
     private LocalDateTime abSubguarantyTripPeriodStartTimeScheduled;
     private LocalDateTime baGuarantyTripPeriodStartTimeScheduled;
     private LocalDateTime baSubguarantyTripPeriodStartTimeScheduled;
-    private float totalRaces;
+    private int totalRaces;
     private LocalDateTime routeStartTime;
     private LocalDateTime routeEndTime;
 
@@ -154,11 +155,11 @@ public class GuarantyRoute extends Route {
         this.standardTripPeriodTime = standardTripPeriodTime;
     }
 
-    public float getTotalRaces() {
+    public int getTotalRaces() {
         return totalRaces;
     }
 
-    public void setTotalRaces(float totalRaces) {
+    public void setTotalRaces(int totalRaces) {
         this.totalRaces = totalRaces;
     }
 
@@ -241,7 +242,35 @@ public class GuarantyRoute extends Route {
     public void setScheme(String scheme) {
         this.scheme = scheme;
     }
-    
-    
 
+    public double getFirstBaseLeavingTime() {
+        LocalDateTime firstBaseLeavingTime = null;
+        for (GuarantyExodus exodus : this.exoduses.values()) {
+            if (firstBaseLeavingTime == null) {
+                firstBaseLeavingTime = LocalDateTime.of(1970, Month.JANUARY, 31, 23, 59, 59);
+            }
+            ArrayList<GuarantyTripPeriod> tripPeriods = exodus.getGuarantyTripPeriods();
+            GuarantyTripPeriod baseLeavingTripPeriod = tripPeriods.get(0);
+            LocalDateTime baseLeavingTripPeriodStartTime = baseLeavingTripPeriod.getStartTimeScheduled();
+            if (firstBaseLeavingTime.isAfter(baseLeavingTripPeriodStartTime)) {
+                firstBaseLeavingTime = baseLeavingTripPeriodStartTime;
+            }
+        }
+        LocalDateTime pointZero = LocalDateTime.of(1970, Month.JANUARY, 01, 00, 00, 00);
+        long intervalSeconds = Duration.between(pointZero, firstBaseLeavingTime).getSeconds();
+        return intervalSeconds * 0.1 / 8640;
+
+    }
+
+    public Duration getStandardBreakTime() {
+        return standardBreakTime;
+    }
+
+    public void setStandardBreakTime(Duration standardBreakTime) {
+        this.standardBreakTime = standardBreakTime;
+    }
+
+
+
+   
 }

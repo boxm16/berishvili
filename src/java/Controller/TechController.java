@@ -131,7 +131,8 @@ public class TechController {
     @RequestMapping(value = "createTables", method = RequestMethod.GET)
     public String createTables(ModelMap model) throws SQLException {
         String routeTableCreationStatus = techDao.createRouteTable();
-        model.addAttribute("routeTableCreationStatus", routeTableCreationStatus);
+        String lastUploadTableCreationStatus = techDao.createLastUploadTable();
+        model.addAttribute("routeTableCreationStatus", routeTableCreationStatus + "<br>" + lastUploadTableCreationStatus);
 
         return "techMan";
     }

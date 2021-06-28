@@ -5,16 +5,21 @@
  */
 package Controller;
 
+import DAO.IndexDao;
 import Model.Route;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.TreeMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class IndexXController {
+
+    @Autowired
+    private IndexDao indexDao;
 
     private String basementDirectory;
 
@@ -35,7 +40,18 @@ public class IndexXController {
         RouteFactory rf = new RouteFactory();
         TreeMap<Float, Route> routes = rf.getRoutesNumbersAndDatesFromUploadedExcelFile();
         Instant end = Instant.now();
-        System.out.println("Time needed for reading excel file:" + Duration.between(start, end));
+        System.out.println("Time needed to get route numbers and dates from uploaded excel file:" + Duration.between(start, end));
+        model.addAttribute("routes", routes);
+        return "index";
+    }
+
+    @RequestMapping(value = "indexDataBase")
+    public String goToIndexDataBaseEdition(ModelMap model) {
+        Instant start = Instant.now();
+
+        TreeMap<Float, Route> routes = indexDao.getRoutes();
+        Instant end = Instant.now();
+        System.out.println("Time needed to get route numbers and dates from database:" + Duration.between(start, end));
         model.addAttribute("routes", routes);
         return "index";
     }

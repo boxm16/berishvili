@@ -10,3 +10,11 @@ xmlsbeans-4.0.0.jar
 
 add for writing also
 commons-collections4-4.1
+
+------------------
+jars for connection pooling
+
+commons-dbcp.jar
+commons-pool.jar
+mysql-connector-java-5.1.28-bin.jar
+

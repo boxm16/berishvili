@@ -18,7 +18,7 @@ public class TechDao {
 
     @Autowired
     private DataBaseConnection dataBaseConnection;
-    
+
     private Connection connection;
 
     public String createSchema() {
@@ -66,6 +66,31 @@ public class TechDao {
         }
     }
 
+    public String createLastUploadTable() {
+        String sql = "CREATE TABLE `last_upload` ("
+                + "`number` VARCHAR(10) NOT NULL, "
+                + "`date_stamp` DATE NOT NULL) "
+                + "ENGINE = InnoDB "
+                + "DEFAULT CHARACTER SET = utf8;";
+
+        try {
+            connection = dataBaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+            statement.close();
+            connection.close();
+            return "Table 'last_upload' created successfully";
+        } catch (SQLException ex) {
+            if (ex.getSQLState().equals("42S01")) {
+                return "Table 'last_upload' already exists";
+            } else {
+                Logger.getLogger(TechDao.class.getName()).log(Level.SEVERE, null, ex);
+                return ex.getMessage();
+            }
+        }
+    }
+
+    //---------------------//----------------------//----------------------
     public String uploadRoutesNamesData(TreeMap<Float, RouteData> routesData) {
 
         try {
@@ -129,4 +154,5 @@ public class TechDao {
         }
         return "Data from excel file has been inserted successfully into database";
     }
+
 }

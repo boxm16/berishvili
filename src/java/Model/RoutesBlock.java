@@ -6,15 +6,16 @@ import java.util.TreeMap;
 
 public class RoutesBlock {
 
-    private int number;
+    private String name;
     private int maxSize;
     private TreeMap<Float, Route> routes;
     private int routesDatesCount;
     private Converter converter;
 
     public RoutesBlock(int maxSize) {
-        routes = new TreeMap<>();
-        routesDatesCount = 0;
+        this.name = "";
+        this.routes = new TreeMap<>();
+        this.routesDatesCount = 0;
         this.maxSize = maxSize;
         converter = new Converter();
     }
@@ -34,6 +35,11 @@ public class RoutesBlock {
         } else {
             route = new Route();
             route.setNumber(routeNumber);
+            if (this.name.equals("")) {
+                this.name += routeNumber;
+            } else {
+                this.name += ", " + routeNumber;
+            }
             Day day = new Day();
             day.setDateStamp(dateStamp);
             route.getDays().put(date, day);
@@ -63,4 +69,11 @@ public class RoutesBlock {
     public TreeMap<Float, Route> getRoutes() {
         return this.routes;
     }
+
+    public String getName() {
+        return name;
+    }
+
+   
+    
 }

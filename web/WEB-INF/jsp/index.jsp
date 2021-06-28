@@ -236,9 +236,9 @@
                     <li class="active">
                         <a href="#" onclick="requestRouter('excelForm.htm')">ექსელის ფორმა</a>
                     </li>
-                    <li >
-                        <a href="#" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">საგარანტიოები</a>
-                        <ul class="collapse list-unstyled" id="homeSubmenu">
+                    <li>
+                        <a href="#guarantySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">საგარანტიოები</a>
+                        <ul class="collapse list-unstyled" id="guarantySubmenu">
                             <li>
                                 <a href="#">Home 1</a>
                             </li>
@@ -507,7 +507,7 @@
                                                     }
                                                     ////--------------------
                                                     function requestRouter(requestTarget) {
-                                                        form.target = "_blank";
+                                                        form.target = "_self";
                                                         form.action = requestTarget;
                                                         routes_dates.value = collectSellectedCheckBoxes();
                                                         console.log(form.action);

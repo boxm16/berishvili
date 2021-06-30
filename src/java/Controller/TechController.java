@@ -161,4 +161,12 @@ public class TechController {
         model.addAttribute("dataBaseInsertionStatus", dataBaseInsertionStatus);
         return "techMan";
     }
+
+    @RequestMapping(value = "startNewThread", method = RequestMethod.POST)
+    public String createNewThread(ModelMap model, @RequestParam String sleepTime, String count) throws SQLException {
+
+        NewThread newThread = new NewThread(sleepTime, count);
+        newThread.start();
+        return "techMan";
+    }
 }

@@ -53,5 +53,14 @@
         ${uploadStatus}
         <br>
         ${dataBaseInsertionStatus}
+
+
+        <hr>
+        <h2>Threads</h2>
+        <form action="startNewThread.htm" method="POST">
+            <input type="number" name="sleepTime" value="3">
+            <button type="submit">Start New Thread</button>
+             <input type="number" name="count" value="3">
+        </form>
     </body>
 </html>

@@ -21,30 +21,33 @@ import org.springframework.stereotype.Repository;
 public class UploadDao {
 
     @Autowired
+    private DataBaseConnection dataBaseConnection;
+
+    @Autowired
     private DataSource dataSource;
-    Connection connection = null;
-    Statement statement = null;
-    ResultSet resultSet = null;
+    private Connection connection = null;
+    private Statement statement = null;
+    private ResultSet resultSet = null;
 
     public String deleteLastUpload() {
+        String errorMessage = "";
         try {
-            connection = DataSource.getInstance().getConnection();
+            // connection = dataSource.getInstance().getConnection();
+            connection = dataBaseConnection.getConnection();
             statement = connection.createStatement();
             statement.executeUpdate("delete from last_upload");
             statement.close();
             connection.close();
             return "Last uploaded routes and dates has been deleted";
-        } catch (IOException ex) {
-            Logger.getLogger(IndexDao.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(IndexDao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (PropertyVetoException ex) {
-            Logger.getLogger(IndexDao.class.getName()).log(Level.SEVERE, null, ex);
+            errorMessage = ex.getMessage();
         }
-        return "Last uploaded routes and dates cant be deleted";
+        return "Last uploaded routes and dates cant be deleted:" + errorMessage;
     }
 
     public String insertNewUpload(TreeMap<Float, Route> routesNumbersAndDatesFromUploadedExcelFile) {
+        System.out.println("Starting Upload Insertion");
         try {
             connection = DataSource.getInstance().getConnection();
             statement = connection.createStatement();

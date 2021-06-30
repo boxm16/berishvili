@@ -18,3 +18,11 @@ commons-dbcp.jar
 commons-pool.jar
 mysql-connector-java-5.1.28-bin.jar
 
+------------------
+On AWS Instance Reboot or Restart public DNS changes,
+so you need to reconfigure some things , besides changing href in berishvili.eu5.org
+first, you need to reconfigure Putty connection (reenter new public address and reenter password( .pem file)
+
+
+
+

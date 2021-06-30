@@ -34,7 +34,7 @@ public class IndexXController {
         return "indexX";
     }
 
-    @RequestMapping(value = "index")
+    @RequestMapping(value = "indexFromExcelFile")
     public String goToIndex(ModelMap model) {
         Instant start = Instant.now();
         RouteFactory rf = new RouteFactory();
@@ -45,7 +45,7 @@ public class IndexXController {
         return "index";
     }
 
-    @RequestMapping(value = "indexDataBase")
+    @RequestMapping(value = "index")
     public String goToIndexDataBaseEdition(ModelMap model) {
         Instant start = Instant.now();
 

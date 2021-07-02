@@ -47,7 +47,7 @@
                     </table>
 
                     <!-- Modal -->
-                    <form action="routes.php" method="POST">
+                    <form action="saveRoute.htm" method="POST">
                         <div class="modal fade bd-example-modal-lg" id="confirmationWindow" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                                 <div class="modal-content">

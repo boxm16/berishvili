@@ -80,4 +80,21 @@ public class RouteDao {
         System.out.println("New routes from excel file has been inserted successfully into database");
     }
 
+    public void updateRoute(RouteData route) {
+        try {
+            connection = dataBaseConnection.getConnection();
+            PreparedStatement updateStatement = connection.prepareStatement("UPDATE route SET a_point = ?, b_point=?, scheme =? where number = ?");
+            updateStatement.setString(1, route.getaPoint());
+            updateStatement.setString(2, route.getbPoint());
+            updateStatement.setString(3, route.getScheme());
+            updateStatement.setString(4, route.getNumber());
+            updateStatement.execute();
+            System.out.println("Route #" + route.getNumber() + "hase been  updated");
+        } catch (SQLException ex) {
+            Logger.getLogger(RouteDao.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+
+    }
+
 }

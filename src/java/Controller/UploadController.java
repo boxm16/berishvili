@@ -61,8 +61,6 @@ public class UploadController {
             RouteFactory routeFactory = new RouteFactory();
             TreeMap<Float, Route> routesNumbersAndDatesFromUploadedExcelFile = routeFactory.getRoutesNumbersAndDatesFromUploadedExcelFile();
 
-            //UploadInsertionThread uit = new UploadInsertionThread(routesNumbersAndDatesFromUploadedExcelFile);
-            //uit.start();
             String deletionStatus = uploadDao.deleteLastUpload();
             System.out.println("Last Upload Deletion Status:" + deletionStatus);
             String insertionStatus = uploadDao.insertNewUpload(routesNumbersAndDatesFromUploadedExcelFile);
@@ -72,6 +70,9 @@ public class UploadController {
             System.out.print("Memory Usage after uploading: ");
             mu.printMemoryUsage();
             System.out.println("--------------------------------------------------");
+
+            UploadInsertionThread uit = new UploadInsertionThread();
+            uit.start();
         } catch (Exception e) {
             System.out.println(e);
             model.addAttribute("uploadStatus", "Upload could not been completed:" + e);

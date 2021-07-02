@@ -1,10 +1,13 @@
 package DAO;
 
+import Model.Route;
 import Model.RouteData;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +47,37 @@ public class RouteDao {
             System.out.println(ex.getMessage());
         }
         return routes;
+    }
+
+    public <K, V> void insertRoutes(TreeMap<K, V> routes) {
+        try {
+            connection = dataBaseConnection.getConnection();
+            PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO route (number, prefix, suffix) VALUES (?,?,?)");
+            String prefix;
+            String suffix;
+            for (Map.Entry<K, V> entry : routes.entrySet()) {
+                Route route = (Route) entry.getValue();
+                String routeNumber = route.getNumber();
+
+                if (routeNumber.contains("-")) {
+                    prefix = routeNumber.split("-")[0];
+                    suffix = routeNumber.split("-")[1];
+                } else {
+                    prefix = routeNumber;
+                    suffix = null;
+                }
+
+                insertStatement.setString(1, routeNumber);
+                insertStatement.setString(2, prefix);
+                insertStatement.setString(3, suffix);
+                insertStatement.addBatch();
+            }
+            insertStatement.executeBatch();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TechDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("New routes from excel file has been inserted successfully into database");
     }
 
 }

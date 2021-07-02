@@ -25,6 +25,8 @@
                     </form>
 
                     <a href="downloadFile.htm?fileName=${fileName}.xlsx">${fileName}</a> <br>
+                    <hr>
+                    ${unregisteredRoutesMessage}
                 </div>
             </div>
         </div>

@@ -2,18 +2,18 @@ package Model;
 
 import Controller.Converter;
 import java.util.Date;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class RoutesBlock {
 
-    private String name;
     private int maxSize;
     private TreeMap<Float, BasicRoute> routes;
     private int routesDatesCount;
     private Converter converter;
 
     public RoutesBlock(int maxSize) {
-        this.name = "";
+
         this.routes = new TreeMap<>();
         this.routesDatesCount = 0;
         this.maxSize = maxSize;
@@ -35,11 +35,7 @@ public class RoutesBlock {
         } else {
             route = new BasicRoute();
             route.setNumber(routeNumber);
-            if (this.name.equals("")) {
-                this.name += routeNumber;
-            } else {
-                this.name += ", " + routeNumber;
-            }
+
             Day day = new Day();
             day.setDateStamp(dateStamp);
             route.getDays().put(date, day);
@@ -71,9 +67,15 @@ public class RoutesBlock {
     }
 
     public String getName() {
+        String name = "";
+        for (Map.Entry<Float, BasicRoute> routeEntry : this.routes.entrySet()) {
+            if (name.equals("")) {
+                name += routeEntry.getValue().getNumber();
+            } else {
+                name += ", " + routeEntry.getValue().getNumber();
+            }
+        }
         return name;
     }
 
-   
-    
 }

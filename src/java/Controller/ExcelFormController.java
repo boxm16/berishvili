@@ -1,7 +1,9 @@
 package Controller;
 
+import Model.Route;
 import Model.RoutesBlock;
 import java.util.ArrayList;
+import java.util.TreeMap;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,7 +18,10 @@ public class ExcelFormController {
         RoutesBlocksBuilder rbb = new RoutesBlocksBuilder();
         ArrayList<RoutesBlock> selectedRoutesBlocks = rbb.createRoutesBlocks(routeDates);
         session.setAttribute("selectedRoutesBlocks", selectedRoutesBlocks);
+        TreeMap<Float, Route> routes = getSelectedBlockRoutes(session, "0");
+        model.addAttribute("routes", routes);
         model.addAttribute("selectedRoutesBlocks", selectedRoutesBlocks);
+
         return "excelForm";
     }
 
@@ -25,9 +30,18 @@ public class ExcelFormController {
         if (session.getAttribute("selectedRoutesBlocks") == null) {
             return "errorPage";
         }
+
+        TreeMap<Float, Route> routes = getSelectedBlockRoutes(session, blockIndex);
+        model.addAttribute("routes", routes);
+        return "excelForm";
+    }
+
+    private TreeMap<Float, Route> getSelectedBlockRoutes(HttpSession session, String blockIndex) {
         ArrayList<RoutesBlock> selectedRoutesBlocks = (ArrayList<RoutesBlock>) session.getAttribute("selectedRoutesBlocks");
         RoutesBlock block = selectedRoutesBlocks.get(Integer.valueOf(blockIndex));
-
-        return "excelForm";
+    
+        RouteFactory routeFactory = new RouteFactory();
+        TreeMap<Float, Route> routes = routeFactory.createSelectedRoutesFromUploadedFile(block);
+        return routes;
     }
 }

@@ -5,13 +5,15 @@
  */
 package Controller;
 
+import Model.BasicRoute;
 import Model.Day;
 import Model.Exodus;
 import Model.GuarantyExodus;
 import Model.GuarantyRoute;
 import Model.GuarantyTripPeriod;
-import Model.BasicRoute;
+import Model.Route;
 import Model.RouteData;
+import Model.RoutesBlock;
 import Model.TripPeriod;
 import Model.TripVoucher;
 import java.time.LocalDateTime;
@@ -692,6 +694,73 @@ public class RouteFactory {
         data = null;
         return routes;
 
+    }
+
+    public TreeMap<Float, Route> createSelectedRoutesFromUploadedFile(RoutesBlock block) {
+        String filePath = this.basementController.getBasementDirectory() + "/uploads/uploadedExcelFile.xlsx";
+        ExcelReader excelReader = new ExcelReader();
+        HashMap<String, String> data = excelReader.getCellsFromExcelFile(filePath);
+        TreeMap<Float, Route> routes = convertExcelDataToRoutes(block, data);
+        return routes;
+    }
+
+    private TreeMap<Float, Route> convertExcelDataToRoutes(RoutesBlock block, HashMap<String, String> data) {
+        TreeMap<Float, Route> routes = new TreeMap();
+
+        int rowIndex = 8;
+        while (!data.isEmpty()) {
+            String routeNumberLocationInTheRow = new StringBuilder("H").append(String.valueOf(rowIndex)).toString();
+            String routeNumberString = data.remove(routeNumberLocationInTheRow);//at the same time reading and removing the cell from hash Map
+            if (routeNumberString == null) {//in theory this means that you reached the end of rows with data
+                break;
+            }
+            Float routeNumberFloat = this.converter.convertRouteNumber(routeNumberString);
+            BasicRoute blockRoute = block.getRoutes().get(routeNumberFloat);
+           if (blockRoute != null) {//this means we want this route
+                Route route;
+                if (routes.containsKey(routeNumberFloat)) {
+                    route = routes.get(routeNumberFloat);
+                } else {
+                    route = new Route();
+                    route.setNumber(routeNumberString);
+                }
+
+                route = addRowElementsToRoute(blockRoute, route, data, rowIndex);
+                routes.put(routeNumberFloat, route);
+                if (rowIndex % 1000 == 0) {
+                    System.out.print("RowIndex:" + rowIndex + " #");
+                    mu.printMemoryUsage();
+                }
+            }
+            rowIndex++;
+        }
+
+        return routes;
+    }
+
+    private Route addRowElementsToRoute(BasicRoute blockRoute, Route route, HashMap<String, String> data, int rowIndex) {
+        String dateStampLocationInTheRow = new StringBuilder("F").append(String.valueOf(rowIndex)).toString();
+        String dateStampExcelFormat = data.remove(dateStampLocationInTheRow);
+        Date date = this.converter.convertDateStampExcelFormatToDate(dateStampExcelFormat);
+        String dateStamp = this.converter.convertDateStampExcelFormatToDatabaseFormat(dateStampExcelFormat);
+
+        TreeMap<Date, Day> blockDays = blockRoute.getDays();
+        if (blockDays.containsKey(date)) {
+            TreeMap<Date, Day> days = route.getDays();
+            Day day;
+            if (days.containsKey(date)) {
+                day = days.get(date);
+            } else {
+                day = new Day();
+                day.setDateStamp(dateStamp);
+            }
+            day = addRowElementsToDay(day, data, rowIndex);
+            days.put(date, day);
+
+            route.setDays(days);
+        }
+
+        return route;
     }
 
 }

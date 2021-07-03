@@ -14,6 +14,7 @@
         <div class="container">
             <div class="row">
                 <div class="col">
+                    <a href="index.htm">საწყის გვერდზე გადასვლა</a>
                     <hr><center><h2>ჩაწერე ფაილის დასახელება და დააჭირე 'ექსელში ექსპორტი'</h2><br>
 
                     </center>

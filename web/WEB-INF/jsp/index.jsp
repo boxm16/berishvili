@@ -234,7 +234,7 @@
 
                 <ul class="list-unstyled components">
                     <li class="active">
-                        <a href="#" onclick="requestRouter('excelForm.htm')">ექსელის ფორმა</a>
+                        <a href="#" onclick="requestRouter('excelFormInitialRequest.htm')">ექსელის ფორმა</a>
                     </li>
                     <li>
                         <a href="#guarantySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">საგარანტიოები</a>
@@ -357,8 +357,8 @@
                                     <a class="nav-link" href="index.htm">Go index DataBase Edition</a>
                                 </li>
                                 <li class="nav-item">
-                                        <a class="nav-link" href="indexFromExcelFile.htm">Go index Excel File Edition</a>
-                                                                </li>
+                                    <a class="nav-link" href="indexFromExcelFile.htm">Go index Excel File Edition</a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Page</a>
                                 </li>
@@ -420,6 +420,7 @@
         </div>
         <form id="form" action="#" method="POST">
             <input hidden type="text" id="routes_dates" name="routes:dates">
+            <input hiddent type="number" name="blockNumber" value="0">
         </form>
 
         <!-- jQuery CDN - Slim version (=without AJAX) -->

@@ -232,10 +232,10 @@
                 </div>
 
                 <ul class="list-unstyled components">
-                    <c:forEach var="routesBlock" items="${routesBlocksArray}">
+                    <c:forEach var="routesBlock" items="${selectedRoutesBlocks}" varStatus="loop">
                         <li >
-                            <a >${routesBlock.name}</a></li>
-
+                            <a href="excelForm.htm?blockIndex=${loop.index}">${routesBlock.name}</a>
+                        </li>
                     </c:forEach> 
 
                     <li >

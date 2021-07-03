@@ -6,7 +6,7 @@
 package Controller;
 
 import DAO.IndexDao;
-import Model.Route;
+import Model.BasicRoute;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.TreeMap;
@@ -38,7 +38,7 @@ public class IndexXController {
     public String goToIndex(ModelMap model) {
         Instant start = Instant.now();
         RouteFactory rf = new RouteFactory();
-        TreeMap<Float, Route> routes = rf.getRoutesNumbersAndDatesFromUploadedExcelFile();
+        TreeMap<Float, BasicRoute> routes = rf.getRoutesNumbersAndDatesFromUploadedExcelFile();
         Instant end = Instant.now();
         System.out.println("Time needed to get route numbers and dates from uploaded excel file:" + Duration.between(start, end));
         model.addAttribute("routes", routes);
@@ -49,7 +49,7 @@ public class IndexXController {
     public String goToIndexDataBaseEdition(ModelMap model) {
         Instant start = Instant.now();
 
-        TreeMap<Float, Route> routes = indexDao.getRoutes();
+        TreeMap<Float, BasicRoute> routes = indexDao.getRoutes();
         Instant end = Instant.now();
         System.out.println("Time needed to get route numbers and dates from database:" + Duration.between(start, end));
         model.addAttribute("routes", routes);

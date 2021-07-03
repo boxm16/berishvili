@@ -10,7 +10,7 @@ import Model.Exodus;
 import Model.GuarantyExodus;
 import Model.GuarantyRoute;
 import Model.GuarantyTripPeriod;
-import Model.Route;
+import Model.BasicRoute;
 import Model.RouteData;
 import Model.TripPeriod;
 import Model.TripVoucher;
@@ -34,22 +34,22 @@ public class RouteFactory {
         this.basementController = new BasementController();
     }
 
-    public TreeMap<Float, Route> createRoutesFromUploadedFile() {
-        TreeMap<Float, Route> routes = new TreeMap<>();
+    public TreeMap<Float, BasicRoute> createBasicRoutesFromUploadedFile() {
+        TreeMap<Float, BasicRoute> routes = new TreeMap<>();
         try {
 
             String filePath = this.basementController.getBasementDirectory() + "/uploads/uploadedExcelFile.xlsx";
             ExcelReader excelReader = new ExcelReader();
             HashMap<String, String> data = excelReader.getCellsFromExcelFile(filePath);
-            routes = convertExcelDataToRoutes(data);
+            routes = convertExcelDataToBasicRoutes(data);
         } catch (Exception ex) {
             Logger.getLogger(ExcelController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return routes;
     }
 
-    private TreeMap<Float, Route> convertExcelDataToRoutes(HashMap<String, String> data) {
-        TreeMap<Float, Route> routes = new TreeMap<>();
+    private TreeMap<Float, BasicRoute> convertExcelDataToBasicRoutes(HashMap<String, String> data) {
+        TreeMap<Float, BasicRoute> routes = new TreeMap<>();
         int rowIndex = 8;
         while (!data.isEmpty()) {
             String routeNumberLocationInTheRow = new StringBuilder("H").append(String.valueOf(rowIndex)).toString();
@@ -58,14 +58,14 @@ public class RouteFactory {
                 break;
             }
             Float routeNumberFloat = this.converter.convertRouteNumber(routeNumberString);
-            Route route;
+            BasicRoute route;
             if (routes.containsKey(routeNumberFloat)) {
                 route = routes.get(routeNumberFloat);
             } else {
-                route = new Route();
+                route = new BasicRoute();
             }
             route.setNumber(routeNumberString);
-            route = addRowElementsToRoute(route, data, rowIndex);
+            route = addRowElementsToBasicRoute(route, data, rowIndex);
             routes.put(routeNumberFloat, route);
             if (rowIndex % 1000 == 0) {
                 System.out.print("RowIndex:" + rowIndex + " #");
@@ -75,8 +75,8 @@ public class RouteFactory {
         }
 
         /*
-        for (Map.Entry<Float, Route> routeEntry : routes.entrySet()) {
-            Route route = routeEntry.getValue();
+        for (Map.Entry<Float, BasicRoute> routeEntry : routes.entrySet()) {
+            BasicRoute route = routeEntry.getValue();
             System.out.println("RouteNumber:" + route);
 
             TreeMap<Date, Day> days = route.getDays();
@@ -103,7 +103,7 @@ public class RouteFactory {
         return routes;
     }
 
-    private Route addRowElementsToRoute(Route route, HashMap<String, String> data, int rowIndex) {
+    private BasicRoute addRowElementsToBasicRoute(BasicRoute route, HashMap<String, String> data, int rowIndex) {
         //----first baseNumber
         String baseNumberLocationInTheRow = new StringBuilder("A").append(String.valueOf(rowIndex)).toString();
         short baseNumber = Short.valueOf(data.remove(baseNumberLocationInTheRow));
@@ -645,12 +645,12 @@ public class RouteFactory {
         return routes;
     }
 
-    public TreeMap<Float, Route> getRoutesNumbersAndDatesFromUploadedExcelFile() {
+    public TreeMap<Float, BasicRoute> getRoutesNumbersAndDatesFromUploadedExcelFile() {
         String filePath = this.basementController.getBasementDirectory() + "/uploads/uploadedExcelFile.xlsx";
         ExcelReader er = new ExcelReader();
         HashMap<String, String> data = er.getCellsFromExcelFile(filePath);
 
-        TreeMap<Float, Route> routes = new TreeMap<>();
+        TreeMap<Float, BasicRoute> routes = new TreeMap<>();
         int rowIndex = 8;
         while (!data.isEmpty()) {
             String routeNumberLocationInTheRow = new StringBuilder("H").append(String.valueOf(rowIndex)).toString();
@@ -666,7 +666,7 @@ public class RouteFactory {
             String dateStamp = this.converter.convertDateStampExcelFormatToDatabaseFormat(dateStampExcelFormat);
 
             if (routes.containsKey(routeNumberFloat)) {
-                Route route = routes.get(routeNumberFloat);
+                BasicRoute route = routes.get(routeNumberFloat);
 
                 TreeMap<Date, Day> days = route.getDays();
                 if (days.containsKey(date)) {
@@ -678,7 +678,7 @@ public class RouteFactory {
                 }
                 route.setDays(days);
             } else {
-                Route route = new Route();
+                BasicRoute route = new BasicRoute();
                 route.setNumber(routeNumberString);
 
                 TreeMap<Date, Day> days = route.getDays();

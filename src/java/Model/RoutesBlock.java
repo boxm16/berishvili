@@ -8,7 +8,7 @@ public class RoutesBlock {
 
     private String name;
     private int maxSize;
-    private TreeMap<Float, Route> routes;
+    private TreeMap<Float, BasicRoute> routes;
     private int routesDatesCount;
     private Converter converter;
 
@@ -25,7 +25,7 @@ public class RoutesBlock {
         String routeNumber = routeDateArray[0];
         String dateStamp = routeDateArray[1];
         Date date = this.converter.convertDateStampDatabaseFormatToDate(dateStamp);
-        Route route;
+        BasicRoute route;
         if (routes.containsKey(this.converter.convertRouteNumber(routeNumber))) {
             route = routes.get(this.converter.convertRouteNumber(routeNumber));
             Day day = new Day();
@@ -33,7 +33,7 @@ public class RoutesBlock {
             route.getDays().put(date, day);
             routesDatesCount++;
         } else {
-            route = new Route();
+            route = new BasicRoute();
             route.setNumber(routeNumber);
             if (this.name.equals("")) {
                 this.name += routeNumber;
@@ -54,19 +54,19 @@ public class RoutesBlock {
         return (this.routesDatesCount > this.maxSize);
     }
 
-    public Route removeLastRoute() {
+    public BasicRoute removeLastRoute() {
         Float lastKey = this.routes.lastKey();
-        Route route = this.routes.get(lastKey);
+        BasicRoute route = this.routes.get(lastKey);
         this.routes.pollLastEntry();
         return route;
     }
 
-    public void addRoute(Route route) {
+    public void addRoute(BasicRoute route) {
         this.routes.put(this.converter.convertRouteNumber(route.getNumber()), route);
         this.routesDatesCount = +route.getDays().size();
     }
 
-    public TreeMap<Float, Route> getRoutes() {
+    public TreeMap<Float, BasicRoute> getRoutes() {
         return this.routes;
     }
 

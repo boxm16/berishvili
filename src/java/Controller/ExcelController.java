@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.Route;
+import Model.BasicRoute;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.TreeMap;
@@ -21,14 +21,14 @@ public class ExcelController {
     public String getRoutesFromUploadedFile(ModelMap model) {
         Instant inst1 = Instant.now();
 
-        TreeMap<Float, Route> routes = new TreeMap();
+        TreeMap<Float, BasicRoute> routes = new TreeMap();
 
         System.out.println();
         System.out.println("----- MEMORY USAGE ---BEFORE----  FILE READING---------");
         mu.showMemoryUsage();
         System.out.println("----END OF MEMORY USAGE ---BEFORE----  FILE READING---------");
         RouteFactory routeFactory = new RouteFactory();
-        routes = routeFactory.createRoutesFromUploadedFile();
+        routes = routeFactory.createBasicRoutesFromUploadedFile();
         //tring to deallocate memmory
         /* for (Iterator<Map.Entry<String, String>> it = data.entrySet().iterator(); it.hasNext();) {
             Map.Entry<String, String> entry = it.next();
@@ -55,7 +55,7 @@ public class ExcelController {
     public String writeExcelFile() {
         ExcelWriter excelWriter = new ExcelWriter();
         RouteFactory routeFactory = new RouteFactory();
-        TreeMap<Float, Route> routes = routeFactory.createRoutesFromUploadedFile();
+        TreeMap<Float, BasicRoute> routes = routeFactory.createBasicRoutesFromUploadedFile();
         excelWriter.write(routes);
         return "index";
     }

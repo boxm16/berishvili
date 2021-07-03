@@ -7,7 +7,7 @@ package Controller;
 
 import Model.Day;
 import Model.GuarantyRoute;
-import Model.Route;
+import Model.BasicRoute;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Duration;
@@ -40,7 +40,7 @@ public class ExcelWriter {
 
     }
 
-    public void write(TreeMap<Float, Route> routes) {
+    public void write(TreeMap<Float, BasicRoute> routes) {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("მარშრუტები");
@@ -51,7 +51,7 @@ public class ExcelWriter {
 
         int rowIndex = 0;
 
-        for (Map.Entry<Float, Route> routeEntry : routes.entrySet()) {
+        for (Map.Entry<Float, BasicRoute> routeEntry : routes.entrySet()) {
             Row row = sheet.createRow(rowIndex);
             int columnIndex = 0;
             float routeNumber = routeEntry.getKey();
@@ -60,7 +60,7 @@ public class ExcelWriter {
             cell.setCellValue(routeNumber);
             cell.setCellStyle(style);
 
-            Route route = routeEntry.getValue();
+            BasicRoute route = routeEntry.getValue();
             TreeMap<Date, Day> days = route.getDays();
             for (Map.Entry<Date, Day> dayEntry : days.entrySet()) {
                 columnIndex++;

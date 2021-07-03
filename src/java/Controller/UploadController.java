@@ -1,7 +1,7 @@
 package Controller;
 
 import DAO.UploadDao;
-import Model.Route;
+import Model.BasicRoute;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.time.Duration;
@@ -59,7 +59,7 @@ public class UploadController {
             bout.flush();
             bout.close();
             RouteFactory routeFactory = new RouteFactory();
-            TreeMap<Float, Route> routesNumbersAndDatesFromUploadedExcelFile = routeFactory.getRoutesNumbersAndDatesFromUploadedExcelFile();
+            TreeMap<Float, BasicRoute> routesNumbersAndDatesFromUploadedExcelFile = routeFactory.getRoutesNumbersAndDatesFromUploadedExcelFile();
 
             String deletionStatus = uploadDao.deleteLastUpload();
             System.out.println("Last Upload Deletion Status:" + deletionStatus);

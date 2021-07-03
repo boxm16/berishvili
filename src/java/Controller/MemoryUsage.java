@@ -5,7 +5,7 @@
  */
 package Controller;
 
-import Model.Route;
+import Model.BasicRoute;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +31,7 @@ public class MemoryUsage {
 
     public void runTest(long routesQuantity) {
         System.out.println("Routes to be created:" + routesQuantity);
-        Map<Integer, Route> map = new HashMap();
+        Map<Integer, BasicRoute> map = new HashMap();
         Runtime rt = Runtime.getRuntime();
         long prevTotal = 0;
         long prevFree = rt.freeMemory();
@@ -52,7 +52,7 @@ public class MemoryUsage {
                 prevTotal = total;
                 prevFree = free;
             }
-            map.put(i, new Route());
+            map.put(i, new BasicRoute());
         }
     }
 

@@ -1,6 +1,6 @@
 package DAO;
 
-import Model.Route;
+import Model.BasicRoute;
 import Model.RouteData;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -56,7 +56,7 @@ public class RouteDao {
             String prefix;
             String suffix;
             for (Map.Entry<K, V> entry : routes.entrySet()) {
-                Route route = (Route) entry.getValue();
+                BasicRoute route = (BasicRoute) entry.getValue();
                 String routeNumber = route.getNumber();
 
                 if (routeNumber.contains("-")) {

@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-public class GuarantyRoute extends Route {
+public class GuarantyRoute extends BasicRoute {
 
     private String dateStamp;
     private String busType;

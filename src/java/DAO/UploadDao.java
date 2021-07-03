@@ -1,7 +1,7 @@
 package DAO;
 
 import Model.Day;
-import Model.Route;
+import Model.BasicRoute;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.sql.Connection;
@@ -46,14 +46,14 @@ public class UploadDao {
         return "Last uploaded routes and dates cant be deleted:" + errorMessage;
     }
 
-    public String insertNewUpload(TreeMap<Float, Route> routesNumbersAndDatesFromUploadedExcelFile) {
+    public String insertNewUpload(TreeMap<Float, BasicRoute> routesNumbersAndDatesFromUploadedExcelFile) {
         System.out.println("Starting Upload Insertion");
         try {
             connection = DataSource.getInstance().getConnection();
             statement = connection.createStatement();
             PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO last_upload (number, date_stamp) VALUES (?,?)");
-            for (Map.Entry<Float, Route> routeEntry : routesNumbersAndDatesFromUploadedExcelFile.entrySet()) {
-                Route route = routeEntry.getValue();
+            for (Map.Entry<Float, BasicRoute> routeEntry : routesNumbersAndDatesFromUploadedExcelFile.entrySet()) {
+                BasicRoute route = routeEntry.getValue();
                 TreeMap<Date, Day> days = route.getDays();
                 for (Map.Entry<Date, Day> dayEntry : days.entrySet()) {
                     Day day = dayEntry.getValue();

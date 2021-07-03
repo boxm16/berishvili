@@ -2,7 +2,7 @@ package DAO;
 
 import Controller.Converter;
 import Model.Day;
-import Model.Route;
+import Model.BasicRoute;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.sql.Connection;
@@ -26,15 +26,15 @@ public class IndexDao {
     Statement statement = null;
     ResultSet resultSet = null;
 
-    public TreeMap<Float, Route> getRoutes() {
-        TreeMap<Float, Route> routes = new TreeMap<>();
+    public TreeMap<Float, BasicRoute> getRoutes() {
+        TreeMap<Float, BasicRoute> routes = new TreeMap<>();
         this.converter = new Converter();
         try {
             connection = DataSource.getInstance().getConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery("select * from last_upload");
             while (resultSet.next()) {
-                Route route ;
+                BasicRoute route ;
                 String routeNumber = resultSet.getString("number");
                 String dateStamp = resultSet.getString("date_stamp");
                 Date date = this.converter.convertDateStampDatabaseFormatToDate(dateStamp);
@@ -47,7 +47,7 @@ public class IndexDao {
                     route = routes.get(routeNumberFloat);
 
                 } else {
-                    route = new Route();
+                    route = new BasicRoute();
 
                 }
                 route.setNumber(routeNumber);

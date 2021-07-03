@@ -27,7 +27,7 @@ public class ExcelFormController {
         }
         ArrayList<RoutesBlock> selectedRoutesBlocks = (ArrayList<RoutesBlock>) session.getAttribute("selectedRoutesBlocks");
         RoutesBlock block = selectedRoutesBlocks.get(Integer.valueOf(blockIndex));
-        System.out.println(session.getCreationTime());
+
         return "excelForm";
     }
 }

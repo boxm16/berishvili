@@ -1,7 +1,7 @@
 package Controller;
 
 import Model.Day;
-import Model.Route;
+import Model.BasicRoute;
 import Model.RoutesBlock;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,7 +16,7 @@ public class RoutesBlocksBuilder {
         for (String routeDate : routeDatesArray) {
             if (!routeDate.equals("")) {
                 if (routesBlock.isFull()) {
-                    Route lastRoute = routesBlock.removeLastRoute();
+                    BasicRoute lastRoute = routesBlock.removeLastRoute();
                     routesBlocksArray.add(routesBlock);
                     routesBlock = new RoutesBlock(50);
                     routesBlock.addRoute(lastRoute);
@@ -29,8 +29,8 @@ public class RoutesBlocksBuilder {
         routesBlocksArray.add(routesBlock);
 
         for (RoutesBlock rb : routesBlocksArray) {
-            for (Map.Entry<Float, Route> entry : rb.getRoutes().entrySet()) {
-                Route route = entry.getValue();
+            for (Map.Entry<Float, BasicRoute> entry : rb.getRoutes().entrySet()) {
+                BasicRoute route = entry.getValue();
                 for (Map.Entry<Date, Day> entryD : route.getDays().entrySet()) {
                     System.out.println("RouteNumber:" + route.getNumber() + " Date:" + entryD.getValue().getDateStamp());
                 }

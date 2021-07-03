@@ -352,7 +352,15 @@
                         <c:forEach var="exodusEntrySet" items="${dayEntrySet.value.exoduses}">
 
                             Exodus:    ${exodusEntrySet.value.number}<br>
+                       
 
+                            <c:forEach var="tripVouchersEntry" items="${exodusEntrySet.value.tripVouchers}">
+
+                                TripVoucher:    ${tripVouchersEntry.value.number}<br>
+
+
+
+                            </c:forEach>
 
 
                         </c:forEach>

@@ -11,7 +11,6 @@ import Model.Exodus;
 import Model.GuarantyExodus;
 import Model.GuarantyRoute;
 import Model.GuarantyTripPeriod;
-import Model.Route;
 import Model.RouteData;
 import Model.RoutesBlock;
 import Model.TripPeriod;
@@ -696,16 +695,16 @@ public class RouteFactory {
 
     }
 
-    public TreeMap<Float, Route> createSelectedRoutesFromUploadedFile(RoutesBlock block) {
+    public TreeMap<Float, BasicRoute> createSelectedRoutesFromUploadedFile(RoutesBlock block) {
         String filePath = this.basementController.getBasementDirectory() + "/uploads/uploadedExcelFile.xlsx";
         ExcelReader excelReader = new ExcelReader();
         HashMap<String, String> data = excelReader.getCellsFromExcelFile(filePath);
-        TreeMap<Float, Route> routes = convertExcelDataToRoutes(block, data);
+        TreeMap<Float, BasicRoute> routes = convertExcelDataToRoutes(block, data);
         return routes;
     }
 
-    private TreeMap<Float, Route> convertExcelDataToRoutes(RoutesBlock block, HashMap<String, String> data) {
-        TreeMap<Float, Route> routes = new TreeMap();
+    private TreeMap<Float, BasicRoute> convertExcelDataToRoutes(RoutesBlock block, HashMap<String, String> data) {
+        TreeMap<Float, BasicRoute> routes = new TreeMap();
 
         int rowIndex = 8;
         while (!data.isEmpty()) {
@@ -716,12 +715,12 @@ public class RouteFactory {
             }
             Float routeNumberFloat = this.converter.convertRouteNumber(routeNumberString);
             BasicRoute blockRoute = block.getRoutes().get(routeNumberFloat);
-           if (blockRoute != null) {//this means we want this route
-                Route route;
+            if (blockRoute != null) {//this means we want this route
+                BasicRoute route;
                 if (routes.containsKey(routeNumberFloat)) {
                     route = routes.get(routeNumberFloat);
                 } else {
-                    route = new Route();
+                    route = new BasicRoute();
                     route.setNumber(routeNumberString);
                 }
 
@@ -738,7 +737,7 @@ public class RouteFactory {
         return routes;
     }
 
-    private Route addRowElementsToRoute(BasicRoute blockRoute, Route route, HashMap<String, String> data, int rowIndex) {
+    private BasicRoute addRowElementsToRoute(BasicRoute blockRoute, BasicRoute route, HashMap<String, String> data, int rowIndex) {
         String dateStampLocationInTheRow = new StringBuilder("F").append(String.valueOf(rowIndex)).toString();
         String dateStampExcelFormat = data.remove(dateStampLocationInTheRow);
         Date date = this.converter.convertDateStampExcelFormatToDate(dateStampExcelFormat);

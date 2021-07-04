@@ -1,7 +1,7 @@
 package Controller;
 
-import Model.Day;
 import Model.BasicRoute;
+import Model.Day;
 import Model.RoutesBlock;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,15 +10,16 @@ import java.util.Map;
 public class RoutesBlocksBuilder {
 
     public ArrayList<RoutesBlock> createRoutesBlocks(String routeDates) {
+        int routeBlockMaxSize=15;
         String[] routeDatesArray = routeDates.split(",");
         ArrayList<RoutesBlock> routesBlocksArray = new ArrayList();
-        RoutesBlock routesBlock = new RoutesBlock(50);
+        RoutesBlock routesBlock = new RoutesBlock(routeBlockMaxSize);
         for (String routeDate : routeDatesArray) {
             if (!routeDate.equals("")) {
                 if (routesBlock.isFull()) {
                     BasicRoute lastRoute = routesBlock.removeLastRoute();
                     routesBlocksArray.add(routesBlock);
-                    routesBlock = new RoutesBlock(50);
+                    routesBlock = new RoutesBlock(routeBlockMaxSize);
                     routesBlock.addRoute(lastRoute);
                     routesBlock.addRouteDate(routeDate);
                 } else {

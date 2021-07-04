@@ -209,7 +209,7 @@
                 height: 20px; /*Desired height*/
             }
 
-            tr  {
+            tr td {
                 border:solid black 1px;
             }
         </style>
@@ -342,22 +342,36 @@
 
 
 
+                <table>
+                    <c:forEach var="routeEntrySet" items="${routes}">
 
-                <c:forEach var="routeEntrySet" items="${routes}">
-                    RouteNumber :${routeEntrySet.value.number}
-                    <br>
-                    <c:forEach var="dayEntrySet" items="${routeEntrySet.value.days}">
 
-                        Date:    ${dayEntrySet.value.dateStamp}<br>
-                        <c:forEach var="exodusEntrySet" items="${dayEntrySet.value.exoduses}">
+                        <c:forEach var="dayEntrySet" items="${routeEntrySet.value.days}">
 
-                            Exodus:    ${exodusEntrySet.value.number}<br>
-                       
+                            <c:forEach var="exodusEntrySet" items="${dayEntrySet.value.exoduses}">
 
-                            <c:forEach var="tripVouchersEntry" items="${exodusEntrySet.value.tripVouchers}">
 
-                                TripVoucher:    ${tripVouchersEntry.value.number}<br>
 
+
+                                <c:forEach var="tripVouchersEntry" items="${exodusEntrySet.value.tripVouchers}">
+                                    <c:forEach var="tripPeriod" items="${tripVouchersEntry.value.tripPeriods}">
+                                        <tr>
+                                            <td>${routeEntrySet.value.number} </td>
+                                            <td>${dayEntrySet.value.dateStamp}</td>
+                                            <td>${tripVouchersEntry.value.number}</td>
+                                            <td>${exodusEntrySet.value.number}</td>                                        
+                                            <td>${exodusEntrySet.value.driverName}</td>
+                                            <td>${tripPeriod.type}</td>
+                                            <td>${tripPeriod.getStartTimeScheduledString()}</td>
+                                            <td>${tripPeriod.getStartTimeActualString()}</td>
+                                            <td>${tripPeriod.getArrivalTimeScheduledString()}</td>
+                                            <td>${tripPeriod.getArrivalTimeActualString()}</td>
+                                            
+                                        </tr>
+
+                                    </c:forEach>
+
+                                </c:forEach>
 
 
                             </c:forEach>
@@ -365,12 +379,9 @@
 
                         </c:forEach>
 
-
                     </c:forEach>
 
-                </c:forEach>
-
-
+                </table>
 
 
 

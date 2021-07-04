@@ -44,7 +44,7 @@ public class RouteFactory {
             HashMap<String, String> data = excelReader.getCellsFromExcelFile(filePath);
             routes = convertExcelDataToBasicRoutes(data);
         } catch (Exception ex) {
-            Logger.getLogger(ExcelController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RouteFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
         return routes;
     }
@@ -133,14 +133,20 @@ public class RouteFactory {
     private Day addRowElementsToDay(Day day, HashMap<String, String> data, int rowIndex) {
         String exodusNumberLocationInTheRow = new StringBuilder("I").append(String.valueOf(rowIndex)).toString();
         short exodusNumber = Float.valueOf(data.remove(exodusNumberLocationInTheRow)).shortValue();
+
+        String driverNameLocationInTheRow = new StringBuilder("E").append(String.valueOf(rowIndex)).toString();
+        String driverName = data.remove(driverNameLocationInTheRow);
+
         TreeMap<Short, Exodus> exoduses = day.getExoduses();
         Exodus exodus;
         if (exoduses.containsKey(exodusNumber)) {
             exodus = exoduses.get(exodusNumber);
         } else {
             exodus = new Exodus();
+            exodus.setNumber(exodusNumber);
+            exodus.setDriverName(driverName);
         }
-        exodus.setNumber(exodusNumber);
+
         exodus = addRowElementsToExodus(exodus, data, rowIndex);
         exoduses.put(exodusNumber, exodus);
         day.setExoduses(exoduses);
@@ -609,7 +615,7 @@ public class RouteFactory {
             HashMap<String, String> data = excelReader.getCellsFromExcelFile(filePath);
             routes = convertExcelDataToRoutesNameData(data);
         } catch (Exception ex) {
-            Logger.getLogger(ExcelController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RouteFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
         return routes;
     }

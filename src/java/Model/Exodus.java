@@ -6,7 +6,6 @@ public class Exodus {
 
     private short number;
     private TreeMap<String, TripVoucher> tripVouchers;
-    private String driverName;
 
     public Exodus() {
         this.tripVouchers = new TreeMap();
@@ -26,14 +25,6 @@ public class Exodus {
 
     public void setTripVouchers(TreeMap<String, TripVoucher> tripVouchers) {
         this.tripVouchers = tripVouchers;
-    }
-
-    public String getDriverName() {
-        return driverName;
-    }
-
-    public void setDriverName(String driverName) {
-        this.driverName = driverName;
     }
 
 }

@@ -1,5 +1,6 @@
 package Controller;
 
+import DAO.RouteDao;
 import DAO.TechDao;
 import Model.RouteData;
 import java.io.BufferedOutputStream;
@@ -21,6 +22,9 @@ public class TechController {
 
     @Autowired
     private TechDao techDao;
+    
+    @Autowired
+    private RouteDao routeDao;
 
     private RouteFactory routeFactory;
 
@@ -132,7 +136,12 @@ public class TechController {
     public String createTables(ModelMap model) throws SQLException {
         String routeTableCreationStatus = techDao.createRouteTable();
         String lastUploadTableCreationStatus = techDao.createLastUploadTable();
-        model.addAttribute("routeTableCreationStatus", routeTableCreationStatus + "<br>" + lastUploadTableCreationStatus);
+        String tripVoucherTableCreationStatus = techDao.createTripVoucherTable();
+        String tripPeriodTableCreationStatus = techDao.createTripPeriodTable();
+        model.addAttribute("routeTableCreationStatus", routeTableCreationStatus
+                + "<br>" + lastUploadTableCreationStatus
+                + "<br>" + tripVoucherTableCreationStatus
+                + "<br>" + tripPeriodTableCreationStatus);
 
         return "techMan";
     }
@@ -169,4 +178,6 @@ public class TechController {
         newThread.start();
         return "techMan";
     }
+
+  
 }

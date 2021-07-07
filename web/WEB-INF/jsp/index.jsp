@@ -367,6 +367,7 @@
                     </div>
                 </nav>
                 <div style="margin-left: 20%;">
+
                     <h3>აირჩიე მარშრუტი და რიცხვები</h3>
                     <br>
                     <c:forEach var="entry" items="${routes}">

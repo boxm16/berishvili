@@ -1,5 +1,6 @@
 package Controller;
 
+import DAO.RouteDao;
 import DAO.UploadDao;
 import Model.BasicRoute;
 import java.io.BufferedOutputStream;
@@ -20,6 +21,8 @@ public class UploadController {
 
     @Autowired
     private UploadDao uploadDao;
+    @Autowired
+    private RouteDao routeDao;
 
     private String basementDirectory;
 
@@ -39,7 +42,7 @@ public class UploadController {
         MemoryUsage mu = new MemoryUsage();
         Instant start = Instant.now();
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        System.out.println("Starting working on uploaded excel file (saving as file, and saving as last upload in database)");
+        System.out.println("Starting working on uploaded excel file (saving as file and saving into database)");
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         System.out.print("Memory Usage before uploading: ");
         mu.printMemoryUsage();
@@ -59,20 +62,30 @@ public class UploadController {
             bout.flush();
             bout.close();
             RouteFactory routeFactory = new RouteFactory();
-            TreeMap<Float, BasicRoute> routesNumbersAndDatesFromUploadedExcelFile = routeFactory.getRoutesNumbersAndDatesFromUploadedExcelFile();
 
-            String deletionStatus = uploadDao.deleteLastUpload();
-            System.out.println("Last Upload Deletion Status:" + deletionStatus);
-            String insertionStatus = uploadDao.insertNewUpload(routesNumbersAndDatesFromUploadedExcelFile);
-            System.out.println("New Upload Insertion Status:" + insertionStatus);
+            TreeMap<Float, BasicRoute> basicRoutesFromUploadedFile = routeFactory.createBasicRoutesFromUploadedFile();
+
+            String lastUploadDeletionStatus = uploadDao.deleteLastUpload();
+            System.out.println("Last Upload Deletion Status:" + lastUploadDeletionStatus);
+            String lastUploadInsertionStatus = uploadDao.insertNewUpload(basicRoutesFromUploadedFile);
+            System.out.println("New Upload Insertion Status:" + lastUploadInsertionStatus);
+
+            Float insertionStatusCode = routeDao.insertUploadedData(basicRoutesFromUploadedFile, model);
+            if (insertionStatusCode == 0.00f) {
+                System.out.println("New data from excel file has been successfully uploaded into database");
+                //  model.addAttribute("unregisteredRoutesMessage", "lalalalalalalalal");
+            }
             Instant end = Instant.now();
             System.out.println("Uploading process Ended. Time needed:" + Duration.between(start, end));
             System.out.print("Memory Usage after uploading: ");
             mu.printMemoryUsage();
             System.out.println("--------------------------------------------------");
+            if (insertionStatusCode > 0.00f) {
+                return "upload-success";
+            }
 
-            UploadInsertionThread uit = new UploadInsertionThread();
-            uit.start();
+            //  UploadInsertionThread uit = new UploadInsertionThread();
+            // uit.start();
         } catch (Exception e) {
             System.out.println(e);
             model.addAttribute("uploadStatus", "Upload could not been completed:" + e);

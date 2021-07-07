@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +25,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 public class GuarantyController {
     
     private String basementDirectory;
-    @Autowired
-    private RouteDao routeDao;
+
     
     public GuarantyController() {
         BasementController basementController = new BasementController();

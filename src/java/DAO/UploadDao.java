@@ -1,7 +1,7 @@
 package DAO;
 
-import Model.Day;
 import Model.BasicRoute;
+import Model.Day;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.sql.Connection;
@@ -47,9 +47,10 @@ public class UploadDao {
     }
 
     public String insertNewUpload(TreeMap<Float, BasicRoute> routesNumbersAndDatesFromUploadedExcelFile) {
-        System.out.println("Starting Upload Insertion");
+        System.out.println("Starting 'Last Upload' Insertion");
         try {
             connection = DataSource.getInstance().getConnection();
+            connection.setAutoCommit(false);
             statement = connection.createStatement();
             PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO last_upload (number, date_stamp) VALUES (?,?)");
             for (Map.Entry<Float, BasicRoute> routeEntry : routesNumbersAndDatesFromUploadedExcelFile.entrySet()) {
@@ -64,6 +65,7 @@ public class UploadDao {
                 }
             }
             insertStatement.executeBatch();
+            connection.commit();
         } catch (SQLException ex) {
             Logger.getLogger(TechDao.class.getName()).log(Level.SEVERE, null, ex);
             return ex.getMessage();
@@ -74,6 +76,6 @@ public class UploadDao {
             Logger.getLogger(UploadDao.class.getName()).log(Level.SEVERE, null, ex);
             return ex.getMessage();
         }
-        return "Data from excel file has been inserted successfully into database";
+        return "Data from excel file has been inserted successfully into 'last_upload'";
     }
 }

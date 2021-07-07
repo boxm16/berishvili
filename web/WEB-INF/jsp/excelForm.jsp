@@ -360,7 +360,7 @@
                                             <td>${dayEntrySet.value.dateStamp}</td>
                                             <td>${tripVouchersEntry.value.number}</td>
                                             <td>${exodusEntrySet.value.number}</td>                                        
-                                            <td>${exodusEntrySet.value.driverName}</td>
+                                            <td>${tripVouchersEntry.value.driverName}</td>
                                             <td>${tripPeriod.type}</td>
                                             <td>${tripPeriod.getStartTimeScheduledString()}</td>
                                             <td>${tripPeriod.getStartTimeActualString()}</td>

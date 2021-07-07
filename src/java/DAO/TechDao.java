@@ -19,6 +19,9 @@ public class TechDao {
     @Autowired
     private DataBaseConnection dataBaseConnection;
 
+    @Autowired
+    private RouteDao routeDao;
+
     private Connection connection;
 
     public String createSchema() {
@@ -90,6 +93,78 @@ public class TechDao {
         }
     }
 
+    public String createTripVoucherTable() {
+        String sql = "CREATE TABLE `trip_voucher` ("
+                + "`number` VARCHAR(20) NOT NULL, "
+                + "`route_number` VARCHAR(10) NOT NULL, "
+                + "`date_stamp` DATE NOT NULL, "
+                + "`exodus_number` INT(2) NOT NULL, "
+                + "`driver_number` VARCHAR(10) NULL, "
+                + "`driver_name` VARCHAR(45) NULL, "
+                + "`bus_number` VARCHAR(15) NULL, "
+                + "`bus_type` VARCHAR(35) NULL, "
+                + "`notes` VARCHAR(2000) NULL, "
+                + "PRIMARY KEY (`number`), "
+                + "CONSTRAINT `route_number` "
+                + "FOREIGN KEY (`route_number`) "
+                + "REFERENCES `route` (`number`) "
+                + "ON DELETE CASCADE "
+                + "ON UPDATE NO ACTION) "
+                + "ENGINE = InnoDB "
+                + "DEFAULT CHARACTER SET = utf8;";
+
+        try {
+            connection = dataBaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+            statement.close();
+            connection.close();
+            return "Table 'trip_voucher' created successfully";
+        } catch (SQLException ex) {
+            if (ex.getSQLState().equals("42S01")) {
+                return "Table 'trip_voucher' already exists";
+            } else {
+                Logger.getLogger(TechDao.class.getName()).log(Level.SEVERE, null, ex);
+                return ex.getMessage();
+            }
+        }
+    }
+
+    public String createTripPeriodTable() {
+        String sql = "CREATE TABLE `trip_period` ("
+                + "`trip_voucher_number` VARCHAR(20) NOT NULL, "
+                + "`type` VARCHAR(15) NOT NULL, "
+                + "`start_time_scheduled` TIME(0) NULL  DEFAULT NULL, "
+                + "`start_time_actual` TIME(0) NULL  DEFAULT NULL, "
+                + "`start_time_difference` VARCHAR(10) NULL, "
+                + "`arrival_time_scheduled` TIME(0) NULL  DEFAULT NULL, "
+                + "`arrival_time_actual` TIME(0) NULL  DEFAULT NULL, "
+                + "`arrival_time_difference` VARCHAR(10) NULL, "
+                + "CONSTRAINT `trip_voucher` "
+                + "FOREIGN KEY (`trip_voucher_number`) "
+                + "REFERENCES `trip_voucher` (`number`) "
+                + "ON DELETE CASCADE "
+                + "ON UPDATE NO ACTION) "
+                + "ENGINE = InnoDB "
+                + "DEFAULT CHARACTER SET = utf8";
+
+        try {
+            connection = dataBaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+            statement.close();
+            connection.close();
+            return "Table 'trip_period' created successfully";
+        } catch (SQLException ex) {
+            if (ex.getSQLState().equals("42S01")) {
+                return "Table 'trip_period' already exists";
+            } else {
+                Logger.getLogger(TechDao.class.getName()).log(Level.SEVERE, null, ex);
+                return ex.getMessage();
+            }
+        }
+    }
+
     //---------------------//----------------------//----------------------
     public String uploadRoutesNamesData(TreeMap<Float, RouteData> routesData) {
 
@@ -154,5 +229,7 @@ public class TechDao {
         }
         return "Data from excel file has been inserted successfully into database";
     }
+
+    
 
 }

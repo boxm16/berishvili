@@ -13,9 +13,13 @@
     </head>
     <body>
         <h1>
+            <a href="index.htm">საწყის გვერდზე გადასვლა</a> 
+        </h1>
+        <hr>
+        <h2>
             <jsp:text>
-                Upload Status : ${uploadStatus};
+                Upload Status : ${unregisteredRoutesMessage}
             </jsp:text>
-        </h1>  
+        </h2>  
     </body>
 </html>

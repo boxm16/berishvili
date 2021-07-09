@@ -213,9 +213,14 @@ public class RouteDao {
         for (Map.Entry<Float, BasicRoute> routeEntry : routes.entrySet()) {
             System.out.println(routeEntry.getValue().getNumber());
 
-            StringBuilder sql = new StringBuilder("SELECT * FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number='" + routeEntry.getValue().getNumber() + "' AND date_stamp='$firstDate' ");
+            StringBuilder sql = new StringBuilder("SELECT * FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE ");
             TreeMap<Date, Day> days = routeEntry.getValue().getDays();
+            int indx = 0;
             for (Map.Entry<Date, Day> day : days.entrySet()) {
+                if (indx == 0) {
+                    sql = sql.append("route_number='").append(routeEntry.getValue().getNumber()).append("' AND date_stamp='").append(day.getValue().getDateStamp()).append("'");
+                    indx++;
+                }
                 sql = sql.append(" OR route_number='").append(routeEntry.getValue().getNumber()).append("' AND date_stamp='").append(day.getValue().getDateStamp()).append("'");
             }
             sql = sql.append("ORDER BY prefix, suffix;");

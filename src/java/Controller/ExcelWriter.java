@@ -5,9 +5,9 @@
  */
 package Controller;
 
+import Model.BasicRoute;
 import Model.Day;
 import Model.GuarantyRoute;
-import Model.BasicRoute;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Duration;
@@ -24,6 +24,7 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFDataFormat;
@@ -370,7 +371,7 @@ public class ExcelWriter {
         XSSFCellStyle middleRowStyle = getRowStyle(workbook, 146, 208, 80, false, false, "");
         while (columnIndex < 21) {
             Cell cell = middleRow.createCell(columnIndex);
-            cell.setCellValue(columnIndex);
+            cell.setCellValue(columnIndex+1);
             cell.setCellStyle(middleRowStyle);
             columnIndex++;
         }
@@ -528,6 +529,14 @@ public class ExcelWriter {
             //---+++--++--++--++--++--++--++
 
         }
+
+        //setting formula
+        CellReference cellReference = new CellReference("F1");
+        Row row = sheet.getRow(cellReference.getRow());
+        Cell formulaCell = row.getCell(cellReference.getCol());
+        String lastRowIndex = String.valueOf(rowIndex + 1);
+
+        formulaCell.setCellFormula("SUBTOTAL(9,F5:F" + lastRowIndex + ")");
 
         try (FileOutputStream outputStream = new FileOutputStream(this.basementDirectory + "/downloads/" + fileName + ".xlsx")) {
             workbook.write(outputStream);

@@ -1,9 +1,11 @@
 package DAO;
 
+import Controller.Converter;
 import Model.BasicRoute;
 import Model.Day;
 import Model.Exodus;
 import Model.RouteData;
+import Model.RoutesBlock;
 import Model.TripPeriod;
 import Model.TripVoucher;
 import java.sql.Connection;
@@ -28,6 +30,7 @@ public class RouteDao {
     private DataBaseConnection dataBaseConnection;
 
     private Connection connection;
+    private Converter converter;
 
     public TreeMap<Float, RouteData> getRoutesDataFromDB() {
         TreeMap<Float, RouteData> routes = new TreeMap<>();
@@ -202,5 +205,69 @@ public class RouteDao {
             model.addAttribute("errorMessage", ex.getMessage());
             return 0.03f;//this is error code for exception error
         }
+    }
+
+    public TreeMap<Float, BasicRoute> getSelectedRoutes(RoutesBlock block) {
+        converter = new Converter();
+        TreeMap<Float, BasicRoute> routes = block.getRoutes();
+        for (Map.Entry<Float, BasicRoute> routeEntry : routes.entrySet()) {
+            System.out.println(routeEntry.getValue().getNumber());
+
+            StringBuilder sql = new StringBuilder("SELECT * FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number='" + routeEntry.getValue().getNumber() + "' AND date_stamp='$firstDate' ");
+            TreeMap<Date, Day> days = routeEntry.getValue().getDays();
+            for (Map.Entry<Date, Day> day : days.entrySet()) {
+                sql = sql.append(" OR route_number='").append(routeEntry.getValue().getNumber()).append("' AND date_stamp='").append(day.getValue().getDateStamp()).append("'");
+            }
+            sql = sql.append("ORDER BY prefix, suffix;");
+            // System.out.println(sql.toString());
+            try {
+                connection = dataBaseConnection.getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(sql.toString());
+
+                while (rs.next()) {
+                    String dateStamp = rs.getString("date_stamp");
+                    short exodusNumber = rs.getShort("exodus_number");
+                    String tripVoucherNumber = rs.getString("trip_voucher_number");
+
+                    Date date = converter.convertDateStampDatabaseFormatToDate(dateStamp);
+                    Day day = days.get(date);
+                    if (!day.getExoduses().containsKey(exodusNumber)) {
+                        Exodus exodus = new Exodus();
+                        exodus.setNumber(exodusNumber);
+                        day.getExoduses().put(exodusNumber, exodus);
+                    }
+                    TreeMap<String, TripVoucher> tripVouchers = day.getExoduses().get(exodusNumber).getTripVouchers();
+                    if (!tripVouchers.containsKey(tripVoucherNumber)) {
+                        TripVoucher tripVoucher = new TripVoucher();
+                        tripVoucher.setNumber(tripVoucherNumber);
+                        tripVoucher.setBusNumber(rs.getString("bus_number"));
+                        tripVoucher.setBusType(rs.getString("bus_type"));
+                        tripVoucher.setDriverNumber(rs.getString("driver_number"));
+                        tripVoucher.setDriverName(rs.getString("driver_name"));
+                        tripVoucher.setNotes(rs.getString("notes"));
+                        tripVouchers.put(tripVoucherNumber, tripVoucher);
+                    }
+
+                    TripPeriod tripPeriod = new TripPeriod();
+                    tripPeriod.setType(rs.getString("type"));
+                    tripPeriod.setStartTimeScheduled(converter.convertStringTimeToDate(rs.getString("start_time_scheduled")));
+                    tripPeriod.setStartTimeActual(converter.convertStringTimeToDate(rs.getString("start_time_actual")));
+                    tripPeriod.setStartTimeDifference(rs.getString("start_time_difference"));
+
+                    tripPeriod.setArrivalTimeScheduled(converter.convertStringTimeToDate(rs.getString("arrival_time_scheduled")));
+                    tripPeriod.setArrivalTimeActual(converter.convertStringTimeToDate(rs.getString("arrival_time_actual")));
+                    tripPeriod.setArrivalTimeDifference(rs.getString("arrival_time_difference"));
+
+                    tripVouchers.get(tripVoucherNumber).getTripPeriods().add(tripPeriod);
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(RouteDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+        return routes;
     }
 }

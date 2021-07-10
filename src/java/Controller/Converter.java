@@ -8,6 +8,7 @@ package Controller;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -107,7 +108,39 @@ public class Converter {
         }
         return null;
     }
-    
-    
+
+    public String convertDurationToString(Duration duration) {
+        if (duration.isNegative()) {
+            long seconds = duration.getSeconds() * (-1);
+            int h = (int) seconds / 3600;
+            int m = (int) (seconds % 3600) / 60;
+            int s = (int) (seconds % 60);
+            String hh = "00";
+            String mm = "00";
+            String ss = "00";
+            if (h < 10) {
+                hh = "0" + String.valueOf(h);
+            } else {
+                hh = String.valueOf(h);
+            }
+
+            if (m < 10) {
+                mm = "0" + String.valueOf(m);
+            } else {
+                mm = String.valueOf(m);
+            }
+            if (s < 10) {
+                ss = "0" + String.valueOf(s);
+            } else {
+                ss = String.valueOf(s);
+            }
+
+            return new StringBuilder("-").append(hh).append(":").append(mm).append(":").append(ss).toString();
+
+        }
+
+        long s = duration.getSeconds();
+        return String.format("%02d:%02d:%02d", s / 3600, (s % 3600) / 60, (s % 60));
+    }
 
 }

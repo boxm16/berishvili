@@ -361,12 +361,16 @@
                                             <td>${tripVouchersEntry.value.number}</td>
                                             <td>${exodusEntrySet.value.number}</td>                                        
                                             <td>${tripVouchersEntry.value.driverName}</td>
-                                            <td>${tripPeriod.type}</td>
+                                            <td>${tripPeriod.getTypeG()}</td>
                                             <td>${tripPeriod.getStartTimeScheduledString()}</td>
                                             <td>${tripPeriod.getStartTimeActualString()}</td>
                                             <td>${tripPeriod.getArrivalTimeScheduledString()}</td>
                                             <td>${tripPeriod.getArrivalTimeActualString()}</td>
-                                            
+                                            <td>${tripPeriod.getTripPeriodTimeScheduledString()}</td>
+                                            <td>${tripPeriod.getTripPeriodTimeActualString()}</td>
+                                            <td style="background-color: ${tripPeriod.getTripPeriodTimeDifferenceColor()}">${tripPeriod.getTripPeriodTimeDifferenceString()}</td>
+
+
                                         </tr>
 
                                     </c:forEach>

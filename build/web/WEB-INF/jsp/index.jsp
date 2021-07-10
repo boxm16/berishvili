@@ -233,7 +233,7 @@
                 </div>
 
                 <ul class="list-unstyled components">
-                    <li class="active">
+                    <li>
                         <a href="#" onclick="requestRouter('tripPeriodsInitialRequest.htm')">ბრუნების დროები</a>
                     </li>
                     <li>

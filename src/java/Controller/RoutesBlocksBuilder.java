@@ -10,18 +10,24 @@ import java.util.Map;
 public class RoutesBlocksBuilder {
 
     public ArrayList<RoutesBlock> createRoutesBlocks(String routeDates) {
-        int routeBlockMaxSize=15;
+        int routeBlockMaxSize = 5;
         String[] routeDatesArray = routeDates.split(",");
         ArrayList<RoutesBlock> routesBlocksArray = new ArrayList();
         RoutesBlock routesBlock = new RoutesBlock(routeBlockMaxSize);
         for (String routeDate : routeDatesArray) {
             if (!routeDate.equals("")) {
                 if (routesBlock.isFull()) {
-                    BasicRoute lastRoute = routesBlock.removeLastRoute();
-                    routesBlocksArray.add(routesBlock);
-                    routesBlock = new RoutesBlock(routeBlockMaxSize);
-                    routesBlock.addRoute(lastRoute);
-                    routesBlock.addRouteDate(routeDate);
+                    if (routesBlock.getRoutes().size() > 1) {
+                        BasicRoute lastRoute = routesBlock.removeLastRoute();
+                        routesBlocksArray.add(routesBlock);
+                        routesBlock = new RoutesBlock(routeBlockMaxSize);
+                        routesBlock.addRoute(lastRoute);
+                        routesBlock.addRouteDate(routeDate);
+                    } else {
+                        routesBlocksArray.add(routesBlock);
+                        routesBlock = new RoutesBlock(routeBlockMaxSize);
+                        routesBlock.addRouteDate(routeDate);
+                    }
                 } else {
                     routesBlock.addRouteDate(routeDate);
                 }

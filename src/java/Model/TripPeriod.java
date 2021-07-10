@@ -1,5 +1,7 @@
 package Model;
 
+import Controller.Converter;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -12,8 +14,10 @@ public class TripPeriod {
     private LocalDateTime arrivalTimeScheduled;
     private LocalDateTime arrivalTimeActual;
     private String arrivalTimeDifference;
+    private Converter converter;
 
     public TripPeriod() {
+        converter = new Converter();
     }
 
     public TripPeriod(String type, LocalDateTime startTimeScheduled, LocalDateTime startTimeActual, String startTimeDifference, LocalDateTime arrivalTimeScheduled, LocalDateTime arrivalTimeActual, String arrivalTimeDifference) {
@@ -28,6 +32,27 @@ public class TripPeriod {
 
     public String getType() {
         return type;
+    }
+
+    public String getTypeG() {
+        switch (type) {
+            case "baseLeaving_A":
+                return "ბაზა_A";
+            case "baseLeaving_B":
+                return "ბაზა_B";
+            case "break":
+                return "შესვენება";
+            case "ab":
+                return "A_B";
+            case "ba":
+                return "B_A";
+            case "A_baseReturn":
+                return "A_ბაზა";
+            case "B_baseReturn":
+                return "B_ბაზა";
+            default:
+                return "";
+        }
     }
 
     public void setType(String type) {
@@ -102,6 +127,45 @@ public class TripPeriod {
             return "";
         }
         return startTimeActual.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    public String getTripPeriodTimeScheduledString() {
+
+        return converter.convertDurationToString(Duration.between(startTimeScheduled, arrivalTimeScheduled));
+    }
+
+    public String getTripPeriodTimeActualString() {
+        if (startTimeActual == null || arrivalTimeActual == null) {
+            return "";
+        }
+
+        return converter.convertDurationToString(Duration.between(startTimeActual, arrivalTimeActual));
+    }
+
+    public String getTripPeriodTimeDifferenceString() {
+        if (startTimeActual == null || arrivalTimeActual == null) {
+            return "";
+        }
+
+        Duration difference = Duration.between(startTimeScheduled, arrivalTimeScheduled).minus(Duration.between(startTimeActual, arrivalTimeActual));
+
+        return converter.convertDurationToString(difference);
+    }
+
+    public String getTripPeriodTimeDifferenceColor() {
+        if (startTimeActual == null || arrivalTimeActual == null) {
+            return "white";
+        }
+        Duration difference = Duration.between(startTimeScheduled, arrivalTimeScheduled).minus(Duration.between(startTimeActual, arrivalTimeActual));
+        long seconds = difference.getSeconds();
+        if (Math.abs(seconds) > (5 * 60)) {
+            return "red";
+        }
+        if (Math.abs(seconds) > (1 * 60)) {
+            return "yellow";
+        }
+        return "white";
+
     }
 
 }

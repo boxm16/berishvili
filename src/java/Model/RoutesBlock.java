@@ -68,11 +68,27 @@ public class RoutesBlock {
 
     public String getName() {
         String name = "";
-        for (Map.Entry<Float, BasicRoute> routeEntry : this.routes.entrySet()) {
-            if (name.equals("")) {
-                name += routeEntry.getValue().getNumber();
-            } else {
-                name += ", " + routeEntry.getValue().getNumber();
+        if (this.routes.size() == 1) {
+            for (Map.Entry<Float, BasicRoute> routeEntry : this.routes.entrySet()) {
+
+                TreeMap<Date, Day> days = routeEntry.getValue().getDays();
+                for (Map.Entry<Date, Day> day : days.entrySet()) {
+                    if (name.equals("")) {
+                        name += day.getValue().getDateStampWeekFormat();
+                    } else {
+                        name += ", " + day.getValue().getDateStampWeekFormat();
+                    }
+                }
+                name = "<center>"+routeEntry.getValue().getNumber() + "</center><br>" + name;
+            }
+        } else {
+
+            for (Map.Entry<Float, BasicRoute> routeEntry : this.routes.entrySet()) {
+                if (name.equals("")) {
+                    name += routeEntry.getValue().getNumber();
+                } else {
+                    name += ", " + routeEntry.getValue().getNumber();
+                }
             }
         }
         return name;

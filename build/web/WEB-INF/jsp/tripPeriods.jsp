@@ -228,7 +228,7 @@
                 <ul class="list-unstyled components">
                     <c:forEach var="routesBlock" items="${selectedRoutesBlocks}" varStatus="loop">
                         <li >
-                            <a href="excelForm.htm?blockIndex=${loop.index}">${routesBlock.name}</a>
+                            <a href="tripPeriods.htm?blockIndex=${loop.index}">${routesBlock.name}</a>
                         </li>
                     </c:forEach> 
 

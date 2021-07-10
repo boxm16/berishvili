@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class ExcelFormController {
+public class TripPeriodsController {
 
     @Autowired
     private RouteDao routeDao;
 
-    @RequestMapping(value = "excelFormInitialRequest")
-    public String goToExcelFormPage(@RequestParam("routes:dates") String routeDates, @RequestParam("blockNumber") String routeNumber, ModelMap model, HttpSession session) {
+    @RequestMapping(value = "tripPeriodsInitialRequest")
+    public String goToTripPeriodsPage(@RequestParam("routes:dates") String routeDates, @RequestParam("blockNumber") String routeNumber, ModelMap model, HttpSession session) {
         RoutesBlocksBuilder rbb = new RoutesBlocksBuilder();
         ArrayList<RoutesBlock> selectedRoutesBlocks = rbb.createRoutesBlocks(routeDates);
         session.setAttribute("selectedRoutesBlocks", selectedRoutesBlocks);
@@ -29,10 +29,10 @@ public class ExcelFormController {
         model.addAttribute("routes", routes);
         model.addAttribute("selectedRoutesBlocks", selectedRoutesBlocks);
 
-        return "excelForm";
+        return "tripPeriods";
     }
 
-    @RequestMapping(value = "excelForm")
+    @RequestMapping(value = "tripPeriods")
     public String dispalySelectedBlock(ModelMap model, HttpSession session, @RequestParam String blockIndex) {
         if (session.getAttribute("selectedRoutesBlocks") == null) {
             return "errorPage";
@@ -40,7 +40,7 @@ public class ExcelFormController {
 
         TreeMap<Float, BasicRoute> routes = getSelectedBlockRoutes(session, blockIndex);
         model.addAttribute("routes", routes);
-        return "excelForm";
+        return "tripPeriods";
     }
 
     private TreeMap<Float, BasicRoute> getSelectedBlockRoutes(HttpSession session, String blockIndex) {
@@ -53,7 +53,7 @@ public class ExcelFormController {
         TreeMap<Float, BasicRoute> routes = routeDao.getSelectedRoutes(block);
 
         Instant end = Instant.now();
-        System.out.println("ExcelForm routes created. Creation time:" + Duration.between(start, end));
+        System.out.println("TripPeriods routes created. Creation time:" + Duration.between(start, end));
         return routes;
     }
 }

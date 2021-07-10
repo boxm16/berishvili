@@ -234,7 +234,7 @@
 
                 <ul class="list-unstyled components">
                     <li class="active">
-                        <a href="#" onclick="requestRouter('excelFormInitialRequest.htm')">ექსელის ფორმა</a>
+                        <a href="#" onclick="requestRouter('tripPeriodsInitialRequest.htm')">ბრუნების დროები</a>
                     </li>
                     <li>
                         <a href="#guarantySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">საგარანტიოები</a>

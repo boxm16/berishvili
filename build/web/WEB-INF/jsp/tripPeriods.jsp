@@ -212,6 +212,43 @@
             tr td {
                 border:solid black 1px;
             }
+            /* ---------------------------------------------------
+            for sticky header for table
+            -----------------------------------------------------*/
+            /* Fixed Headers */
+
+            th {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 40px;
+                z-index: 2;
+
+            }
+
+            th[scope=row] {
+                position: -webkit-sticky;
+                position: sticky;
+                left: 0;
+                z-index: 1;
+            }
+
+            th[scope=row] {
+                vertical-align: top;
+                color: inherit;
+                background-color: inherit;
+                background: linear-gradient(90deg, transparent 0%, transparent calc(100% - .05em), #d6d6d6 calc(100% - .05em), #d6d6d6 100%);
+            }
+            th {
+                vertical-align: bottom;
+                background-color: #D170F7;
+                color: #fff;
+            }
+
+            /* ---------------------------------------------------
+                          tool tip styling          
+            ----------------------------------------------------- */
+
+
         </style>
     </head>
     <body>
@@ -342,49 +379,67 @@
 
 
 
-                <table>
-                    <c:forEach var="routeEntrySet" items="${routes}">
+                <table >
+                    <thead>
+                        <tr>
+                            <th>მრშრ.#</th>
+                            <th>თარიღი</th>
+                            <th>ავტ.#</th>
+                            <th>გას.#</th>
+                            <th>მძღოლი</th>
+                            <th>მიმართულება</th>
+                            <th>გ.გ.დ.</th>
+                            <th>გ.ფ.დ.</th>
+                            <th>მ.გ.დ.</th>
+                            <th>მ.ფ.დ.</th>
+                            <th>წ.გ.დ</th>
+                            <th>წ.ფ.დ.</th>
+                            <th>სხვაობა</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="routeEntrySet" items="${routes}">
 
 
-                        <c:forEach var="dayEntrySet" items="${routeEntrySet.value.days}">
+                            <c:forEach var="dayEntrySet" items="${routeEntrySet.value.days}">
 
-                            <c:forEach var="exodusEntrySet" items="${dayEntrySet.value.exoduses}">
-
-
+                                <c:forEach var="exodusEntrySet" items="${dayEntrySet.value.exoduses}">
 
 
-                                <c:forEach var="tripVouchersEntry" items="${exodusEntrySet.value.tripVouchers}">
-                                    <c:forEach var="tripPeriod" items="${tripVouchersEntry.value.tripPeriods}">
-                                        <tr>
-                                            <td>${routeEntrySet.value.number} </td>
-                                            <td>${dayEntrySet.value.dateStamp}</td>
-                                            <td>${tripVouchersEntry.value.number}</td>
-                                            <td>${exodusEntrySet.value.number}</td>                                        
-                                            <td>${tripVouchersEntry.value.driverName}</td>
-                                            <td>${tripPeriod.getTypeG()}</td>
-                                            <td>${tripPeriod.getStartTimeScheduledString()}</td>
-                                            <td>${tripPeriod.getStartTimeActualString()}</td>
-                                            <td>${tripPeriod.getArrivalTimeScheduledString()}</td>
-                                            <td>${tripPeriod.getArrivalTimeActualString()}</td>
-                                            <td>${tripPeriod.getTripPeriodTimeScheduledString()}</td>
-                                            <td>${tripPeriod.getTripPeriodTimeActualString()}</td>
-                                            <td style="background-color: ${tripPeriod.getTripPeriodTimeDifferenceColor()}">${tripPeriod.getTripPeriodTimeDifferenceString()}</td>
 
 
-                                        </tr>
+                                    <c:forEach var="tripVouchersEntry" items="${exodusEntrySet.value.tripVouchers}">
+                                        <c:forEach var="tripPeriod" items="${tripVouchersEntry.value.tripPeriods}">
+                                            <tr>
+                                                <td>${routeEntrySet.value.number} </td>
+                                                <td>${dayEntrySet.value.dateStamp}</td>
+                                                <td>${tripVouchersEntry.value.number}</td>
+                                                <td>${exodusEntrySet.value.number}</td>                                        
+                                                <td>${tripVouchersEntry.value.driverName}</td>
+                                                <td>${tripPeriod.getTypeG()}</td>
+                                                <td>${tripPeriod.getStartTimeScheduledString()}</td>
+                                                <td>${tripPeriod.getStartTimeActualString()}</td>
+                                                <td>${tripPeriod.getArrivalTimeScheduledString()}</td>
+                                                <td>${tripPeriod.getArrivalTimeActualString()}</td>
+                                                <td>${tripPeriod.getTripPeriodTimeScheduledString()}</td>
+                                                <td>${tripPeriod.getTripPeriodTimeActualString()}</td>
+                                                <td style="background-color: ${tripPeriod.getTripPeriodTimeDifferenceColor()}">${tripPeriod.getTripPeriodTimeDifferenceString()}</td>
+
+
+                                            </tr>
+
+                                        </c:forEach>
 
                                     </c:forEach>
+
 
                                 </c:forEach>
 
 
                             </c:forEach>
 
-
                         </c:forEach>
-
-                    </c:forEach>
-
+                    </tbody>
                 </table>
 
 

@@ -242,15 +242,15 @@
                 vertical-align: bottom;
                 background-color: #D170F7;
                 color: #fff;
+                border:solid black 1px;
             }
 
             /* ---------------------------------------------------
                           tool tip styling          
             ----------------------------------------------------- */
-
-
         </style>
     </head>
+
     <body>
         <div class="wrapper">
             <!-- Sidebar  -->
@@ -355,7 +355,6 @@
                             <i class="fas fa-align-left"></i>
                             <span>Toggle Sidebar</span>
                         </button>
-
                         <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <i class="fas fa-align-justify"></i>
                         </button>
@@ -375,26 +374,37 @@
                         </div>
                     </div>
                 </nav>
-
-
-
-
-                <table >
+                <table>
                     <thead>
                         <tr>
-                            <th>მრშრ.#</th>
+                            <th>მარშრუტის #</th>
                             <th>თარიღი</th>
-                            <th>ავტ.#</th>
-                            <th>გას.#</th>
+                            <th>ავტობუსის #</th>
+                            <th>გასვლის #</th>
                             <th>მძღოლი</th>
                             <th>მიმართულება</th>
-                            <th>გ.გ.დ.</th>
-                            <th>გ.ფ.დ.</th>
-                            <th>მ.გ.დ.</th>
-                            <th>მ.ფ.დ.</th>
-                            <th>წ.გ.დ</th>
-                            <th>წ.ფ.დ.</th>
+                            <th>გასვლის<br>გეგმიური<br>დრო</th>
+                            <th>გასვლის<br>ფაქტიური<br>დრო</th>
+                            <th>მისვლის<br>გეგმიური<br>დრო</th>
+                            <th>მისვლის<br>ფაქტიური<br>დრო</th>
+                            <th>წირის<br>გეგმიური<br>დრო</th>
+                            <th>წირის<br>ფაქტიური<br>დრო</th>
                             <th>სხვაობა</th>
+                            <!--
+                <th title="მარშრუტის #" >მრშრ.#</th>
+                <th title="თარიღი">თარიღი</th>
+                <th title="ავტობუსის #">ავტობუსის #</th>
+                <th title="გასვლის #">გას.#</th>
+                <th title="მძღოლი">მძღოლი</th>
+                <th title="მიმართულება">მიმართულება</th>
+                <th title="გასვლის გეგმიური დრო">გ.გ.დ.</th>
+                <th title="გასვლის ფაქტიური დრო">გ.ფ.დ.</th>
+                <th title="მისვლის გეგმიური დრო">მ.გ.დ.</th>
+                <th title="მისვლის ფაქტიური დრო">მ.ფ.დ.</th>
+                <th title="წირის გეგმიური დრო">წ.გ.დ</th>
+                <th title="წირის ფაქტიური დრო">წ.ფ.დ.</th>
+                <th title="სხვაობ">სხვაობა</th>
+                            -->
                         </tr>
                     </thead>
                     <tbody>
@@ -469,6 +479,9 @@
                     $('a[aria-expanded=true]').attr('aria-expanded', 'false');
                 });
             });
+
+
+
         </script>
     </body>
 </html>

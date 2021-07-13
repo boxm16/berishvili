@@ -255,9 +255,7 @@
         <div class="wrapper">
             <!-- Sidebar  -->
             <nav id="sidebar">
-                <div class="sidebar-header" style="background-color: blue">
-                    <h3> <a href="index.htm">საწყისი გვერდი</a> </h3>
-                </div>
+
                 <div class="sidebar-header">
                     <h4>მარშრუტების ბლოკები</h4>
                 </div>
@@ -355,6 +353,13 @@
                             <i class="fas fa-align-left"></i>
                             <span>Toggle Sidebar</span>
                         </button>
+                        &nbsp
+                        <button type="button" class="btn btn-outline-success">
+                            
+                            <span> <a href="index.htm">საწყისი გვერდი</a> </span>
+                        </button>
+
+
                         <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <i class="fas fa-align-justify"></i>
                         </button>
@@ -377,12 +382,12 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>მარშრუტის #</th>
+                            <th>მარ-<br>შრუ-<br>ტის #</th>
                             <th>თარიღი</th>
                             <th>ავტობუსის #</th>
-                            <th>გასვლის #</th>
+                            <th>გას-<br>ვლი-<br>ს #</th>
                             <th>მძღოლი</th>
-                            <th>მიმართულება</th>
+                            <th>მიმართ-<br>ულება</th>
                             <th>გასვლის<br>გეგმიური<br>დრო</th>
                             <th>გასვლის<br>ფაქტიური<br>დრო</th>
                             <th>მისვლის<br>გეგმიური<br>დრო</th>

@@ -8,7 +8,13 @@ import java.util.Date;
 import java.util.Map;
 
 public class RoutesBlocksBuilder {
-
+    
+    private Converter converter;
+    
+    public RoutesBlocksBuilder() {
+        converter = new Converter();
+    }
+    
     public ArrayList<RoutesBlock> createRoutesBlocks(String routeDates) {
         int routeBlockMaxSize = 5;
         String[] routeDatesArray = routeDates.split(",");
@@ -16,25 +22,30 @@ public class RoutesBlocksBuilder {
         RoutesBlock routesBlock = new RoutesBlock(routeBlockMaxSize);
         for (String routeDate : routeDatesArray) {
             if (!routeDate.equals("")) {
-                if (routesBlock.isFull()) {
+                String[] routeDateArray = routeDate.split(":");
+                String routeNumber = routeDateArray[0];
+                String dateStamp = routeDateArray[1];
+                Date date = this.converter.convertDateStampDatabaseFormatToDate(dateStamp);
+                if (routesBlock.isFull() && !routesBlock.getRoutes().containsKey(this.converter.convertRouteNumber(routeNumber))) {
+                    //after&& is let complete route (otherwise sometime route can be broken into parts)
                     if (routesBlock.getRoutes().size() > 1) {
                         BasicRoute lastRoute = routesBlock.removeLastRoute();
                         routesBlocksArray.add(routesBlock);
                         routesBlock = new RoutesBlock(routeBlockMaxSize);
                         routesBlock.addRoute(lastRoute);
-                        routesBlock.addRouteDate(routeDate);
+                        routesBlock.addRouteDate(routeNumber, dateStamp);
                     } else {
                         routesBlocksArray.add(routesBlock);
                         routesBlock = new RoutesBlock(routeBlockMaxSize);
-                        routesBlock.addRouteDate(routeDate);
+                        routesBlock.addRouteDate(routeNumber, dateStamp);
                     }
                 } else {
-                    routesBlock.addRouteDate(routeDate);
+                    routesBlock.addRouteDate(routeNumber, dateStamp);
                 }
             }
         }
         routesBlocksArray.add(routesBlock);
-
+        
         for (RoutesBlock rb : routesBlocksArray) {
             for (Map.Entry<Float, BasicRoute> entry : rb.getRoutes().entrySet()) {
                 BasicRoute route = entry.getValue();

@@ -20,10 +20,7 @@ public class RoutesBlock {
         converter = new Converter();
     }
 
-    public void addRouteDate(String routeDate) {
-        String[] routeDateArray = routeDate.split(":");
-        String routeNumber = routeDateArray[0];
-        String dateStamp = routeDateArray[1];
+    public void addRouteDate(String routeNumber, String dateStamp) {
         Date date = this.converter.convertDateStampDatabaseFormatToDate(dateStamp);
         BasicRoute route;
         if (routes.containsKey(this.converter.convertRouteNumber(routeNumber))) {
@@ -68,6 +65,7 @@ public class RoutesBlock {
 
     public String getName() {
         String name = "";
+        /*
         if (this.routes.size() == 1) {
             for (Map.Entry<Float, BasicRoute> routeEntry : this.routes.entrySet()) {
 
@@ -79,18 +77,18 @@ public class RoutesBlock {
                         name += ", " + day.getValue().getDateStampWeekFormat();
                     }
                 }
-                name = "<center>"+routeEntry.getValue().getNumber() + "</center><br>" + name;
+                name = "<center>" + routeEntry.getValue().getNumber() + "</center><br>" + name;
             }
         } else {
-
-            for (Map.Entry<Float, BasicRoute> routeEntry : this.routes.entrySet()) {
-                if (name.equals("")) {
-                    name += routeEntry.getValue().getNumber();
-                } else {
-                    name += ", " + routeEntry.getValue().getNumber();
-                }
+         */
+        for (Map.Entry<Float, BasicRoute> routeEntry : this.routes.entrySet()) {
+            if (name.equals("")) {
+                name += routeEntry.getValue().getNumber();
+            } else {
+                name += ", " + routeEntry.getValue().getNumber();
             }
         }
+
         return name;
     }
 

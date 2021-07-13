@@ -455,9 +455,19 @@
                         </c:forEach>
                     </tbody>
                 </table>
-
-
-
+                <hr>
+                <center>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td> ${previousBlock}</td>
+                                <td> ${currentBlock}</td>
+                                <td> ${nextBlock}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </center>
+                <hr>
 
             </div>
         </div>

@@ -245,6 +245,13 @@
                 border:solid black 1px;
             }
 
+            /* -----------------
+            number inside circle css
+            
+            --------------------*/
+
+
+
         </style>
     </head>
 
@@ -349,7 +356,6 @@
                         </button>
                         &nbsp
                         <button type="button" class="btn btn-outline-success">
-
                             <span> <a href="index.htm">საწყისი გვერდი</a> </span>
                         </button>
 

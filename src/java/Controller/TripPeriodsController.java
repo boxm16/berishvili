@@ -30,11 +30,16 @@ public class TripPeriodsController {
         model.addAttribute("selectedRoutesBlocks", selectedRoutesBlocks);
 
         String previousBlockHtml = "";
-        String currentBlockHtml = "<a class=\"nav-link\">" + selectedRoutesBlocks.get(0).getName() + "</a>";
+        String currentBlockHtml = "<button type=\"button\" class=\"btn  btn-outline-primary\" disabled>"
+                + " <span>" + selectedRoutesBlocks.get(0).getName() + "</span>"
+                + " </button>";
+
         String nextBlockHtml = "";
 
         if (selectedRoutesBlocks.get(1) != null) {
-            nextBlockHtml = "<a class=\"nav-link\">" + selectedRoutesBlocks.get(1).getName() + "</a>";
+            nextBlockHtml = " <button type=\"button\" class=\"btn btn-outline-success\">"
+                    + " <span> <a  href=\"tripPeriods.htm?blockIndex=1\">" + selectedRoutesBlocks.get(1).getName() + "</a></span>"
+                    + " </button>";
         }
         model.addAttribute("previousBlock", previousBlockHtml);
         model.addAttribute("currentBlock", currentBlockHtml);
@@ -53,15 +58,21 @@ public class TripPeriodsController {
         model.addAttribute("routes", routes);
 
         String previousBlockHtml = "";
-        String currentBlockHtml = "<a class=\"nav-link\">" + selectedRoutesBlocks.get(Integer.valueOf(blockIndex)).getName() + "</a>";
+        String currentBlockHtml = "<button type=\"button\" class=\"btn btn-outline-primary\" disabled>"
+                + " <span>" + selectedRoutesBlocks.get(Integer.valueOf(blockIndex)).getName() + "</span>"
+                + " </button>";
         String nextBlockHtml = "";
+
         if (Integer.valueOf(blockIndex) > 0) {
-            if (selectedRoutesBlocks.get(Integer.valueOf(blockIndex) - 1) != null) {
-                previousBlockHtml = "<a class=\"nav-link\" href=\"tripPeriods.htm?blockIndex=" + (Integer.valueOf(blockIndex) - 1) + "\">" + selectedRoutesBlocks.get(Integer.valueOf(blockIndex) - 1).getName() + "</a>";
-            }
+            previousBlockHtml = " <button type=\"button\" class=\"btn btn-outline-success\">"
+                    + " <span> <a href=\"tripPeriods.htm?blockIndex=" + (Integer.valueOf(blockIndex) - 1) + "\">" + selectedRoutesBlocks.get(Integer.valueOf(blockIndex) - 1).getName() + "</a> </span>"
+                    + " </button>";
         }
-        if (selectedRoutesBlocks.get(Integer.valueOf(blockIndex) + 1) != null) {
-            nextBlockHtml = "<a class=\"nav-link\" href=\"tripPeriods.htm?blockIndex=" + (Integer.valueOf(blockIndex) + 1) + "\">" + selectedRoutesBlocks.get(Integer.valueOf(blockIndex) + 1).getName() + "</a>";
+
+        if (Integer.valueOf(blockIndex) < selectedRoutesBlocks.size() - 1) {
+            nextBlockHtml = " <button type=\"button\" class=\"btn btn-outline-success\">"
+                    + "<span><a  href=\"tripPeriods.htm?blockIndex=" + (Integer.valueOf(blockIndex) + 1) + "\">" + selectedRoutesBlocks.get(Integer.valueOf(blockIndex) + 1).getName() + "</a></span>"
+                    + " </button>";
         }
 
         model.addAttribute("previousBlock", previousBlockHtml);

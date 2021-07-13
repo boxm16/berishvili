@@ -195,6 +195,10 @@ public class TechDao {
             updateStatement.executeBatch();
             deleteStatement.executeBatch();
 
+            resultSet.close();
+            updateStatement.close();
+            deleteStatement.close();
+
             PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO route (number, prefix, suffix, a_point, b_point, scheme) VALUES (?,?,?,?,?,?)");
             String prefix;
             String suffix;
@@ -223,13 +227,13 @@ public class TechDao {
             }
             insertStatement.executeBatch();
 
+            insertStatement.close();
+            connection.close();
         } catch (SQLException ex) {
             Logger.getLogger(TechDao.class.getName()).log(Level.SEVERE, null, ex);
             return ex.getMessage();
         }
         return "Data from excel file has been inserted successfully into database";
     }
-
-    
 
 }

@@ -51,7 +51,9 @@ public class RouteDao {
                 route.setScheme(scheme);
                 routes.put(Float.valueOf(routeKey), route);
             }
-
+            resultSet.close();
+            statement.close();
+            connection.close();
         } catch (SQLException ex) {
             Logger.getLogger(TechDao.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex.getMessage());
@@ -84,6 +86,9 @@ public class RouteDao {
             }
             insertStatement.executeBatch();
 
+            insertStatement.close();
+            connection.close();
+
         } catch (SQLException ex) {
             Logger.getLogger(TechDao.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -100,6 +105,8 @@ public class RouteDao {
             updateStatement.setString(4, route.getNumber());
             updateStatement.execute();
             System.out.println("Route #" + route.getNumber() + "hase been  updated");
+            updateStatement.close();
+            connection.close();
         } catch (SQLException ex) {
             Logger.getLogger(RouteDao.class.getName()).log(Level.SEVERE, null, ex);
 
@@ -198,7 +205,10 @@ public class RouteDao {
             }
             //Saving the changes
             connection.commit();
-
+            deletePreparedStatement.close();
+            tripVoucherInsertionPreparedStatement.close();
+            tripPeriodInsertionPreparedStatement.close();
+            connection.close();
             return returnCode;//this is No error code
         } catch (SQLException ex) {
             Logger.getLogger(TechDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -267,6 +277,9 @@ public class RouteDao {
                     tripVouchers.get(tripVoucherNumber).getTripPeriods().add(tripPeriod);
                 }
 
+                connection.close();
+                statement.close();
+                rs.close();
             } catch (SQLException ex) {
                 Logger.getLogger(RouteDao.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -29,6 +29,16 @@ public class TripPeriodsController {
         model.addAttribute("routes", routes);
         model.addAttribute("selectedRoutesBlocks", selectedRoutesBlocks);
 
+        String previousBlockHtml = "";
+        String currentBlockHtml = "<a class=\"nav-link\">" + selectedRoutesBlocks.get(0).getName() + "</a>";
+        String nextBlockHtml = "";
+
+        if (selectedRoutesBlocks.get(1) != null) {
+            nextBlockHtml = "<a class=\"nav-link\">" + selectedRoutesBlocks.get(1).getName() + "</a>";
+        }
+        model.addAttribute("previousBlock", previousBlockHtml);
+        model.addAttribute("currentBlock", currentBlockHtml);
+        model.addAttribute("nextBlock", nextBlockHtml);
         return "tripPeriods";
     }
 
@@ -37,9 +47,27 @@ public class TripPeriodsController {
         if (session.getAttribute("selectedRoutesBlocks") == null) {
             return "errorPage";
         }
+        ArrayList<RoutesBlock> selectedRoutesBlocks = (ArrayList<RoutesBlock>) session.getAttribute("selectedRoutesBlocks");
 
         TreeMap<Float, BasicRoute> routes = getSelectedBlockRoutes(session, blockIndex);
         model.addAttribute("routes", routes);
+
+        String previousBlockHtml = "";
+        String currentBlockHtml = "<a class=\"nav-link\">" + selectedRoutesBlocks.get(Integer.valueOf(blockIndex)).getName() + "</a>";
+        String nextBlockHtml = "";
+        if (Integer.valueOf(blockIndex) > 0) {
+            if (selectedRoutesBlocks.get(Integer.valueOf(blockIndex) - 1) != null) {
+                previousBlockHtml = "<a class=\"nav-link\" href=\"tripPeriods.htm?blockIndex=" + (Integer.valueOf(blockIndex) - 1) + "\">" + selectedRoutesBlocks.get(Integer.valueOf(blockIndex) - 1).getName() + "</a>";
+            }
+        }
+        if (selectedRoutesBlocks.get(Integer.valueOf(blockIndex) + 1) != null) {
+            nextBlockHtml = "<a class=\"nav-link\" href=\"tripPeriods.htm?blockIndex=" + (Integer.valueOf(blockIndex) + 1) + "\">" + selectedRoutesBlocks.get(Integer.valueOf(blockIndex) + 1).getName() + "</a>";
+        }
+
+        model.addAttribute("previousBlock", previousBlockHtml);
+        model.addAttribute("currentBlock", currentBlockHtml);
+        model.addAttribute("nextBlock", nextBlockHtml);
+
         return "tripPeriods";
     }
 

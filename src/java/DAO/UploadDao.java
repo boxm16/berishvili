@@ -6,7 +6,6 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
@@ -27,7 +26,6 @@ public class UploadDao {
     private DataSource dataSource;
     private Connection connection = null;
     private Statement statement = null;
-    private ResultSet resultSet = null;
 
     public String deleteLastUpload() {
         String errorMessage = "";
@@ -66,6 +64,8 @@ public class UploadDao {
             }
             insertStatement.executeBatch();
             connection.commit();
+            insertStatement.close();
+            connection.close();
         } catch (SQLException ex) {
             Logger.getLogger(TechDao.class.getName()).log(Level.SEVERE, null, ex);
             return ex.getMessage();

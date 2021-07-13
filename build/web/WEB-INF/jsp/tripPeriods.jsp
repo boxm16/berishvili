@@ -74,7 +74,7 @@
             }
 
             #sidebar {
-                width: 250px;
+                width: 150px;
                 position: fixed;
                 top: 0;
                 left: 0;
@@ -86,7 +86,7 @@
             }
 
             #sidebar.active {
-                margin-left: -250px;
+                margin-left: -150px;
             }
 
             #sidebar .sidebar-header {
@@ -167,7 +167,7 @@
             ----------------------------------------------------- */
 
             #content {
-                width: calc(100% - 250px);
+                width: calc(100% - 150px);
                 padding: 5px;
                 min-height: 100vh;
                 transition: all 0.3s;
@@ -186,7 +186,7 @@
 
             @media (max-width: 768px) {
                 #sidebar {
-                    margin-left: -250px;
+                    margin-left: -150px;
                 }
                 #sidebar.active {
                     margin-left: 0;
@@ -195,7 +195,7 @@
                     width: 100%;
                 }
                 #content.active {
-                    width: calc(100% - 250px);
+                    width: calc(100% - 150px);
                 }
                 #sidebarCollapse span {
                     display: none;
@@ -245,9 +245,6 @@
                 border:solid black 1px;
             }
 
-            /* ---------------------------------------------------
-                          tool tip styling          
-            ----------------------------------------------------- */
         </style>
     </head>
 
@@ -255,18 +252,15 @@
         <div class="wrapper">
             <!-- Sidebar  -->
             <nav id="sidebar">
-
                 <div class="sidebar-header">
-                    <h4>მარშრუტების ბლოკები</h4>
+                    <center><h5>მარშრუტების ბლოკები</h5></center>
                 </div>
-
                 <ul class="list-unstyled components">
                     <c:forEach var="routesBlock" items="${selectedRoutesBlocks}" varStatus="loop">
                         <li >
                             <a href="tripPeriods.htm?blockIndex=${loop.index}">${routesBlock.name}</a>
                         </li>
                     </c:forEach> 
-
                     <li >
                         <a href="#" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">საგარანტიოები</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
@@ -355,7 +349,7 @@
                         </button>
                         &nbsp
                         <button type="button" class="btn btn-outline-success">
-                            
+
                             <span> <a href="index.htm">საწყისი გვერდი</a> </span>
                         </button>
 
@@ -367,14 +361,15 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="nav navbar-nav ml-auto">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Page</a>
+                                    ${previousBlock}   
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Page</a>
+                                    ${currentBlock}
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Page</a>
+                                    ${nextBlock}
                                 </li>
+
                             </ul>
                         </div>
                     </div>
@@ -426,21 +421,19 @@
                                     <c:forEach var="tripVouchersEntry" items="${exodusEntrySet.value.tripVouchers}">
                                         <c:forEach var="tripPeriod" items="${tripVouchersEntry.value.tripPeriods}">
                                             <tr>
-                                                <td>${routeEntrySet.value.number} </td>
-                                                <td>${dayEntrySet.value.dateStamp}</td>
-                                                <td>${tripVouchersEntry.value.number}</td>
-                                                <td>${exodusEntrySet.value.number}</td>                                        
-                                                <td>${tripVouchersEntry.value.driverName}</td>
-                                                <td>${tripPeriod.getTypeG()}</td>
-                                                <td>${tripPeriod.getStartTimeScheduledString()}</td>
-                                                <td>${tripPeriod.getStartTimeActualString()}</td>
-                                                <td>${tripPeriod.getArrivalTimeScheduledString()}</td>
-                                                <td>${tripPeriod.getArrivalTimeActualString()}</td>
-                                                <td>${tripPeriod.getTripPeriodTimeScheduledString()}</td>
-                                                <td>${tripPeriod.getTripPeriodTimeActualString()}</td>
-                                                <td style="background-color: ${tripPeriod.getTripPeriodTimeDifferenceColor()}">${tripPeriod.getTripPeriodTimeDifferenceString()}</td>
-
-
+                                                <td align="center">${routeEntrySet.value.number} </td>
+                                                <td align="center">${dayEntrySet.value.dateStamp}</td>
+                                                <td align="center">${tripVouchersEntry.value.number}</td>
+                                                <td align="center">${exodusEntrySet.value.number}</td>                                        
+                                                <td align="center">${tripVouchersEntry.value.driverName}</td>
+                                                <td align="center">${tripPeriod.getTypeG()}</td>
+                                                <td align="center">${tripPeriod.getStartTimeScheduledString()}</td>
+                                                <td align="center">${tripPeriod.getStartTimeActualString()}</td>
+                                                <td align="center">${tripPeriod.getArrivalTimeScheduledString()}</td>
+                                                <td align="center">${tripPeriod.getArrivalTimeActualString()}</td>
+                                                <td align="center">${tripPeriod.getTripPeriodTimeScheduledString()}</td>
+                                                <td align="center">${tripPeriod.getTripPeriodTimeActualString()}</td>
+                                                <td style="background-color: ${tripPeriod.getTripPeriodTimeDifferenceColor()}" align="center">${tripPeriod.getTripPeriodTimeDifferenceString()}</td>
                                             </tr>
 
                                         </c:forEach>

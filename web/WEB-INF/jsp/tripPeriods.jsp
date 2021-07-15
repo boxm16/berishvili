@@ -360,8 +360,9 @@
                         </button>
 
 
-                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <i class="fas fa-align-justify"></i>
+                        &nbsp  &nbsp  &nbsp
+                        <button type="button" class="btn btn-success">
+                            <span> <a href="tripPeriodsFilter.htm?blockIndex=${currentBlockIndex}">ფილტრები</a> </span>
                         </button>
 
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -428,7 +429,7 @@
                                         <c:forEach var="tripPeriod" items="${tripVouchersEntry.value.tripPeriods}">
                                             <tr>
                                                 <td align="center">${routeEntrySet.value.number} </td>
-                                                <td align="center">${dayEntrySet.value.dateStamp}</td>
+                                                <td align="center">${dayEntrySet.value.getDateStampWeekFormat()}</td>
                                                 <td align="center">${tripVouchersEntry.value.number}</td>
                                                 <td align="center">${exodusEntrySet.value.number}</td>                                        
                                                 <td align="center">${tripVouchersEntry.value.driverName}</td>

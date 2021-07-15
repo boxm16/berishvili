@@ -7,6 +7,7 @@ import Model.Exodus;
 import Model.RouteData;
 import Model.RoutesBlock;
 import Model.TripPeriod;
+import Model.TripPeriodsFilter;
 import Model.TripVoucher;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -287,5 +288,55 @@ public class RouteDao {
         }
 
         return routes;
+    }
+
+    public TripPeriodsFilter getSelectedRoutesTripPeriodsFilter(RoutesBlock block) {
+        converter = new Converter();
+        TreeMap<Float, BasicRoute> routes = block.getRoutes();
+        TripPeriodsFilter tripPeriodsFilter = new TripPeriodsFilter();
+
+        for (Map.Entry<Float, BasicRoute> routeEntry : routes.entrySet()) {
+            StringBuilder sql = new StringBuilder("SELECT * FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE ");
+            TreeMap<Date, Day> days = routeEntry.getValue().getDays();
+            int indx = 0;
+            for (Map.Entry<Date, Day> day : days.entrySet()) {
+                if (indx == 0) {
+                    sql = sql.append("route_number='").append(routeEntry.getValue().getNumber()).append("' AND date_stamp='").append(day.getValue().getDateStamp()).append("'");
+                    indx++;
+                }
+                sql = sql.append(" OR route_number='").append(routeEntry.getValue().getNumber()).append("' AND date_stamp='").append(day.getValue().getDateStamp()).append("'");
+            }
+            sql = sql.append("ORDER BY prefix, suffix;");
+            // System.out.println(sql.toString());
+            try {
+                connection = dataBaseConnection.getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(sql.toString());
+                tripPeriodsFilter.addRouteNumber(routeEntry.getValue().getNumber());
+
+                while (rs.next()) {
+
+                    tripPeriodsFilter.addDateStamp(rs.getString("date_stamp"));
+                    tripPeriodsFilter.addBusNumber(rs.getString("bus_number"));
+                    tripPeriodsFilter.addExodusNumber(rs.getShort("exodus_number"));
+                    tripPeriodsFilter.addDriverName(rs.getString("driver_name"));
+                    tripPeriodsFilter.addTripPeriodType(rs.getString("type"));
+                    tripPeriodsFilter.addStartTimeScheduled(rs.getString("start_time_scheduled"));
+                    tripPeriodsFilter.addStartTimeActual(rs.getString("start_time_actual"));
+                    tripPeriodsFilter.addArrivalTimeScheduled(rs.getString("arrival_time_scheduled"));
+                    tripPeriodsFilter.addArrivalTimeActual(rs.getString("arrival_time_actual"));
+
+                }
+
+                connection.close();
+                statement.close();
+                rs.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(RouteDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+        return tripPeriodsFilter;
     }
 }

@@ -3,6 +3,7 @@ package Controller;
 import DAO.RouteDao;
 import Model.BasicRoute;
 import Model.RoutesBlock;
+import Model.TripPeriodsFilter;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -36,11 +38,12 @@ public class TripPeriodsController {
 
         String nextBlockHtml = "";
 
-        if (selectedRoutesBlocks.get(1) != null) {
+        if (selectedRoutesBlocks.size() > 1) {
             nextBlockHtml = " <button type=\"button\" class=\"btn btn-outline-success\">"
                     + " <span> <a  href=\"tripPeriods.htm?blockIndex=1\">" + selectedRoutesBlocks.get(1).getName() + "</a></span>"
                     + " </button>";
         }
+        model.addAttribute("currentBlockIndex", 0);
         model.addAttribute("previousBlock", previousBlockHtml);
         model.addAttribute("currentBlock", currentBlockHtml);
         model.addAttribute("nextBlock", nextBlockHtml);
@@ -78,7 +81,7 @@ public class TripPeriodsController {
         model.addAttribute("previousBlock", previousBlockHtml);
         model.addAttribute("currentBlock", currentBlockHtml);
         model.addAttribute("nextBlock", nextBlockHtml);
-
+        model.addAttribute("currentBlockIndex", blockIndex);
         return "tripPeriods";
     }
 
@@ -95,4 +98,23 @@ public class TripPeriodsController {
         System.out.println("TripPeriods routes created. Creation time:" + Duration.between(start, end));
         return routes;
     }
+
+    @RequestMapping(value = "tripPeriodsFilter")
+    public String tripPeriodsFilter(ModelMap model, HttpSession session, @RequestParam String blockIndex) {
+
+        ArrayList<RoutesBlock> selectedRoutesBlocks = (ArrayList<RoutesBlock>) session.getAttribute("selectedRoutesBlocks");
+        RoutesBlock block = selectedRoutesBlocks.get(Integer.valueOf(blockIndex));
+        TripPeriodsFilter tripPeriodsFilter = routeDao.getSelectedRoutesTripPeriodsFilter(block);
+
+        model.addAttribute("tripPeriodsFilter", tripPeriodsFilter);
+        return "tripPeriodsFilter";
+    }
+
+    @RequestMapping(value = "res")
+    public String processTeams(ModelMap model, @ModelAttribute TripPeriodsFilter tripPeriodsFilter) {
+        System.out.println("-----");
+        model.addAttribute("tripPeriodsFilter", tripPeriodsFilter);
+        return "res";
+    }
+
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -60,6 +61,56 @@ public class TripPeriodsController {
         TreeMap<Float, BasicRoute> routes = getSelectedBlockRoutes(session, blockIndex);
         model.addAttribute("routes", routes);
 
+        addTripPeriodsModelAttributes(model, selectedRoutesBlocks, blockIndex);
+        return "tripPeriods";
+    }
+
+    private TreeMap<Float, BasicRoute> getSelectedBlockRoutes(HttpSession session, String blockIndex) {
+        Instant start = Instant.now();
+        ArrayList<RoutesBlock> selectedRoutesBlocks = (ArrayList<RoutesBlock>) session.getAttribute("selectedRoutesBlocks");
+        RoutesBlock block = selectedRoutesBlocks.get(Integer.valueOf(blockIndex));
+
+        //RouteFactory routeFactory = new RouteFactory();
+        //TreeMap<Float, BasicRoute> routes = routeFactory.createSelectedRoutesFromUploadedFile(block);
+        TreeMap<Float, BasicRoute> routes = routeDao.getSelectedRoutes(block);
+
+        Instant end = Instant.now();
+        System.out.println("TripPeriods routes created. Creation time:" + Duration.between(start, end));
+        return routes;
+    }
+
+    @RequestMapping(value = "tripPeriodsFilterRequest")
+    public String tripPeriodsFilter(ModelMap model, HttpSession session, @RequestParam String blockIndex) {
+        Instant filteringStart = Instant.now();
+        TripPeriodsFilter tripPeriodsFilter;
+        if (session.getAttribute("tripPeriodsFilter") == null) {
+            ArrayList<RoutesBlock> selectedRoutesBlocks = (ArrayList<RoutesBlock>) session.getAttribute("selectedRoutesBlocks");
+            RoutesBlock block = selectedRoutesBlocks.get(Integer.valueOf(blockIndex));
+            tripPeriodsFilter = routeDao.getSelectedRoutesTripPeriodsFilter(block);
+        } else {
+            tripPeriodsFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsFilter");
+        }
+        Instant filteringEnd = Instant.now();
+        System.out.println("TripPeriods routes filtered. Time needed:" + Duration.between(filteringStart, filteringEnd));
+        model.addAttribute("blockIndex", blockIndex);
+        model.addAttribute("tripPeriodsFilter", tripPeriodsFilter);
+//------
+        TreeMap<String, Boolean> rrs = new TreeMap();
+        rrs.put("1", Boolean.FALSE);
+        rrs.put("2", Boolean.TRUE);
+        model.addAttribute("rrs", rrs);
+
+        return "tripPeriodsFilter";
+    }
+
+    @RequestMapping(value = "tripPeriodsFilter111")
+    public String processTeams(ModelMap model, @ModelAttribute TripPeriodsFilter tripPeriodsFilter) {
+
+        model.addAttribute("tripPeriodsFilter", tripPeriodsFilter);
+        return "res";
+    }
+
+    private void addTripPeriodsModelAttributes(ModelMap model, ArrayList<RoutesBlock> selectedRoutesBlocks, String blockIndex) {
         String previousBlockHtml = "";
         String currentBlockHtml = "<button type=\"button\" class=\"btn btn-outline-primary\" disabled>"
                 + " <span>" + selectedRoutesBlocks.get(Integer.valueOf(blockIndex)).getName() + "</span>"
@@ -82,38 +133,16 @@ public class TripPeriodsController {
         model.addAttribute("currentBlock", currentBlockHtml);
         model.addAttribute("nextBlock", nextBlockHtml);
         model.addAttribute("currentBlockIndex", blockIndex);
-        return "tripPeriods";
     }
 
-    private TreeMap<Float, BasicRoute> getSelectedBlockRoutes(HttpSession session, String blockIndex) {
-        Instant start = Instant.now();
-        ArrayList<RoutesBlock> selectedRoutesBlocks = (ArrayList<RoutesBlock>) session.getAttribute("selectedRoutesBlocks");
-        RoutesBlock block = selectedRoutesBlocks.get(Integer.valueOf(blockIndex));
+    @RequestMapping(value = "tripPeriodsFilter2", method = RequestMethod.POST)
+    public String editCustomer(@RequestParam(value = "exodusNumbers", required = false) String[] checkboxesValues) {
 
-        //RouteFactory routeFactory = new RouteFactory();
-        //TreeMap<Float, BasicRoute> routes = routeFactory.createSelectedRoutesFromUploadedFile(block);
-        TreeMap<Float, BasicRoute> routes = routeDao.getSelectedRoutes(block);
-
-        Instant end = Instant.now();
-        System.out.println("TripPeriods routes created. Creation time:" + Duration.between(start, end));
-        return routes;
-    }
-
-    @RequestMapping(value = "tripPeriodsFilter")
-    public String tripPeriodsFilter(ModelMap model, HttpSession session, @RequestParam String blockIndex) {
-
-        ArrayList<RoutesBlock> selectedRoutesBlocks = (ArrayList<RoutesBlock>) session.getAttribute("selectedRoutesBlocks");
-        RoutesBlock block = selectedRoutesBlocks.get(Integer.valueOf(blockIndex));
-        TripPeriodsFilter tripPeriodsFilter = routeDao.getSelectedRoutesTripPeriodsFilter(block);
-
-        model.addAttribute("tripPeriodsFilter", tripPeriodsFilter);
-        return "tripPeriodsFilter";
-    }
-
-    @RequestMapping(value = "res")
-    public String processTeams(ModelMap model, @ModelAttribute TripPeriodsFilter tripPeriodsFilter) {
-        System.out.println("-----");
-        model.addAttribute("tripPeriodsFilter", tripPeriodsFilter);
+        int ind = 0;
+        while (ind < checkboxesValues.length) {
+            System.out.println(checkboxesValues[ind]);
+            ind++;
+        }
         return "res";
     }
 

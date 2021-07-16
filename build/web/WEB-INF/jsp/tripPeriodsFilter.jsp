@@ -48,22 +48,23 @@
                 display: block;
                 color: #f2f2f2;
                 text-align: center;
-                padding: 14px 16px;
+                padding: 18px 16px;
                 text-decoration: none;
                 font-size: 17px;
             }
 
             .navbar a:hover {
-                background: #ddd;
+                background: lightgreen;
                 color: black;
             }
             .btn{
-                color: lightblue;
+                background-color: blue;
+                color:white;
                 padding: 10px;
                 text-align: center;
                 text-decoration: none;
                 display: inline-block;
-                font-size: 16px;
+                font-size: 20px;
                 margin: 4px 2px;
                 cursor: pointer;
                 border-radius: 10px;
@@ -71,15 +72,16 @@
         </style>
     </head>
     <body>
-        <form:form method="POST" commandName="tripPeriodsFilter" action="res.htm">
+        <form:form method="POST" commandName="tripPeriodsFilter" action="tripPeriodsFilter.htm">
 
             <div class="navbar">
-                <a href="#home">Home</a>
-                <center>
-                    <div>
-                        <input class="btn" type="submit" value="გაფილტვრა"/>
-                    </div>
-                </center>
+
+
+                <a href="index.htm">საწყისი გვერდი</a>
+                <a href="tripPeriods.htm?blockIndex=${blockIndex}">უკან დაბრუნება</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input class="btn" type="submit" value="გაფილტვრა"/>
+
             </div>
 
             <br><br>     
@@ -156,7 +158,28 @@
 
         </table>
     </form:form>
+    <hr>
+    <hr>
 
+    <form:form method="POST"  action="tripPeriodsFilter2.htm">
+
+        <table style="text-align:center; font-size:20px" id="daysOfRoute:${entry.value.number}">
+            <tbody>
+
+                <c:forEach var="item" items="${rrs}">
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="exodusNumbers" class="dates" checked="${item.value}" value="${item.key}"> 
+                        </td>
+                        <td>
+                            ${item.key} 
+                        </td>
+                    </tr>
+                </c:forEach> 
+            </tbody>
+        </table>
+        <button type="submit">submit</button>
+    </form:form>
 
 </body>
 </html>

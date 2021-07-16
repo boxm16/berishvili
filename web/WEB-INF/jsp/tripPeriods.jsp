@@ -362,7 +362,7 @@
 
                         &nbsp  &nbsp  &nbsp
                         <button type="button" class="btn btn-success">
-                            <span> <a href="tripPeriodsFilter.htm?blockIndex=${currentBlockIndex}">ფილტრები</a> </span>
+                            <span> <a href="tripPeriodsFilterRequest.htm?blockIndex=${currentBlockIndex}">ფილტრები</a> </span>
                         </button>
 
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">

@@ -8,26 +8,6 @@
     </head>
     <body>
         <h1>Hello World!</h1>
-        Selected teams:
-        <br/>
-        <c:forEach var="routeNumber" items="${tripPeriodsFilter.routeNumbers}">
-            ${routeNumber}
-            <br/>
-        </c:forEach>
-        <hr>
-        <c:forEach var="dateStamp" items="${tripPeriodsFilter.dateStamps}">
-            ${dateStamp}
-            <br/>
-        </c:forEach>
-        <hr>
-        <c:forEach var="busNumber" items="${tripPeriodsFilter.busNumbers}">
-            ${busNumber}
-            <br/>
-        </c:forEach> 
-        <hr>
-        <c:forEach var="exodusNumber" items="${tripPeriodsFilter.exodusNumbers}">
-            ${exodusNumber}
-            <br/>
-        </c:forEach> 
+         
     </body>
 </html>

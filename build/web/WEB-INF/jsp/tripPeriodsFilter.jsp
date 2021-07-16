@@ -1,5 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>  
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
@@ -23,14 +22,6 @@
             }
             td {
                 vertical-align: top;
-            }
-            ul {
-                list-style-type: none;
-                margin: 0;
-                padding: 0;
-            }
-            label {
-                font-size: 20px;
             }
             /*-----------------
             navbar styling
@@ -72,114 +63,259 @@
         </style>
     </head>
     <body>
-        <form:form method="POST" commandName="tripPeriodsFilter" action="tripPeriodsFilter.htm">
-
-            <div class="navbar">
-
-
-                <a href="index.htm">საწყისი გვერდი</a>
-                <a href="tripPeriods.htm?blockIndex=${blockIndex}">უკან დაბრუნება</a>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input class="btn" type="submit" value="გაფილტვრა"/>
-
-            </div>
-
-            <br><br>     
-        <center> <h1>ბრუნების დროების ფილტრები</h1></center>
+        <div class="navbar">
+            <a href="index.htm">საწყისი გვერდი</a>
+            <a href="tripPeriods.htm?blockIndex=${blockIndex}">უკან დაბრუნება</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ROuteNumber</th>
-                    <th>DateStamp</th>
-                    <th>BusNumber</th>
-                    <th>ExodusNumber</th>
-                    <th>DriverName</th>
-                    <th>type</th>
-                    <th>StartTimeScheduled</th>
-                    <th>StartTimeActual</th>
-                    <th>ArrivalTimeScheduled</th>
-                    <th>ArrivalTimeActual</th>
-                </tr>
-            </thead>
+        </div>
+
+        <br><br>     
+    <center> <h1>ბრუნების დროების ფილტრები</h1></center>
+    <table>
+        <thead >
             <tr>
-                <td style="vertical-align: top;">
-                    <ul  style="list-style-type:none;">
-                        <form:checkboxes delimiter="<hr>" element="li" path="routeNumbers" items="${tripPeriodsFilter.routeNumbers}"/>
-                    </ul>
-                </td>
-                <td>
-                    <ul  style="list-style-type:none;">
-                        <form:checkboxes delimiter="<hr>"  element="li" path="dateStamps" items="${tripPeriodsFilter.dateStamps}"/>
-                    </ul>
-                </td>
-                <td>
-                    <ul  style="list-style-type:none;">
-                        <form:checkboxes delimiter="<hr>" element="li" path="busNumbers" items="${tripPeriodsFilter.busNumbers}"/>
-                    </ul>
-                </td>
-                <td>
-                    <ul  style="list-style-type:none;">
-                        <form:checkboxes delimiter="<hr>"  element="li" path="exodusNumbers" items="${tripPeriodsFilter.exodusNumbers}"/>
-                    </ul>
-                </td>
+                <th><button onclick="">მარშრუტის ნომრების გაფილტვრა</button></th>
+                <th>DateStamp</th>
+                <th>BusNumber</th>
+                <th>Exodus<br>Number</th>
+                <th>DriverName</th>
+                <th>type</th>
+                <th>StartTime<br>Scheduled</th>
+                <th>StartTime<br>Actual</th>
+                <th>ArrivalTime<br>Scheduled</th>
+                <th>ArrivalTime<br>Actual</th>
+                <th>TripPeriodTime<br>Scheduled</th>
+                <th>TripPeriodTime<br>Actual</th>
+                <th>TripPeriodTime<br>Difference</th>
+            </tr>
+        </thead>
+        <tbody 
+            <tr height="150px">
+        <td>
+            <table>
+                <tbody style="height:500px; overflow-y:scroll; display:block;">
+                    <c:forEach var="item" items="${tripPeriodsFilter.routeNumbers}">
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="exodusNumbers" class="dates" checked="${item.value}" value="${item.key}"> 
+                            </td>
+                            <td>
+                                ${item.key}  
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tbody style="height:500px; overflow-y:scroll; display:block;">
 
-                <td>
-                    <ul  style="list-style-type:none;">
-                        <form:checkboxes delimiter="<hr>"  element="li" path="driverNames" items="${tripPeriodsFilter.driverNames}"/>
-                    </ul>
-                </td>
-                <td>
-                    <ul  style="list-style-type:none;">
-                        <form:checkboxes delimiter="<hr>"  element="li" path="tripPeriodTypes" items="${tripPeriodsFilter.tripPeriodTypes}"/>
-                    </ul>
-                </td>
-                <td>
-                    <ul  style="list-style-type:none;">
-                        <form:checkboxes delimiter="<hr>"  element="li" path="startTimesScheduled" items="${tripPeriodsFilter.startTimesScheduled}"/>
-                    </ul>
-                </td>
-                <td>
-                    <ul  style="list-style-type:none;">
-                        <form:checkboxes delimiter="<hr>"  element="li" path="startTimesActual" items="${tripPeriodsFilter.startTimesActual}"/>
-                    </ul>
-                </td>
-                <td>
-                    <ul  style="list-style-type:none;">
-                        <form:checkboxes delimiter="<hr>" element="li" path="arrivalTimesScheduled" items="${tripPeriodsFilter.arrivalTimesScheduled}"/>
-                    </ul>
-                </td>
-                <td>
-                    <ul  style="list-style-type:none;">
-                        <form:checkboxes delimiter="<hr>"  element="li" path="arrivalTimesActual" items="${tripPeriodsFilter.arrivalTimesActual}"/>
-                    </ul>
-                </td>
+                    <c:forEach var="item" items="${tripPeriodsFilter.dateStamps}">
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="dateStamps" class="dates" checked="${item.value}" value="${item.key}"> 
+                            </td>
+                            <td>
+                                ${item.key}  
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </td>
 
-        </table>
-    </form:form>
-    <hr>
-    <hr>
+        <td>
+            <table>
+                <tbody style="height:500px; overflow-y:scroll; display:block;">
 
-    <form:form method="POST"  action="tripPeriodsFilter2.htm">
+                    <c:forEach var="item" items="${tripPeriodsFilter.busNumbers}">
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="busNumbers" class="dates" checked="${item.value}" value="${item.key}"> 
+                            </td>
+                            <td>
+                                ${item.key}  
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tbody style="height:500px; overflow-y:scroll; display:block;">
 
-        <table style="text-align:center; font-size:20px" id="daysOfRoute:${entry.value.number}">
-            <tbody>
+                    <c:forEach var="item" items="${tripPeriodsFilter.exodusNumbers}">
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="exodusNumbers" class="dates" checked="${item.value}" value="${item.key}"> 
+                            </td>
+                            <td>
+                                ${item.key}  
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tbody style="height:500px; overflow-y:scroll; display:block;">
+                    <c:forEach var="item" items="${tripPeriodsFilter.driverNames}">
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="driverNames" class="dates" checked="${item.value}" value="${item.key}"> 
+                            </td>
+                            <td>
+                                ${item.key}  
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tbody style="height:500px; overflow-y:scroll; display:block;">
 
-                <c:forEach var="item" items="${rrs}">
-                    <tr>
-                        <td>
-                            <input type="checkbox" name="exodusNumbers" class="dates" checked="${item.value}" value="${item.key}"> 
-                        </td>
-                        <td>
-                            ${item.key} 
-                        </td>
-                    </tr>
-                </c:forEach> 
-            </tbody>
-        </table>
-        <button type="submit">submit</button>
-    </form:form>
+                    <c:forEach var="item" items="${tripPeriodsFilter.tripPeriodTypes}">
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="tripPeriodTypes" class="dates" checked="${item.value}" value="${item.key}"> 
+                            </td>
+                            <td>
+                                ${item.key}  
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tbody style="height:500px; overflow-y:scroll; display:block;">
+
+                    <c:forEach var="item" items="${tripPeriodsFilter.startTimesScheduled}">
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="startTimesScheduled" class="dates" checked="${item.value}" value="${item.key}"> 
+                            </td>
+                            <td>
+                                ${item.key}  
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tbody style="height:500px; overflow-y:scroll; display:block;">
+
+                    <c:forEach var="item" items="${tripPeriodsFilter.startTimesActual}">
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="startTimesActual" class="dates" checked="${item.value}" value="${item.key}"> 
+                            </td>
+                            <td>
+                                ${item.key}  
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tbody style="height:500px; overflow-y:scroll; display:block;">
+
+                    <c:forEach var="item" items="${tripPeriodsFilter.arrivalTimesScheduled}">
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="arrivalTimesScheduled" class="dates" checked="${item.value}" value="${item.key}"> 
+                            </td>
+                            <td>
+                                ${item.key}  
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tbody style="height:500px; overflow-y:scroll; display:block;">
+
+                    <c:forEach var="item" items="${tripPeriodsFilter.arrivalTimesActual}">
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="arrivalTimesActual" class="dates" checked="${item.value}" value="${item.key}"> 
+                            </td>
+                            <td>
+                                ${item.key}  
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tbody style="height:500px; overflow-y:scroll; display:block;">
+                    <c:forEach var="item" items="${tripPeriodsFilter.tripPeriodTimeScheduled}">
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="tripPeriodTimeScheduled" class="dates" checked="${item.value}" value="${item.key}"> 
+                            </td>
+                            <td>
+                                ${item.key}  
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </td>
+
+        <td>
+            <table>
+                <tbody style="height:500px; overflow-y:scroll; display:block;">
+                    <c:forEach var="item" items="${tripPeriodsFilter.tripPeriodTimeActual}">
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="tripPeriodTimeActual" class="dates" checked="${item.value}" value="${item.key}"> 
+                            </td>
+                            <td>
+                                ${item.key}  
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </td>
+
+        <td>
+            <table>
+                <tbody style="height:500px; overflow-y:scroll; display:block;">
+                    <c:forEach var="item" items="${tripPeriodsFilter.tripPeriodTimeDifference}">
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="tripPeriodTimeDifference" class="dates" checked="${item.value}" value="${item.key}"> 
+                            </td>
+                            <td>
+                                ${item.key}  
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </td>
+
+    </tr>
+</tbody>
+</table>
 
 </body>
 </html>

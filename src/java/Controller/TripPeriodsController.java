@@ -103,7 +103,7 @@ public class TripPeriodsController {
         return "tripPeriodsFilter";
     }
 
-    @RequestMapping(value = "tripPeriodsFilter111")
+    @RequestMapping(value = "tripPeriodsFilter")
     public String processTeams(ModelMap model, @ModelAttribute TripPeriodsFilter tripPeriodsFilter) {
 
         model.addAttribute("tripPeriodsFilter", tripPeriodsFilter);

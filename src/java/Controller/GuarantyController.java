@@ -80,14 +80,14 @@ public class GuarantyController {
 
         if (guarantyRoutes.containsKey(0.001f)) {//0.001f is code for error when actualStartTimes exist in file,(it cant be, because this file have to be from futer dates
 
-            model.addAttribute("error", "<h3>ატვირთული ფაილი არ არის საგარანტიო გასვლების გამოსათვლელად გამუოსადეგი (ფაილში იძებნება ფაქტიური გასვლის დრო, რაც აქ დაუშვებელია)"
+            model.addAttribute("error", "<h3>ატვირთული ფაილი არ არის საგარანტიო გასვლების გამოსათვლელად გამოსადეგი (ფაილში იძებნება ფაქტიური გასვლის დრო, რაც აქ დაუშვებელია)"
                     + "<a  href=\"guarantyTripsUploadPage.htm\"> დაბრუნდი და ატვირთე ახალი ფაილი </a></h3>");
 
             return "guarantyTripsDashboard";
         }
         if (guarantyRoutes.containsKey(0.002f)) {//0.002 is a error code for error when uploaded file contains data with more than one datestamp
 
-            model.addAttribute("dateStampError", "ატვირთული ფაილი არ არის საგარანტიო გასვლების გამოსათვლელად გამუოსადეგი (ფაილში იძებნება სხვადასხვა რიცხვი, რაც აქ დაუშვებელია)&nbsp&nbsp"
+            model.addAttribute("dateStampError", "ატვირთული ფაილი არ არის საგარანტიო გასვლების გამოსათვლელად გამოსადეგი (ფაილში იძებნება სხვადასხვა რიცხვი, რაც აქ დაუშვებელია)&nbsp&nbsp"
                     + "<a  href=\"guarantyTripsUploadPage.htm\"> დაბრუნდი და ატვირთე ახალი ფაილი </a>");
 
         }

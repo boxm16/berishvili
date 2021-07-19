@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,6 +47,8 @@ public class TripPeriodsController {
         model.addAttribute("previousBlock", previousBlockHtml);
         model.addAttribute("currentBlock", currentBlockHtml);
         model.addAttribute("nextBlock", nextBlockHtml);
+
+        session.setAttribute("tripPeriodsFilter", null);//
         return "tripPeriods";
     }
 
@@ -62,6 +63,8 @@ public class TripPeriodsController {
         model.addAttribute("routes", routes);
 
         addTripPeriodsModelAttributes(model, selectedRoutesBlocks, blockIndex);
+
+        session.setAttribute("tripPeriodsFilter", null);//
         return "tripPeriods";
     }
 
@@ -94,20 +97,8 @@ public class TripPeriodsController {
         System.out.println("TripPeriods routes filtered. Time needed:" + Duration.between(filteringStart, filteringEnd));
         model.addAttribute("blockIndex", blockIndex);
         model.addAttribute("tripPeriodsFilter", tripPeriodsFilter);
-//------
-        TreeMap<String, Boolean> rrs = new TreeMap();
-        rrs.put("1", Boolean.FALSE);
-        rrs.put("2", Boolean.TRUE);
-        model.addAttribute("rrs", rrs);
-
+        session.setAttribute("tripPeriodsFilter", tripPeriodsFilter);
         return "tripPeriodsFilter";
-    }
-
-    @RequestMapping(value = "tripPeriodsFilter")
-    public String processTeams(ModelMap model, @ModelAttribute TripPeriodsFilter tripPeriodsFilter) {
-
-        model.addAttribute("tripPeriodsFilter", tripPeriodsFilter);
-        return "res";
     }
 
     private void addTripPeriodsModelAttributes(ModelMap model, ArrayList<RoutesBlock> selectedRoutesBlocks, String blockIndex) {
@@ -135,14 +126,35 @@ public class TripPeriodsController {
         model.addAttribute("currentBlockIndex", blockIndex);
     }
 
-    @RequestMapping(value = "tripPeriodsFilter2", method = RequestMethod.POST)
-    public String editCustomer(@RequestParam(value = "exodusNumbers", required = false) String[] checkboxesValues) {
+    @RequestMapping(value = "tripPeriodsFilter", method = RequestMethod.POST)
+    public String editCustomer(HttpSession session, ModelMap model,
+            @RequestParam(value = "triggerFilter") String triggerFilter,
+            @RequestParam(value = "routeNumbers", required = false) ArrayList<String> routeNumbers,
+            @RequestParam(value = "dateStamps", required = false) ArrayList<String> dateStamps,
+            @RequestParam(value = "busNumbers", required = false) ArrayList<String> busNumbers,
+            @RequestParam(value = "exodusNumbers", required = false) ArrayList<String> exodusNumbers,
+            @RequestParam(value = "driverNames", required = false) ArrayList<String> driverNames,
+            @RequestParam(value = "tripPeriodTypes", required = false) ArrayList<String> tripPeriodTypes,
+            @RequestParam(value = "startTimesScheduled", required = false) ArrayList<String> startTimesScheduled,
+            @RequestParam(value = "startTimesActual", required = false) ArrayList<String> startTimesActual,
+            @RequestParam(value = "arrivalTimesScheduled", required = false) ArrayList<String> arrivalTimesScheduled,
+            @RequestParam(value = "arrivalTimesActual", required = false) ArrayList<String> arrivalTimesActual,
+            @RequestParam(value = "tripPeriodTimesScheduled", required = false) ArrayList<String> tripPeriodTimesScheduled,
+            @RequestParam(value = "tripPeriodTimesActual", required = false) ArrayList<String> tripPeriodTimesActual,
+            @RequestParam(value = "tripPeriodTimeScheduled", required = false) ArrayList<String> tripPeriodTimeScheduled,
+            @RequestParam(value = "tripPeriodTimesDifference", required = false) ArrayList<String> tripPeriodTimesDifference) {
 
-        int ind = 0;
-        while (ind < checkboxesValues.length) {
-            System.out.println(checkboxesValues[ind]);
-            ind++;
-        }
+        TripPeriodsFilter tripPeriodsFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsFilter");
+        tripPeriodsFilter = tripPeriodsFilter.refactorFilter(triggerFilter, routeNumbers, dateStamps, busNumbers, exodusNumbers,
+                driverNames, tripPeriodTypes, startTimesScheduled, startTimesActual,
+                arrivalTimesScheduled, arrivalTimesActual, tripPeriodTimesScheduled, tripPeriodTimesActual,
+                tripPeriodTimeScheduled, tripPeriodTimesDifference);
+
+        TreeMap<Float, BasicRoute> routes = routeDao.getFilteredRoutes(tripPeriodsFilter);
+
+        System.out.println(exodusNumbers);
+        System.out.println(tripPeriodsFilter.getExodusNumbers());
+        model.addAttribute("routes", routes);
         return "res";
     }
 

@@ -430,7 +430,7 @@
                                             <tr>
                                                 <td align="center">${routeEntrySet.value.number} </td>
                                                 <td align="center">${dayEntrySet.value.getDateStampWeekFormat()}</td>
-                                                <td align="center">${tripVouchersEntry.value.number}</td>
+                                                <td align="center">${tripVouchersEntry.value.busNumber}</td>
                                                 <td align="center">${exodusEntrySet.value.number}</td>                                        
                                                 <td align="center">${tripVouchersEntry.value.driverName}</td>
                                                 <td align="center">${tripPeriod.getTypeG()}</td>

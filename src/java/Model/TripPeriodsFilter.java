@@ -1,6 +1,7 @@
 package Model;
 
-import Controller.Converter;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class TripPeriodsFilter {
@@ -8,18 +9,16 @@ public class TripPeriodsFilter {
     private TreeMap<String, Boolean> routeNumbers;
     private TreeMap<String, Boolean> dateStamps;
     private TreeMap<String, Boolean> busNumbers;
-    private TreeMap<Short, Boolean> exodusNumbers;
+    private TreeMap<String, Boolean> exodusNumbers;
     private TreeMap<String, Boolean> driverNames;
     private TreeMap<String, Boolean> tripPeriodTypes;
     private TreeMap<String, Boolean> startTimesScheduled;
     private TreeMap<String, Boolean> startTimesActual;
-    private TreeMap<String, Boolean> tripPeriodTimeScheduled;
+    private TreeMap<String, Boolean> tripPeriodTimesScheduled;
     private TreeMap<String, Boolean> arrivalTimesScheduled;
-    private TreeMap<String, Boolean> tripPeriodTimeActual;
+    private TreeMap<String, Boolean> tripPeriodTimesActual;
     private TreeMap<String, Boolean> arrivalTimesActual;
-    private TreeMap<String, Boolean> tripPeriodTimeDifference;
-
-    private Converter converter;
+    private TreeMap<String, Boolean> tripPeriodTimeDifferences;
 
     public TripPeriodsFilter() {
         this.routeNumbers = new TreeMap();
@@ -30,12 +29,12 @@ public class TripPeriodsFilter {
         this.tripPeriodTypes = new TreeMap();
         this.startTimesScheduled = new TreeMap();
         this.startTimesActual = new TreeMap();
-        this.tripPeriodTimeScheduled = new TreeMap();
+        this.tripPeriodTimesScheduled = new TreeMap();
         this.arrivalTimesScheduled = new TreeMap();
-        this.tripPeriodTimeActual = new TreeMap();
+        this.tripPeriodTimesActual = new TreeMap();
         this.arrivalTimesActual = new TreeMap();
-        this.tripPeriodTimeDifference = new TreeMap();
-        converter = new Converter();
+        this.tripPeriodTimeDifferences = new TreeMap();
+
     }
 
     public void addRouteNumber(String routeNumber) {
@@ -43,14 +42,14 @@ public class TripPeriodsFilter {
     }
 
     public void addDateStamp(String dateStamp) {
-        this.dateStamps.put(converter.convertDateStampDatabaseFormatToExcelFormat(dateStamp), Boolean.TRUE);
+        this.dateStamps.put(dateStamp, Boolean.TRUE);
     }
 
     public void addBusNumber(String busNumber) {
         this.busNumbers.put(busNumber, Boolean.TRUE);
     }
 
-    public void addExodusNumber(short exodusNumber) {
+    public void addExodusNumber(String exodusNumber) {
         this.exodusNumbers.put(exodusNumber, Boolean.TRUE);
     }
 
@@ -99,6 +98,7 @@ public class TripPeriodsFilter {
         }
     }
 
+    //-------------------
     public TreeMap<String, Boolean> getRouteNumbers() {
         return routeNumbers;
     }
@@ -123,11 +123,11 @@ public class TripPeriodsFilter {
         this.busNumbers = busNumbers;
     }
 
-    public TreeMap<Short, Boolean> getExodusNumbers() {
+    public TreeMap<String, Boolean> getExodusNumbers() {
         return exodusNumbers;
     }
 
-    public void setExodusNumbers(TreeMap<Short, Boolean> exodusNumbers) {
+    public void setExodusNumbers(TreeMap<String, Boolean> exodusNumbers) {
         this.exodusNumbers = exodusNumbers;
     }
 
@@ -163,12 +163,12 @@ public class TripPeriodsFilter {
         this.startTimesActual = startTimesActual;
     }
 
-    public TreeMap<String, Boolean> getTripPeriodTimeScheduled() {
-        return tripPeriodTimeScheduled;
+    public TreeMap<String, Boolean> getTripPeriodTimesScheduled() {
+        return tripPeriodTimesScheduled;
     }
 
-    public void setTripPeriodTimeScheduled(TreeMap<String, Boolean> tripPeriodTimeScheduled) {
-        this.tripPeriodTimeScheduled = tripPeriodTimeScheduled;
+    public void setTripPeriodTimesScheduled(TreeMap<String, Boolean> tripPeriodTimesScheduled) {
+        this.tripPeriodTimesScheduled = tripPeriodTimesScheduled;
     }
 
     public TreeMap<String, Boolean> getArrivalTimesScheduled() {
@@ -179,12 +179,12 @@ public class TripPeriodsFilter {
         this.arrivalTimesScheduled = arrivalTimesScheduled;
     }
 
-    public TreeMap<String, Boolean> getTripPeriodTimeActual() {
-        return tripPeriodTimeActual;
+    public TreeMap<String, Boolean> getTripPeriodTimesActual() {
+        return tripPeriodTimesActual;
     }
 
-    public void setTripPeriodTimeActual(TreeMap<String, Boolean> tripPeriodTimeActual) {
-        this.tripPeriodTimeActual = tripPeriodTimeActual;
+    public void setTripPeriodTimesActual(TreeMap<String, Boolean> tripPeriodTimesActual) {
+        this.tripPeriodTimesActual = tripPeriodTimesActual;
     }
 
     public TreeMap<String, Boolean> getArrivalTimesActual() {
@@ -195,22 +195,121 @@ public class TripPeriodsFilter {
         this.arrivalTimesActual = arrivalTimesActual;
     }
 
-    public TreeMap<String, Boolean> getTripPeriodTimeDifference() {
-        return tripPeriodTimeDifference;
+    public TreeMap<String, Boolean> getTripPeriodTimeDifferences() {
+        return tripPeriodTimeDifferences;
     }
 
-    public void setTripPeriodTimeDifference(TreeMap<String, Boolean> tripPeriodTimeDifference) {
-        this.tripPeriodTimeDifference = tripPeriodTimeDifference;
+    public void setTripPeriodTimeDifferences(TreeMap<String, Boolean> tripPeriodTimeDifferences) {
+        this.tripPeriodTimeDifferences = tripPeriodTimeDifferences;
     }
 
-    public Converter getConverter() {
-        return converter;
+    public TripPeriodsFilter refactorFilter(String triggerFilter, ArrayList<String> routeNumbers, ArrayList<String> dateStamps, ArrayList<String> busNumbers, ArrayList<String> exodusNumbers, ArrayList<String> driverNames, ArrayList<String> tripPeriodTypes, ArrayList<String> startTimesScheduled, ArrayList<String> startTimesActual, ArrayList<String> arrivalTimesScheduled, ArrayList<String> arrivalTimesActual, ArrayList<String> tripPeriodTimesScheduled, ArrayList<String> tripPeriodTimesActual, ArrayList<String> tripPeriodTimeScheduled, ArrayList<String> tripPeriodTimeDifferences) {
+
+        if (triggerFilter.equals("routeNumbers")) {
+            refactorTriggerFilterItems(this.routeNumbers, routeNumbers);
+        } else {
+            refactorFilterItems(this.routeNumbers, routeNumbers);
+        }
+        //
+        if (triggerFilter.equals("dateStamps")) {
+            refactorTriggerFilterItems(this.dateStamps, dateStamps);
+        } else {
+            refactorFilterItems(this.dateStamps, dateStamps);
+        }
+        //
+        if (triggerFilter.equals("busNumbers")) {
+            refactorTriggerFilterItems(this.busNumbers, busNumbers);
+        } else {
+            refactorFilterItems(this.busNumbers, busNumbers);
+        }
+        //
+        if (triggerFilter.equals("exodusNumbers")) {
+            refactorTriggerFilterItems(this.exodusNumbers, exodusNumbers);
+        } else {
+            refactorFilterItems(this.exodusNumbers, exodusNumbers);
+        }
+
+        //
+        if (triggerFilter.equals("driverNames")) {
+            refactorTriggerFilterItems(this.driverNames, driverNames);
+        } else {
+            refactorFilterItems(this.driverNames, driverNames);
+        }
+        //
+        if (triggerFilter.equals("tripPeriodTypes")) {
+            refactorTriggerFilterItems(this.tripPeriodTypes, tripPeriodTypes);
+        } else {
+            refactorFilterItems(this.tripPeriodTypes, tripPeriodTypes);
+        }
+        //
+        if (triggerFilter.equals("startTimesScheduled")) {
+            refactorTriggerFilterItems(this.startTimesScheduled, startTimesScheduled);
+        } else {
+            refactorFilterItems(this.startTimesScheduled, startTimesScheduled);
+        }
+        //
+        if (triggerFilter.equals("startTimesActual")) {
+            refactorTriggerFilterItems(this.startTimesActual, startTimesActual);
+        } else {
+            refactorFilterItems(this.startTimesActual, startTimesActual);
+        }
+        //
+        if (triggerFilter.equals("arrivalTimesScheduled")) {
+            refactorTriggerFilterItems(this.arrivalTimesScheduled, arrivalTimesScheduled);
+        } else {
+            refactorFilterItems(this.arrivalTimesScheduled, arrivalTimesScheduled);
+        }
+        //
+        if (triggerFilter.equals("arrivalTimesActual")) {
+            refactorTriggerFilterItems(this.arrivalTimesActual, arrivalTimesActual);
+        } else {
+            refactorFilterItems(this.arrivalTimesActual, arrivalTimesActual);
+        }
+        //
+        if (triggerFilter.equals("tripPeriodTimesScheduled")) {
+            refactorTriggerFilterItems(this.tripPeriodTimesScheduled, tripPeriodTimesScheduled);
+        } else {
+            refactorFilterItems(this.tripPeriodTimesScheduled, tripPeriodTimesScheduled);
+        }
+        //
+        if (triggerFilter.equals("tripPeriodTimesActual")) {
+            refactorTriggerFilterItems(this.tripPeriodTimesActual, tripPeriodTimesActual);
+        } else {
+            refactorFilterItems(this.tripPeriodTimesActual, tripPeriodTimesActual);
+        }
+        //
+        if (triggerFilter.equals("tripPeriodTimeDifferences")) {
+            refactorTriggerFilterItems(this.tripPeriodTimeDifferences, tripPeriodTimeDifferences);
+        } else {
+            refactorFilterItems(this.tripPeriodTimeDifferences, tripPeriodTimeDifferences);
+        }
+
+        return this;
     }
 
-    public void setConverter(Converter converter) {
-        this.converter = converter;
+    private void refactorTriggerFilterItems(TreeMap<String, Boolean> filterTreeMap, ArrayList<String> filteredItems) {
+
+        for (Map.Entry<String, Boolean> entry : filterTreeMap.entrySet()) {
+            if (filteredItems == null) {
+                entry.setValue(Boolean.FALSE);
+            } else {
+                if (filteredItems.contains(entry.getKey())) {
+                    entry.setValue(Boolean.TRUE);
+                } else {
+                    entry.setValue(Boolean.FALSE);
+                }
+            }
+        }
     }
-    
-    
+
+    private void refactorFilterItems(TreeMap<String, Boolean> filterTreeMap, ArrayList<String> filteredItems) {
+
+        filterTreeMap = new TreeMap<>();
+        if (filteredItems != null) {
+            for (String filteredItem : filteredItems) {
+                filterTreeMap.put(filteredItem, Boolean.TRUE);
+            }
+        }
+    }
 
 }

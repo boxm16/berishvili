@@ -69,29 +69,71 @@
             <a href="index.htm">საწყისი გვერდი</a>
             <a href="tripPeriods.htm?blockIndex=${blockIndex}">უკან დაბრუნება</a>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
         </div>
 
         <br><br>     
     <center> <h1>ბრუნების დროების ფილტრები</h1></center>
-    <form action="tripPeriodsFilter2" method="POST">
+
+    <form action="tripPeriodsFilter.htm" method="POST">
+        <input type="hidden" name="triggerFilter" id="triggerFilter" value="0">
         <table>
             <thead >
                 <tr>
-                    <th>მარშრუტის ნომრები</th>
-                    <th>DateStamp</th>
-                    <th>BusNumber</th>
-                    <th>Exodus<br>Number</th>
-                    <th>DriverName</th>
-                    <th>type</th>
-                    <th>StartTime<br>Scheduled</th>
-                    <th>StartTime<br>Actual</th>
-                    <th>ArrivalTime<br>Scheduled</th>
-                    <th>ArrivalTime<br>Actual</th>
-                    <th>TripPeriodTime<br>Scheduled</th>
-                    <th>TripPeriodTime<br>Actual</th>
-                    <th>TripPeriodTime<br>Difference</th>
+                    <td>  
+                        <input type="submit" value="ფ" class="filter_btn" onclick="DoSubmit('routeNumbers')"/>
+                    </td>
+                    <td>  
+                        <input type="submit" value="ფ" class="filter_btn" onclick="DoSubmit('dateStamps')"/>
+
+                    </td>
+                    <td>  
+                        <input type="submit" value="ფ" class="filter_btn" onclick="DoSubmit('busNumbers')"/>
+                    </td>
+                    <td>  
+                        <input type="submit" value="ფ" class="filter_btn" onclick="DoSubmit('exodusNumbers')"/>
+                    </td>
+                    <td>  
+                        <input type="submit" value="ფ" class="filter_btn" onclick="DoSubmit('driverNames')"/>
+                    </td>
+                    <td>  
+                        <input type="submit" value="ფ" class="filter_btn" onclick="DoSubmit('tripPeriodTypes')"/>
+                    </td>
+                    <td>  
+                        <input type="submit" value="ფ" class="filter_btn" onclick="DoSubmit('startTimesScheduled')"/>
+                    </td>
+                    <td>  
+                        <input type="submit" value="ფ" class="filter_btn" onclick="DoSubmit('startTimesActual')"/>
+                    </td>
+                    <td>  
+                        <input type="submit" value="ფ" class="filter_btn" onclick="DoSubmit('arrivalTimesScheduled')"/>
+                    </td>
+                    <td>  
+                        <input type="submit" value="ფ" class="filter_btn" onclick="DoSubmit('arrivalTimesActual')"/>
+                    </td>
+                    <td>  
+                        <input type="submit" value="ფ" class="filter_btn" onclick="DoSubmit('tripPeriodTimesScheduled')"/>
+                    </td>
+                    <td>  
+                        <input type="submit" value="ფ" class="filter_btn" onclick="DoSubmit('tripPeriodTimesActual')"/>
+                    </td>
+                    <td>  
+                        <input type="submit" value="ფ" class="filter_btn" onclick="DoSubmit('tripPeriodTimeDifferences')"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>მარშრ-<br>უტის<br>#</th>
+                    <th>თარიღი</th>
+                    <th>ავტობ-<br>უსის #</th>
+                    <th>გასვ-<br>ლის<br> #</th>
+                    <th>მძღოლი</th>
+                    <th>მიმართ-<br>ულება</th>
+                    <th>გასვლის<br>გეგმიური<br>დრო</th>
+                    <th>გასვლის<br>ფაქტიური<br>დრო</th>
+                    <th>მისვლის<br>გეგმიური<br>დრო</th>
+                    <th>მისვლის<br>ფაქტიური<br>დრო</th>
+                    <th>წირის<br>გეგმიური<br>დრო</th>
+                    <th>წირის<br>ფაქტიური<br>დრო</th>
+                    <th>სხვაობა</th>
                 </tr>
             </thead>
             <tbody> 
@@ -112,47 +154,7 @@
                     <td><input type="checkbox" onclick="check(event, 0)" checked="true"> ყველა</td>
 
                 </tr> 
-                <tr>
-                    <td>  
-                        <button class="filter_btn" onclick="submit('routeNumber')">ფ</button>
-                    </td>
-                    <td>  
-                        <button class="filter_btn" onclick="">ფ</button>
-                    </td>
-                    <td>  
-                        <button class="filter_btn" onclick="">ფ</button>
-                    </td>
-                    <td>  
-                        <button class="filter_btn" onclick="">ფ</button>
-                    </td>
-                    <td>  
-                        <button class="filter_btn" onclick="">ფ</button>
-                    </td>
-                    <td>  
-                        <button class="filter_btn" onclick="">ფ</button>
-                    </td>
-                    <td>  
-                        <button class="filter_btn" onclick="">ფ</button>
-                    </td>
-                    <td>  
-                        <button class="filter_btn" onclick="">ფ</button>
-                    </td>
-                    <td>  
-                        <button class="filter_btn" onclick="">ფ</button>
-                    </td>
-                    <td>  
-                        <button class="filter_btn" onclick="">ფ</button>
-                    </td>
-                    <td>  
-                        <button class="filter_btn" onclick="">ფ</button>
-                    </td>
-                    <td>  
-                        <button class="filter_btn" onclick="">ფ</button>
-                    </td>
-                    <td>  
-                        <button class="filter_btn" onclick="">ფ</button>
-                    </td>
-                </tr>
+
 
                 <tr>
                     <td>
@@ -161,7 +163,7 @@
                                 <c:forEach var="item" items="${tripPeriodsFilter.routeNumbers}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="exodusNumbers" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="routeNumbers" class="dates" checked="${item.value}" value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -327,10 +329,10 @@
                     <td>
                         <table>
                             <tbody style="height:500px; overflow-y:scroll; display:block;">
-                                <c:forEach var="item" items="${tripPeriodsFilter.tripPeriodTimeScheduled}">
+                                <c:forEach var="item" items="${tripPeriodsFilter.tripPeriodTimesScheduled}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="tripPeriodTimeScheduled" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="tripPeriodTimesScheduled" class="dates" checked="${item.value}" value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -344,10 +346,10 @@
                     <td>
                         <table>
                             <tbody style="height:500px; overflow-y:scroll; display:block;">
-                                <c:forEach var="item" items="${tripPeriodsFilter.tripPeriodTimeActual}">
+                                <c:forEach var="item" items="${tripPeriodsFilter.tripPeriodTimesActual}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="tripPeriodTimeActual" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="tripPeriodsTimeActual" class="dates" checked="${item.value}" value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -361,10 +363,10 @@
                     <td>
                         <table>
                             <tbody style="height:500px; overflow-y:scroll; display:block;">
-                                <c:forEach var="item" items="${tripPeriodsFilter.tripPeriodTimeDifference}">
+                                <c:forEach var="item" items="${tripPeriodsFilter.tripPeriodTimeDifferences}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="tripPeriodTimeDifference" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="tripPeriodTimesDifference" class="dates" checked="${item.value}" value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -381,8 +383,10 @@
         </table>
     </form>
     <script>
-
-
+        function DoSubmit(triggerFilter) {
+            document.getElementById("triggerFilter").value = triggerFilter;
+            return true;
+        }
     </script>
 
 </body>

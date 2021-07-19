@@ -25,8 +25,10 @@
                         <center><button type="submit" class="btn btn-warning ">ექსელში ექსპორტი</button></center>
                     </form>
 
+                    ${error} ${dateStampError}
                     <a href="downloadFile.htm?fileName=${fileName}.xlsx">${fileName}</a> <br>
                     <hr>
+
                 </div>
             </div>
         </div>

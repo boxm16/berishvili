@@ -16,7 +16,7 @@ public class RoutesBlocksBuilder {
     }
     
     public ArrayList<RoutesBlock> createRoutesBlocks(String routeDates) {
-        int routeBlockMaxSize = 5;
+        int routeBlockMaxSize = 25;
         String[] routeDatesArray = routeDates.split(",");
         ArrayList<RoutesBlock> routesBlocksArray = new ArrayList();
         RoutesBlock routesBlock = new RoutesBlock(routeBlockMaxSize);

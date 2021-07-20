@@ -87,7 +87,11 @@ public class TripPeriodsController {
         Instant filteringStart = Instant.now();
         TripPeriodsFilter tripPeriodsFilter;
         if (session.getAttribute("tripPeriodsFilter") == null) {
+            if (session.getAttribute("selectedRoutesBlocks") == null) {
+                return "errorPage";
+            }
             ArrayList<RoutesBlock> selectedRoutesBlocks = (ArrayList<RoutesBlock>) session.getAttribute("selectedRoutesBlocks");
+
             RoutesBlock block = selectedRoutesBlocks.get(Integer.valueOf(blockIndex));
             tripPeriodsFilter = routeDao.getSelectedRoutesTripPeriodsFilter(block);
         } else {
@@ -128,6 +132,7 @@ public class TripPeriodsController {
 
     @RequestMapping(value = "tripPeriodsFilter", method = RequestMethod.POST)
     public String editCustomer(HttpSession session, ModelMap model,
+            @RequestParam(value = "blockIndex") String blockIndex,
             @RequestParam(value = "triggerFilter") String triggerFilter,
             @RequestParam(value = "routeNumbers", required = false) ArrayList<String> routeNumbers,
             @RequestParam(value = "dateStamps", required = false) ArrayList<String> dateStamps,
@@ -143,6 +148,9 @@ public class TripPeriodsController {
             @RequestParam(value = "tripPeriodTimesActual", required = false) ArrayList<String> tripPeriodTimesActual,
             @RequestParam(value = "tripPeriodTimeScheduled", required = false) ArrayList<String> tripPeriodTimeScheduled,
             @RequestParam(value = "tripPeriodTimesDifference", required = false) ArrayList<String> tripPeriodTimesDifference) {
+        if (session.getAttribute("selectedRoutesBlocks") == null) {
+            return "errorPage";
+        }
 
         TripPeriodsFilter tripPeriodsFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsFilter");
         tripPeriodsFilter = tripPeriodsFilter.refactorFilter(triggerFilter, routeNumbers, dateStamps, busNumbers, exodusNumbers,
@@ -151,11 +159,11 @@ public class TripPeriodsController {
                 tripPeriodTimeScheduled, tripPeriodTimesDifference);
 
         TreeMap<Float, BasicRoute> routes = routeDao.getFilteredRoutes(tripPeriodsFilter);
-
-        System.out.println(exodusNumbers);
-        System.out.println(tripPeriodsFilter.getExodusNumbers());
         model.addAttribute("routes", routes);
-        return "res";
+        ArrayList<RoutesBlock> selectedRoutesBlocks = (ArrayList<RoutesBlock>) session.getAttribute("selectedRoutesBlocks");
+        addTripPeriodsModelAttributes(model, selectedRoutesBlocks, blockIndex);
+
+        return "tripPeriods";
     }
 
 }

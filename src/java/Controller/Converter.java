@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -141,6 +142,35 @@ public class Converter {
 
         long s = duration.getSeconds();
         return String.format("%02d:%02d:%02d", s / 3600, (s % 3600) / 60, (s % 60));
+    }
+
+    public String covertTripPeriodTypeFromDBFormatToExcelFormat(String type) {
+        switch (type) {
+            case "baseLeaving_A":
+                return "ბაზა_A";
+            case "baseLeaving_B":
+                return "ბაზა_B";
+            case "break":
+                return "შესვენება";
+            case "ab":
+                return "A_B";
+            case "ba":
+                return "B_A";
+            case "A_baseReturn":
+                return "A_ბაზა";
+            case "B_baseReturn":
+                return "B_ბაზა";
+            default:
+                return "";
+        }
+    }
+
+    public String convertTimeStampFromDBFormatToExcelFormat(String dbFormatTimeStamp) {
+        if (dbFormatTimeStamp == null) {
+            return "";
+        }
+        LocalDateTime dateFormat = convertStringTimeToDate(dbFormatTimeStamp);
+        return dateFormat.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
 }

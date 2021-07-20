@@ -76,6 +76,7 @@
 
     <form action="tripPeriodsFilter.htm" method="POST">
         <input type="hidden" name="triggerFilter" id="triggerFilter" value="0">
+        <input type="hidden" name="blockIndex"  value="${blockIndex}">
         <table>
             <thead >
                 <tr>
@@ -163,7 +164,7 @@
                                 <c:forEach var="item" items="${tripPeriodsFilter.routeNumbers}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="routeNumbers" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="routeNumbers" class="dates"   ${item.value} value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -180,7 +181,7 @@
                                 <c:forEach var="item" items="${tripPeriodsFilter.dateStamps}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="dateStamps" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="dateStamps" class="dates"  ${item.value} value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -198,7 +199,7 @@
                                 <c:forEach var="item" items="${tripPeriodsFilter.busNumbers}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="busNumbers" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="busNumbers" class="dates"  ${item.value} value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -215,7 +216,7 @@
                                 <c:forEach var="item" items="${tripPeriodsFilter.exodusNumbers}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="exodusNumbers" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="exodusNumbers" class="dates"  ${item.value} value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -231,7 +232,7 @@
                                 <c:forEach var="item" items="${tripPeriodsFilter.driverNames}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="driverNames" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="driverNames" class="dates"  ${item.value} value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -248,7 +249,7 @@
                                 <c:forEach var="item" items="${tripPeriodsFilter.tripPeriodTypes}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="tripPeriodTypes" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="tripPeriodTypes" class="dates"  ${item.value} value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -265,7 +266,7 @@
                                 <c:forEach var="item" items="${tripPeriodsFilter.startTimesScheduled}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="startTimesScheduled" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="startTimesScheduled" class="dates"  ${item.value} value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -282,7 +283,7 @@
                                 <c:forEach var="item" items="${tripPeriodsFilter.startTimesActual}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="startTimesActual" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="startTimesActual" class="dates"  ${item.value} value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -299,7 +300,7 @@
                                 <c:forEach var="item" items="${tripPeriodsFilter.arrivalTimesScheduled}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="arrivalTimesScheduled" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="arrivalTimesScheduled" class="dates"  ${item.value} value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -316,7 +317,7 @@
                                 <c:forEach var="item" items="${tripPeriodsFilter.arrivalTimesActual}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="arrivalTimesActual" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="arrivalTimesActual" class="dates"  ${item.value} value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -332,7 +333,7 @@
                                 <c:forEach var="item" items="${tripPeriodsFilter.tripPeriodTimesScheduled}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="tripPeriodTimesScheduled" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="tripPeriodTimesScheduled" class="dates"  ${item.value} value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -349,7 +350,7 @@
                                 <c:forEach var="item" items="${tripPeriodsFilter.tripPeriodTimesActual}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="tripPeriodsTimeActual" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="tripPeriodsTimeActual" class="dates"  ${item.value} value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  
@@ -366,7 +367,7 @@
                                 <c:forEach var="item" items="${tripPeriodsFilter.tripPeriodTimeDifferences}">
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="tripPeriodTimesDifference" class="dates" checked="${item.value}" value="${item.key}"> 
+                                            <input type="checkbox" name="tripPeriodTimesDifference" class="dates"  ${item.value} value="${item.key}"> 
                                         </td>
                                         <td>
                                             ${item.key}  

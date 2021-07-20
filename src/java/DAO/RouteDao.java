@@ -342,20 +342,26 @@ public class RouteDao {
 
     public TreeMap<Float, BasicRoute> getFilteredRoutes(TripPeriodsFilter tripPeriodsFilter) {
         TreeMap<Float, BasicRoute> filteredRoutes = new TreeMap<>();
-        StringBuilder sql = new StringBuilder();
-        for (Map.Entry<String, Boolean> routeEntry : tripPeriodsFilter.getRouteNumbers().entrySet()) {
-            sql = new StringBuilder("SELECT * FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE ");
-            TreeMap<String, Boolean> dateStamps = tripPeriodsFilter.getDateStamps();
-            int indx = 0;
-            for (Map.Entry<String, Boolean> dateStampEntry : dateStamps.entrySet()) {
-                if (indx == 0) {
-                    sql = sql.append("route_number='").append(routeEntry.getKey()).append("' AND date_stamp='").append(converter.convertDateStampExcelFormatToDatabaseFormat(dateStampEntry.getKey())).append("'");
-                    indx++;
+        StringBuilder sql = new StringBuilder("SELECT * FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE ");
+        int indx = 0;
+        for (Map.Entry<String, String> routeEntry : tripPeriodsFilter.getRouteNumbers().entrySet()) {
+            if (routeEntry.getValue().equals("checked")) {
+                TreeMap<String, String> dateStamps = tripPeriodsFilter.getDateStamps();
+
+                for (Map.Entry<String, String> dateStampEntry : dateStamps.entrySet()) {
+                    if (dateStampEntry.getValue().equals("checked")) {
+                        if (indx == 0) {
+                            sql = sql.append(" route_number='").append(routeEntry.getKey()).append("' AND date_stamp='").append(converter.convertDateStampExcelFormatToDatabaseFormat(dateStampEntry.getKey())).append("'");
+                            indx++;
+                        } else {
+                            sql = sql.append(" OR route_number='").append(routeEntry.getKey()).append("' AND date_stamp='").append(converter.convertDateStampExcelFormatToDatabaseFormat(dateStampEntry.getKey())).append("'");
+                        }
+                    }
                 }
-                sql = sql.append(" OR route_number='").append(routeEntry.getKey()).append("' AND date_stamp='").append(converter.convertDateStampExcelFormatToDatabaseFormat(dateStampEntry.getKey())).append("'");
             }
-            sql = sql.append("ORDER BY prefix, suffix;");
         }
+        sql = sql.append(" ORDER BY prefix, suffix;");
+
         try {
             connection = dataBaseConnection.getConnection();
             Statement statement = connection.createStatement();
@@ -367,54 +373,80 @@ public class RouteDao {
                 String dateStampExcelFormat = converter.convertDateStampDatabaseFormatToExcelFormat(dateStamp);
                 String busNumber = rs.getString("bus_number");
                 short exodusNumber = rs.getShort("exodus_number");
+
                 String tripVoucherNumber = rs.getString("trip_voucher_number");
                 String driverName = rs.getString("driver_name");
                 String tripPeriodType = rs.getString("type");
+                String tripPeriodTypeExcelFormat = converter.covertTripPeriodTypeFromDBFormatToExcelFormat(tripPeriodType);
                 String startTimeScheduled = rs.getString("start_time_scheduled");
                 String startTimeActual = rs.getString("start_time_actual");
+                if (startTimeActual == null) {
+                    startTimeActual = "";
+                }
+//startTimeActual = converter.convertTimeStampFromDBFormatToExcelFormat(startTimeActual);
+
                 String arrivalTimeScheduled = rs.getString("arrival_time_scheduled");
                 String arrivalTimeActual = rs.getString("arrival_time_actual");
+                if (arrivalTimeActual == null) {
+                    arrivalTimeActual = "";
+                }
+                //  arrivalTimeActual = converter.convertTimeStampFromDBFormatToExcelFormat(arrivalTimeActual);
+
+                //here is actual selection of selected
                 float routeNumberIndex = converter.convertRouteNumber(routeNumber);
-                if (!filteredRoutes.containsKey(routeNumberIndex)) {
-                    BasicRoute route = new BasicRoute();
-                    route.setNumber(routeNumber);
-                    filteredRoutes.put(routeNumberIndex, route);
-                }
 
-                Date date = converter.convertDateStampDatabaseFormatToDate(dateStamp);
-                TreeMap<Date, Day> days = filteredRoutes.get(routeNumberIndex).getDays();
-                if (!days.containsKey(date)) {
-                    Day day = new Day();
-                    day.setDateStamp(dateStampExcelFormat);
-                    days.put(date, day);
-                }
-                TreeMap<Short, Exodus> exoduses = days.get(date).getExoduses();
-                short exodusNumberShort = Short.valueOf(exodusNumber);
-                if (!exoduses.containsKey(exodusNumberShort)) {
-                    Exodus exodus = new Exodus();
-                    exodus.setNumber(exodusNumberShort);
-                    exoduses.put(exodusNumber, exodus);
-                }
-                TreeMap<String, TripVoucher> tripVouchers = exoduses.get(exodusNumberShort).getTripVouchers();
-                if (!tripVouchers.containsKey(tripVoucherNumber)) {
-                    TripVoucher tripVoucher = new TripVoucher();
-                    tripVoucher.setBusNumber(tripVoucherNumber);
-                    tripVouchers.put(tripVoucherNumber, tripVoucher);
-                }
+                if ((tripPeriodsFilter.getRouteNumbers().containsKey(routeNumber) && tripPeriodsFilter.getRouteNumbers().get(routeNumber).equals("checked"))
+                        && (tripPeriodsFilter.getDateStamps().containsKey(dateStampExcelFormat) && tripPeriodsFilter.getDateStamps().get(dateStampExcelFormat).equals("checked"))
+                        && (tripPeriodsFilter.getBusNumbers().containsKey(busNumber) && tripPeriodsFilter.getBusNumbers().get(busNumber).equals("checked"))
+                        && (tripPeriodsFilter.getExodusNumbers().containsKey(rs.getString("exodus_number")) && tripPeriodsFilter.getExodusNumbers().get(rs.getString("exodus_number")).equals("checked"))
+                        && (tripPeriodsFilter.getDriverNames().containsKey(driverName) && tripPeriodsFilter.getDriverNames().get(driverName).equals("checked"))
+                        && (tripPeriodsFilter.getTripPeriodTypes().containsKey(tripPeriodTypeExcelFormat) && tripPeriodsFilter.getTripPeriodTypes().get(tripPeriodTypeExcelFormat).equals("checked"))
+                        && (tripPeriodsFilter.getStartTimesScheduled().containsKey(startTimeScheduled) && tripPeriodsFilter.getStartTimesScheduled().get(startTimeScheduled).equals("checked"))
+                        && (tripPeriodsFilter.getStartTimesActual().containsKey(startTimeActual) && tripPeriodsFilter.getStartTimesActual().get(startTimeActual).equals("checked"))
+                        && (tripPeriodsFilter.getArrivalTimesScheduled().containsKey(arrivalTimeScheduled) && tripPeriodsFilter.getArrivalTimesScheduled().get(arrivalTimeScheduled).equals("checked"))
+                        && (tripPeriodsFilter.getArrivalTimesActual().containsKey(arrivalTimeActual) && tripPeriodsFilter.getArrivalTimesActual().get(arrivalTimeActual).equals("checked"))) {
 
-                ArrayList<TripPeriod> tripPeriods = tripVouchers.get(tripVoucherNumber).getTripPeriods();
-                System.out.println(arrivalTimeActual);
-                if (tripPeriodsFilter.getStartTimesScheduled().containsKey(startTimeScheduled)
-                        && tripPeriodsFilter.getStartTimesActual().containsKey(startTimeActual)
-                        && tripPeriodsFilter.getArrivalTimesScheduled().containsKey(arrivalTimeScheduled)
-                        && tripPeriodsFilter.getArrivalTimesActual().containsKey(arrivalTimeActual)) {
-                    TripPeriod tripPeriod = new TripPeriod();
-                    tripPeriod.setStartTimeScheduled(converter.convertStringTimeToDate(startTimeScheduled));
-                    tripPeriod.setStartTimeActual(converter.convertStringTimeToDate(startTimeActual));
-                    tripPeriod.setArrivalTimeScheduled(converter.convertStringTimeToDate(arrivalTimeScheduled));
-                    tripPeriod.setArrivalTimeActual(converter.convertStringTimeToDate(arrivalTimeActual));
-                    tripPeriod.setType(tripPeriodType);
-                    tripPeriods.add(tripPeriod);
+                    if (!filteredRoutes.containsKey(routeNumberIndex)) {
+                        BasicRoute route = new BasicRoute();
+                        route.setNumber(routeNumber);
+                        filteredRoutes.put(routeNumberIndex, route);
+                    }
+
+                    Date date = converter.convertDateStampDatabaseFormatToDate(dateStamp);
+                    TreeMap<Date, Day> days = filteredRoutes.get(routeNumberIndex).getDays();
+                    if (!days.containsKey(date)) {
+                        Day day = new Day();
+                        day.setDateStamp(dateStamp);
+                        days.put(date, day);
+                    }
+                    TreeMap<Short, Exodus> exoduses = days.get(date).getExoduses();
+                    short exodusNumberShort = exodusNumber;
+                    if (!exoduses.containsKey(exodusNumberShort)) {
+                        Exodus exodus = new Exodus();
+                        exodus.setNumber(exodusNumberShort);
+                        exoduses.put(exodusNumber, exodus);
+                    }
+                    TreeMap<String, TripVoucher> tripVouchers = exoduses.get(exodusNumberShort).getTripVouchers();
+                    if (!tripVouchers.containsKey(tripVoucherNumber)) {
+                        TripVoucher tripVoucher = new TripVoucher();
+                        tripVoucher.setBusNumber(busNumber);
+                        tripVoucher.setDriverName(driverName);
+                        tripVouchers.put(tripVoucherNumber, tripVoucher);
+                    }
+
+                    ArrayList<TripPeriod> tripPeriods = tripVouchers.get(tripVoucherNumber).getTripPeriods();
+                    if (tripPeriodsFilter.getStartTimesScheduled().containsKey(startTimeScheduled)
+                            && tripPeriodsFilter.getStartTimesActual().containsKey(startTimeActual)
+                            && tripPeriodsFilter.getArrivalTimesScheduled().containsKey(arrivalTimeScheduled)
+                            && tripPeriodsFilter.getArrivalTimesActual().containsKey(arrivalTimeActual)) {
+                        TripPeriod tripPeriod = new TripPeriod();
+                        tripPeriod.setStartTimeScheduled(converter.convertStringTimeToDate(startTimeScheduled));
+                        tripPeriod.setStartTimeActual(converter.convertStringTimeToDate(startTimeActual));
+                        tripPeriod.setArrivalTimeScheduled(converter.convertStringTimeToDate(arrivalTimeScheduled));
+                        tripPeriod.setArrivalTimeActual(converter.convertStringTimeToDate(arrivalTimeActual));
+                        tripPeriod.setType(tripPeriodType);
+                        tripPeriods.add(tripPeriod);
+                    }
                 }
             }
         } catch (SQLException ex) {

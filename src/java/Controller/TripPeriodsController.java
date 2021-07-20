@@ -97,6 +97,7 @@ public class TripPeriodsController {
         } else {
             tripPeriodsFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsFilter");
         }
+        
         Instant filteringEnd = Instant.now();
         System.out.println("TripPeriods routes filtered. Time needed:" + Duration.between(filteringStart, filteringEnd));
         model.addAttribute("blockIndex", blockIndex);
@@ -131,7 +132,7 @@ public class TripPeriodsController {
     }
 
     @RequestMapping(value = "tripPeriodsFilter", method = RequestMethod.POST)
-    public String editCustomer(HttpSession session, ModelMap model,
+    public String filterTripPeriods(HttpSession session, ModelMap model,
             @RequestParam(value = "blockIndex") String blockIndex,
             @RequestParam(value = "triggerFilter") String triggerFilter,
             @RequestParam(value = "routeNumbers", required = false) ArrayList<String> routeNumbers,

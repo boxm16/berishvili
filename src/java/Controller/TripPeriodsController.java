@@ -23,7 +23,7 @@ public class TripPeriodsController {
     private RouteDao routeDao;
 
     @RequestMapping(value = "tripPeriodsInitialRequest")
-    public String goToTripPeriodsPage(@RequestParam("routes:dates") String routeDates, @RequestParam("blockNumber") String routeNumber, ModelMap model, HttpSession session) {
+    public String tripPeriodInitialRequest(@RequestParam("routes:dates") String routeDates, @RequestParam("blockNumber") String routeNumber, ModelMap model, HttpSession session) {
         RoutesBlocksBuilder rbb = new RoutesBlocksBuilder();
         ArrayList<RoutesBlock> selectedRoutesBlocks = rbb.createRoutesBlocks(routeDates);
         session.setAttribute("selectedRoutesBlocks", selectedRoutesBlocks);
@@ -84,25 +84,26 @@ public class TripPeriodsController {
 
     @RequestMapping(value = "tripPeriodsFilterRequest")
     public String tripPeriodsFilter(ModelMap model, HttpSession session, @RequestParam String blockIndex) {
-        Instant filteringStart = Instant.now();
-        TripPeriodsFilter tripPeriodsFilter;
-        if (session.getAttribute("tripPeriodsFilter") == null) {
-            if (session.getAttribute("selectedRoutesBlocks") == null) {
-                return "errorPage";
-            }
-            ArrayList<RoutesBlock> selectedRoutesBlocks = (ArrayList<RoutesBlock>) session.getAttribute("selectedRoutesBlocks");
-
-            RoutesBlock block = selectedRoutesBlocks.get(Integer.valueOf(blockIndex));
-            tripPeriodsFilter = routeDao.getSelectedRoutesTripPeriodsFilter(block);
-        } else {
-            tripPeriodsFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsFilter");
+        if (session.getAttribute("selectedRoutesBlocks") == null) {
+            return "errorPage";
         }
-        
+        Instant filteringStart = Instant.now();
+        TripPeriodsFilter baseTripPeriodsFilter;
+        TripPeriodsFilter tripPeriodsFilter;
+        ArrayList<RoutesBlock> selectedRoutesBlocks = (ArrayList<RoutesBlock>) session.getAttribute("selectedRoutesBlocks");
+        RoutesBlock block = selectedRoutesBlocks.get(Integer.valueOf(blockIndex));
+        if (session.getAttribute("baseTripPeriodsFilter") == null) {
+            baseTripPeriodsFilter = routeDao.getSelectedRoutesTripPeriodsFilter(block);
+            tripPeriodsFilter = baseTripPeriodsFilter;
+        } else {
+            baseTripPeriodsFilter = (TripPeriodsFilter) session.getAttribute("baseTripPeriodsFilter");
+        }
+        tripPeriodsFilter = routeDao.getSelectedRoutesTripPeriodsFilter(block);
         Instant filteringEnd = Instant.now();
         System.out.println("TripPeriods routes filtered. Time needed:" + Duration.between(filteringStart, filteringEnd));
         model.addAttribute("blockIndex", blockIndex);
         model.addAttribute("tripPeriodsFilter", tripPeriodsFilter);
-        session.setAttribute("tripPeriodsFilter", tripPeriodsFilter);
+        session.setAttribute("baseTripPeriodsFilter", baseTripPeriodsFilter);
         return "tripPeriodsFilter";
     }
 
@@ -153,7 +154,7 @@ public class TripPeriodsController {
             return "errorPage";
         }
 
-        TripPeriodsFilter tripPeriodsFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsFilter");
+        TripPeriodsFilter tripPeriodsFilter = (TripPeriodsFilter) session.getAttribute("baseTripPeriodsFilter");
         tripPeriodsFilter = tripPeriodsFilter.refactorFilter(triggerFilter, routeNumbers, dateStamps, busNumbers, exodusNumbers,
                 driverNames, tripPeriodTypes, startTimesScheduled, startTimesActual,
                 arrivalTimesScheduled, arrivalTimesActual, tripPeriodTimesScheduled, tripPeriodTimesActual,
@@ -163,7 +164,7 @@ public class TripPeriodsController {
         model.addAttribute("routes", routes);
         ArrayList<RoutesBlock> selectedRoutesBlocks = (ArrayList<RoutesBlock>) session.getAttribute("selectedRoutesBlocks");
         addTripPeriodsModelAttributes(model, selectedRoutesBlocks, blockIndex);
-
+        model.addAttribute("baseTripPeriodsFilter", tripPeriodsFilter);
         return "tripPeriods";
     }
 

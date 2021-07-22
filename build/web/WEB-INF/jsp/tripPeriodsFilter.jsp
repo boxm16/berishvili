@@ -67,7 +67,7 @@
     <body>
         <div class="navbar">
             <a href="index.htm">საწყისი გვერდი</a>
-            <a href="tripPeriods.htm?blockIndex=${blockIndex}">უკან დაბრუნება</a>
+            <a href="tripPeriods.htm?blockIndex=${currentBlockIndex}">უკან დაბრუნება</a>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
 

@@ -421,7 +421,6 @@
         </div>
         <form id="form" action="#" method="POST">
             <input hidden type="text" id="routes_dates" name="routes:dates">
-            <input hiddent type="number" name="blockNumber" value="0">
         </form>
 
         <!-- jQuery CDN - Slim version (=without AJAX) -->

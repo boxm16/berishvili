@@ -364,6 +364,10 @@
                         <button type="button" class="btn btn-success">
                             <span> <a href="tripPeriodsFilterRequest.htm">ფილტრები</a> </span>
                         </button>
+                        &nbsp  &nbsp  &nbsp
+                        <button type="button" class="btn btn-danger">
+                            <span> <a href="filterChoice.htm">ფილტრებიs archeva</a> </span>
+                        </button>
 
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="nav navbar-nav ml-auto">

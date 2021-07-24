@@ -1,6 +1,7 @@
 package Controller;
 
 import DAO.RouteDao;
+import Model.TripPeriodsFilter;
 import java.util.ArrayList;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,15 @@ public class TripPeriodsController {
 
     @RequestMapping(value = "tripPeriodsInitialRequest")
     public String tripPeriodInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model, HttpSession session) {
+        //first setting into session tripPeriodFilter
+        TripPeriodsFilter tripPeriodsFilter = convertSelectedRoutesToTripPeriodFilter(routeDates);
 
         return "tripPeriods";
+    }
+
+    private TripPeriodsFilter convertSelectedRoutesToTripPeriodFilter(String routeDates) {
+        TripPeriodsFilter tripPeriodsFilter = new TripPeriodsFilter();
+        return tripPeriodsFilter;
     }
 
     @RequestMapping(value = "tripPeriods")
@@ -57,6 +65,15 @@ public class TripPeriodsController {
         return "tripPeriods";
     }
 
-    
+    //----------
+    @RequestMapping(value = "filterChoice")
+    public String filterChoice() {
+        return "filterChoice";
+    }
+
+    @RequestMapping(value = "filter")
+    public String filter() {
+        return "filterChoice";
+    }
 
 }

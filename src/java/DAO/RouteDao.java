@@ -336,8 +336,60 @@ public class RouteDao {
 
     public ArrayList<TripPeriod2X> getFilteredTripPeriods(TripPeriodsFilter tripPeriodsFilter) {
         ArrayList<TripPeriod2X> tripPeriods = new ArrayList<>();
+        if (tripPeriodsFilter.isBlank()) {
+            //return empty;
+            return tripPeriods;
+        }
+        StringBuilder query = new StringBuilder();
+        StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT route_number, date_stamp,  start_time_scheduled FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number IN ");
+        StringBuilder queryBuilderRouteNumberPart = buildStringFromTreeMap(tripPeriodsFilter.getRouteNumbers());
+        StringBuilder queryBuilderDateStampPart = buildStringFromTreeMap(tripPeriodsFilter.getDateStamps());
+        if (tripPeriodsFilter.isInitial()) {
+            query = queryBuilderInitialPart.append(queryBuilderRouteNumberPart).
+                    append(" AND date_stamp IN ").append(queryBuilderDateStampPart).
+                    append(" ORDER BY prefix, suffix ;");
+        } else {
+            StringBuilder queryBuilderBusNumberPart = buildStringFromTreeMap(tripPeriodsFilter.getBusNumbers());
+            StringBuilder queryBuilderExodusNumberPart = buildStringFromTreeMap(tripPeriodsFilter.getBusNumbers());
+            StringBuilder queryBuilderDriverNamePart = buildStringFromTreeMap(tripPeriodsFilter.getBusNumbers());
+            StringBuilder queryBuilderTripPeriodTypePart = buildStringFromTreeMap(tripPeriodsFilter.getTripPeriodTypes());
+            StringBuilder queryBuilderStartTimeScheduledPart = buildStringFromTreeMap(tripPeriodsFilter.getStartTimesScheduled());
+            StringBuilder queryBuilderStartTimeActualPart = buildStringFromTreeMap(tripPeriodsFilter.getStartTimesActual());
+            StringBuilder queryBuilderArrivalTimeScheduledPart = buildStringFromTreeMap(tripPeriodsFilter.getArrivalTimesScheduled());
+            StringBuilder queryBuilderArrivalTimeActualPart = buildStringFromTreeMap(tripPeriodsFilter.getArrivalTimesActual());
 
+            query = queryBuilderInitialPart.append(queryBuilderRouteNumberPart).
+                    append(" AND date_stamp IN ").append(queryBuilderDateStampPart).
+                    append(" AND bus_number IN ").append(queryBuilderBusNumberPart).
+                    append(" AND exodus_number IN ").append(queryBuilderExodusNumberPart).
+                    append(" AND driver_name IN ").append(queryBuilderDriverNamePart).
+                    append(" AND type IN ").append(queryBuilderTripPeriodTypePart).
+                    append(" ORDER BY prefix, suffix ;");
+        }
+        System.out.println(query.toString());
         return tripPeriods;
     }
 
+    private StringBuilder buildStringFromTreeMap(TreeMap<String, String> treeMap) {
+        StringBuilder stringBuilder = new StringBuilder("(");
+        if (treeMap.size() == 0) {
+            stringBuilder.append(")");
+            return stringBuilder;
+        }
+        int x = 0;
+        for (Map.Entry<String, String> entry : treeMap.entrySet()) {
+            String string = entry.getKey();
+            if (x == 0) {
+                stringBuilder.append("'").append(string).append("'");
+            } else {
+                stringBuilder.append(", '").append(string).append("'");
+            }
+            if (x == treeMap.size() - 1) {
+                stringBuilder.append(")");
+            }
+            x++;
+        }
+
+        return stringBuilder;
+    }
 }

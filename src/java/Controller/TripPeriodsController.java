@@ -22,6 +22,7 @@ public class TripPeriodsController {
     public String tripPeriodInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model, HttpSession session) {
 
         TripPeriodsFilter tripPeriodsFilter = convertSelectedRoutesToTripPeriodFilter(routeDates);
+        tripPeriodsFilter.setInitial(true);
         ArrayList<TripPeriod2X> tripPeriods = routeDao.getFilteredTripPeriods(tripPeriodsFilter);
         return "tripPeriods";
     }
@@ -31,6 +32,9 @@ public class TripPeriodsController {
 
         //trimming and cleaning input
         routeDates = routeDates.trim();
+        if (routeDates.length() == 0) {
+            return tripPeriodsFilter;
+        }
         if (routeDates.substring(routeDates.length() - 1, routeDates.length()).equals(",")) {
             routeDates = routeDates.substring(0, routeDates.length() - 1).trim();
         }

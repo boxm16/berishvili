@@ -19,6 +19,7 @@ public class TripPeriodsFilter {
     private TreeMap<String, String> tripPeriodTimesActual;
     private TreeMap<String, String> arrivalTimesActual;
     private TreeMap<String, String> tripPeriodTimeDifferences;
+    private boolean initial;
 
     public TripPeriodsFilter() {
         this.routeNumbers = new TreeMap();
@@ -310,6 +311,31 @@ public class TripPeriodsFilter {
                 filterTreeMap.put(filteredItem, "checked");
             }
         }
+    }
+
+    public boolean isInitial() {
+        return initial;
+    }
+
+    public void setInitial(boolean initial) {
+        this.initial = initial;
+    }
+
+    public boolean isBlank() {
+        if (routeNumbers.isEmpty() || dateStamps.isEmpty()) {
+            return true;
+        }
+        if ((busNumbers.isEmpty() && !initial)
+                || exodusNumbers.isEmpty() && !initial
+                || driverNames.isEmpty() && !initial
+                || tripPeriodTypes.isEmpty() && !initial
+                || startTimesScheduled.isEmpty() && !initial
+                || startTimesActual.isEmpty() && !initial
+                || arrivalTimesScheduled.isEmpty() && !initial
+                || arrivalTimesActual.isEmpty() && !initial) {
+            return true;
+        }
+        return false;
     }
 
 }

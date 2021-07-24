@@ -1,6 +1,7 @@
 package Controller;
 
 import DAO.RouteDao;
+import Model.TripPeriod2X;
 import Model.TripPeriodsFilter;
 import java.util.ArrayList;
 import javax.servlet.http.HttpSession;
@@ -21,7 +22,7 @@ public class TripPeriodsController {
     public String tripPeriodInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model, HttpSession session) {
 
         TripPeriodsFilter tripPeriodsFilter = convertSelectedRoutesToTripPeriodFilter(routeDates);
-
+        ArrayList<TripPeriod2X> tripPeriods = routeDao.getFilteredTripPeriods(tripPeriodsFilter);
         return "tripPeriods";
     }
 

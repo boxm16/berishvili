@@ -6,6 +6,7 @@ import Model.Day;
 import Model.Exodus;
 import Model.RouteData;
 import Model.TripPeriod;
+import Model.TripPeriod2X;
 import Model.TripPeriodsFilter;
 import Model.TripVoucher;
 import java.sql.Connection;
@@ -331,6 +332,10 @@ public class RouteDao {
         }
 
         return filteredRoutes;
+    }
+
+    public ArrayList<TripPeriod2X> getFilteredTripPeriods(TripPeriodsFilter tripPeriodsFilter) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

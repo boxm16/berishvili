@@ -335,7 +335,9 @@ public class RouteDao {
     }
 
     public ArrayList<TripPeriod2X> getFilteredTripPeriods(TripPeriodsFilter tripPeriodsFilter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ArrayList<TripPeriod2X> tripPeriods = new ArrayList<>();
+
+        return tripPeriods;
     }
 
 }

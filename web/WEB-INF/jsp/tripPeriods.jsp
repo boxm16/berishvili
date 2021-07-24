@@ -401,62 +401,26 @@
                             <th>წირის<br>გეგმიური<br>დრო</th>
                             <th>წირის<br>ფაქტიური<br>დრო</th>
                             <th>სხვაობა</th>
-                            <!--
-                <th title="მარშრუტის #" >მრშრ.#</th>
-                <th title="თარიღი">თარიღი</th>
-                <th title="ავტობუსის #">ავტობუსის #</th>
-                <th title="გასვლის #">გას.#</th>
-                <th title="მძღოლი">მძღოლი</th>
-                <th title="მიმართულება">მიმართულება</th>
-                <th title="გასვლის გეგმიური დრო">გ.გ.დ.</th>
-                <th title="გასვლის ფაქტიური დრო">გ.ფ.დ.</th>
-                <th title="მისვლის გეგმიური დრო">მ.გ.დ.</th>
-                <th title="მისვლის ფაქტიური დრო">მ.ფ.დ.</th>
-                <th title="წირის გეგმიური დრო">წ.გ.დ</th>
-                <th title="წირის ფაქტიური დრო">წ.ფ.დ.</th>
-                <th title="სხვაობ">სხვაობა</th>
-                            -->
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="routeEntrySet" items="${routes}">
+                        <c:forEach var="tripPeriod" items="${tripPeriods}">
+                            <tr>
+                                <td align="center">${tripPeriod.routeNumber} </td>
+                                <td align="center">${tripPeriod.dateStamp} </td>
+                                <td align="center">${tripPeriod.busNumber} </td>
+                                <td align="center">${tripPeriod.exodusNumber} </td>
+                                <td align="center">${tripPeriod.driverName} </td>
+                                <td align="center">${tripPeriod.typeG} </td>
+                                <td align="center">${tripPeriod.getStartTimeScheduledString()} </td>
+                                <td align="center">${tripPeriod.getStartTimeActualString()} </td>
+                                <td align="center">${tripPeriod.getArrivalTimeScheduledString()} </td>
+                                <td align="center">${tripPeriod.getArrivalTimeActualString()} </td>
+                                <td align="center">${tripPeriod.getTripPeriodTimeScheduledString()} </td>
+                                <td align="center">${tripPeriod.getTripPeriodTimeActualString()} </td>
+                                <td align="center" style="background-color: ${tripPeriod.getTripPeriodTimeDifferenceColor()}">${tripPeriod.getTripPeriodTimeDifferenceString()} </td>
 
-
-                            <c:forEach var="dayEntrySet" items="${routeEntrySet.value.days}">
-
-                                <c:forEach var="exodusEntrySet" items="${dayEntrySet.value.exoduses}">
-
-
-
-
-                                    <c:forEach var="tripVouchersEntry" items="${exodusEntrySet.value.tripVouchers}">
-                                        <c:forEach var="tripPeriod" items="${tripVouchersEntry.value.tripPeriods}">
-                                            <tr>
-                                                <td align="center">${routeEntrySet.value.number} </td>
-                                                <td align="center">${dayEntrySet.value.getDateStampWeekFormat()}</td>
-                                                <td align="center">${tripVouchersEntry.value.busNumber}</td>
-                                                <td align="center">${exodusEntrySet.value.number}</td>                                        
-                                                <td align="center">${tripVouchersEntry.value.driverName}</td>
-                                                <td align="center">${tripPeriod.getTypeG()}</td>
-                                                <td align="center">${tripPeriod.getStartTimeScheduledString()}</td>
-                                                <td align="center">${tripPeriod.getStartTimeActualString()}</td>
-                                                <td align="center">${tripPeriod.getArrivalTimeScheduledString()}</td>
-                                                <td align="center">${tripPeriod.getArrivalTimeActualString()}</td>
-                                                <td align="center">${tripPeriod.getTripPeriodTimeScheduledString()}</td>
-                                                <td align="center">${tripPeriod.getTripPeriodTimeActualString()}</td>
-                                                <td style="background-color: ${tripPeriod.getTripPeriodTimeDifferenceColor()}" align="center">${tripPeriod.getTripPeriodTimeDifferenceString()}</td>
-                                            </tr>
-
-                                        </c:forEach>
-
-                                    </c:forEach>
-
-
-                                </c:forEach>
-
-
-                            </c:forEach>
-
+                            </tr>
                         </c:forEach>
                     </tbody>
                 </table>

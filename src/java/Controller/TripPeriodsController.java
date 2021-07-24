@@ -24,6 +24,7 @@ public class TripPeriodsController {
         TripPeriodsFilter tripPeriodsFilter = convertSelectedRoutesToTripPeriodFilter(routeDates);
         tripPeriodsFilter.setInitial(true);
         ArrayList<TripPeriod2X> tripPeriods = routeDao.getFilteredTripPeriods(tripPeriodsFilter);
+        model.addAttribute("tripPeriods", tripPeriods);
         return "tripPeriods";
     }
 

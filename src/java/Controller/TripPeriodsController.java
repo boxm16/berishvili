@@ -25,6 +25,7 @@ public class TripPeriodsController {
         tripPeriodsFilter.setInitial(true);
         ArrayList<TripPeriod2X> tripPeriods = routeDao.getFilteredTripPeriods(tripPeriodsFilter);
         model.addAttribute("tripPeriods", tripPeriods);
+        session.setAttribute("tripPeriodsFilter", tripPeriodsFilter);
         return "tripPeriods";
     }
 
@@ -51,6 +52,26 @@ public class TripPeriodsController {
         return tripPeriodsFilter;
     }
 
+    //----------
+    @RequestMapping(value = "tripPeriodsFilterChoice")
+    public String filterChoice() {
+        return "tripPeriodsFilterChoice";
+    }
+
+    @RequestMapping(value = "filter")
+    public String filter(@RequestParam(value = "target") String targetFilter, HttpSession session) {
+        if (session.getAttribute(targetFilter) == null) {
+            session.getAttribute("tripPeriodsFilter");
+            if(targetFilter.equals("routeNumber")){
+            
+            }
+            
+        }
+
+        return "tripPeriodsFilterChoice";
+    }
+
+    //-----------------//---------------------//---------------
     @RequestMapping(value = "tripPeriods")
     public String tripPeriods(ModelMap model, HttpSession session, @RequestParam String blockIndex) {
 
@@ -84,17 +105,6 @@ public class TripPeriodsController {
 
         System.out.println("tripPeriodsFilter");
         return "tripPeriods";
-    }
-
-    //----------
-    @RequestMapping(value = "filterChoice")
-    public String filterChoice() {
-        return "filterChoice";
-    }
-
-    @RequestMapping(value = "filter")
-    public String filter() {
-        return "filterChoice";
     }
 
 }

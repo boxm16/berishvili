@@ -27,6 +27,16 @@
                         <span> <a href="filter.htm?target=dateStamp">Date Stamp Filter</a> </span>
                     </button>
                 </td>
+                <td>
+                    <button type="button" class="btn btn-danger">
+                        <span> <a href="filter.htm?target=busNumber">Bus Number</a> </span>
+                    </button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger">
+                        <span> <a href="filter.htm?target=exodusNumber">Exodus Number</a> </span>
+                    </button>
+                </td>
             </tr>
         </table>
     </body>

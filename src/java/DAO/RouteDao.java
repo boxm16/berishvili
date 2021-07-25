@@ -293,11 +293,13 @@ public class RouteDao {
         }
         int x = 0;
         for (Map.Entry<String, String> entry : treeMap.entrySet()) {
-            String string = entry.getKey();
-            if (x == 0) {
-                stringBuilder.append("'").append(string).append("'");
-            } else {
-                stringBuilder.append(", '").append(string).append("'");
+            if (entry.getValue().equals("checked")) {
+                String string = entry.getKey();
+                if (x == 0) {
+                    stringBuilder.append("'").append(string).append("'");
+                } else {
+                    stringBuilder.append(", '").append(string).append("'");
+                }
             }
             if (x == treeMap.size() - 1) {
                 stringBuilder.append(")");

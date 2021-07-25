@@ -21,11 +21,10 @@ public class TripPeriodsController {
     @RequestMapping(value = "tripPeriodsInitialRequest")
     public String tripPeriodInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model, HttpSession session) {
 
-        TripPeriodsFilter tripPeriodsFilter = convertSelectedRoutesToTripPeriodFilter(routeDates);
-        tripPeriodsFilter.setInitial(true);
-        ArrayList<TripPeriod2X> tripPeriods = routeDao.getFilteredTripPeriods(tripPeriodsFilter);
-        model.addAttribute("tripPeriods", tripPeriods);
-        session.setAttribute("tripPeriodsFilter", tripPeriodsFilter);
+        TripPeriodsFilter tripPeriodsInitialFilter = convertSelectedRoutesToTripPeriodFilter(routeDates);
+        ArrayList<TripPeriod2X> initialTripPeriods = routeDao.getInitialTripPeriods(tripPeriodsInitialFilter);
+        model.addAttribute("tripPeriods", initialTripPeriods);
+        session.setAttribute("tripPeriodsInitialFilter", tripPeriodsInitialFilter);
         return "tripPeriods";
     }
 
@@ -53,25 +52,20 @@ public class TripPeriodsController {
     }
 
     //----------
+    @RequestMapping(value = "tripPeriodsFilterDashboard")
+    public String filterChoice(HttpSession session) {
+        TripPeriodsFilter tripPeriodsInitialFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsInitialFilter");
+        TripPeriodsFilter tripPeriodsFilter = routeDao.getTripPeriodsFilter(tripPeriodsInitialFilter);
+        return "tripPeriodsFilterDashboard";
+    }
+
     @RequestMapping(value = "tripPeriodsFilterChoice")
-    public String filterChoice() {
-        return "tripPeriodsFilterChoice";
+    public String filter(@RequestParam(value = "target") String targetFilter, HttpSession session, ModelMap model) {
+
+        return "tripPeriodsFilterDashboard";
     }
 
-    @RequestMapping(value = "filter")
-    public String filter(@RequestParam(value = "target") String targetFilter, HttpSession session) {
-        if (session.getAttribute(targetFilter) == null) {
-            session.getAttribute("tripPeriodsFilter");
-            if(targetFilter.equals("routeNumber")){
-            
-            }
-            
-        }
-
-        return "tripPeriodsFilterChoice";
-    }
-
-    //-----------------//---------------------//---------------
+//-----------------//---------------------//---------------
     @RequestMapping(value = "tripPeriods")
     public String tripPeriods(ModelMap model, HttpSession session, @RequestParam String blockIndex) {
 

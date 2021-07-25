@@ -366,7 +366,7 @@
                         </button>
                         &nbsp  &nbsp  &nbsp
                         <button type="button" class="btn btn-danger">
-                            <span> <a href="tripPeriodsFilterChoice.htm">ფილტრებიs archeva</a> </span>
+                            <span> <a href="tripPeriodsFilterDashboard.htm">ფილტრებიs archeva</a> </span>
                         </button>
 
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">

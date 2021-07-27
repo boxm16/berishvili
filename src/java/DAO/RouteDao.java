@@ -33,6 +33,10 @@ public class RouteDao {
     private Connection connection;
     private Converter converter;
 
+    public RouteDao() {
+        converter = new Converter();
+    }
+
     public TreeMap<Float, RouteData> getRoutesDataFromDB() {
         TreeMap<Float, RouteData> routes = new TreeMap<>();
         try {
@@ -246,7 +250,7 @@ public class RouteDao {
 
     //- - - - - - - -  -
     public ArrayList<TripPeriod2X> getInitialTripPeriods(TripPeriodsFilter tripPeriodsFilter) {
-        converter = new Converter();
+
         ArrayList<TripPeriod2X> tripPeriods = new ArrayList<>();
         StringBuilder query = new StringBuilder();
         StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT route_number, date_stamp,  bus_number, exodus_number, driver_name, type, start_time_scheduled, start_time_actual, arrival_time_scheduled, arrival_time_actual FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number IN ");
@@ -286,6 +290,150 @@ public class RouteDao {
         }
 
         return tripPeriods;
+    }
+
+    public TripPeriodsFilter getTripPeriodsFullInitialFilter(TripPeriodsFilter tripPeriodsInitialFilter) {
+
+        TripPeriodsFilter tripPeriodsFilter = new TripPeriodsFilter();
+        StringBuilder query = new StringBuilder();
+        StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT route_number, date_stamp,  bus_number, exodus_number, driver_name, type, start_time_scheduled, start_time_actual, arrival_time_scheduled, arrival_time_actual FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number IN ");
+        StringBuilder queryBuilderRouteNumberPart = buildStringFromTreeMap(tripPeriodsInitialFilter.getRouteNumbers());
+        StringBuilder queryBuilderDateStampPart = buildStringFromTreeMap(tripPeriodsInitialFilter.getDateStamps());
+
+        query = queryBuilderInitialPart.append(queryBuilderRouteNumberPart).
+                append(" AND date_stamp IN ").append(queryBuilderDateStampPart).
+                append(" ORDER BY prefix, suffix ;");
+        try {
+            connection = dataBaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query.toString());
+
+            while (resultSet.next()) {
+                tripPeriodsFilter.addRouteNumber(resultSet.getString("route_number"));
+                tripPeriodsFilter.addDateStamp(resultSet.getString("date_stamp"));
+                tripPeriodsFilter.addBusNumber(resultSet.getString("bus_number"));
+                tripPeriodsFilter.addExodusNumber(resultSet.getString("exodus_number"));
+                tripPeriodsFilter.addDriverName(resultSet.getString("driver_name"));
+                tripPeriodsFilter.addTripPeriodType(resultSet.getString("type"));
+                tripPeriodsFilter.addStartTimeScheduled(resultSet.getString("start_time_scheduled"));
+                tripPeriodsFilter.addStartTimeActual(resultSet.getString("start_time_actual"));
+                tripPeriodsFilter.addArrivalTimeScheduled(resultSet.getString("arrival_time_scheduled"));
+                tripPeriodsFilter.addArrivalTimeActual(resultSet.getString("arrival_time_actual"));
+            }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(RouteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return tripPeriodsFilter;
+    }
+
+    public TripPeriodsFilter getFilteredTripPeriodsFilter(TripPeriodsFilter tripPeriodsFilter) {
+        TripPeriodsFilter filteredTripPeriodsFilter = new TripPeriodsFilter();
+        StringBuilder query = new StringBuilder();
+        StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT route_number, date_stamp,  bus_number, exodus_number, driver_name, type, start_time_scheduled, start_time_actual, arrival_time_scheduled, arrival_time_actual FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number IN ");
+
+        StringBuilder queryBuilderRouteNumberPart = buildStringFromTreeMap2(tripPeriodsFilter.getRouteNumbers());
+        if (queryBuilderRouteNumberPart.equals("")) {
+            return filteredTripPeriodsFilter;
+        }
+
+        StringBuilder queryBuilderDateStampPart = buildStringFromTreeMap2(tripPeriodsFilter.getDateStamps());
+        if (queryBuilderDateStampPart.equals("")) {
+            return filteredTripPeriodsFilter;
+        }
+
+        StringBuilder queryBuilderBusNumberPart = buildStringFromTreeMap2(tripPeriodsFilter.getBusNumbers());
+        if (queryBuilderBusNumberPart.equals("")) {
+            return filteredTripPeriodsFilter;
+        }
+
+        StringBuilder queryBuilderExodusNumberPart = buildStringFromTreeMap2(tripPeriodsFilter.getExodusNumbers());
+        if (queryBuilderExodusNumberPart.equals("")) {
+            return filteredTripPeriodsFilter;
+        }
+
+        StringBuilder queryBuilderDriverNamePart = buildStringFromTreeMap2(tripPeriodsFilter.getDriverNames());
+        if (queryBuilderDriverNamePart.equals("")) {
+            return filteredTripPeriodsFilter;
+        }
+
+        StringBuilder queryBuilderTripPeriodTypePart = buildStringFromTreeMap2(tripPeriodsFilter.getTripPeriodTypes());
+        if (queryBuilderTripPeriodTypePart.equals("")) {
+            return filteredTripPeriodsFilter;
+        }
+
+        StringBuilder queryBuilderStartTimeScheduledPart = buildStringFromTreeMap2(tripPeriodsFilter.getStartTimesScheduled());
+        if (queryBuilderStartTimeScheduledPart.equals("")) {
+            return filteredTripPeriodsFilter;
+        }
+
+        query = queryBuilderInitialPart.append(queryBuilderRouteNumberPart).
+                append(" AND date_stamp IN ").append(queryBuilderDateStampPart).
+                append(" AND bus_number IN ").append(queryBuilderBusNumberPart).
+                append(" AND exodus_number IN ").append(queryBuilderExodusNumberPart).
+                append(" AND driver_name IN ").append(queryBuilderDriverNamePart).
+                // append(" AND type IN ").append(queryBuilderTripPeriodTypePart).
+                append(" AND start_time_scheduled IN ").append(queryBuilderStartTimeScheduledPart).
+                append(" ORDER BY prefix, suffix ;");
+        System.out.println(query);
+        try {
+            connection = dataBaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query.toString());
+
+            while (resultSet.next()) {
+                filteredTripPeriodsFilter.addRouteNumber(resultSet.getString("route_number"));
+                filteredTripPeriodsFilter.addDateStamp(resultSet.getString("date_stamp"));
+                filteredTripPeriodsFilter.addBusNumber(resultSet.getString("bus_number"));
+                filteredTripPeriodsFilter.addExodusNumber(resultSet.getString("exodus_number"));
+                filteredTripPeriodsFilter.addDriverName(resultSet.getString("driver_name"));
+                filteredTripPeriodsFilter.addTripPeriodType(resultSet.getString("type"));
+                filteredTripPeriodsFilter.addStartTimeScheduled(resultSet.getString("start_time_scheduled"));
+                filteredTripPeriodsFilter.addStartTimeActual(resultSet.getString("start_time_actual"));
+                filteredTripPeriodsFilter.addArrivalTimeScheduled(resultSet.getString("arrival_time_scheduled"));
+                filteredTripPeriodsFilter.addArrivalTimeActual(resultSet.getString("arrival_time_actual"));
+            }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(RouteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return filteredTripPeriodsFilter;
+    }
+
+    //-----------------------------------------------------------
+    private StringBuilder buildStringFromTreeMap2(TreeMap<String, String> treeMap) {
+        StringBuilder stringBuilder = new StringBuilder("(");
+        if (treeMap.isEmpty()) {
+            return new StringBuilder("");
+        }
+        int x = 0;
+        for (Map.Entry<String, String> entry : treeMap.entrySet()) {
+            if (entry.getValue().equals("checked") && x < treeMap.size() - 1) {
+                String string = entry.getKey();
+                stringBuilder.append("'").append(string).append("', ");
+            }
+            if (x == treeMap.size() - 1) {
+                String string = entry.getKey();
+                if (entry.getValue().equals("checked")) {
+                    stringBuilder.append("'").append(string).append("'").append(")");
+                } else {
+                    stringBuilder.append(")");
+                }
+            }
+            x++;
+        }
+        if ((stringBuilder).equals("()")) {//if every item is unchecked
+            return new StringBuilder("");
+        }
+        return stringBuilder;
     }
 
 // - - - - - - - - - - - -  - - 
@@ -434,8 +582,4 @@ public class RouteDao {
     }
 
      */
-
-    public TripPeriodsFilter getTripPeriodsFilter(TripPeriodsFilter tripPeriodsInitialFilter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

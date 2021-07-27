@@ -80,11 +80,25 @@
         </table>
         <hr><hr>
         <table>
+            <thead>
+                <tr>
+                    <th>${targetFilterButton}</th>
+                </tr>
+                <tr>
+                    <th><form id="form" action="filterTripPeriods.htm" method="POST">
+                            <input  name="trigger" value="${targetFilterTrigger}" hidden>
+                            <input name ="inputString" id="inputString" value="kakakchi" hidden>
+                        </form>
+                        <button type="submit" onclick="collectCheckBoxInput()">SUBMIT</button>
+
+                    </th>
+                </tr>
+            </thead>
             <tbody style="height:200px; overflow-y:scroll; display:block;">
-                <c:forEach var="item" items="${targetFilter}">
+                <c:forEach var="item" items="${targetFilterBody}">
                     <tr>
                         <td>
-                            <input type="checkbox" name="routeNumbers" class="dates"   ${item.value} value="${item.key}"> 
+                            <input type="checkbox" name="checkBoxInput" class="checkBoxInput"  ${item.value} value="${item.key}"> 
                         </td>
                         <td>
                             ${item.key}  
@@ -93,5 +107,21 @@
                 </c:forEach>
             </tbody>
         </table>
+        <script>
+            function collectCheckBoxInput() {
+                var inputValue = "";
+                var targetCheckBoxes = document.querySelectorAll(".checkBoxInput");
+                for (x = 0; x < targetCheckBoxes.length; x++) {
+                    if (targetCheckBoxes[x].checked) {
+                        inputValue += targetCheckBoxes[x].value + ":checked" + ",";
+                    } else {
+                        inputValue += targetCheckBoxes[x].value + ":unchecked" + ",";
+                    }
+
+                }
+                inputString.value = inputValue;
+                form.submit();
+            }
+        </script>
     </body>
 </html>

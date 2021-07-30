@@ -4,6 +4,7 @@ import DAO.RouteDao;
 import Model.TripPeriod2X;
 import Model.TripPeriodsFilter;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.TreeMap;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,29 +103,59 @@ public class TripPeriodsController {
     public String filterTripPeriods(HttpSession session, @RequestParam String trigger, @RequestParam String inputString, ModelMap model) {
         TripPeriodsFilter tripPeriodsCurrentFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsCurrentFilter");
         TreeMap<String, String> triggeredFilter = getTriggerFilter(inputString);
-        tripPeriodsCurrentFilter = routeDao.getFilteredTripPeriodsFilter(tripPeriodsCurrentFilter);
-        System.out.println(trigger);
+        TripPeriodsFilter tripPeriodsFullInitialFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsFullInitialFilter");
         if (trigger.equals("routeNumbers")) {
             tripPeriodsCurrentFilter.setRouteNumbers(triggeredFilter);
+            tripPeriodsCurrentFilter = routeDao.getFilteredTripPeriodsFilter(tripPeriodsCurrentFilter, trigger);
+            tripPeriodsCurrentFilter.setRouteNumbers(triggeredFilter);
+            tripPeriodsFullInitialFilter = resetInitialFilter(tripPeriodsFullInitialFilter, triggeredFilter, "routeNumbers");
+
         }
         if (trigger.equals("dateStamps")) {
             tripPeriodsCurrentFilter.setDateStamps(triggeredFilter);
+            tripPeriodsCurrentFilter = routeDao.getFilteredTripPeriodsFilter(tripPeriodsCurrentFilter, trigger);
+            tripPeriodsCurrentFilter.setDateStamps(triggeredFilter);
+            tripPeriodsFullInitialFilter = resetInitialFilter(tripPeriodsFullInitialFilter, triggeredFilter, "dateStamps");
+
         }
         if (trigger.equals("busNumbers")) {
             tripPeriodsCurrentFilter.setBusNumbers(triggeredFilter);
+            tripPeriodsCurrentFilter = routeDao.getFilteredTripPeriodsFilter(tripPeriodsCurrentFilter, trigger);
+            tripPeriodsCurrentFilter.setBusNumbers(triggeredFilter);
+            tripPeriodsFullInitialFilter = resetInitialFilter(tripPeriodsFullInitialFilter, triggeredFilter, "busNumbers");
+
         }
         if (trigger.equals("exodusNumbers")) {
             tripPeriodsCurrentFilter.setExodusNumbers(triggeredFilter);
+            tripPeriodsCurrentFilter = routeDao.getFilteredTripPeriodsFilter(tripPeriodsCurrentFilter, trigger);
+            tripPeriodsCurrentFilter.setExodusNumbers(triggeredFilter);
+            tripPeriodsFullInitialFilter = resetInitialFilter(tripPeriodsFullInitialFilter, triggeredFilter, "exodusNumbers");
+
         }
         if (trigger.equals("driverNames")) {
             tripPeriodsCurrentFilter.setDriverNames(triggeredFilter);
+            tripPeriodsCurrentFilter = routeDao.getFilteredTripPeriodsFilter(tripPeriodsCurrentFilter, trigger);
+            tripPeriodsCurrentFilter.setDriverNames(triggeredFilter);
+            tripPeriodsFullInitialFilter = resetInitialFilter(tripPeriodsFullInitialFilter, triggeredFilter, "driverNames");
+
         }
         if (trigger.equals("tripPeriodTypes")) {
             tripPeriodsCurrentFilter.setTripPeriodTypes(triggeredFilter);
+            tripPeriodsCurrentFilter = routeDao.getFilteredTripPeriodsFilter(tripPeriodsCurrentFilter, trigger);
+            tripPeriodsCurrentFilter.setTripPeriodTypes(triggeredFilter);
+            tripPeriodsFullInitialFilter = resetInitialFilter(tripPeriodsFullInitialFilter, triggeredFilter, "tripPeriodTypes");
+
         }
         if (trigger.equals("startTimesScheduled")) {
             tripPeriodsCurrentFilter.setStartTimesScheduled(triggeredFilter);
+            tripPeriodsCurrentFilter = routeDao.getFilteredTripPeriodsFilter(tripPeriodsCurrentFilter, trigger);
+            tripPeriodsCurrentFilter.setStartTimesScheduled(triggeredFilter);
+            tripPeriodsFullInitialFilter = resetInitialFilter(tripPeriodsFullInitialFilter, triggeredFilter, "startTimesScheduled");
+
         }
+
+        session.setAttribute("tripPeriodsFullInitialFilter", tripPeriodsFullInitialFilter);
+        tripPeriodsCurrentFilter = refactorFiler(tripPeriodsFullInitialFilter, tripPeriodsCurrentFilter);
         session.setAttribute("tripPeriodsCurrentFilter", tripPeriodsCurrentFilter);
         return "tripPeriodsFilterDashboard";
     }
@@ -186,4 +217,106 @@ public class TripPeriodsController {
         return "tripPeriods";
     }
 
+    private TripPeriodsFilter resetInitialFilter(TripPeriodsFilter tripPeriodsFullInitialFilter, TreeMap<String, String> triggeredFilter, String trigger) {
+        if (trigger.equals("routeNumbers")) {
+            TreeMap<String, String> routeNumbers = tripPeriodsFullInitialFilter.getRouteNumbers();
+            for (Map.Entry<String, String> entry : triggeredFilter.entrySet()) {
+                routeNumbers.put(entry.getKey(), entry.getValue());
+            }
+            tripPeriodsFullInitialFilter.setRouteNumbers(routeNumbers);
+        }
+        if (trigger.equals("dateStamps")) {
+            TreeMap<String, String> dateStamps = tripPeriodsFullInitialFilter.getDateStamps();
+            for (Map.Entry<String, String> entry : triggeredFilter.entrySet()) {
+                dateStamps.put(entry.getKey(), entry.getValue());
+            }
+            tripPeriodsFullInitialFilter.setDateStamps(dateStamps);
+        }
+        if (trigger.equals("busNumbers")) {
+            TreeMap<String, String> busNumbers = tripPeriodsFullInitialFilter.getBusNumbers();
+            for (Map.Entry<String, String> entry : triggeredFilter.entrySet()) {
+                busNumbers.put(entry.getKey(), entry.getValue());
+            }
+            tripPeriodsFullInitialFilter.setBusNumbers(busNumbers);
+        }
+        if (trigger.equals("exodusNumbers")) {
+            TreeMap<String, String> exodusNumbers = tripPeriodsFullInitialFilter.getExodusNumbers();
+            for (Map.Entry<String, String> entry : triggeredFilter.entrySet()) {
+                exodusNumbers.put(entry.getKey(), entry.getValue());
+            }
+            tripPeriodsFullInitialFilter.setExodusNumbers(exodusNumbers);
+        }
+        if (trigger.equals("driverNames")) {
+            TreeMap<String, String> driverNames = tripPeriodsFullInitialFilter.getDriverNames();
+            for (Map.Entry<String, String> entry : triggeredFilter.entrySet()) {
+                driverNames.put(entry.getKey(), entry.getValue());
+            }
+            tripPeriodsFullInitialFilter.setDriverNames(driverNames);
+        }
+        if (trigger.equals("tripPeriodTypes")) {
+            TreeMap<String, String> tripPeriodTypes = tripPeriodsFullInitialFilter.getTripPeriodTypes();
+            for (Map.Entry<String, String> entry : triggeredFilter.entrySet()) {
+                tripPeriodTypes.put(entry.getKey(), entry.getValue());
+            }
+            tripPeriodsFullInitialFilter.setTripPeriodTypes(tripPeriodTypes);
+        }
+        if (trigger.equals("startTimesScheduled")) {
+            TreeMap<String, String> startTimesScheduled = tripPeriodsFullInitialFilter.getStartTimesScheduled();
+            for (Map.Entry<String, String> entry : triggeredFilter.entrySet()) {
+                startTimesScheduled.put(entry.getKey(), entry.getValue());
+            }
+            tripPeriodsFullInitialFilter.setStartTimesScheduled(startTimesScheduled);
+        }
+
+        return tripPeriodsFullInitialFilter;
+    }
+
+    private TripPeriodsFilter refactorFiler(TripPeriodsFilter tripPeriodsFullInitialFilter, TripPeriodsFilter tripPeriodsCurrentFilter) {
+
+        TreeMap<String, String> routeNumbers = tripPeriodsCurrentFilter.getRouteNumbers();
+        for (Map.Entry<String, String> entry : routeNumbers.entrySet()) {
+            String kk = entry.getKey();
+            String savedValue = tripPeriodsFullInitialFilter.getRouteNumbers().get(kk);
+            routeNumbers.put(kk, savedValue);
+        }
+        tripPeriodsCurrentFilter.setRouteNumbers(routeNumbers);
+        //------
+        TreeMap<String, String> dateStamps = tripPeriodsCurrentFilter.getDateStamps();
+        for (Map.Entry<String, String> entry : dateStamps.entrySet()) {
+            String kk = entry.getKey();
+            String savedValue = tripPeriodsFullInitialFilter.getDateStamps().get(kk);
+            dateStamps.put(kk, savedValue);
+        }
+        tripPeriodsCurrentFilter.setDateStamps(dateStamps);
+        //------------------
+        //------
+        TreeMap<String, String> busNumbers = tripPeriodsCurrentFilter.getBusNumbers();
+        for (Map.Entry<String, String> entry : busNumbers.entrySet()) {
+            String kk = entry.getKey();
+            String savedValue = tripPeriodsFullInitialFilter.getBusNumbers().get(kk);
+            busNumbers.put(kk, savedValue);
+        }
+        tripPeriodsCurrentFilter.setBusNumbers(busNumbers);
+        //------------------
+        //------
+        TreeMap<String, String> exodusNumbers = tripPeriodsCurrentFilter.getExodusNumbers();
+        for (Map.Entry<String, String> entry : exodusNumbers.entrySet()) {
+            String kk = entry.getKey();
+            String savedValue = tripPeriodsFullInitialFilter.getExodusNumbers().get(kk);
+            exodusNumbers.put(kk, savedValue);
+        }
+        tripPeriodsCurrentFilter.setExodusNumbers(exodusNumbers);
+        //------------------
+        //------------------
+        //------
+        TreeMap<String, String> tripPeriodTypes = tripPeriodsCurrentFilter.getTripPeriodTypes();
+        for (Map.Entry<String, String> entry : tripPeriodTypes.entrySet()) {
+            String kk = entry.getKey();
+            String savedValue = tripPeriodsFullInitialFilter.getTripPeriodTypes().get(kk);
+            tripPeriodTypes.put(kk, savedValue);
+        }
+        tripPeriodsCurrentFilter.setTripPeriodTypes(tripPeriodTypes);
+        //------------------
+        return tripPeriodsCurrentFilter;
+    }
 }

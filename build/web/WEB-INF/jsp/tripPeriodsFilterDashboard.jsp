@@ -10,6 +10,11 @@
             button {
                 font-size: 25px;
             }
+            input[type="checkbox"]{
+                width: 20px; /*Desired width*/
+                height: 20px; /*Desired height*/
+            }
+
         </style>
     </head>
     <body>
@@ -79,49 +84,66 @@
             </tr>
         </table>
         <hr><hr>
-        <table>
-            <thead>
-                <tr>
-                    <th>${targetFilterButton}</th>
-                </tr>
-                <tr>
-                    <th><form id="form" action="filterTripPeriods.htm" method="POST">
-                            <input  name="trigger" value="${targetFilterTrigger}" hidden>
-                            <input name ="inputString" id="inputString" value="kakakchi" hidden>
-                        </form>
-                        <button type="submit" onclick="collectCheckBoxInput()">SUBMIT</button>
-
-                    </th>
-                </tr>
-            </thead>
-            <tbody style="height:200px; overflow-y:scroll; display:block;">
-                <c:forEach var="item" items="${targetFilterBody}">
+    <center> <div>
+            <table>
+                <thead>
                     <tr>
-                        <td>
-                            <input type="checkbox" name="checkBoxInput" class="checkBoxInput"  ${item.value} value="${item.key}"> 
-                        </td>
-                        <td>
-                            ${item.key}  
-                        </td>
+                        <th>${targetFilterButton}</th>
                     </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-        <script>
-            function collectCheckBoxInput() {
-                var inputValue = "";
-                var targetCheckBoxes = document.querySelectorAll(".checkBoxInput");
-                for (x = 0; x < targetCheckBoxes.length; x++) {
-                    if (targetCheckBoxes[x].checked) {
-                        inputValue += targetCheckBoxes[x].value + ":checked" + ",";
-                    } else {
-                        inputValue += targetCheckBoxes[x].value + ":unchecked" + ",";
-                    }
+                    <tr>
+                        <th><form id="form" action="filterTripPeriods.htm" method="POST">
+                                <input  name="trigger" value="${targetFilterTrigger}" hidden>
+                                <input name ="inputString" id="inputString" value="kakakchi" hidden>
+                            </form>
+                            <button type="submit" onclick="collectCheckBoxInput()">SUBMIT</button>
 
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <input type="checkbox" style="width:28px;height:28px" checked="true" onclick="selectAll(event)">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody style="height:300px; overflow-y:scroll; display:block;">
+                    <c:forEach var="item" items="${targetFilterBody}">
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="checkBoxInput" class="checkBoxInput"  ${item.value} value="${item.key}"> 
+                            </td>
+                            <td>
+                                ${item.key}  
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </center>
+    <script>
+        function collectCheckBoxInput() {
+            var inputValue = "";
+            var targetCheckBoxes = document.querySelectorAll(".checkBoxInput");
+            for (x = 0; x < targetCheckBoxes.length; x++) {
+                if (targetCheckBoxes[x].checked) {
+                    inputValue += targetCheckBoxes[x].value + ":checked" + ",";
+                } else {
+                    inputValue += targetCheckBoxes[x].value + ":unchecked" + ",";
                 }
-                inputString.value = inputValue;
-                form.submit();
+
             }
-        </script>
-    </body>
+            inputString.value = inputValue;
+            form.submit();
+        }
+
+        function selectAll(event) {
+
+            var bigCheckBox = event.target;
+            var allCheckBoxes = document.querySelectorAll("input[type=\"checkbox\"]");
+            for (x = 0; x < allCheckBoxes.length; x++) {
+                allCheckBoxes[x].checked = bigCheckBox.checked;
+            }
+        }
+    </script>
+</body>
 </html>

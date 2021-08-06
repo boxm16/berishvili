@@ -260,89 +260,18 @@
             <!-- Sidebar  -->
             <nav id="sidebar">
                 <div class="sidebar-header">
-                    <center><h5>მარშრუტების ბლოკები</h5></center>
+                    <center><h5>ფუნქციები</h5></center>
                 </div>
                 <ul class="list-unstyled components">
-                    <c:forEach var="routesBlock" items="${selectedRoutesBlocks}" varStatus="loop">
-                        <li >
-                            <a href="tripPeriods.htm?blockIndex=${loop.index}">${routesBlock.name}</a>
-                        </li>
-                    </c:forEach> 
-                    <li >
-                        <a href="#" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">საგარანტიოები</a>
-                        <ul class="collapse list-unstyled" id="homeSubmenu">
-                            <li>
-                                <a href="#">Home 1</a>
-                            </li>
-                            <li>
-                                <a href="#">Home 2</a>
-                            </li>
-                            <li>
-                                <a href="guarantyTripsUploadPage.htm"">ავტობუსების მარშრუტების ანალიზი</a>
-                            </li>
-                        </ul>
-                    </li>
 
                     <li>
-                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-                        <ul class="collapse list-unstyled" id="pageSubmenu">
-                            <li>
-                                <a href="#"></a>
-                            </li>
-                            <li>
-                                <a href="#">Page 2</a>
-                            </li>
-                            <li>
-                                <a href="#">Page 3</a>
-                            </li>
-                        </ul>
+                        <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> 
+
                     </li>
-                    <li>
-                        <a href="#">Portfolio</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                    <li>
-                        <a href="#">Portfolio</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                    <li>
-                        <a href="#">Portfolio</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                    <li>
-                        <a href="#">Portfolio</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                    <li>
-                        <a href="#">Portfolio</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                    <li>
-                        <a href="#">Portfolio</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
+
                 </ul>
 
-                <ul class="list-unstyled CTAs">
-                    <li>
-                        <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
-                    </li>
-                    <li>
-                        <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>
-                    </li>
-                </ul>
+
             </nav>
 
             <!-- Page Content  -->
@@ -360,6 +289,7 @@
                         </button>
 
 
+                        <!--
                         &nbsp  &nbsp  &nbsp
                         <button type="button" class="btn btn-success">
                             <span> <a href="tripPeriodsFilterRequest.htm">ფილტრები</a> </span>
@@ -368,6 +298,8 @@
                         <button type="button" class="btn btn-danger">
                             <span> <a href="tripPeriodsFilterDashboard.htm">ფილტრებიs archeva</a> </span>
                         </button>
+                        -->
+                        &nbsp  &nbsp  &nbsp
 
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="nav navbar-nav ml-auto">

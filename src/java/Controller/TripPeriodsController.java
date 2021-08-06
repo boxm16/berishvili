@@ -24,14 +24,16 @@ public class TripPeriodsController {
     public String tripPeriodInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model, HttpSession session) {
 
         TripPeriodsFilter tripPeriodsInitialFilter = convertSelectedRoutesToTripPeriodFilter(routeDates);
+        session.setAttribute("tripPeriodsInitialFilter", tripPeriodsInitialFilter);
         ArrayList<TripPeriod2X> initialTripPeriods = routeDao.getInitialTripPeriods(tripPeriodsInitialFilter);
         model.addAttribute("tripPeriods", initialTripPeriods);
 
+        /*
         TripPeriodsFilter tripPeriodsFullInitialFilter = routeDao.getTripPeriodsFullInitialFilter(tripPeriodsInitialFilter);
         session.setAttribute("tripPeriodsFullInitialFilter", tripPeriodsFullInitialFilter);
         TripPeriodsFilter tripPeriodsCurrentFilter = tripPeriodsFullInitialFilter.getDeepCopy();
         session.setAttribute("tripPeriodsCurrentFilter", tripPeriodsCurrentFilter);
-
+         */
         return "tripPeriods";
     }
 
@@ -318,5 +320,27 @@ public class TripPeriodsController {
         tripPeriodsCurrentFilter.setTripPeriodTypes(tripPeriodTypes);
         //------------------
         return tripPeriodsCurrentFilter;
+    }
+
+    //--------excel export-------------------
+    //---------------------------------------
+    @RequestMapping(value = "tripPeriodsExcelExportDashboard", method = RequestMethod.GET)
+    public String tripPeriodsExcelExportDashboard(ModelMap model) {
+        model.addAttribute("excelExportLink", "exportTripPeriods.htm");
+        return "excelExportDashboard";
+    }
+
+    @RequestMapping(value = "exportTripPeriods", method = RequestMethod.POST)
+    public String exportTripPeriods(String fileName, ModelMap model, HttpSession session) {
+        System.out.println(fileName);
+        TripPeriodsFilter tripPeriodsInitialFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsInitialFilter");
+        ArrayList<TripPeriod2X> initialTripPeriods = routeDao.getInitialTripPeriods(tripPeriodsInitialFilter);
+        //now write the results
+        ExcelWriter excelWriter = new ExcelWriter();
+        excelWriter.exportTripPeriods(initialTripPeriods, fileName);
+
+        model.addAttribute("excelExportLink", "exportTripPeriods.htm");
+        model.addAttribute("fileName", fileName);
+        return "excelExportDashboard";
     }
 }

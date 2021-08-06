@@ -8,9 +8,11 @@ package Controller;
 import Model.BasicRoute;
 import Model.Day;
 import Model.GuarantyRoute;
+import Model.TripPeriod2X;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
@@ -34,10 +36,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class ExcelWriter {
 
     private String basementDirectory;
+    private Converter converter;
 
     public ExcelWriter() {
         BasementController basementController = new BasementController();
         this.basementDirectory = basementController.getBasementDirectory();
+        this.converter = new Converter();
 
     }
 
@@ -371,7 +375,7 @@ public class ExcelWriter {
         XSSFCellStyle middleRowStyle = getRowStyle(workbook, 146, 208, 80, false, false, "");
         while (columnIndex < 21) {
             Cell cell = middleRow.createCell(columnIndex);
-            cell.setCellValue(columnIndex+1);
+            cell.setCellValue(columnIndex + 1);
             cell.setCellStyle(middleRowStyle);
             columnIndex++;
         }
@@ -606,5 +610,246 @@ public class ExcelWriter {
         XSSFDataFormat fmts = workbook.createDataFormat();
         style.setDataFormat(fmts.getFormat(format));
         return style;
+    }
+
+    void exportTripPeriods(ArrayList<TripPeriod2X> tripPeriods, String fileName) {
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("ბრუნების დროები");
+//setting date 1904 system (to show negative duration in excel workbook)
+        workbook.getCTWorkbook().getWorkbookPr().setDate1904(true);
+
+        int rowIndex = 0;
+        int columnIndex = 0;
+        int rowHeigth = 0;
+        int columnWidth = 0;
+
+        //column width
+        //  sheet.setDefaultColumnWidth(2);
+        while (columnIndex < 21) {
+            switch (columnIndex) {
+                case 0:
+                    columnWidth = 1000;
+                    break;
+                case 1:
+                    columnWidth = 3000;
+                    break;
+                case 2:
+                    columnWidth = 3300;
+                    break;
+                case 3:
+                    columnWidth = 1000;
+                    break;
+                case 4:
+                    columnWidth = 6500;
+                    break;
+                case 5:
+                    columnWidth = 2800;
+                    break;
+                case 6:
+                    columnWidth = 2800;
+                    break;
+                case 7:
+                    columnWidth = 2800;
+                    break;
+                case 8:
+                    columnWidth = 2800;
+                    break;
+                case 9:
+                    columnWidth = 2800;
+                    break;
+                case 10:
+                    columnWidth = 2800;
+                    break;
+                case 11:
+                    columnWidth = 2800;
+                    break;
+                case 12:
+                    columnWidth = 2800;
+                    break;
+
+            }
+            sheet.setColumnWidth(columnIndex, columnWidth);
+            columnIndex++;
+        }
+        //now headers
+        //first header row
+        Row headerRow1 = sheet.createRow(rowIndex);
+        rowHeigth = 80;
+        headerRow1.setHeightInPoints(rowHeigth);
+
+        XSSFCellStyle headerStyle = getHeaderStyle(workbook, 209, 112, 247, 0, false);
+        XSSFCellStyle headerStyleVertical = getHeaderStyle(workbook, 209, 112, 247, 90, false);
+
+        columnIndex = 0;
+        while (columnIndex < 13) {
+            Cell cell = headerRow1.createCell(columnIndex);
+            switch (columnIndex) {
+                case 0:
+                    cell.setCellValue("მარშრუტის #");
+                    cell.setCellStyle(headerStyleVertical);
+                    break;
+                case 1:
+                    cell.setCellValue("თარიღი");
+                    cell.setCellStyle(headerStyle);
+                    break;
+
+                case 2:
+                    cell.setCellValue("ავტობუსის #");
+                    cell.setCellStyle(headerStyle);
+                    break;
+                case 3:
+                    cell.setCellValue("გასვლი #");
+                    cell.setCellStyle(headerStyleVertical);
+                    break;
+
+                case 4:
+                    cell.setCellValue("მძღოლი");
+                    cell.setCellStyle(headerStyle);
+                    break;
+                case 5:
+                    cell.setCellValue("მიმართულება");
+                    cell.setCellStyle(headerStyle);
+                    break;
+                case 6:
+                    cell.setCellValue("გასვლის  გეგმიური  დრო");
+                    cell.setCellStyle(headerStyle);
+                    break;
+                case 7:
+                    cell.setCellValue("გასვლის ფაქტიური დრო");
+                    cell.setCellStyle(headerStyle);
+                    break;
+                case 8:
+                    cell.setCellValue("მისვლის გეგმიური დრო");
+                    cell.setCellStyle(headerStyle);
+                    break;
+                case 9:
+                    cell.setCellValue("მისვლის ფაქტიური დრო");
+                    cell.setCellStyle(headerStyle);
+                    break;
+                case 10:
+                    cell.setCellValue("წირის გეგმიური დრო");
+                    cell.setCellStyle(headerStyle);
+                    break;
+                case 11:
+                    cell.setCellValue("წირის ფაქტიური დრო");
+                    cell.setCellStyle(headerStyle);
+                    break;
+
+                case 12:
+                    cell.setCellValue("სხვაობა");
+                    cell.setCellStyle(headerStyle);
+                    break;
+
+            }
+
+            columnIndex++;
+        }
+
+        //  XSSFCellStyle rowStyleWhiteItalic = getRowStyle(workbook, 255, 255, 255, true, false, "");
+        XSSFCellStyle rowStyleWhiteRegular = getRowStyle(workbook, 255, 255, 255, false, false, "");
+        XSSFCellStyle rowStyleWhiteNumber = getRowStyle(workbook, 255, 255, 255, false, false, "0"); //"0" makes cell numeric type
+        XSSFCellStyle rowStyleWhiteTimeHHmm = getRowStyle(workbook, 255, 255, 255, false, false, "[hh]:mm");
+        XSSFCellStyle rowStyleWhiteTimeHHmmss = getRowStyle(workbook, 255, 255, 255, false, false, "[hh]:mm:ss");
+        XSSFCellStyle rowStyleYellowTimeHHmmss = getRowStyle(workbook, 255, 255, 0, false, false, "[hh]:mm:ss");
+        XSSFCellStyle rowStyleRedTimeHHmmss = getRowStyle(workbook, 255, 0, 0, false, false, "[hh]:mm:ss");
+
+        rowHeigth = 30;
+        for (TripPeriod2X tripPeriod : tripPeriods) {
+
+            Row row = sheet.createRow(++rowIndex);
+            row.setHeightInPoints(rowHeigth);
+
+            Cell cell_0 = row.createCell(0);
+            cell_0.setCellValue(this.converter.convertRouteNumber(tripPeriod.getRouteNumber()));
+            cell_0.setCellStyle(rowStyleWhiteRegular);
+
+            Cell cell_1 = row.createCell(1);
+            cell_1.setCellValue(tripPeriod.getDateStamp());
+            cell_1.setCellStyle(rowStyleWhiteRegular);
+
+            Cell cell_2 = row.createCell(2);
+            cell_2.setCellValue(tripPeriod.getBusNumber());
+            cell_2.setCellStyle(rowStyleWhiteRegular);
+
+            Cell cell_3 = row.createCell(3);
+            cell_3.setCellValue((short) tripPeriod.getExodusNumber());
+            cell_3.setCellStyle(rowStyleWhiteNumber);
+
+            Cell cell_4 = row.createCell(4);
+            cell_4.setCellValue(tripPeriod.getDriverName());
+            cell_4.setCellStyle(rowStyleWhiteRegular);
+
+            Cell cell_5 = row.createCell(5);
+            cell_5.setCellValue(tripPeriod.getTypeG());
+            cell_5.setCellStyle(rowStyleWhiteRegular);
+
+            Cell cell_6 = row.createCell(6);
+            cell_6.setCellValue(tripPeriod.getStartTimeScheduledExcelFormat());
+            cell_6.setCellStyle(rowStyleWhiteTimeHHmm);
+
+            Cell cell_7 = row.createCell(7);
+            if (tripPeriod.getStartTimeActualExcelFormat() == null) {
+                cell_7.setCellValue("");
+            } else {
+                cell_7.setCellValue(tripPeriod.getStartTimeActualExcelFormat());
+            }
+            cell_7.setCellStyle(rowStyleWhiteTimeHHmm);
+
+            Cell cell_8 = row.createCell(8);
+            cell_8.setCellValue(tripPeriod.getArrivaltTimeScheduledExcelFormat());
+            cell_8.setCellStyle(rowStyleWhiteTimeHHmm);
+
+            Cell cell_9 = row.createCell(9);
+            if (tripPeriod.getArrivalTimeActualExcelFormat() == null) {
+                cell_9.setCellValue("");
+            } else {
+                cell_9.setCellValue(tripPeriod.getArrivalTimeActualExcelFormat());
+            }
+            cell_9.setCellStyle(rowStyleWhiteTimeHHmm);
+
+            Duration tripPeriodTimeScheduled = tripPeriod.getTripPeriodTimeScheduled();
+            Cell cell_10 = row.createCell(10);
+            if (tripPeriodTimeScheduled == null) {
+                cell_10.setCellValue("");
+            } else {
+                long tripPeriodSeconds = tripPeriodTimeScheduled.getSeconds();
+                cell_10.setCellValue(tripPeriodSeconds * 0.1 / 8640);
+            }
+            cell_10.setCellStyle(rowStyleWhiteTimeHHmmss);
+
+            Duration tripPeriodTimeActiual = tripPeriod.getTripPeriodTimeActual();
+            Cell cell_11 = row.createCell(11);
+            if (tripPeriodTimeActiual == null) {
+                cell_11.setCellValue("");
+            } else {
+                long tripPeriodSeconds = tripPeriodTimeActiual.getSeconds();
+                cell_11.setCellValue(tripPeriodSeconds * 0.1 / 8640);
+            }
+            cell_11.setCellStyle(rowStyleWhiteTimeHHmmss);
+
+            Duration tripPeriodTimeDifference = tripPeriod.getTripPeriodTimeDifference();
+            Cell cell_12 = row.createCell(12);
+            if (tripPeriodTimeDifference == null) {
+                cell_12.setCellValue("");
+            } else {
+                long tripPeriodSeconds = tripPeriodTimeDifference.getSeconds();
+                cell_12.setCellValue(tripPeriodSeconds * 0.1 / 8640);
+            }
+            String tripPeriodTimeDifferenceColor = tripPeriod.getTripPeriodTimeDifferenceColor();
+            cell_12.setCellStyle(rowStyleWhiteTimeHHmmss);
+            if (tripPeriodTimeDifferenceColor.equals("yellow")) {
+                cell_12.setCellStyle(rowStyleYellowTimeHHmmss);
+            }
+            if (tripPeriodTimeDifferenceColor.equals("red")) {
+                cell_12.setCellStyle(rowStyleRedTimeHHmmss);
+            }
+
+        }
+
+        try (FileOutputStream outputStream = new FileOutputStream(this.basementDirectory + "/downloads/" + fileName + ".xlsx")) {
+            workbook.write(outputStream);
+        } catch (IOException ex) {
+            Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

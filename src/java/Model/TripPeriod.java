@@ -129,6 +129,10 @@ public class TripPeriod {
         return startTimeActual.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
+    public Duration getTripPeriodTimeScheduled() {
+        return Duration.between(startTimeScheduled, arrivalTimeScheduled);
+    }
+
     public String getTripPeriodTimeScheduledString() {
 
         return converter.convertDurationToString(Duration.between(startTimeScheduled, arrivalTimeScheduled));
@@ -142,6 +146,14 @@ public class TripPeriod {
         return converter.convertDurationToString(Duration.between(startTimeActual, arrivalTimeActual));
     }
 
+    public Duration getTripPeriodTimeActual() {
+        if (startTimeActual == null || arrivalTimeActual == null) {
+            return null;
+        }
+
+        return Duration.between(startTimeActual, arrivalTimeActual);
+    }
+
     public String getTripPeriodTimeDifferenceString() {
         if (startTimeActual == null || arrivalTimeActual == null) {
             return "";
@@ -150,6 +162,15 @@ public class TripPeriod {
         Duration difference = Duration.between(startTimeScheduled, arrivalTimeScheduled).minus(Duration.between(startTimeActual, arrivalTimeActual));
 
         return converter.convertDurationToString(difference);
+    }
+
+    public Duration getTripPeriodTimeDifference() {
+        if (startTimeActual == null || arrivalTimeActual == null) {
+            return null;
+        }
+
+        return Duration.between(startTimeScheduled, arrivalTimeScheduled).minus(Duration.between(startTimeActual, arrivalTimeActual));
+
     }
 
     public String getTripPeriodTimeDifferenceColor() {

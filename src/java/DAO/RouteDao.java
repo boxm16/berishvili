@@ -717,4 +717,46 @@ public class RouteDao {
 
         return filteredTripPeriodsFilter;
     }
+
+    public ArrayList<TripPeriod2X> getTripPeriods(TripPeriodsFilter tripPeriodsFilter) {
+        ArrayList<TripPeriod2X> tripPeriods = new ArrayList<>();
+        StringBuilder query = new StringBuilder();
+        StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT route_number, date_stamp,  bus_number, exodus_number, driver_name, type, start_time_scheduled, start_time_actual, arrival_time_scheduled, arrival_time_actual FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number IN ");
+        StringBuilder queryBuilderRouteNumberPart = buildStringFromTreeMap(tripPeriodsFilter.getRouteNumbers());
+        StringBuilder queryBuilderDateStampPart = buildStringFromTreeMap(tripPeriodsFilter.getDateStamps());
+
+        query = queryBuilderInitialPart.append(queryBuilderRouteNumberPart).
+                append(" AND date_stamp IN ").append(queryBuilderDateStampPart).
+                append(" ORDER BY prefix, suffix, date_stamp, exodus_number, start_time_scheduled ;");
+        try {
+            connection = dataBaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query.toString());
+
+            while (resultSet.next()) {
+                TripPeriod2X tripPeriod = new TripPeriod2X();
+                tripPeriod.setRouteNumber(resultSet.getString("route_number"));
+                tripPeriod.setDateStamp(resultSet.getString("date_stamp"));
+                tripPeriod.setBusNumber(resultSet.getString("bus_number"));
+                tripPeriod.setExodusNumber(resultSet.getShort("exodus_number"));
+                tripPeriod.setDriverName(resultSet.getString("driver_name"));
+                tripPeriod.setType(resultSet.getString("type"));
+                tripPeriod.setStartTimeScheduled(converter.convertStringTimeToDate(resultSet.getString("start_time_scheduled")));
+                tripPeriod.setStartTimeActual(converter.convertStringTimeToDate(resultSet.getString("start_time_actual")));
+                tripPeriod.setArrivalTimeScheduled(converter.convertStringTimeToDate(resultSet.getString("arrival_time_scheduled")));
+                tripPeriod.setArrivalTimeActual(converter.convertStringTimeToDate(resultSet.getString("arrival_time_actual")));
+
+                tripPeriods.add(tripPeriod);
+
+            }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(RouteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return tripPeriods;
+    }
 }

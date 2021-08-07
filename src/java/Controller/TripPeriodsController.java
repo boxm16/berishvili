@@ -334,7 +334,7 @@ public class TripPeriodsController {
     public String exportTripPeriods(String fileName, ModelMap model, HttpSession session) {
         System.out.println(fileName);
         TripPeriodsFilter tripPeriodsInitialFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsInitialFilter");
-        ArrayList<TripPeriod2X> initialTripPeriods = routeDao.getInitialTripPeriods(tripPeriodsInitialFilter);
+        ArrayList<TripPeriod2X> initialTripPeriods = routeDao.getTripPeriods(tripPeriodsInitialFilter);
         //now write the results
         ExcelWriter excelWriter = new ExcelWriter();
         excelWriter.exportTripPeriods(initialTripPeriods, fileName);

@@ -246,10 +246,29 @@
             }
 
             /* -----------------
-            number inside circle css
+           pagination
             
             --------------------*/
+            .pagination {
+                display: inline-block;
+            }
 
+            .pagination a {
+                color: black;
+                float: left;
+                padding: 8px 16px;
+                text-decoration: none;
+                transition: background-color .3s;
+                border: 1px solid #ddd;
+            }
+
+            .pagination a.active {
+                background-color: #4CAF50;
+                color: white;
+                border: 1px solid #4CAF50;
+            }
+
+            .pagination a:hover:not(.active) {background-color: #ddd;}
 
 
         </style>
@@ -262,6 +281,15 @@
                 <div class="sidebar-header">
                     <center><h5>ფუნქციები</h5></center>
                 </div>
+                <ul class="list-unstyled components">
+
+                    <li>
+                        <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> 
+
+                    </li>
+
+                </ul>
+
                 <ul class="list-unstyled components">
 
                     <li>
@@ -302,18 +330,9 @@
                         &nbsp  &nbsp  &nbsp
 
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="nav navbar-nav ml-auto">
-                                <li class="nav-item">
-                                    ${previousBlock}   
-                                </li>
-                                <li class="nav-item">
-                                    ${currentBlock}
-                                </li>
-                                <li class="nav-item">
-                                    ${nextBlock}
-                                </li>
-
-                            </ul>
+                            <center>
+                                ${tripPeriodsPager.display}
+                            </center>
                         </div>
                     </div>
                 </nav>
@@ -358,15 +377,9 @@
                 </table>
                 <hr>
                 <center>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td> ${previousBlock}</td>
-                                <td> ${currentBlock}</td>
-                                <td> ${nextBlock}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                    ${tripPeriodsPager.display}
+
                 </center>
                 <hr>
 

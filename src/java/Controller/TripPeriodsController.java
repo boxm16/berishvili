@@ -3,6 +3,7 @@ package Controller;
 import DAO.RouteDao;
 import Model.TripPeriod2X;
 import Model.TripPeriodsFilter;
+import Model.TripPeriodsPager;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -25,15 +26,36 @@ public class TripPeriodsController {
 
         TripPeriodsFilter tripPeriodsInitialFilter = convertSelectedRoutesToTripPeriodFilter(routeDates);
         session.setAttribute("tripPeriodsInitialFilter", tripPeriodsInitialFilter);
-        ArrayList<TripPeriod2X> initialTripPeriods = routeDao.getInitialTripPeriods(tripPeriodsInitialFilter);
-        model.addAttribute("tripPeriods", initialTripPeriods);
 
+        ArrayList<TripPeriod2X> initialTripPeriods = routeDao.getInitialTripPeriods(tripPeriodsInitialFilter);
+
+        int rowLimit = 200;
+        TripPeriodsPager tripPeriodsPager = routeDao.getTripPeriodsPager(tripPeriodsInitialFilter, rowLimit);
+        tripPeriodsPager.setCurrentPage(1);
+        model.addAttribute("tripPeriods", initialTripPeriods);
+        model.addAttribute("tripPeriodsPager", tripPeriodsPager);
+        session.setAttribute("tripPeriodsPager", tripPeriodsPager);
         /*
         TripPeriodsFilter tripPeriodsFullInitialFilter = routeDao.getTripPeriodsFullInitialFilter(tripPeriodsInitialFilter);
         session.setAttribute("tripPeriodsFullInitialFilter", tripPeriodsFullInitialFilter);
         TripPeriodsFilter tripPeriodsCurrentFilter = tripPeriodsFullInitialFilter.getDeepCopy();
         session.setAttribute("tripPeriodsCurrentFilter", tripPeriodsCurrentFilter);
          */
+        return "tripPeriods";
+    }
+
+    @RequestMapping(value = "tripPeriodsRequest")
+    private String tripPeriodsRequest(@RequestParam(value = "requestedPage") String requestedPage, HttpSession session, ModelMap model) {
+        TripPeriodsPager tripPeriodsPager = (TripPeriodsPager) session.getAttribute("tripPeriodsPager");
+        int requestedPageNumber;
+        try {
+            requestedPageNumber = Integer.valueOf(requestedPage);
+        } catch (NumberFormatException nfe) {
+            return "errorPage";
+        }
+        tripPeriodsPager.setCurrentPage(requestedPageNumber);
+        model.addAttribute("tripPeriodsPager", tripPeriodsPager);
+        session.setAttribute("tripPeriodsPager", tripPeriodsPager);
         return "tripPeriods";
     }
 

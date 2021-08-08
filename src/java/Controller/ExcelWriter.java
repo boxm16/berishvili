@@ -12,6 +12,7 @@ import Model.TripPeriod2X;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
@@ -613,6 +614,8 @@ public class ExcelWriter {
     }
 
     void exportTripPeriods(ArrayList<TripPeriod2X> tripPeriods, String fileName) {
+
+        Instant start = Instant.now();
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("ბრუნების დროები");
 //setting date 1904 system (to show negative duration in excel workbook)
@@ -851,5 +854,8 @@ public class ExcelWriter {
         } catch (IOException ex) {
             Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
+        Instant end = Instant.now();
+        System.out.println("Trip Periods Excel Export completed. Time needed:" + Duration.between(start, end));
+
     }
 }

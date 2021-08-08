@@ -284,7 +284,7 @@
                 <ul class="list-unstyled components">
                     <c:forEach var="routeNumberEntry" items="${tripPeriodsPager.routeNumbers}" varStatus="loop">
                         <li >
-                            <a href="tripPeriods.htm?blockIndex=${routeNumberEntry.value}">${routeNumberEntry.key}</a>
+                            <a href="tripPeriodsRequest.htm?requestedPage=${routeNumberEntry.value}">${routeNumberEntry.key}</a>
                         </li>
                     </c:forEach>
                 </ul>

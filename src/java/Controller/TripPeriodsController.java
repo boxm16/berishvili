@@ -35,6 +35,8 @@ public class TripPeriodsController {
         model.addAttribute("tripPeriods", initialTripPeriods);
         model.addAttribute("tripPeriodsPager", tripPeriodsPager);
         session.setAttribute("tripPeriodsPager", tripPeriodsPager);
+        session.setAttribute("tripPeriodsInitialFilter", tripPeriodsInitialFilter);
+        session.setAttribute("rowLimit", rowLimit);
         /*
         TripPeriodsFilter tripPeriodsFullInitialFilter = routeDao.getTripPeriodsFullInitialFilter(tripPeriodsInitialFilter);
         session.setAttribute("tripPeriodsFullInitialFilter", tripPeriodsFullInitialFilter);
@@ -48,14 +50,24 @@ public class TripPeriodsController {
     private String tripPeriodsRequest(@RequestParam(value = "requestedPage") String requestedPage, HttpSession session, ModelMap model) {
         TripPeriodsPager tripPeriodsPager = (TripPeriodsPager) session.getAttribute("tripPeriodsPager");
         int requestedPageNumber;
+
+        int rowLimit = (int) session.getAttribute("rowLimit");
+
         try {
             requestedPageNumber = Integer.valueOf(requestedPage);
+
         } catch (NumberFormatException nfe) {
             return "errorPage";
         }
         tripPeriodsPager.setCurrentPage(requestedPageNumber);
+
         model.addAttribute("tripPeriodsPager", tripPeriodsPager);
         session.setAttribute("tripPeriodsPager", tripPeriodsPager);
+        int startIndex = (requestedPageNumber - 1) * rowLimit;
+
+        TripPeriodsFilter tripPeriodsFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsInitialFilter");
+        ArrayList<TripPeriod2X> tripPeriods = routeDao.getTripPeriods(tripPeriodsFilter, startIndex, rowLimit);
+        model.addAttribute("tripPeriods", tripPeriods);
         return "tripPeriods";
     }
 
@@ -206,12 +218,6 @@ public class TripPeriodsController {
     }
 
 //-----------------//---------------------//---------------
-    @RequestMapping(value = "tripPeriods")
-    public String tripPeriods(ModelMap model, HttpSession session, @RequestParam String blockIndex) {
-
-        return "tripPeriods";
-    }
-
     @RequestMapping(value = "tripPeriodsFilterRequest")
     public String tripPeriodsFilterRequest(ModelMap model, HttpSession session) {
         System.out.println("tripPeriodsFilterRequest");

@@ -310,12 +310,14 @@
                             <center>
                                 ${tripPeriodsPager.display}
                             </center>
+                             &nbsp  &nbsp  &nbsp 
                             <button type="button" class="btn btn-outline-success">
-                                <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
+                                 <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
                             </button>
                         </div>
                     </div>
                 </nav>
+             
                 <table>
                     <thead>
                         <tr>

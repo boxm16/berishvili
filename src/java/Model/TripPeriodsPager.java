@@ -12,7 +12,13 @@ public class TripPeriodsPager {
 
     public TripPeriodsPager(LinkedHashMap<String, Integer> routeNumbers, int rowCount, int rowLimit) {
         this.routeNumbers = routeNumbers;
-        lastPageNumber = rowCount / rowLimit;
+        if (rowCount % rowLimit == 0) {
+            lastPageNumber = rowCount / rowLimit;
+        } else {
+            lastPageNumber = (rowCount / rowLimit) + 1;
+        }
+
+         System.out.println("Last Page Number" + lastPageNumber);
         this.rowLimit = rowLimit;
         display = initialDispaly;
     }
@@ -42,10 +48,10 @@ public class TripPeriodsPager {
         }
 
         StringBuilder currentPageHTML = new StringBuilder("<a class=\"active\">").append(currentPageNumber).append("</a>");
-        if (nextPageNumber < lastPageNumber) {
+        if (nextPageNumber <=lastPageNumber) {
             nextPageHTML = nextPageHTML.append("<a href=\"tripPeriodsRequest.htm?requestedPage=").append(nextPageNumber).append("\">").append(nextPageNumber).append("</a>");
         }
-        if (nextNextPageNumber < lastPageNumber) {
+        if (nextNextPageNumber <= lastPageNumber) {
             nextNextPageHTML.append("<a href=\"tripPeriodsRequest.htm?requestedPage=").append(nextNextPageNumber).append("\">").append(nextNextPageNumber).append("</a>");
         }
 

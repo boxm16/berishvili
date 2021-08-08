@@ -1,18 +1,16 @@
 package Model;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class TripPeriodsPager {
 
     private String display;
     private String initialDispaly;
     private int lastPageNumber;
+    private LinkedHashMap<String, Integer> routeNumbers;
 
-    public TripPeriodsPager(int rowCount, int rowLimit) {
-
-    }
-
-    public TripPeriodsPager(HashMap<String, Integer> pagerRouteNumbers, int rowCount, int rowLimit) {
+    public TripPeriodsPager(LinkedHashMap<String, Integer> routeNumbers, int rowCount, int rowLimit) {
+        this.routeNumbers = routeNumbers;
         lastPageNumber = rowCount / rowLimit;
         initialDispaly = "<div class=\"pagination\">\n"
                 + "  <a href=\"#\" class=\"active\">1</a>\n"
@@ -106,8 +104,15 @@ public class TripPeriodsPager {
         } else {
             if (currentPageNumber == lastPageNumber - 2) {
             }
-
         }
+    }
+
+    public LinkedHashMap<String, Integer> getRouteNumbers() {
+        return routeNumbers;
+    }
+
+    public void setRouteNumbers(LinkedHashMap<String, Integer> routeNumbers) {
+        this.routeNumbers = routeNumbers;
     }
 
 }

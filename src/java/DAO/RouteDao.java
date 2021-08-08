@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
@@ -791,7 +791,7 @@ public class RouteDao {
     }
 
     public TripPeriodsPager getTripPeriodsPager(TripPeriodsFilter tripPeriodsFilter, int rowLimit) {
-        HashMap<String, Integer> pagerRouteNumbers = new HashMap<>();
+        LinkedHashMap<String, Integer> pagerRouteNumbers = new LinkedHashMap<>();
 
         StringBuilder query = new StringBuilder();
         StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT route_number FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number IN ");
@@ -800,7 +800,7 @@ public class RouteDao {
 
         query = queryBuilderInitialPart.append(queryBuilderRouteNumberPart).
                 append(" AND date_stamp IN ").append(queryBuilderDateStampPart).
-                append(" ORDER BY prefix, suffix, date_stamp, exodus_number, start_time_scheduled ;");
+                append(" ORDER BY prefix, suffix    ;");
         int index = 0;
         try {
             connection = dataBaseConnection.getConnection();
@@ -809,7 +809,12 @@ public class RouteDao {
 
             while (resultSet.next()) {
                 index++;
-                pagerRouteNumbers.put(resultSet.getString("route_number"), index);
+
+                if (pagerRouteNumbers.containsKey(resultSet.getString("route_number"))) {
+                //do nothing
+                } else {
+                    pagerRouteNumbers.put(resultSet.getString("route_number"), index);
+                }
             }
 
             resultSet.close();

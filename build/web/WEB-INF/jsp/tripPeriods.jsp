@@ -282,24 +282,21 @@
                     <center><h5>ფუნქციები</h5></center>
                 </div>
                 <ul class="list-unstyled components">
-
                     <li>
                         <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> 
-
+                    </li>
+                    <li>
+                        <a href="#routeNumbersSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Marshrutebi</a>
+                        <ul class="collapse list-unstyled" id="routeNumbersSubmenu">
+                            <c:forEach var="routeNumberEntry" items="${tripPeriodsPager.routeNumbers}" varStatus="loop">
+                                <li >
+                                    <a href="tripPeriods.htm?blockIndex=${routeNumberEntry.value}">${routeNumberEntry.key}</a>
+                                </li>
+                            </c:forEach>
+                        </ul>
                     </li>
 
                 </ul>
-
-                <ul class="list-unstyled components">
-
-                    <li>
-                        <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> 
-
-                    </li>
-
-                </ul>
-
-
             </nav>
 
             <!-- Page Content  -->

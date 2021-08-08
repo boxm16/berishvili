@@ -12,15 +12,20 @@ public class TripPeriodsPager {
     public TripPeriodsPager(LinkedHashMap<String, Integer> routeNumbers, int rowCount, int rowLimit) {
         this.routeNumbers = routeNumbers;
         lastPageNumber = rowCount / rowLimit;
-        initialDispaly = "<div class=\"pagination\">\n"
-                + "  <a href=\"#\" class=\"active\">1</a>\n"
-                + "  <a href=\"tripPeriodsRequest.htm?requestedPage=2\" >2</a>\n"
-                + "  <a href=\"tripPeriodsRequest.htm?requestedPage=3\">3</a>\n"
-                + "  <a href=\"tripPeriodsRequest.htm?requestedPage=4\">4</a>\n"
-                + "  <a href=\"tripPeriodsRequest.htm?requestedPage=5\">5</a>\n"
-                + "  <a href=\"tripPeriodsRequest.htm?requestedPage=2\">&raquo;</a>\n"
-                + "  <a href=\"tripPeriodsRequest.htm?requestedPage=" + lastPageNumber + "\">" + lastPageNumber + "</a>\n"
-                + "</div>";
+        if (lastPageNumber < 5) {
+            initialDispaly = "<div class=\"pagination\">\n"
+                    + "  <a href=\"#\" class=\"active\">1</a>\n"
+                    + "  <a href=\"tripPeriodsRequest.htm?requestedPage=2\" >+1</a>\n"
+                    + "</div>";
+        }
+        if (lastPageNumber > 5) {
+            initialDispaly = "<div class=\"pagination\">\n"
+                    + "  <a href=\"#\" class=\"active\">1</a>\n"
+                    + "  <a href=\"tripPeriodsRequest.htm?requestedPage=2\" >+1</a>\n"
+                    + "  <a href=\"tripPeriodsRequest.htm?requestedPage=6\">+5</a>\n"
+                    + "</div>";
+        }
+
         display = initialDispaly;
     }
 
@@ -33,78 +38,32 @@ public class TripPeriodsPager {
     }
 
     public void setCurrentPage(int currentPageNumber) {
-        if (currentPageNumber == 1) {
-            display = initialDispaly;
-            return;
+        int prePreviosPageNumber = currentPageNumber - 5;
+        int previosPageNumber = currentPageNumber - 1;
+        int nextPageNumber = currentPageNumber + 1;
+        int nextNextPageNumber = currentPageNumber + 5;
+        StringBuilder prePreviousPageHTML = new StringBuilder();
+        StringBuilder previousPageHTML = new StringBuilder();
+        if (prePreviosPageNumber > 0) {
+            prePreviousPageHTML = prePreviousPageHTML.append("<a href=\"tripPeriodsRequest.htm?requestedPage=").append(prePreviosPageNumber).append("\">").append(prePreviosPageNumber).append("</a>");
         }
-        if (currentPageNumber == 2) {
-            display = "<div class=\"pagination\">\n"
-                    + "  <a href=\"tripPeriodsRequest.htm?requestedPage=1\">&laquo;</a>\n"
-                    + "  <a href=\"tripPeriodsRequest.htm?requestedPage=1\" >1</a>\n"
-                    + "  <a href=\"#\" class=\"active\">2</a>\n"
-                    + "  <a href=\"tripPeriodsRequest.htm?requestedPage=3\">3</a>\n"
-                    + "  <a href=\"tripPeriodsRequest.htm?requestedPage=4\">4</a>\n"
-                    + "  <a href=\"tripPeriodsRequest.htm?requestedPage=5\">5</a>\n"
-                    + "  <a href=\"tripPeriodsRequest.htm?requestedPage=2\">&raquo;</a>\n"
-                    + "  <a href=\"tripPeriodsRequest.htm?requestedPage=" + lastPageNumber + "\">" + lastPageNumber + "</a>\n"
-                    + "  <a href=\"#\">&#10704;</a>\n"
-                    + "</div>";
-            return;
+        if (previosPageNumber > 0) {
+            previousPageHTML = previousPageHTML.append("<a href=\"tripPeriodsRequest.htm?requestedPage=").append(previosPageNumber).append("\">").append(previosPageNumber).append("</a>");
         }
-        if (currentPageNumber < lastPageNumber - 2) {
-            int previosPageNumber = currentPageNumber - 1;
-            int prePreviosPageNumber = currentPageNumber - 2;
-            int nextPageNumber = currentPageNumber + 1;
-            int nextNextPageNumber = currentPageNumber + 2;
+        StringBuilder currentPageHTML = new StringBuilder("<a class=\"active\">").append(currentPageNumber).append("</a>");
+        StringBuilder nextPageHTML = new StringBuilder("<a href=\"tripPeriodsRequest.htm?requestedPage=").append(nextPageNumber).append("\">").append(nextPageNumber).append("</a>");
+        StringBuilder nextNextPageHTML = new StringBuilder("<a href=\"tripPeriodsRequest.htm?requestedPage=").append(nextNextPageNumber).append("\">").append(nextNextPageNumber).append("</a>");
 
-            StringBuilder stringBuilder = new StringBuilder("<div class=\"pagination\">");
-            stringBuilder = stringBuilder.append("<a href=\"tripPeriodsRequest.htm?requestedPage=1\">1</a>");
-            stringBuilder = stringBuilder.append("<a href=\"tripPeriodsRequest.htm?requestedPage=");
-            stringBuilder = stringBuilder.append(String.valueOf(previosPageNumber));
-            stringBuilder = stringBuilder.append("\">&laquo;</a>");
+        StringBuilder stringBuilder = new StringBuilder("<div class=\"pagination\">");
+        stringBuilder = stringBuilder.append(prePreviousPageHTML);
+        stringBuilder = stringBuilder.append(previousPageHTML);
+        stringBuilder = stringBuilder.append(currentPageHTML);
+        stringBuilder = stringBuilder.append(nextPageHTML);
+        stringBuilder = stringBuilder.append(nextNextPageHTML);
+        stringBuilder = stringBuilder.append("</div>");
 
-            stringBuilder = stringBuilder.append("<a href=\"tripPeriodsRequest.htm?requestedPage=");
-            stringBuilder = stringBuilder.append(String.valueOf(prePreviosPageNumber));
-            stringBuilder = stringBuilder.append("\">");
-            stringBuilder = stringBuilder.append(String.valueOf(prePreviosPageNumber));
-            stringBuilder = stringBuilder.append("</a>");
+        display = stringBuilder.toString();
 
-            stringBuilder = stringBuilder.append("<a href=\"tripPeriodsRequest.htm?requestedPage=");
-            stringBuilder = stringBuilder.append(String.valueOf(previosPageNumber));
-            stringBuilder = stringBuilder.append("\">");
-            stringBuilder = stringBuilder.append(String.valueOf(previosPageNumber));
-            stringBuilder = stringBuilder.append("</a>");
-
-            stringBuilder = stringBuilder.append("<a href=\"tripPeriodsRequest.htm?requestedPage=");
-            stringBuilder = stringBuilder.append(String.valueOf(currentPageNumber));
-            stringBuilder = stringBuilder.append("\" class=\"active\">");
-            stringBuilder = stringBuilder.append(String.valueOf(currentPageNumber));
-            stringBuilder = stringBuilder.append("</a>");
-
-            stringBuilder = stringBuilder.append("<a href=\"tripPeriodsRequest.htm?requestedPage=");
-            stringBuilder = stringBuilder.append(String.valueOf(nextPageNumber));
-            stringBuilder = stringBuilder.append("\">");
-            stringBuilder = stringBuilder.append(String.valueOf(nextPageNumber));
-            stringBuilder = stringBuilder.append("</a>");
-
-            stringBuilder = stringBuilder.append("<a href=\"tripPeriodsRequest.htm?requestedPage=");
-            stringBuilder = stringBuilder.append(String.valueOf(nextNextPageNumber));
-            stringBuilder = stringBuilder.append("\">");
-            stringBuilder = stringBuilder.append(String.valueOf(nextNextPageNumber));
-            stringBuilder = stringBuilder.append("</a>");
-
-            stringBuilder = stringBuilder.append("<a href=\"tripPeriodsRequest.htm?requestedPage=");
-            stringBuilder = stringBuilder.append(String.valueOf(nextPageNumber));
-            stringBuilder = stringBuilder.append("\">&raquo;</a>\n");
-
-            stringBuilder = stringBuilder.append("<a href=\"tripPeriodsRequest.htm?requestedPage=").append(lastPageNumber).append("\">").append(lastPageNumber).append("</a>\n");
-
-            display = stringBuilder.toString();
-
-        } else {
-            if (currentPageNumber == lastPageNumber - 2) {
-            }
-        }
     }
 
     public LinkedHashMap<String, Integer> getRouteNumbers() {

@@ -307,17 +307,23 @@
                         &nbsp  &nbsp  &nbsp
 
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            &nbsp  &nbsp  
+                            <button type="button" class="btn btn-outline-success">
+                                <span> <a href="tripPeriodsCalculations.htm">გამოთვლები</a> </span>
+                            </button>
+                            &nbsp &nbsp &nbsp 
                             <center>
                                 ${tripPeriodsPager.display}
                             </center>
-                             &nbsp  &nbsp  &nbsp 
+
+                            &nbsp  &nbsp  &nbsp 
                             <button type="button" class="btn btn-outline-success">
-                                 <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
+                                <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
                             </button>
                         </div>
                     </div>
                 </nav>
-             
+
                 <table>
                     <thead>
                         <tr>

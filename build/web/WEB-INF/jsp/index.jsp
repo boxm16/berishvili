@@ -234,7 +234,18 @@
 
                 <ul class="list-unstyled components">
                     <li>
-                        <a href="#" onclick="requestRouter('tripPeriodsInitialRequest.htm')">ბრუნების დროები</a>
+                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">ბრუნების დროები</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                            <li>
+                                <a href="#" onclick="requestRouter('tripPeriodsInitialRequest.htm')">დათვალიერება</a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="requestRouter('tripPeriodsCalculationsInitialRequest.htm')">გამოთვლები</a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="requestRouter('tripPeriodsExcelExportDashboardInitialRequest.htm')">ექსელში ექსპორტი</a>
+                            </li>
+                        </ul>
                     </li>
                     <li>
                         <a href="#guarantySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">საგარანტიოები</a>
@@ -251,20 +262,6 @@
                         </ul>
                     </li>
 
-                    <li>
-                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-                        <ul class="collapse list-unstyled" id="pageSubmenu">
-                            <li>
-                                <a href="#"></a>
-                            </li>
-                            <li>
-                                <a href="#">Page 2</a>
-                            </li>
-                            <li>
-                                <a href="#">Page 3</a>
-                            </li>
-                        </ul>
-                    </li>
                     <li>
                         <a href="routes.htm">მარშრუტები</a>
                     </li>
@@ -321,12 +318,6 @@
 
                         <a class="btn btn-primary" href="upload.htm" style="font-size: 20px">ახალი ფაილის ატვირთვა</a>
 
-                        <!--
-                                                <button type="button" id="sidebarCollapse" class="btn btn-info">
-                                                    <i class="fas fa-align-left"></i>
-                                                    <span><></span>
-                                                </button>
-                        -->
 
                         <div style="margin-left: 5%;"> 
                             <table>
@@ -346,7 +337,7 @@
                             </table>
                         </div>
 
-
+                        <!-- this part is juts to keep space -->
                         <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <i class="fas fa-align-justify"></i>
                         </button>
@@ -354,16 +345,17 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="nav navbar-nav ml-auto">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="index.htm">Go index DataBase Edition</a>
+                                    <a class="nav-link"></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="indexFromExcelFile.htm">Go index Excel File Edition</a>
+                                    <a class="nav-link"></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Page</a>
+                                    <a class="nav-link" ></a>
                                 </li>
                             </ul>
                         </div>
+                        <!-- end of the  part that  is just to keep space -->
                     </div>
                 </nav>
                 <div style="margin-left: 20%;">

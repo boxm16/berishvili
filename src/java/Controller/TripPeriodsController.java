@@ -1,6 +1,7 @@
 package Controller;
 
 import DAO.RouteDao;
+import Model.RouteAverages;
 import Model.TripPeriod2X;
 import Model.TripPeriodsFilter;
 import Model.TripPeriodsPager;
@@ -370,5 +371,42 @@ public class TripPeriodsController {
         model.addAttribute("excelExportLink", "exportTripPeriods.htm");
         model.addAttribute("fileName", fileName);
         return "excelExportDashboard";
+    }
+    //-----------------Calculations -----------------
+
+    @RequestMapping(value = "tripPeriodsCalculationsInitialRequest", method = RequestMethod.POST)
+    public String tripPeriodsCalculationsInitialRequest(@RequestParam("routes:dates") String routeDates, HttpSession session) {
+        TripPeriodsFilter tripPeriodsInitialFilter = convertSelectedRoutesToTripPeriodFilter(routeDates);
+        session.setAttribute("tripPeriodsInitialFilter", tripPeriodsInitialFilter);
+        int rowLimit = 200;
+        TripPeriodsPager tripPeriodsPager = routeDao.getTripPeriodsPager(tripPeriodsInitialFilter, rowLimit);
+        session.setAttribute("tripPeriodsPager", tripPeriodsPager);
+        session.setAttribute("rowLimit", rowLimit);
+        return "tripPeriodsCalculations";
+    }
+
+    @RequestMapping(value = "tripPeriodsCalculations")
+    public String tripPeriodsCalculations() {
+        return "tripPeriodsCalculations";
+    }
+
+    @RequestMapping(value = "tripPeriodsCalculatePercentage", method = RequestMethod.POST)
+    public String tripPeriodsCalculatePercentage(@RequestParam("percents") String percents, HttpSession session, ModelMap model) {
+        TripPeriodsFilter tripPeriodsInitialFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsInitialFilter");
+        int percentsInteger = Integer.valueOf(percents);
+        TreeMap<Float, RouteAverages> routesAveragesTreeMap = routeDao.getTripPeriodsAB_BA(tripPeriodsInitialFilter, percentsInteger);
+        for (Map.Entry<Float, RouteAverages> entry : routesAveragesTreeMap.entrySet()) {
+            //     System.out.println(entry.getValue().getRouteNumber());
+        }
+        model.addAttribute("routesAverages", routesAveragesTreeMap);
+        return "tripPeriodsCalculations";
+    }
+
+    @RequestMapping(value = "tripPeriodsExcelExportDashboardInitialRequest", method = RequestMethod.POST)
+    public String tripPeriodsExcelExportDashboardInitialRequest(@RequestParam("routes:dates") String routeDates, HttpSession session) {
+        TripPeriodsFilter tripPeriodsInitialFilter = convertSelectedRoutesToTripPeriodFilter(routeDates);
+        session.setAttribute("tripPeriodsInitialFilter", tripPeriodsInitialFilter);
+
+        return "redirect:/tripPeriodsExcelExportDashboard.htm";
     }
 }

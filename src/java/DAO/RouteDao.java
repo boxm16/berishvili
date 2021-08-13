@@ -4,6 +4,7 @@ import Controller.Converter;
 import Model.BasicRoute;
 import Model.Day;
 import Model.Exodus;
+import Model.RouteAverages;
 import Model.RouteData;
 import Model.TripPeriod;
 import Model.TripPeriod2X;
@@ -15,6 +16,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -870,5 +873,125 @@ public class RouteDao {
         }
 
         return tripPeriods;
+    }
+
+    public TreeMap<Float, RouteAverages> getTripPeriodsAB_BA(TripPeriodsFilter tripPeriodsFilter, int percents) {
+        TreeMap<Float, RouteAverages> routesAveragesTreeMap = new TreeMap<>();
+        StringBuilder query = new StringBuilder();
+        StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT route_number, date_stamp,  bus_number, exodus_number, driver_name, type, start_time_scheduled, start_time_actual, arrival_time_scheduled, arrival_time_actual FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number IN ");
+        StringBuilder queryBuilderRouteNumberPart = buildStringFromTreeMap(tripPeriodsFilter.getRouteNumbers());
+        StringBuilder queryBuilderDateStampPart = buildStringFromTreeMap(tripPeriodsFilter.getDateStamps());
+
+        query = queryBuilderInitialPart.append(queryBuilderRouteNumberPart).
+                append(" AND date_stamp IN ").append(queryBuilderDateStampPart).
+                append(" AND type IN ('ab', 'ba') ").
+                append(" ORDER BY prefix, suffix, date_stamp, exodus_number, start_time_scheduled ;");
+
+        try {
+            connection = dataBaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query.toString());
+
+            while (resultSet.next()) {
+                String routeNumberString = resultSet.getString("route_number");
+                float routeNumberFloat = converter.convertRouteNumber(routeNumberString);
+                if (!routesAveragesTreeMap.containsKey(routeNumberFloat)) {
+                    RouteAverages routeAverages = new RouteAverages();
+                    routeAverages.setRouteNumber(routeNumberString);
+                    routesAveragesTreeMap.put(routeNumberFloat, routeAverages);
+                }
+                RouteAverages routeAverages = routesAveragesTreeMap.get(routeNumberFloat);
+                LocalDateTime startTimeActual = converter.convertStringTimeToDate(resultSet.getString("start_time_actual"));
+                LocalDateTime startTimeScheduled = converter.convertStringTimeToDate(resultSet.getString("start_time_scheduled"));
+
+                LocalDateTime arrivalTimeScheduled = converter.convertStringTimeToDate(resultSet.getString("arrival_time_scheduled"));
+                LocalDateTime arrivalTimeActual = converter.convertStringTimeToDate(resultSet.getString("arrival_time_actual"));
+
+                if (startTimeActual != null && arrivalTimeActual != null) {
+
+                    Duration tripPeriodTimeActual = Duration.between(startTimeActual, arrivalTimeActual);
+                    Duration tripPeriodTimeScheduled = Duration.between(startTimeScheduled, arrivalTimeScheduled);
+                    String tripPeriodType = resultSet.getString("type");
+
+                    if (tripPeriodType.equals("ab")) {
+                        if (lowPercentageChecks(startTimeScheduled, startTimeActual, arrivalTimeScheduled, arrivalTimeActual, percents) || highPercentageChecks(startTimeScheduled, startTimeActual, arrivalTimeScheduled, arrivalTimeActual, percents)) {
+                            routeAverages.setAbLowCount(routeAverages.getAbLowCount() + 1);
+                            routeAverages.setAbLowTotal(routeAverages.getAbLowTotal() + tripPeriodTimeActual.getSeconds());
+                        }
+
+                        if (highPercentageChecks(startTimeScheduled, startTimeActual, arrivalTimeScheduled, arrivalTimeActual, percents)) {
+                            routeAverages.setAbHighCount(routeAverages.getAbHighCount() + 1);
+                            routeAverages.setAbHighTotal(routeAverages.getAbHighTotal() + tripPeriodTimeActual.getSeconds());
+                        }
+
+                        if (routeAverages.getAbTripPeriodTimeStandart() == Duration.ZERO) {
+                            routeAverages.setAbTripPeriodTimeStandart(tripPeriodTimeScheduled);
+                        } else {
+                            if (routeAverages.getAbTripPeriodTimeStandart().getSeconds() != tripPeriodTimeActual.getSeconds()) {
+                                routeAverages.setAbTripPeriodTimeMultipleStandart("Multiple Standart Times");
+                            }
+                        }
+                    }
+                    if (tripPeriodType.equals("ba")) {
+                        if (lowPercentageChecks(startTimeScheduled, startTimeActual, arrivalTimeScheduled, arrivalTimeActual, percents) || highPercentageChecks(startTimeScheduled, startTimeActual, arrivalTimeScheduled, arrivalTimeActual, percents)) {
+                            routeAverages.setBaLowCount(routeAverages.getBaLowCount() + 1);
+                            routeAverages.setBaLowTotal(routeAverages.getBaLowTotal() + tripPeriodTimeActual.getSeconds());
+                        }
+
+                        if (highPercentageChecks(startTimeScheduled, startTimeActual, arrivalTimeScheduled, arrivalTimeActual, percents)) {
+                            routeAverages.setBaHighCount(routeAverages.getBaHighCount() + 1);
+                            routeAverages.setBaHighTotal(routeAverages.getBaHighTotal() + tripPeriodTimeActual.getSeconds());
+                        }
+
+                        if (routeAverages.getBaTripPeriodTimeStandart() == Duration.ZERO) {
+                            routeAverages.setBaTripPeriodTimeStandart(tripPeriodTimeScheduled);
+                        } else {
+                            if (routeAverages.getBaTripPeriodTimeStandart().getSeconds() != tripPeriodTimeActual.getSeconds()) {
+                                routeAverages.setBaTripPeriodTimeMultipleStandart("Multiple Standart Times");
+                            }
+                        }
+                    }
+                }
+            }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(RouteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return routesAveragesTreeMap;
+
+    }
+
+    private boolean lowPercentageChecks(LocalDateTime startTimeScheduled, LocalDateTime startTimeActual, LocalDateTime arrivalTimeScheduled, LocalDateTime arrivalTimeActual, int percents) {
+        if (startTimeActual == null || arrivalTimeActual == null) {
+            return false;
+        }
+        Duration tripPeriodTimeScheduled = Duration.between(startTimeScheduled, arrivalTimeScheduled);
+        Duration tripPeriodTimeActual = Duration.between(startTimeActual, arrivalTimeActual);
+        Duration difference = tripPeriodTimeScheduled.minus(tripPeriodTimeActual);
+        if (difference.getSeconds() >= (tripPeriodTimeScheduled.getSeconds() / 100) * (-1 * percents)
+                && difference.getSeconds() < 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean highPercentageChecks(LocalDateTime startTimeScheduled, LocalDateTime startTimeActual, LocalDateTime arrivalTimeScheduled, LocalDateTime arrivalTimeActual, int percents) {
+        if (startTimeActual == null || arrivalTimeActual == null) {
+            return false;
+        }
+        Duration tripPeriodTimeScheduled = Duration.between(startTimeScheduled, arrivalTimeScheduled);
+        Duration tripPeriodTimeActual = Duration.between(startTimeActual, arrivalTimeActual);
+        Duration difference = tripPeriodTimeScheduled.minus(tripPeriodTimeActual);
+        if (difference.getSeconds() <= (tripPeriodTimeScheduled.getSeconds() / 100) * percents
+                && difference.getSeconds() >= 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

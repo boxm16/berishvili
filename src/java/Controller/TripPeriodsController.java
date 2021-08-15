@@ -354,16 +354,23 @@ public class TripPeriodsController {
     //--------excel export-------------------
     //---------------------------------------
     @RequestMapping(value = "tripPeriodsExcelExportDashboard", method = RequestMethod.GET)
-    public String tripPeriodsExcelExportDashboard(ModelMap model) {
+    public String tripPeriodsExcelExportDashboard(ModelMap model, HttpSession session) {
         model.addAttribute("excelExportLink", "exportTripPeriods.htm");
+        session.setAttribute("message", "გამოთვლებისთვის დაფიქსირებულია " + session.getAttribute("percents") + " პროცენტიანი ზღვარი. <a href=\"tripPeriodsCalculations.htm\">შეცვალე პროცენტი</a>  ");
         return "excelExportDashboard";
     }
 
     @RequestMapping(value = "exportTripPeriods", method = RequestMethod.POST)
     public String exportTripPeriods(String fileName, ModelMap model, HttpSession session) {
-        System.out.println(fileName);
+        //first get data
+        if (session.getAttribute("percents") == null) {
+            return "errorPage";
+        }
+        int percents = (Integer) session.getAttribute("percents");
+
         TripPeriodsFilter tripPeriodsInitialFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsInitialFilter");
         ArrayList<TripPeriod2X> initialTripPeriods = routeDao.getTripPeriods(tripPeriodsInitialFilter);
+
         //now write the results
         ExcelWriter excelWriter = new ExcelWriter();
         excelWriter.exportTripPeriods(initialTripPeriods, fileName);
@@ -375,18 +382,21 @@ public class TripPeriodsController {
     //-----------------Calculations -----------------
 
     @RequestMapping(value = "tripPeriodsCalculationsInitialRequest", method = RequestMethod.POST)
-    public String tripPeriodsCalculationsInitialRequest(@RequestParam("routes:dates") String routeDates, HttpSession session) {
+    public String tripPeriodsCalculationsInitialRequest(@RequestParam("routes:dates") String routeDates, HttpSession session, ModelMap model) {
         TripPeriodsFilter tripPeriodsInitialFilter = convertSelectedRoutesToTripPeriodFilter(routeDates);
         session.setAttribute("tripPeriodsInitialFilter", tripPeriodsInitialFilter);
         int rowLimit = 200;
         TripPeriodsPager tripPeriodsPager = routeDao.getTripPeriodsPager(tripPeriodsInitialFilter, rowLimit);
         session.setAttribute("tripPeriodsPager", tripPeriodsPager);
         session.setAttribute("rowLimit", rowLimit);
+        session.setAttribute("percents", 20);
         return "tripPeriodsCalculations";
     }
 
     @RequestMapping(value = "tripPeriodsCalculations")
-    public String tripPeriodsCalculations() {
+    public String tripPeriodsCalculations(HttpSession session) {
+        int percents = (Integer) session.getAttribute("percents");
+        System.out.println(percents);
         return "tripPeriodsCalculations";
     }
 
@@ -397,7 +407,7 @@ public class TripPeriodsController {
         TreeMap<Float, RouteAverages> routesAveragesTreeMap = routeDao.getRoutesAverages(tripPeriodsInitialFilter, percentsInteger);
 
         model.addAttribute("routesAverages", routesAveragesTreeMap);
-        model.addAttribute("percents", percents);
+        session.setAttribute("percents", percentsInteger);
         return "tripPeriodsCalculations";
     }
 

@@ -30,8 +30,8 @@
             &nbsp;&nbsp;&nbsp;&nbsp;
 
             <form action="tripPeriodsCalculatePercentage.htm" method="POST" class="form-inline my-2 my-lg-0">
-                <input name="percents" class="form-control mr-sm-2" type="number" value="20" >
-                <button class="btn btn-primary my-2 my-sm-0" type="submit">გამოთვლა</button>
+                <input name="percents" class="form-control mr-sm-2" type="number" value="${percents}" >
+                <button class="btn btn-primary my-2 my-sm-0" type="submit">%-ის დაფიქსირება და გამოთვლა</button>
             </form>
 
             &nbsp  &nbsp  &nbsp 

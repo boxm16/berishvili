@@ -11,7 +11,7 @@
                 border:solid black 1px;
                 font-size: 15px;
             }
-           
+
         </style>
     </head>
     <body>
@@ -68,6 +68,22 @@
             <th>
                 ყველა ჩათვლილი რეისების საშუალო ფაქტიური დრო
             </th>
+            <th>
+                იძებნება მრავალი გეგმიური დრო
+            </th>
+            <th>
+                წირის სტანდარტული გეგმიური დრო
+            </th>
+            <th>
+                ბრუნების სტანდარტული გეგმიური დრო
+            </th>
+            <th>
+                ყველა ჩათვლილი რეისების რაოდენობა
+            </th>
+            <th>
+                ორივე მიმართულების ბრუნების საშუალო ფაქტიური დრო
+            </th>
+
         </thead>
         <tbody>
             <c:forEach var="entry" items="${routesAverages}">
@@ -96,7 +112,21 @@
                     <td>
                         ${entry.value.getAbLowAndHighAverage()}
                     </td>
-
+                    <td>
+                        ${entry.value.abTripPeriodTimeIsMultiple()}
+                    </td>
+                    <td>
+                        ${entry.value.getABTripPeriodStandartTimeString()}
+                    </td>
+                    <td rowspan="2">
+                        ${entry.value.getTripRoundStandartTimeString()}
+                    </td>
+                    <td rowspan="2"> 
+                        ${entry.value.getAllCount()}
+                    </td>
+                    <td rowspan="2"> 
+                        ${entry.value.getAllAverage()}
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -119,6 +149,12 @@
                     </td>
                     <td>
                         ${entry.value.getBaLowAndHighAverage()}
+                    </td>
+                    <td>
+                        ${entry.value.baTripPeriodTimeIsMultiple()}
+                    </td>
+                    <td>
+                        ${entry.value.getBATripPeriodStandartTimeString()}
                     </td>
                 </tr>
             </c:forEach> 

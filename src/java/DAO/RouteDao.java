@@ -924,13 +924,7 @@ public class RouteDao {
                             routeAverages.setAbHighTotal(routeAverages.getAbHighTotal() + tripPeriodTimeActual.getSeconds());
                         }
 
-                        if (routeAverages.getAbTripPeriodTimeStandart() == Duration.ZERO) {
-                            routeAverages.setAbTripPeriodTimeStandart(tripPeriodTimeScheduled);
-                        } else {
-                            if (routeAverages.getAbTripPeriodTimeStandart().getSeconds() != tripPeriodTimeActual.getSeconds()) {
-                                routeAverages.setAbTripPeriodTimeMultipleStandart("Multiple Standart Times");
-                            }
-                        }
+                        routeAverages.addABTripPeriodTime(tripPeriodTimeScheduled);
                     }
                     if (tripPeriodType.equals("ba")) {
                         if (lowPercentageChecks(tripPeriodTimeScheduled, tripPeriodTimeActual, percents)) {
@@ -943,13 +937,7 @@ public class RouteDao {
                             routeAverages.setBaHighTotal(routeAverages.getBaHighTotal() + tripPeriodTimeActual.getSeconds());
                         }
 
-                        if (routeAverages.getBaTripPeriodTimeStandart() == Duration.ZERO) {
-                            routeAverages.setBaTripPeriodTimeStandart(tripPeriodTimeScheduled);
-                        } else {
-                            if (routeAverages.getBaTripPeriodTimeStandart().getSeconds() != tripPeriodTimeActual.getSeconds()) {
-                                routeAverages.setBaTripPeriodTimeMultipleStandart("Multiple Standart Times");
-                            }
-                        }
+                        routeAverages.addBATripPeriodTime(tripPeriodTimeScheduled);
                     }
                 }
             }

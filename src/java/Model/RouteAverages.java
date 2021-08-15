@@ -2,35 +2,31 @@ package Model;
 
 import Controller.Converter;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RouteAverages {
 
     private String routeNumber;
-    private Duration abTripPeriodTimeStandart;
-    private String abTripPeriodTimeMultipleStandart;
+
+    private HashMap<Duration, Integer> abTripPeriodTimes;
     private int abLowCount;
     private long abLowTotal;
     private int abHighCount;
     private long abHighTotal;
 
-    private Duration baTripPeriodTimeStandart;
-    private String baTripPeriodTimeMultipleStandart;
+    private HashMap<Duration, Integer> baTripPeriodTimes;
     private int baLowCount;
     private long baLowTotal;
     private int baHighCount;
     private long baHighTotal;
 
-    /*
-    private int abLowAndHighCount;
-    private int baLowAndHighCount;
-    private Duration abLowAndHighAverage;
-    private int baLowAndHighAverage;
-     */
     private Converter converter;
 
     public RouteAverages() {
-        abTripPeriodTimeStandart = Duration.ZERO;
-        baTripPeriodTimeStandart = Duration.ZERO;
+        abTripPeriodTimes = new HashMap<>();
+        baTripPeriodTimes = new HashMap<>();
+
         converter = new Converter();
     }
 
@@ -106,38 +102,6 @@ public class RouteAverages {
         this.baHighTotal = baHighTotal;
     }
 
-    public Duration getAbTripPeriodTimeStandart() {
-        return abTripPeriodTimeStandart;
-    }
-
-    public void setAbTripPeriodTimeStandart(Duration abTripPeriodTimeStandart) {
-        this.abTripPeriodTimeStandart = abTripPeriodTimeStandart;
-    }
-
-    public Duration getBaTripPeriodTimeStandart() {
-        return baTripPeriodTimeStandart;
-    }
-
-    public void setBaTripPeriodTimeStandart(Duration baTripPeriodTimeStandart) {
-        this.baTripPeriodTimeStandart = baTripPeriodTimeStandart;
-    }
-
-    public String getAbTripPeriodTimeMultipleStandart() {
-        return abTripPeriodTimeMultipleStandart;
-    }
-
-    public void setAbTripPeriodTimeMultipleStandart(String abTripPeriodTimeMultipleStandart) {
-        this.abTripPeriodTimeMultipleStandart = abTripPeriodTimeMultipleStandart;
-    }
-
-    public String getBaTripPeriodTimeMultipleStandart() {
-        return baTripPeriodTimeMultipleStandart;
-    }
-
-    public void setBaTripPeriodTimeMultipleStandart(String baTripPeriodTimeMultipleStandart) {
-        this.baTripPeriodTimeMultipleStandart = baTripPeriodTimeMultipleStandart;
-    }
-
     public Duration getAbLowAverage() {
         return Duration.ofSeconds(this.abLowTotal / this.abLowCount);
 
@@ -197,7 +161,116 @@ public class RouteAverages {
             return "";
         }
         return converter.convertDurationToString(Duration.ofSeconds((this.baLowTotal + this.baHighTotal) / getBaLowAndHighCount()));
-
     }
 
+    public void addABTripPeriodTime(Duration tripPeriodStandartTime) {
+        if (this.abTripPeriodTimes.containsKey(tripPeriodStandartTime)) {
+            int count = this.abTripPeriodTimes.get(tripPeriodStandartTime);
+            count++;
+            this.abTripPeriodTimes.put(tripPeriodStandartTime, count);
+        } else {
+            this.abTripPeriodTimes.put(tripPeriodStandartTime, 1);
+        }
+    }
+
+    public void addBATripPeriodTime(Duration tripPeriodStandartTime) {
+        if (this.baTripPeriodTimes.containsKey(tripPeriodStandartTime)) {
+            int count = this.baTripPeriodTimes.get(tripPeriodStandartTime);
+            count++;
+            this.baTripPeriodTimes.put(tripPeriodStandartTime, count);
+        } else {
+            this.baTripPeriodTimes.put(tripPeriodStandartTime, 1);
+        }
+    }
+
+    public String abTripPeriodTimeIsMultiple() {
+        if (this.abTripPeriodTimes.size() > 1) {
+            return "*";
+        } else {
+            return "";
+        }
+    }
+
+    public String baTripPeriodTimeIsMultiple() {
+        if (this.baTripPeriodTimes.size() > 1) {
+            return "*";
+        } else {
+            return "";
+        }
+    }
+
+    public String getABTripPeriodStandartTimeString() {
+        Duration abStandartTripPeriodTime = Duration.ZERO;
+        if (this.abTripPeriodTimes.size() > 0) {
+            //iterating map to find max value
+            Map.Entry<Duration, Integer> maxEntry = null;
+            for (Map.Entry<Duration, Integer> entry : abTripPeriodTimes.entrySet()) {
+                if (maxEntry == null || entry.getValue() > maxEntry.getValue()) {
+                    maxEntry = entry;
+                }
+            }
+            abStandartTripPeriodTime = maxEntry.getKey();
+            return converter.convertDurationToString(abStandartTripPeriodTime);
+        } else {
+            return "";
+        }
+    }
+
+    public String getBATripPeriodStandartTimeString() {
+        Duration baStandartTripPeriodTime = Duration.ZERO;
+        if (this.baTripPeriodTimes.size() > 0) {
+            //iterating map to find max value
+            Map.Entry<Duration, Integer> maxEntry = null;
+            for (Map.Entry<Duration, Integer> entry : baTripPeriodTimes.entrySet()) {
+                if (maxEntry == null || entry.getValue() > maxEntry.getValue()) {
+                    maxEntry = entry;
+                }
+            }
+            baStandartTripPeriodTime = maxEntry.getKey();
+            return converter.convertDurationToString(baStandartTripPeriodTime);
+        } else {
+            return "";
+        }
+    }
+
+    public String getTripRoundStandartTimeString() {
+        Duration abStandartTripPeriodTime = Duration.ZERO;
+        if (this.abTripPeriodTimes.size() > 0) {
+            //iterating map to find max value
+            Map.Entry<Duration, Integer> maxEntry = null;
+            for (Map.Entry<Duration, Integer> entry : abTripPeriodTimes.entrySet()) {
+                if (maxEntry == null || entry.getValue() > maxEntry.getValue()) {
+                    maxEntry = entry;
+                }
+            }
+            abStandartTripPeriodTime = maxEntry.getKey();
+        }
+//--------------
+        Duration baStandartTripPeriodTime = Duration.ZERO;
+        if (this.baTripPeriodTimes.size() > 0) {
+            //iterating map to find max value
+            Map.Entry<Duration, Integer> maxEntry = null;
+            for (Map.Entry<Duration, Integer> entry : baTripPeriodTimes.entrySet()) {
+                if (maxEntry == null || entry.getValue() > maxEntry.getValue()) {
+                    maxEntry = entry;
+                }
+            }
+            baStandartTripPeriodTime = maxEntry.getKey();
+        }
+        return converter.convertDurationToString(abStandartTripPeriodTime.plus(baStandartTripPeriodTime));
+    }
+
+    public int getAllCount() {
+        return this.getAbLowAndHighCount() + this.getBaLowAndHighCount();
+    }
+
+    public String getAllAverage() {
+        if (getAbLowAndHighCount() == 0 && getBaLowAndHighCount() == 0) {
+            return "";
+        }
+        Duration abAllAverage = Duration.ofSeconds((this.abLowTotal + this.abHighTotal) / (this.abLowCount + this.abHighCount));
+        Duration baAllAverage = Duration.ofSeconds((this.baLowTotal + this.baHighTotal) / (this.baLowCount + this.baHighCount));
+        return converter.convertDurationToString(abAllAverage.plus(baAllAverage));
+
+    }
 }

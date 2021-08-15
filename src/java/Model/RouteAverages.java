@@ -185,7 +185,7 @@ public class RouteAverages {
 
     public String abTripPeriodTimeIsMultiple() {
         if (this.abTripPeriodTimes.size() > 1) {
-            return "*";
+            return "X";
         } else {
             return "";
         }
@@ -193,7 +193,7 @@ public class RouteAverages {
 
     public String baTripPeriodTimeIsMultiple() {
         if (this.baTripPeriodTimes.size() > 1) {
-            return "*";
+            return "X";
         } else {
             return "";
         }

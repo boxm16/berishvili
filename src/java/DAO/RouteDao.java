@@ -20,6 +20,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -971,5 +972,105 @@ public class RouteDao {
         } else {
             return false;
         }
+    }
+
+    public HashMap getExcelExportData(TripPeriodsFilter tripPeriodsFilter, int percents) {
+        HashMap<String, Object> excelExportData = new HashMap<>();
+
+        ArrayList<TripPeriod2X> tripPeriods = new ArrayList<>();
+        TreeMap<Float, RouteAverages> routesAveragesTreeMap = new TreeMap<>();
+
+        StringBuilder query = new StringBuilder();
+        StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT route_number, date_stamp,  bus_number, exodus_number, driver_name, type, start_time_scheduled, start_time_actual, arrival_time_scheduled, arrival_time_actual FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number IN ");
+        StringBuilder queryBuilderRouteNumberPart = buildStringFromTreeMap(tripPeriodsFilter.getRouteNumbers());
+        StringBuilder queryBuilderDateStampPart = buildStringFromTreeMap(tripPeriodsFilter.getDateStamps());
+
+        query = queryBuilderInitialPart.append(queryBuilderRouteNumberPart).
+                append(" AND date_stamp IN ").append(queryBuilderDateStampPart).
+                append(" AND type IN ('ab', 'ba') ").
+                append(" ORDER BY prefix, suffix, date_stamp, exodus_number, start_time_scheduled ;");
+
+        try {
+            connection = dataBaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query.toString());
+
+            while (resultSet.next()) {
+                //first Trip Periods
+                TripPeriod2X tripPeriod = new TripPeriod2X();
+                tripPeriod.setRouteNumber(resultSet.getString("route_number"));
+                tripPeriod.setDateStamp(resultSet.getString("date_stamp"));
+                tripPeriod.setBusNumber(resultSet.getString("bus_number"));
+                tripPeriod.setExodusNumber(resultSet.getShort("exodus_number"));
+                tripPeriod.setDriverName(resultSet.getString("driver_name"));
+                tripPeriod.setType(resultSet.getString("type"));
+                tripPeriod.setStartTimeScheduled(converter.convertStringTimeToDate(resultSet.getString("start_time_scheduled")));
+                tripPeriod.setStartTimeActual(converter.convertStringTimeToDate(resultSet.getString("start_time_actual")));
+                tripPeriod.setArrivalTimeScheduled(converter.convertStringTimeToDate(resultSet.getString("arrival_time_scheduled")));
+                tripPeriod.setArrivalTimeActual(converter.convertStringTimeToDate(resultSet.getString("arrival_time_actual")));
+
+                tripPeriods.add(tripPeriod);
+                //----now averages----
+
+                String routeNumberString = resultSet.getString("route_number");
+                float routeNumberFloat = converter.convertRouteNumber(routeNumberString);
+                if (!routesAveragesTreeMap.containsKey(routeNumberFloat)) {
+                    RouteAverages routeAverages = new RouteAverages();
+                    routeAverages.setRouteNumber(routeNumberString);
+                    routesAveragesTreeMap.put(routeNumberFloat, routeAverages);
+                }
+                RouteAverages routeAverages = routesAveragesTreeMap.get(routeNumberFloat);
+                LocalDateTime startTimeActual = converter.convertStringTimeToDate(resultSet.getString("start_time_actual"));
+                LocalDateTime startTimeScheduled = converter.convertStringTimeToDate(resultSet.getString("start_time_scheduled"));
+
+                LocalDateTime arrivalTimeScheduled = converter.convertStringTimeToDate(resultSet.getString("arrival_time_scheduled"));
+                LocalDateTime arrivalTimeActual = converter.convertStringTimeToDate(resultSet.getString("arrival_time_actual"));
+
+                if (startTimeActual != null && arrivalTimeActual != null) {
+
+                    Duration tripPeriodTimeActual = Duration.between(startTimeActual, arrivalTimeActual);
+                    Duration tripPeriodTimeScheduled = Duration.between(startTimeScheduled, arrivalTimeScheduled);
+                    String tripPeriodType = resultSet.getString("type");
+
+                    if (tripPeriodType.equals("ab")) {
+                        if (lowPercentageChecks(tripPeriodTimeScheduled, tripPeriodTimeActual, percents)) {
+                            routeAverages.setAbLowCount(routeAverages.getAbLowCount() + 1);
+                            routeAverages.setAbLowTotal(routeAverages.getAbLowTotal() + tripPeriodTimeActual.getSeconds());
+                        }
+
+                        if (highPercentageChecks(tripPeriodTimeScheduled, tripPeriodTimeActual, percents)) {
+                            routeAverages.setAbHighCount(routeAverages.getAbHighCount() + 1);
+                            routeAverages.setAbHighTotal(routeAverages.getAbHighTotal() + tripPeriodTimeActual.getSeconds());
+                        }
+
+                        routeAverages.addABTripPeriodTime(tripPeriodTimeScheduled);
+                    }
+                    if (tripPeriodType.equals("ba")) {
+                        if (lowPercentageChecks(tripPeriodTimeScheduled, tripPeriodTimeActual, percents)) {
+                            routeAverages.setBaLowCount(routeAverages.getBaLowCount() + 1);
+                            routeAverages.setBaLowTotal(routeAverages.getBaLowTotal() + tripPeriodTimeActual.getSeconds());
+                        }
+
+                        if (highPercentageChecks(tripPeriodTimeScheduled, tripPeriodTimeActual, percents)) {
+                            routeAverages.setBaHighCount(routeAverages.getBaHighCount() + 1);
+                            routeAverages.setBaHighTotal(routeAverages.getBaHighTotal() + tripPeriodTimeActual.getSeconds());
+                        }
+
+                        routeAverages.addBATripPeriodTime(tripPeriodTimeScheduled);
+                    }
+                }
+            }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(RouteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        excelExportData.put("routesAverages", routesAveragesTreeMap);
+        excelExportData.put("tripPeriods", tripPeriods);
+        return excelExportData;
+
     }
 }

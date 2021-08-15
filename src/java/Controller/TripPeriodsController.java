@@ -6,6 +6,7 @@ import Model.TripPeriod2X;
 import Model.TripPeriodsFilter;
 import Model.TripPeriodsPager;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.servlet.http.HttpSession;
@@ -367,14 +368,17 @@ public class TripPeriodsController {
             return "errorPage";
         }
         int percents = (Integer) session.getAttribute("percents");
-
         TripPeriodsFilter tripPeriodsInitialFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsInitialFilter");
-        ArrayList<TripPeriod2X> initialTripPeriods = routeDao.getTripPeriods(tripPeriodsInitialFilter);
 
+        HashMap excelExportData = routeDao.getExcelExportData(tripPeriodsInitialFilter, percents);
+
+        ArrayList<TripPeriod2X> tripPeriods = (ArrayList) excelExportData.get("tripPeriods");
+        TreeMap<Float, RouteAverages> routesAveragesTreeMap = (TreeMap) excelExportData.get("routesAverages");
+        //ArrayList<TripPeriod2X> initialTripPeriods = routeDao.getTripPeriods(tripPeriodsInitialFilter);
         //now write the results
         ExcelWriter excelWriter = new ExcelWriter();
-        excelWriter.exportTripPeriods(initialTripPeriods, fileName);
-
+        //  excelWriter.exportTripPeriods(initialTripPeriods, fileName);
+        excelWriter.exportTripPeriodsAndRoutesAverages(tripPeriods, routesAveragesTreeMap, percents, fileName);
         model.addAttribute("excelExportLink", "exportTripPeriods.htm");
         model.addAttribute("fileName", fileName);
         return "excelExportDashboard";

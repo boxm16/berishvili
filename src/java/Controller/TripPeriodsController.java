@@ -394,11 +394,10 @@ public class TripPeriodsController {
     public String tripPeriodsCalculatePercentage(@RequestParam("percents") String percents, HttpSession session, ModelMap model) {
         TripPeriodsFilter tripPeriodsInitialFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsInitialFilter");
         int percentsInteger = Integer.valueOf(percents);
-        TreeMap<Float, RouteAverages> routesAveragesTreeMap = routeDao.getTripPeriodsAB_BA(tripPeriodsInitialFilter, percentsInteger);
-        for (Map.Entry<Float, RouteAverages> entry : routesAveragesTreeMap.entrySet()) {
-            //     System.out.println(entry.getValue().getRouteNumber());
-        }
+        TreeMap<Float, RouteAverages> routesAveragesTreeMap = routeDao.getRoutesAverages(tripPeriodsInitialFilter, percentsInteger);
+
         model.addAttribute("routesAverages", routesAveragesTreeMap);
+        model.addAttribute("percents", percents);
         return "tripPeriodsCalculations";
     }
 

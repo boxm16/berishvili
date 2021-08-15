@@ -875,7 +875,7 @@ public class RouteDao {
         return tripPeriods;
     }
 
-    public TreeMap<Float, RouteAverages> getTripPeriodsAB_BA(TripPeriodsFilter tripPeriodsFilter, int percents) {
+    public TreeMap<Float, RouteAverages> getRoutesAverages(TripPeriodsFilter tripPeriodsFilter, int percents) {
         TreeMap<Float, RouteAverages> routesAveragesTreeMap = new TreeMap<>();
         StringBuilder query = new StringBuilder();
         StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT route_number, date_stamp,  bus_number, exodus_number, driver_name, type, start_time_scheduled, start_time_actual, arrival_time_scheduled, arrival_time_actual FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number IN ");
@@ -914,12 +914,12 @@ public class RouteDao {
                     String tripPeriodType = resultSet.getString("type");
 
                     if (tripPeriodType.equals("ab")) {
-                        if (lowPercentageChecks(startTimeScheduled, startTimeActual, arrivalTimeScheduled, arrivalTimeActual, percents) || highPercentageChecks(startTimeScheduled, startTimeActual, arrivalTimeScheduled, arrivalTimeActual, percents)) {
+                        if (lowPercentageChecks(tripPeriodTimeScheduled, tripPeriodTimeActual, percents)) {
                             routeAverages.setAbLowCount(routeAverages.getAbLowCount() + 1);
                             routeAverages.setAbLowTotal(routeAverages.getAbLowTotal() + tripPeriodTimeActual.getSeconds());
                         }
 
-                        if (highPercentageChecks(startTimeScheduled, startTimeActual, arrivalTimeScheduled, arrivalTimeActual, percents)) {
+                        if (highPercentageChecks(tripPeriodTimeScheduled, tripPeriodTimeActual, percents)) {
                             routeAverages.setAbHighCount(routeAverages.getAbHighCount() + 1);
                             routeAverages.setAbHighTotal(routeAverages.getAbHighTotal() + tripPeriodTimeActual.getSeconds());
                         }
@@ -933,12 +933,12 @@ public class RouteDao {
                         }
                     }
                     if (tripPeriodType.equals("ba")) {
-                        if (lowPercentageChecks(startTimeScheduled, startTimeActual, arrivalTimeScheduled, arrivalTimeActual, percents) || highPercentageChecks(startTimeScheduled, startTimeActual, arrivalTimeScheduled, arrivalTimeActual, percents)) {
+                        if (lowPercentageChecks(tripPeriodTimeScheduled, tripPeriodTimeActual, percents)) {
                             routeAverages.setBaLowCount(routeAverages.getBaLowCount() + 1);
                             routeAverages.setBaLowTotal(routeAverages.getBaLowTotal() + tripPeriodTimeActual.getSeconds());
                         }
 
-                        if (highPercentageChecks(startTimeScheduled, startTimeActual, arrivalTimeScheduled, arrivalTimeActual, percents)) {
+                        if (highPercentageChecks(tripPeriodTimeScheduled, tripPeriodTimeActual, percents)) {
                             routeAverages.setBaHighCount(routeAverages.getBaHighCount() + 1);
                             routeAverages.setBaHighTotal(routeAverages.getBaHighTotal() + tripPeriodTimeActual.getSeconds());
                         }
@@ -965,12 +965,7 @@ public class RouteDao {
 
     }
 
-    private boolean lowPercentageChecks(LocalDateTime startTimeScheduled, LocalDateTime startTimeActual, LocalDateTime arrivalTimeScheduled, LocalDateTime arrivalTimeActual, int percents) {
-        if (startTimeActual == null || arrivalTimeActual == null) {
-            return false;
-        }
-        Duration tripPeriodTimeScheduled = Duration.between(startTimeScheduled, arrivalTimeScheduled);
-        Duration tripPeriodTimeActual = Duration.between(startTimeActual, arrivalTimeActual);
+    private boolean lowPercentageChecks(Duration tripPeriodTimeScheduled, Duration tripPeriodTimeActual, int percents) {
         Duration difference = tripPeriodTimeScheduled.minus(tripPeriodTimeActual);
         if (difference.getSeconds() >= (tripPeriodTimeScheduled.getSeconds() / 100) * (-1 * percents)
                 && difference.getSeconds() < 0) {
@@ -980,12 +975,7 @@ public class RouteDao {
         }
     }
 
-    private boolean highPercentageChecks(LocalDateTime startTimeScheduled, LocalDateTime startTimeActual, LocalDateTime arrivalTimeScheduled, LocalDateTime arrivalTimeActual, int percents) {
-        if (startTimeActual == null || arrivalTimeActual == null) {
-            return false;
-        }
-        Duration tripPeriodTimeScheduled = Duration.between(startTimeScheduled, arrivalTimeScheduled);
-        Duration tripPeriodTimeActual = Duration.between(startTimeActual, arrivalTimeActual);
+    private boolean highPercentageChecks(Duration tripPeriodTimeScheduled, Duration tripPeriodTimeActual, int percents) {
         Duration difference = tripPeriodTimeScheduled.minus(tripPeriodTimeActual);
         if (difference.getSeconds() <= (tripPeriodTimeScheduled.getSeconds() / 100) * percents
                 && difference.getSeconds() >= 0) {

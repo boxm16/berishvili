@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.Converter;
 import java.time.Duration;
 
 public class RouteAverages {
@@ -9,26 +10,28 @@ public class RouteAverages {
     private String abTripPeriodTimeMultipleStandart;
     private int abLowCount;
     private long abLowTotal;
-    private Duration abLowAverage;
     private int abHighCount;
     private long abHighTotal;
-    private Duration abHighAverage;
+
     private Duration baTripPeriodTimeStandart;
     private String baTripPeriodTimeMultipleStandart;
     private int baLowCount;
     private long baLowTotal;
-    private Duration baLowAverage;
     private int baHighCount;
     private long baHighTotal;
-    private Duration baHighAverage;
+
+    /*
     private int abLowAndHighCount;
     private int baLowAndHighCount;
     private Duration abLowAndHighAverage;
     private int baLowAndHighAverage;
+     */
+    private Converter converter;
 
     public RouteAverages() {
         abTripPeriodTimeStandart = Duration.ZERO;
         baTripPeriodTimeStandart = Duration.ZERO;
+        converter = new Converter();
     }
 
     public String getRouteNumber() {
@@ -133,6 +136,68 @@ public class RouteAverages {
 
     public void setBaTripPeriodTimeMultipleStandart(String baTripPeriodTimeMultipleStandart) {
         this.baTripPeriodTimeMultipleStandart = baTripPeriodTimeMultipleStandart;
+    }
+
+    public Duration getAbLowAverage() {
+        return Duration.ofSeconds(this.abLowTotal / this.abLowCount);
+
+    }
+
+    public Duration getBaLowAverage() {
+        return Duration.ofSeconds(this.baLowTotal / this.baLowCount);
+    }
+
+    public String getAbLowAverageString() {
+        if (0 == this.abLowCount) {
+            return "";
+        }
+        return converter.convertDurationToString(Duration.ofSeconds(this.abLowTotal / this.abLowCount));
+    }
+
+    public String getBaLowAverageString() {
+        if (0 == this.baLowCount) {
+            return "";
+        }
+        return converter.convertDurationToString(Duration.ofSeconds(this.baLowTotal / this.baLowCount));
+    }
+
+    //--
+    public String getAbHighAverageString() {
+        if (0 == this.abHighCount) {
+            return "";
+        }
+        return converter.convertDurationToString(Duration.ofSeconds(this.abHighTotal / this.abHighCount));
+    }
+
+    public String getBaHighAverageString() {
+        if (0 == this.baHighCount) {
+            return "";
+        }
+        return converter.convertDurationToString(Duration.ofSeconds(this.baHighTotal / this.baHighCount));
+    }
+
+    public int getAbLowAndHighCount() {
+        return this.abLowCount + this.abHighCount;
+    }
+
+    public int getBaLowAndHighCount() {
+        return this.baLowCount + this.baHighCount;
+    }
+
+    public String getAbLowAndHighAverage() {
+        if (getAbLowAndHighCount() == 0) {
+            return "";
+        }
+        return converter.convertDurationToString(Duration.ofSeconds((this.abLowTotal + this.abHighTotal) / getAbLowAndHighCount()));
+
+    }
+
+    public String getBaLowAndHighAverage() {
+        if (getBaLowAndHighCount() == 0) {
+            return "";
+        }
+        return converter.convertDurationToString(Duration.ofSeconds((this.baLowTotal + this.baHighTotal) / getBaLowAndHighCount()));
+
     }
 
 }

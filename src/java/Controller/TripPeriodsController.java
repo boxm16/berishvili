@@ -5,6 +5,8 @@ import Model.RouteAverages;
 import Model.TripPeriod2X;
 import Model.TripPeriodsFilter;
 import Model.TripPeriodsPager;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +25,12 @@ public class TripPeriodsController {
     @Autowired
     private RouteDao routeDao;
 
+    private MemoryUsage memoryUsage;
+
+    public TripPeriodsController() {
+        memoryUsage = new MemoryUsage();
+    }
+
     @RequestMapping(value = "tripPeriodsInitialRequest")
     public String tripPeriodInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model, HttpSession session) {
 
@@ -39,6 +47,9 @@ public class TripPeriodsController {
         session.setAttribute("tripPeriodsPager", tripPeriodsPager);
         session.setAttribute("tripPeriodsInitialFilter", tripPeriodsInitialFilter);
         session.setAttribute("rowLimit", rowLimit);
+        if (session.getAttribute("percents") == null) {
+            session.setAttribute("percents", 20);
+        }
         /*
         TripPeriodsFilter tripPeriodsFullInitialFilter = routeDao.getTripPeriodsFullInitialFilter(tripPeriodsInitialFilter);
         session.setAttribute("tripPeriodsFullInitialFilter", tripPeriodsFullInitialFilter);
@@ -363,24 +374,35 @@ public class TripPeriodsController {
 
     @RequestMapping(value = "exportTripPeriods", method = RequestMethod.POST)
     public String exportTripPeriods(String fileName, ModelMap model, HttpSession session) {
-        //first get data
+
+        System.out.println("---------------Trip Periods And Routes Averages Excel Export Starting ------------------------------");
+        Instant start = Instant.now();
+//first get data
         if (session.getAttribute("percents") == null) {
             return "errorPage";
         }
         int percents = (Integer) session.getAttribute("percents");
         TripPeriodsFilter tripPeriodsInitialFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsInitialFilter");
-
+        System.out.println("---Selected Routes Filter Created -----");
+        memoryUsage.printMemoryUsage();
         HashMap excelExportData = routeDao.getExcelExportData(tripPeriodsInitialFilter, percents);
-
+        System.out.println("---Excel Export Data Created------");
+        memoryUsage.printMemoryUsage();
         ArrayList<TripPeriod2X> tripPeriods = (ArrayList) excelExportData.get("tripPeriods");
         TreeMap<Float, RouteAverages> routesAveragesTreeMap = (TreeMap) excelExportData.get("routesAverages");
         //ArrayList<TripPeriod2X> initialTripPeriods = routeDao.getTripPeriods(tripPeriodsInitialFilter);
         //now write the results
+
         ExcelWriter excelWriter = new ExcelWriter();
         //  excelWriter.exportTripPeriods(initialTripPeriods, fileName);
+        System.out.println("---Writing Excel File Started---");
+        memoryUsage.printMemoryUsage();
         excelWriter.exportTripPeriodsAndRoutesAverages(tripPeriods, routesAveragesTreeMap, percents, fileName);
         model.addAttribute("excelExportLink", "exportTripPeriods.htm");
         model.addAttribute("fileName", fileName);
+        Instant end = Instant.now();
+        System.out.println("++++++++Trip Periods And Routes Averages Excel Export completed. Time needed:" + Duration.between(start, end) + "+++++++++++");
+
         return "excelExportDashboard";
     }
     //-----------------Calculations -----------------
@@ -393,7 +415,9 @@ public class TripPeriodsController {
         TripPeriodsPager tripPeriodsPager = routeDao.getTripPeriodsPager(tripPeriodsInitialFilter, rowLimit);
         session.setAttribute("tripPeriodsPager", tripPeriodsPager);
         session.setAttribute("rowLimit", rowLimit);
-        session.setAttribute("percents", 20);
+        if (session.getAttribute("percents") == null) {
+            session.setAttribute("percents", 20);
+        }
         return "tripPeriodsCalculations";
     }
 
@@ -419,7 +443,9 @@ public class TripPeriodsController {
     public String tripPeriodsExcelExportDashboardInitialRequest(@RequestParam("routes:dates") String routeDates, HttpSession session) {
         TripPeriodsFilter tripPeriodsInitialFilter = convertSelectedRoutesToTripPeriodFilter(routeDates);
         session.setAttribute("tripPeriodsInitialFilter", tripPeriodsInitialFilter);
-
+        if (session.getAttribute("percents") == null) {
+            session.setAttribute("percents", 20);
+        }
         return "redirect:/tripPeriodsExcelExportDashboard.htm";
     }
 }

@@ -268,8 +268,14 @@ public class RouteAverages {
         if (getAbLowAndHighCount() == 0 && getBaLowAndHighCount() == 0) {
             return "";
         }
-        Duration abAllAverage = Duration.ofSeconds((this.abLowTotal + this.abHighTotal) / (this.abLowCount + this.abHighCount));
-        Duration baAllAverage = Duration.ofSeconds((this.baLowTotal + this.baHighTotal) / (this.baLowCount + this.baHighCount));
+        Duration abAllAverage = Duration.ZERO;
+        Duration baAllAverage = Duration.ZERO;
+        if (this.abLowCount + this.abHighCount != 0) {
+            abAllAverage = Duration.ofSeconds((this.abLowTotal + this.abHighTotal) / (this.abLowCount + this.abHighCount));
+        }
+        if (this.baLowCount + this.baHighCount != 0) {
+            baAllAverage = Duration.ofSeconds((this.baLowTotal + this.baHighTotal) / (this.baLowCount + this.baHighCount));
+        }
         return converter.convertDurationToString(abAllAverage.plus(baAllAverage));
 
     }

@@ -39,11 +39,13 @@ public class ExcelWriter {
 
     private String basementDirectory;
     private Converter converter;
+    private MemoryUsage memoryUsage;
 
     public ExcelWriter() {
         BasementController basementController = new BasementController();
         this.basementDirectory = basementController.getBasementDirectory();
         this.converter = new Converter();
+        this.memoryUsage = new MemoryUsage();
 
     }
 
@@ -862,7 +864,7 @@ public class ExcelWriter {
 
     void exportTripPeriodsAndRoutesAverages(ArrayList<TripPeriod2X> tripPeriods, TreeMap<Float, RouteAverages> routesAverages, int percents, String fileName) {
         //first part is for Trip Periods
-        Instant start = Instant.now();
+
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("ბრუნების დროები");
 //setting date 1904 system (to show negative duration in excel workbook)
@@ -1094,11 +1096,18 @@ public class ExcelWriter {
                 cell_12.setCellStyle(rowStyleRedTimeHHmmss);
             }
 
-        }
+            if (rowIndex % 1000 == 0) {
 
+                System.out.println(rowIndex + " Rows Have Been Written Into Excel By Now");
+                memoryUsage.printMemoryUsage();
+            }
+
+        }
+        System.out.println("++++Trip Periods Excel Writing Completed+++++ ");
         //----------------------------------------------------------------------------------
         //          NOW AVERAGES
         //----------------------------------------------------------------------------------
+        System.out.println("----Routes Averages Excel Writing Started------");
         rowIndex = 0;
         XSSFSheet averagesSheet = workbook.createSheet("ბრუნების საშუალო დროები");
         Row averagesHeaderRow1 = averagesSheet.createRow(rowIndex);
@@ -1333,16 +1342,14 @@ public class ExcelWriter {
 
             Cell cell_BA_12 = rowBA.createCell(12);
             cell_BA_12.setCellStyle(rowStyleWhiteTimeHHmm);
-
+            System.out.println("Route N" + routeAverages.getRouteNumber() + " Completed");
         }
-
+        System.out.println("++++Routes Averages Excel Writing Completed++++");
         try (FileOutputStream outputStream = new FileOutputStream(this.basementDirectory + "/downloads/" + fileName + ".xlsx")) {
             workbook.write(outputStream);
         } catch (IOException ex) {
             Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Instant end = Instant.now();
-        System.out.println("Trip Periods And Routes Averages Excel Export completed. Time needed:" + Duration.between(start, end));
 
     }
 }

@@ -397,7 +397,9 @@ public class TripPeriodsController {
         //  excelWriter.exportTripPeriods(initialTripPeriods, fileName);
         System.out.println("---Writing Excel File Started---");
         memoryUsage.printMemoryUsage();
-        excelWriter.exportTripPeriodsAndRoutesAverages(tripPeriods, routesAveragesTreeMap, percents, fileName);
+        //excelWriter.exportTripPeriodsAndRoutesAverages(tripPeriods, routesAveragesTreeMap, percents, fileName);
+        excelWriter.SXSSF(tripPeriods, routesAveragesTreeMap, percents, fileName);
+
         model.addAttribute("excelExportLink", "exportTripPeriods.htm");
         model.addAttribute("fileName", fileName);
         Instant end = Instant.now();

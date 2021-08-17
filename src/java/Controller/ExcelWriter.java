@@ -12,6 +12,8 @@ import Model.RouteAverages;
 import Model.TripPeriod2X;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.invoke.MethodHandles;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -26,9 +28,11 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFDataFormat;
@@ -1352,4 +1356,572 @@ public class ExcelWriter {
         }
 
     }
+
+    void SXSSF(ArrayList<TripPeriod2X> tripPeriods, TreeMap<Float, RouteAverages> routesAverages, int percents, String fileName) {
+        long begin = System.currentTimeMillis();
+        Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
+
+        // keep 100 rows in memory, exceeding rows will be flushed to disk
+        try (SXSSFWorkbook workbook = new SXSSFWorkbook(100);
+                OutputStream os = new FileOutputStream(this.basementDirectory + "/downloads/" + fileName + ".xlsx")) {
+            //setting date 1904 system (to show negative duration in excel workbook)
+            workbook.getXSSFWorkbook().getCTWorkbook().getWorkbookPr().setDate1904(true);
+
+            Sheet tripPeriodsSheet = workbook.createSheet("ბრუნების დროები");
+            /*
+            String val = "The first%s Xing di%s column";
+            for (int rowNum = 0; rowNum < 100_0000; rowNum++) {
+                Row row = tripPeriodsSheet.createRow(rowNum);
+                int realRowNum = rowNum + 1;
+                Cell cell1 = row.createCell(0);
+                cell1.setCellValue(realRowNum);
+            }
+             */
+            int rowIndex = 0;
+            int columnIndex = 0;
+            int rowHeigth = 0;
+            int columnWidth = 0;
+
+            //column width
+            while (columnIndex < 21) {
+                switch (columnIndex) {
+                    case 0:
+                        columnWidth = 1000;
+                        break;
+                    case 1:
+                        columnWidth = 3000;
+                        break;
+                    case 2:
+                        columnWidth = 3300;
+                        break;
+                    case 3:
+                        columnWidth = 1000;
+                        break;
+                    case 4:
+                        columnWidth = 6500;
+                        break;
+                    case 5:
+                        columnWidth = 2800;
+                        break;
+                    case 6:
+                        columnWidth = 2800;
+                        break;
+                    case 7:
+                        columnWidth = 2800;
+                        break;
+                    case 8:
+                        columnWidth = 2800;
+                        break;
+                    case 9:
+                        columnWidth = 2800;
+                        break;
+                    case 10:
+                        columnWidth = 2800;
+                        break;
+                    case 11:
+                        columnWidth = 2800;
+                        break;
+                    case 12:
+                        columnWidth = 2800;
+                        break;
+
+                }
+                tripPeriodsSheet.setColumnWidth(columnIndex, columnWidth);
+                columnIndex++;
+            }
+
+            //now headers
+            //first header row
+            Row headerRow1 = tripPeriodsSheet.createRow(rowIndex);
+            rowHeigth = 80;
+            headerRow1.setHeightInPoints(rowHeigth);
+
+            XSSFCellStyle headerStyle = getHeaderStyle(workbook, 209, 112, 247, 0, false);
+            XSSFCellStyle headerStyleVertical = getHeaderStyle(workbook, 209, 112, 247, 90, false);
+
+            columnIndex = 0;
+            while (columnIndex < 13) {
+                Cell cell = headerRow1.createCell(columnIndex);
+                switch (columnIndex) {
+                    case 0:
+                        cell.setCellValue("მარშრუტის #");
+                        cell.setCellStyle(headerStyleVertical);
+                        break;
+                    case 1:
+                        cell.setCellValue("თარიღი");
+                        cell.setCellStyle(headerStyle);
+                        break;
+
+                    case 2:
+                        cell.setCellValue("ავტობუსის #");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 3:
+                        cell.setCellValue("გასვლი #");
+                        cell.setCellStyle(headerStyleVertical);
+                        break;
+
+                    case 4:
+                        cell.setCellValue("მძღოლი");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 5:
+                        cell.setCellValue("მიმართულება");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 6:
+                        cell.setCellValue("გასვლის  გეგმიური  დრო");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 7:
+                        cell.setCellValue("გასვლის ფაქტიური დრო");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 8:
+                        cell.setCellValue("მისვლის გეგმიური დრო");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 9:
+                        cell.setCellValue("მისვლის ფაქტიური დრო");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 10:
+                        cell.setCellValue("წირის გეგმიური დრო");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 11:
+                        cell.setCellValue("წირის ფაქტიური დრო");
+                        cell.setCellStyle(headerStyle);
+                        break;
+
+                    case 12:
+                        cell.setCellValue("სხვაობა");
+                        cell.setCellStyle(headerStyle);
+                        break;
+
+                }
+
+                columnIndex++;
+            }
+
+            //  XSSFCellStyle rowStyleWhiteItalic = getRowStyle(workbook, 255, 255, 255, true, false, "");
+            XSSFCellStyle rowStyleWhiteRegular = getRowStyle(workbook, 255, 255, 255, false, false, "");
+            XSSFCellStyle rowStyleWhiteNumber = getRowStyle(workbook, 255, 255, 255, false, false, "0"); //"0" makes cell numeric type
+            XSSFCellStyle rowStyleWhiteTimeHHmm = getRowStyle(workbook, 255, 255, 255, false, false, "[hh]:mm");
+            XSSFCellStyle rowStyleWhiteTimeHHmmss = getRowStyle(workbook, 255, 255, 255, false, false, "[hh]:mm:ss");
+            XSSFCellStyle rowStyleYellowTimeHHmmss = getRowStyle(workbook, 255, 255, 0, false, false, "[hh]:mm:ss");
+            XSSFCellStyle rowStyleRedTimeHHmmss = getRowStyle(workbook, 255, 0, 0, false, false, "[hh]:mm:ss");
+
+            rowHeigth = 30;
+            for (TripPeriod2X tripPeriod : tripPeriods) {
+
+                Row row = tripPeriodsSheet.createRow(++rowIndex);
+                row.setHeightInPoints(rowHeigth);
+
+                Cell cell_0 = row.createCell(0);
+                cell_0.setCellValue(this.converter.convertRouteNumber(tripPeriod.getRouteNumber()));
+                cell_0.setCellStyle(rowStyleWhiteRegular);
+
+                Cell cell_1 = row.createCell(1);
+                cell_1.setCellValue(tripPeriod.getDateStamp());
+                cell_1.setCellStyle(rowStyleWhiteRegular);
+
+                Cell cell_2 = row.createCell(2);
+                cell_2.setCellValue(tripPeriod.getBusNumber());
+                cell_2.setCellStyle(rowStyleWhiteRegular);
+
+                Cell cell_3 = row.createCell(3);
+                cell_3.setCellValue((short) tripPeriod.getExodusNumber());
+                cell_3.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_4 = row.createCell(4);
+                cell_4.setCellValue(tripPeriod.getDriverName());
+                cell_4.setCellStyle(rowStyleWhiteRegular);
+
+                Cell cell_5 = row.createCell(5);
+                cell_5.setCellValue(tripPeriod.getTypeG());
+                cell_5.setCellStyle(rowStyleWhiteRegular);
+
+                Cell cell_6 = row.createCell(6);
+                cell_6.setCellValue(tripPeriod.getStartTimeScheduledExcelFormat());
+                cell_6.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_7 = row.createCell(7);
+                if (tripPeriod.getStartTimeActualExcelFormat() == null) {
+                    cell_7.setCellValue("");
+                } else {
+                    cell_7.setCellValue(tripPeriod.getStartTimeActualExcelFormat());
+                }
+                cell_7.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_8 = row.createCell(8);
+                cell_8.setCellValue(tripPeriod.getArrivaltTimeScheduledExcelFormat());
+                cell_8.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_9 = row.createCell(9);
+                if (tripPeriod.getArrivalTimeActualExcelFormat() == null) {
+                    cell_9.setCellValue("");
+                } else {
+                    cell_9.setCellValue(tripPeriod.getArrivalTimeActualExcelFormat());
+                }
+                cell_9.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Duration tripPeriodTimeScheduled = tripPeriod.getTripPeriodTimeScheduled();
+                Cell cell_10 = row.createCell(10);
+                if (tripPeriodTimeScheduled == null) {
+                    cell_10.setCellValue("");
+                } else {
+                    long tripPeriodSeconds = tripPeriodTimeScheduled.getSeconds();
+                    cell_10.setCellValue(tripPeriodSeconds * 0.1 / 8640);
+                }
+                cell_10.setCellStyle(rowStyleWhiteTimeHHmmss);
+
+                Duration tripPeriodTimeActiual = tripPeriod.getTripPeriodTimeActual();
+                Cell cell_11 = row.createCell(11);
+                if (tripPeriodTimeActiual == null) {
+                    cell_11.setCellValue("");
+                } else {
+                    long tripPeriodSeconds = tripPeriodTimeActiual.getSeconds();
+                    cell_11.setCellValue(tripPeriodSeconds * 0.1 / 8640);
+                }
+                cell_11.setCellStyle(rowStyleWhiteTimeHHmmss);
+
+                Duration tripPeriodTimeDifference = tripPeriod.getTripPeriodTimeDifference();
+                Cell cell_12 = row.createCell(12);
+                if (tripPeriodTimeDifference == null) {
+                    cell_12.setCellValue("");
+                } else {
+                    long tripPeriodSeconds = tripPeriodTimeDifference.getSeconds();
+                    cell_12.setCellValue(tripPeriodSeconds * 0.1 / 8640);
+                }
+                String tripPeriodTimeDifferenceColor = tripPeriod.getTripPeriodTimeDifferenceColor();
+                cell_12.setCellStyle(rowStyleWhiteTimeHHmmss);
+                if (tripPeriodTimeDifferenceColor.equals("yellow")) {
+                    cell_12.setCellStyle(rowStyleYellowTimeHHmmss);
+                }
+                if (tripPeriodTimeDifferenceColor.equals("red")) {
+                    cell_12.setCellStyle(rowStyleRedTimeHHmmss);
+                }
+
+                if (rowIndex % 1000 == 0) {
+
+                    System.out.println(rowIndex + " Rows Have Been Written Into Excel By Now");
+                    memoryUsage.printMemoryUsage();
+                }
+
+            }
+            System.out.println("++++Trip Periods Excel Writing Completed+++++ ");
+
+            //----------------------------------------------------------------------------------
+            //          NOW AVERAGES
+            //----------------------------------------------------------------------------------
+            System.out.println("----Routes Averages Excel Writing Started------");
+            rowIndex = 0;
+            Sheet averagesSheet = workbook.createSheet("ბრუნების საშუალო დროები");
+            Row averagesHeaderRow1 = averagesSheet.createRow(rowIndex);
+            rowHeigth = 80;
+            averagesHeaderRow1.setHeightInPoints(rowHeigth);
+
+            //column width
+            //  sheet.setDefaultColumnWidth(2);
+            columnIndex = 0;
+            while (columnIndex < 13) {
+                switch (columnIndex) {
+                    case 0:
+                        columnWidth = 1700;
+                        break;
+                    case 1:
+                        columnWidth = 1700;
+                        break;
+                    case 2:
+                        columnWidth = 4000;
+                        break;
+                    case 3:
+                        columnWidth = 4000;
+                        break;
+                    case 4:
+                        columnWidth = 4000;
+                        break;
+                    case 5:
+                        columnWidth = 4000;
+                        break;
+                    case 6:
+                        columnWidth = 4000;
+                        break;
+                    case 7:
+                        columnWidth = 4000;
+                        break;
+                    case 8:
+                        columnWidth = 2500;
+                        break;
+                    case 9:
+                        columnWidth = 4000;
+                        break;
+                    case 10:
+                        columnWidth = 4000;
+                        break;
+                    case 11:
+                        columnWidth = 4000;
+                        break;
+                    case 12:
+                        columnWidth = 4000;
+                        break;
+
+                }
+                averagesSheet.setColumnWidth(columnIndex, columnWidth);
+                columnIndex++;
+            }
+
+            columnIndex = 0;
+            while (columnIndex < 13) {
+                Cell cell = averagesHeaderRow1.createCell(columnIndex);
+                switch (columnIndex) {
+                    case 0:
+                        cell.setCellValue("მარშრუტის #");
+                        cell.setCellStyle(headerStyleVertical);
+                        break;
+                    case 1:
+                        cell.setCellValue("მიმართულება");
+                        cell.setCellStyle(headerStyleVertical);
+                        break;
+
+                    case 2:
+                        cell.setCellValue("+" + percents + "% ჩათვლილი რეისების რაოდენობა");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 3:
+                        cell.setCellValue("+" + percents + "% ჩათვლილი რეისების საშუალო ფაქტიური დრო");
+                        cell.setCellStyle(headerStyle);
+                        break;
+
+                    case 4:
+                        cell.setCellValue("-" + percents + "% ჩათვლილი რეისების რაოდენობა");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 5:
+                        cell.setCellValue("-" + percents + "% ჩათვლილი რეისების საშუალო ფაქტიური დრო");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 6:
+                        cell.setCellValue("ყველა ჩათვლილი რეისების რაოდენობა");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 7:
+                        cell.setCellValue("ყველა ჩათვლილი რეისების საშუალო ფაქტიური დრო");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 8:
+                        cell.setCellValue("იძებნება მრავალი გეგმიური დრო");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 9:
+                        cell.setCellValue("წირის სტანდარტული გეგმიური დრო");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 10:
+                        cell.setCellValue("ბრუნების სტანდარტული გეგმიური დრო");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 11:
+                        cell.setCellValue("ყველა ჩათვლილი რეისების რაოდენობა");
+                        cell.setCellStyle(headerStyle);
+                        break;
+
+                    case 12:
+                        cell.setCellValue("ორივე მიმართულების ბრუნების საშუალო ფაქტიური დრო");
+                        cell.setCellStyle(headerStyle);
+                        break;
+
+                }
+
+                columnIndex++;
+            }
+
+            rowHeigth = 30;
+            for (Map.Entry<Float, RouteAverages> routesAveragesEntry : routesAverages.entrySet()) {
+                RouteAverages routeAverages = routesAveragesEntry.getValue();
+                Row rowAB = averagesSheet.createRow(++rowIndex);
+                rowAB.setHeightInPoints(rowHeigth);
+
+                Cell cell_AB_0 = rowAB.createCell(0);
+                cell_AB_0.setCellValue(this.converter.convertRouteNumber(routeAverages.getRouteNumber()));
+                cell_AB_0.setCellStyle(rowStyleWhiteRegular);
+
+                averagesSheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 1, 0, 0));
+
+                Cell cell_AB_1 = rowAB.createCell(1);
+                cell_AB_1.setCellValue("A_B");
+                cell_AB_1.setCellStyle(rowStyleWhiteRegular);
+
+                Cell cell_AB_2 = rowAB.createCell(2);
+                cell_AB_2.setCellValue(routeAverages.getAbLowCount());
+                cell_AB_2.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_AB_3 = rowAB.createCell(3);
+                cell_AB_3.setCellValue(routeAverages.getAbLowAverageString());
+                cell_AB_3.setCellStyle(rowStyleWhiteTimeHHmmss);
+
+                Cell cell_AB_4 = rowAB.createCell(4);
+                cell_AB_4.setCellValue(routeAverages.getAbHighCount());
+                cell_AB_4.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_AB_5 = rowAB.createCell(5);
+                cell_AB_5.setCellValue(routeAverages.getAbHighAverageString());
+                cell_AB_5.setCellStyle(rowStyleWhiteTimeHHmmss);
+
+                Cell cell_AB_6 = rowAB.createCell(6);
+                cell_AB_6.setCellValue(routeAverages.getAbLowAndHighCount());
+                cell_AB_6.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_AB_7 = rowAB.createCell(7);
+                cell_AB_7.setCellValue(routeAverages.getAbLowAndHighAverage());
+                cell_AB_7.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_AB_8 = rowAB.createCell(8);
+                cell_AB_8.setCellValue(routeAverages.abTripPeriodTimeIsMultiple());
+                cell_AB_8.setCellStyle(rowStyleWhiteRegular);
+
+                Cell cell_AB_9 = rowAB.createCell(9);
+                cell_AB_9.setCellValue(routeAverages.getABTripPeriodStandartTimeString());
+                cell_AB_9.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_AB_10 = rowAB.createCell(10);
+                cell_AB_10.setCellValue(routeAverages.getTripRoundStandartTimeString());
+                cell_AB_10.setCellStyle(rowStyleWhiteTimeHHmm);
+                averagesSheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 1, 10, 10));
+
+                Cell cell_AB_11 = rowAB.createCell(11);
+                cell_AB_11.setCellValue(routeAverages.getAllCount());
+                cell_AB_11.setCellStyle(rowStyleWhiteNumber);
+                averagesSheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 1, 11, 11));
+
+                Cell cell_AB_12 = rowAB.createCell(12);
+                cell_AB_12.setCellValue(routeAverages.getAllAverage());
+                cell_AB_12.setCellStyle(rowStyleWhiteTimeHHmm);
+                averagesSheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 1, 12, 12));
+
+                Row rowBA = averagesSheet.createRow(++rowIndex);
+                rowBA.setHeightInPoints(rowHeigth);
+
+                Cell cell_BA_0 = rowBA.createCell(0);
+                cell_BA_0.setCellStyle(rowStyleWhiteRegular);
+
+                Cell cell_BA_1 = rowBA.createCell(1);
+                cell_BA_1.setCellValue("B_A");
+                cell_BA_1.setCellStyle(rowStyleWhiteRegular);
+
+                Cell cell_BA_2 = rowBA.createCell(2);
+                cell_BA_2.setCellValue(routeAverages.getBaLowCount());
+                cell_BA_2.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_BA_3 = rowBA.createCell(3);
+                cell_BA_3.setCellValue(routeAverages.getBaLowAverageString());
+                cell_BA_3.setCellStyle(rowStyleWhiteTimeHHmmss);
+
+                Cell cell_BA_4 = rowBA.createCell(4);
+                cell_BA_4.setCellValue(routeAverages.getBaHighCount());
+                cell_BA_4.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_BA_5 = rowBA.createCell(5);
+                cell_BA_5.setCellValue(routeAverages.getBaHighAverageString());
+                cell_BA_5.setCellStyle(rowStyleWhiteTimeHHmmss);
+
+                Cell cell_BA_6 = rowBA.createCell(6);
+                cell_BA_6.setCellValue(routeAverages.getBaLowAndHighCount());
+                cell_BA_6.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_BA_7 = rowBA.createCell(7);
+                cell_BA_7.setCellValue(routeAverages.getBaLowAndHighAverage());
+                cell_BA_7.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_BA_8 = rowBA.createCell(8);
+                cell_BA_8.setCellValue(routeAverages.baTripPeriodTimeIsMultiple());
+                cell_BA_8.setCellStyle(rowStyleWhiteRegular);
+
+                Cell cell_BA_9 = rowBA.createCell(9);
+                cell_BA_9.setCellValue(routeAverages.getBATripPeriodStandartTimeString());
+                cell_BA_9.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_BA_10 = rowBA.createCell(10);
+                cell_BA_10.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_BA_11 = rowBA.createCell(11);
+                cell_BA_11.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_BA_12 = rowBA.createCell(12);
+                cell_BA_12.setCellStyle(rowStyleWhiteTimeHHmm);
+                System.out.println("Route N" + routeAverages.getRouteNumber() + " Completed");
+            }
+            workbook.write(os);
+            System.out.println("++++Routes Averages Excel Writing Completed++++");
+
+            LOGGER.info("Export 100 W Row data time (seconds):" + (System.currentTimeMillis() - begin) / 1000);
+
+        } catch (IOException ex) {
+            Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private XSSFCellStyle getHeaderStyle(SXSSFWorkbook workbook, int rgbA, int rgbB, int rgbC, int rotation, boolean bold) {
+        XSSFCellStyle style = (XSSFCellStyle) workbook.createCellStyle();
+        byte[] rgb = new byte[]{(byte) rgbA, (byte) rgbB, (byte) rgbC};
+        XSSFColor color = new XSSFColor(rgb, null); //IndexedColorMap has no usage until now. So it can be set null.
+        style.setFillForegroundColor(color);
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        style.setRotation((short) rotation);
+
+        style.setWrapText(true);
+
+        style.setRotation((short) rotation);
+
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderTop(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+
+        // font
+        Font font = workbook.createFont();
+        font.setFontHeightInPoints((short) 11);
+        font.setFontName("Sylfaen");
+        font.setBold(bold);
+        style.setFont(font);
+
+        return style;
+    }
+
+    private XSSFCellStyle getRowStyle(SXSSFWorkbook workbook, int rgbA, int rgbB, int rgbC, boolean italic, boolean bold, String format) {
+        XSSFCellStyle style = (XSSFCellStyle) workbook.createCellStyle();
+        byte[] rgb = new byte[]{(byte) rgbA, (byte) rgbB, (byte) rgbC};
+        XSSFColor color = new XSSFColor(rgb, null); //IndexedColorMap has no usage until now. So it can be set null.
+        style.setFillForegroundColor(color);
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        style.setWrapText(true);
+
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderTop(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+
+        // font
+        Font font = workbook.createFont();
+        font.setFontHeightInPoints((short) 11);
+        font.setFontName("Sylfaen");
+        font.setItalic(italic);
+        font.setBold(bold);
+        style.setFont(font);
+
+        //time formats "[hh]:mm"   "[mm]:ss"
+        XSSFDataFormat fmts = (XSSFDataFormat) workbook.createDataFormat();
+        style.setDataFormat(fmts.getFormat(format));
+        return style;
+    }
+
 }

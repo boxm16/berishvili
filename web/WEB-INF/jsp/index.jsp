@@ -336,17 +336,23 @@
                                 </thead>
                             </table>
                         </div>
+                        &nbsp; &nbsp; &nbsp;
+                        <div>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+                               თარიღის ერთიანად მონშვნა
+                            </button>
+                        </div>
 
                         <!-- this part is juts to keep space -->
+
                         <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <i class="fas fa-align-justify"></i>
                         </button>
 
+
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="nav navbar-nav ml-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link"></a>
-                                </li>
+
                                 <li class="nav-item">
                                     <a class="nav-link"></a>
                                 </li>
@@ -393,7 +399,7 @@
                                                 &nbsp&nbsp&nbsp
                                             </td>
                                             <td>
-                                                <input type="checkbox" class="dates" checked="true" value="${entry.value.number}:${dayEntry.value.getDateStamp()}" onclick="checkDayCheckBoxes(event)"> 
+                                                <input type="checkbox" class="route_date" id=" ${dayEntry.value.getDateStampWeekFormat()}" checked="true" value="${entry.value.number}:${dayEntry.value.getDateStamp()}" onclick="checkDayCheckBoxes(event)"> 
                                             </td>
                                             <td colspan="2">
                                                 &nbsp&nbsp ${dayEntry.value.getDateStampWeekFormat()}
@@ -415,6 +421,47 @@
             <input hidden type="text" id="routes_dates" name="routes:dates">
         </form>
 
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">აირჩიე  თარიღი ყველა მარშრუთისვის</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <table style="text-align:center; font-size:20px">
+                            <tbody>
+
+                                <c:forEach var="dateEntry" items="${dates.dates}">
+                                    <tr>
+                                        <td>
+                                            &nbsp&nbsp&nbsp
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="dates" checked="true" value="${dateEntry.value.dateStampExcelFormat}" onclick="checkDate(event)"> 
+                                        </td>
+                                        <td>
+                                            ${dateEntry.value.dateStampExcelFormat}
+                                        </td>
+                                    </tr>
+                                </c:forEach> 
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
         <!-- jQuery CDN - Slim version (=without AJAX) -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <!-- Popper.JS -->
@@ -425,97 +472,112 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
         <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        $("#sidebar").mCustomScrollbar({
-                                                            theme: "minimal"
-                                                        });
-
-                                                        $('#sidebarCollapse').on('click', function () {
-                                                            $('#sidebar, #content').toggleClass('active');
-                                                            $('.collapse.in').toggleClass('in');
-                                                            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-                                                        });
+                                                $(document).ready(function () {
+                                                    $("#sidebar").mCustomScrollbar({
+                                                        theme: "minimal"
                                                     });
 
+                                                    $('#sidebarCollapse').on('click', function () {
+                                                        $('#sidebar, #content').toggleClass('active');
+                                                        $('.collapse.in').toggleClass('in');
+                                                        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                                                    });
+                                                });
 
-                                                    function selectRouteAll(event) {
 
-                                                        var bigCheckBox = event.target;
-                                                        var allCheckBoxes = document.querySelectorAll("input[type=\"checkbox\"]");
-                                                        for (x = 0; x < allCheckBoxes.length; x++) {
-                                                            allCheckBoxes[x].checked = bigCheckBox.checked;
+                                                function selectRouteAll(event) {
+
+                                                    var bigCheckBox = event.target;
+                                                    var allCheckBoxes = document.querySelectorAll("input[type=\"checkbox\"]");
+                                                    for (x = 0; x < allCheckBoxes.length; x++) {
+                                                        allCheckBoxes[x].checked = bigCheckBox.checked;
+                                                    }
+                                                }
+
+                                                function selectRouteAllDates(event, routeNumber) {
+                                                    console.log(routeNumber);
+                                                    var checkbox = event.target;
+                                                    var table = document.getElementById("daysOfRoute:" + routeNumber);
+                                                    var targetCheckBoxes = table.querySelectorAll("input[type=\"checkbox\"]");
+
+                                                    for (x = 0; x < targetCheckBoxes.length; x++) {
+                                                        targetCheckBoxes[x].checked = checkbox.checked;
+                                                    }
+                                                    checkRouteCheckBoxes();
+
+                                                }
+
+                                                function checkRouteCheckBoxes() {
+                                                    var targetCheckBoxes = document.querySelectorAll(".routes");
+                                                    for (x = 0; x < targetCheckBoxes.length; x++) {
+                                                        if (targetCheckBoxes[x].checked) {
+                                                            //do nothing
+                                                        } else {
+                                                            mainCheckBox.checked = false;
+                                                            return;
+                                                        }
+                                                    }
+                                                    mainCheckBox.checked = true;
+                                                }
+
+                                                function checkDateCheckBoxes(event) {
+
+                                                    var targetTable = event.target.parentNode.parentNode.parentNode.parentNode;
+
+                                                    var targetTableFullId = targetTable.id;
+                                                    var targetTableIdArray = targetTableFullId.split(":");
+                                                    var routeNumber = targetTableIdArray[1];
+
+                                                    var routeCheckBox = document.getElementById("routeCheckBox:" + routeNumber);
+
+                                                    var routeDatesCheckBoxes = targetTable.querySelectorAll(".route_date");
+
+                                                    for (x = 0; x < routeDatesCheckBoxes.length; x++) {
+                                                        if (routeDatesCheckBoxes[x].checked) {
+                                                            //do nothing
+                                                        } else {
+                                                            routeCheckBox.checked = false;
+                                                            checkRouteCheckBoxes();
+                                                            return;
+                                                        }
+                                                    }
+                                                    routeCheckBox.checked = true;
+                                                    checkRouteCheckBoxes();
+
+                                                }
+
+                                                function checkDate(event) {
+                                                    var triggerCheckbox = event.target;
+                                                    var targetCheckBoxes = document.querySelectorAll(".route_date");
+                                                    console.log(triggerCheckbox.value);
+                                                    for (x = 0; x < targetCheckBoxes.length; x++) {
+                                                        let triggerCheckboxValue = " " + triggerCheckbox.value;//i dont have idea why triggerCHeckboxValue adds empty string in front
+                                                        let targetCheckBoxeValue = targetCheckBoxes[x].getAttribute("id");
+                                                        if (triggerCheckboxValue == targetCheckBoxeValue) {
+
+                                                            targetCheckBoxes[x].checked = triggerCheckbox.checked;
                                                         }
                                                     }
 
-                                                    function selectRouteAllDates(event, routeNumber) {
-                                                        console.log(routeNumber);
-                                                        var checkbox = event.target;
-                                                        var table = document.getElementById("daysOfRoute:" + routeNumber);
-                                                        var targetCheckBoxes = table.querySelectorAll("input[type=\"checkbox\"]");
-
-                                                        for (x = 0; x < targetCheckBoxes.length; x++) {
-                                                            targetCheckBoxes[x].checked = checkbox.checked;
-                                                        }
-                                                        checkRouteCheckBoxes();
-
+                                                }
+                                                ////--------------------
+                                                function requestRouter(requestTarget) {
+                                                    form.target = "_self";
+                                                    form.action = requestTarget;
+                                                    routes_dates.value = collectSellectedCheckBoxes();
+                                                    console.log(form.action);
+                                                    form.submit();
+                                                }
+                                                //this function collects all checked checkbox values, concatinates them in one string and returns that string to send it after by POST method to server
+                                                function collectSellectedCheckBoxes() {
+                                                    var returnValue = "";
+                                                    var targetCheckBoxes = document.querySelectorAll(".route_date");
+                                                    for (x = 0; x < targetCheckBoxes.length; x++) {
+                                                        if (targetCheckBoxes[x].checked)
+                                                            returnValue += targetCheckBoxes[x].value + ",";
                                                     }
-
-                                                    function checkRouteCheckBoxes() {
-                                                        var targetCheckBoxes = document.querySelectorAll(".routes");
-                                                        for (x = 0; x < targetCheckBoxes.length; x++) {
-                                                            if (targetCheckBoxes[x].checked) {
-                                                                //do nothing
-                                                            } else {
-                                                                mainCheckBox.checked = false;
-                                                                return;
-                                                            }
-                                                        }
-                                                        mainCheckBox.checked = true;
-                                                    }
-
-                                                    function checkDayCheckBoxes(event) {
-
-                                                        var targetTable = event.target.parentNode.parentNode.parentNode.parentNode;
-
-                                                        var targetTableFullId = targetTable.id;
-                                                        var targetTableIdArray = targetTableFullId.split(":");
-                                                        var routeNumber = targetTableIdArray[1];
-
-                                                        var routeCheckBox = document.getElementById("routeCheckBox:" + routeNumber);
-
-                                                        var routeDatesCheckBoxes = targetTable.querySelectorAll(".dates");
-
-                                                        for (x = 0; x < routeDatesCheckBoxes.length; x++) {
-                                                            if (routeDatesCheckBoxes[x].checked) {
-                                                                //do nothing
-                                                            } else {
-                                                                routeCheckBox.checked = false;
-                                                                checkRouteCheckBoxes();
-                                                                return;
-                                                            }
-                                                        }
-                                                        routeCheckBox.checked = true;
-                                                        checkRouteCheckBoxes();
-
-                                                    }
-                                                    ////--------------------
-                                                    function requestRouter(requestTarget) {
-                                                        form.target = "_self";
-                                                        form.action = requestTarget;
-                                                        routes_dates.value = collectSellectedCheckBoxes();
-                                                        console.log(form.action);
-                                                        form.submit();
-                                                    }
-                                                    //this function collects all checked checkbox values, concatinates them in one string and returns that string to send it after by POST method to server
-                                                    function collectSellectedCheckBoxes() {
-                                                        var returnValue = "";
-                                                        var targetCheckBoxes = document.querySelectorAll(".dates");
-                                                        for (x = 0; x < targetCheckBoxes.length; x++) {
-                                                            if (targetCheckBoxes[x].checked)
-                                                                returnValue += targetCheckBoxes[x].value + ",";
-                                                        }
-                                                        return returnValue;
-                                                    }
+                                                    return returnValue;
+                                                }
         </script>
     </body>
 

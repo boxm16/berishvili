@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -373,7 +374,7 @@ public class TripPeriodsController {
     }
 
     @RequestMapping(value = "exportTripPeriods", method = RequestMethod.POST)
-    public String exportTripPeriods(String fileName, ModelMap model, HttpSession session) {
+    public String exportTripPeriods(String fileName, ModelMap model, HttpSession session, HttpServletRequest request) {
 
         System.out.println("---------------Trip Periods And Routes Averages Excel Export Starting ------------------------------");
         Instant start = Instant.now();
@@ -398,7 +399,7 @@ public class TripPeriodsController {
         System.out.println("---Writing Excel File Started---");
         memoryUsage.printMemoryUsage();
         //excelWriter.exportTripPeriodsAndRoutesAverages(tripPeriods, routesAveragesTreeMap, percents, fileName);
-        excelWriter.SXSSF(tripPeriods, routesAveragesTreeMap, percents, fileName);
+        excelWriter.SXSSF(tripPeriods, routesAveragesTreeMap, percents, fileName, request);
 
         model.addAttribute("excelExportLink", "exportTripPeriods.htm");
         model.addAttribute("fileName", fileName);

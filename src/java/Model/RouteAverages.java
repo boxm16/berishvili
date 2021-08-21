@@ -286,8 +286,9 @@ public class RouteAverages {
     }
 
     public void setDateStamps(String dateStamps) {
+       // dateStamps = dateStamps.replaceAll("'", "%27");
+
         this.dateStamps = dateStamps;
     }
-    
-    
+
 }

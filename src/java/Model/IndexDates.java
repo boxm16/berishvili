@@ -8,6 +8,7 @@ package Model;
 import Controller.Converter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TreeMap;
 
@@ -30,6 +31,40 @@ public class IndexDates {
 
         IndexDate indexDate = new IndexDate();
         indexDate.setDateStampExcelFormat(dateStampExcelFormat);
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+        switch (dayOfWeek) {
+            case 1:
+                indexDate.setDayOfWeek("კვირა");
+                indexDate.setDayColor("red");
+                break;
+            case 2:
+                indexDate.setDayOfWeek("ორშაბათი");
+                indexDate.setDayColor("black");
+                break;
+            case 3:
+                indexDate.setDayOfWeek("სამშაბათი");
+                indexDate.setDayColor("black");
+                break;
+            case 4:
+                indexDate.setDayOfWeek("ოთხშაბათი");
+                indexDate.setDayColor("black");
+                break;
+            case 5:
+                indexDate.setDayOfWeek("ხუთშაბათი");
+                indexDate.setDayColor("black");
+                break;
+            case 6:
+                indexDate.setDayOfWeek("პარასკევი");
+                indexDate.setDayColor("black");
+                break;
+            case 7:
+                indexDate.setDayOfWeek("შაბათი");
+                indexDate.setDayColor("red");
+                break;
+        }
 
         dates.put(date, indexDate);
     }

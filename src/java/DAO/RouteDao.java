@@ -242,7 +242,7 @@ public class RouteDao {
                 if (x == 0) {
                     stringBuilder.append("'").append(string).append("'");
                 } else {
-                    stringBuilder.append(", '").append(string).append("'");
+                    stringBuilder.append(",'").append(string).append("'");
                 }
             }
             if (x == treeMap.size() - 1) {
@@ -1019,6 +1019,7 @@ public class RouteDao {
                 if (!routesAveragesTreeMap.containsKey(routeNumberFloat)) {
                     RouteAverages routeAverages = new RouteAverages();
                     routeAverages.setRouteNumber(routeNumberString);
+                    routeAverages.setDateStamps(queryBuilderDateStampPart.toString());
                     routesAveragesTreeMap.put(routeNumberFloat, routeAverages);
 
                 }

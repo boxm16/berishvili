@@ -4,6 +4,7 @@ public class IndexDate {
 
     private String dateStampExcelFormat;
     private String dayOfWeek;
+    private String dayColor;
 
     public String getDateStampExcelFormat() {
         return dateStampExcelFormat;
@@ -20,5 +21,14 @@ public class IndexDate {
     public void setDayOfWeek(String dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
+
+    public String getDayColor() {
+        return dayColor;
+    }
+
+    public void setDayColor(String dayColor) {
+        this.dayColor = dayColor;
+    }
+    
 
 }

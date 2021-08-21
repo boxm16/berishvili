@@ -339,7 +339,7 @@
                         &nbsp; &nbsp; &nbsp;
                         <div>
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
-                               თარიღის ერთიანად მონშვნა
+                                თარიღის ერთიანად მონშვნა
                             </button>
                         </div>
 
@@ -444,8 +444,11 @@
                                         <td>
                                             <input type="checkbox" class="dates" checked="true" value="${dateEntry.value.dateStampExcelFormat}" onclick="checkDate(event)"> 
                                         </td>
-                                        <td>
+                                         <td style="color: ${dateEntry.value.dayColor}">
                                             ${dateEntry.value.dateStampExcelFormat}
+                                        </td>
+                                        <td style="color: ${dateEntry.value.dayColor}">
+                                            ${dateEntry.value.dayOfWeek}
                                         </td>
                                     </tr>
                                 </c:forEach> 

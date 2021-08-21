@@ -22,11 +22,14 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
@@ -36,6 +39,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFDataFormat;
+import org.apache.poi.xssf.usermodel.XSSFHyperlink;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -1357,7 +1361,7 @@ public class ExcelWriter {
 
     }
 
-    void SXSSF(ArrayList<TripPeriod2X> tripPeriods, TreeMap<Float, RouteAverages> routesAverages, int percents, String fileName) {
+    void SXSSF(ArrayList<TripPeriod2X> tripPeriods, TreeMap<Float, RouteAverages> routesAverages, int percents, String fileName, HttpServletRequest request) {
         long begin = System.currentTimeMillis();
         Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 
@@ -1672,6 +1676,12 @@ public class ExcelWriter {
                 columnIndex++;
             }
 
+            String path;
+            if (request.getServerName().equals("localhost")) {
+                path = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+            } else {
+                path = request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+            }
             columnIndex = 0;
             while (columnIndex < 13) {
                 Cell cell = averagesHeaderRow1.createCell(columnIndex);
@@ -1756,6 +1766,10 @@ public class ExcelWriter {
                 Cell cell_AB_2 = rowAB.createCell(2);
                 cell_AB_2.setCellValue(routeAverages.getAbLowCount());
                 cell_AB_2.setCellStyle(rowStyleWhiteNumber);
+                Hyperlink hyperlink = workbook.getCreationHelper()
+                        .createHyperlink(HyperlinkType.URL);
+                hyperlink.setAddress(path + "countedTripPeriods.htm?routeNumber="+routeAverages.getRouteNumber()+"&dateStamps=" + routeAverages.getDateStamps() + "&type=ab&percents="+percents+"&height=low");
+                cell_AB_2.setHyperlink((XSSFHyperlink) hyperlink);
 
                 Cell cell_AB_3 = rowAB.createCell(3);
                 cell_AB_3.setCellValue(routeAverages.getAbLowAverageString());

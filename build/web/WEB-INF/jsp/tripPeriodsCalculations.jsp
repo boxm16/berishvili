@@ -95,19 +95,19 @@
                         A_B
                     </td>
                     <td>
-                        ${entry.value.abLowCount}
+                        <a href="countedTripPeriods.htm?routeNumber=${entry.value.routeNumber}&dateStamps=${entry.value.dateStamps}&type=ab&percents=${percents}&height=low" target="_blank"> ${entry.value.abLowCount} </a>
                     </td>
                     <td>
                         ${entry.value.getAbLowAverageString()}
                     </td>
                     <td>
-                        ${entry.value.abHighCount}
+                        <a href="countedTripPeriods.htm?routeNumber=${entry.value.routeNumber}&dateStamps=${entry.value.dateStamps}&type=ab&percents=${percents}&height=high" target="_blank"> ${entry.value.abHighCount}</a>
                     </td>
                     <td>
                         ${entry.value.getAbHighAverageString()}
                     </td>
                     <td>
-                        ${entry.value.abLowAndHighCount}
+                        <a href="countedTripPeriods.htm?routeNumber=${entry.value.routeNumber}&dateStamps=${entry.value.dateStamps}&type=ab&percents=${percents}&height=both" target="_blank"> ${entry.value.abLowAndHighCount}</a>
                     </td>
                     <td>
                         ${entry.value.getAbLowAndHighAverage()}
@@ -133,19 +133,19 @@
                         B_A
                     </td>
                     <td>
-                        ${entry.value.baLowCount} 
+                        <a href="countedTripPeriods.htm?routeNumber=${entry.value.routeNumber}&dateStamps=${entry.value.dateStamps}&type=ba&percents=${percents}&height=low" target="_blank"> ${entry.value.baLowCount} </a>
                     </td>
                     <td>
                         ${entry.value.getBaLowAverageString()}
                     </td>
                     <td>
-                        ${entry.value.baHighCount}
+                        <a href="countedTripPeriods.htm?routeNumber=${entry.value.routeNumber}&dateStamps=${entry.value.dateStamps}&type=ba&percents=${percents}&height=high" target="_blank"> ${entry.value.baHighCount}</a>
                     </td>
                     <td>
                         ${entry.value.getBaHighAverageString()}
                     </td>
                     <td>
-                        ${entry.value.baLowAndHighCount}
+                        <a href="countedTripPeriods.htm?routeNumber=${entry.value.routeNumber}&dateStamps=${entry.value.dateStamps}&type=ba&percents=${percents}&height=both" target="_blank">  ${entry.value.baLowAndHighCount}</a>
                     </td>
                     <td>
                         ${entry.value.getBaLowAndHighAverage()}

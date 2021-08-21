@@ -21,6 +21,8 @@ public class RouteAverages {
     private int baHighCount;
     private long baHighTotal;
 
+    private String dateStamps;
+
     private Converter converter;
 
     public RouteAverages() {
@@ -277,6 +279,15 @@ public class RouteAverages {
             baAllAverage = Duration.ofSeconds((this.baLowTotal + this.baHighTotal) / (this.baLowCount + this.baHighCount));
         }
         return converter.convertDurationToString(abAllAverage.plus(baAllAverage));
-
     }
+
+    public String getDateStamps() {
+        return dateStamps;
+    }
+
+    public void setDateStamps(String dateStamps) {
+        this.dateStamps = dateStamps;
+    }
+    
+    
 }

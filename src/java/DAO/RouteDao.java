@@ -899,6 +899,8 @@ public class RouteDao {
                 if (!routesAveragesTreeMap.containsKey(routeNumberFloat)) {
                     RouteAverages routeAverages = new RouteAverages();
                     routeAverages.setRouteNumber(routeNumberString);
+                    routeAverages.setDateStamps(queryBuilderDateStampPart.toString());
+
                     routesAveragesTreeMap.put(routeNumberFloat, routeAverages);
                 }
                 RouteAverages routeAverages = routesAveragesTreeMap.get(routeNumberFloat);
@@ -1018,6 +1020,7 @@ public class RouteDao {
                     RouteAverages routeAverages = new RouteAverages();
                     routeAverages.setRouteNumber(routeNumberString);
                     routesAveragesTreeMap.put(routeNumberFloat, routeAverages);
+
                 }
                 RouteAverages routeAverages = routesAveragesTreeMap.get(routeNumberFloat);
                 LocalDateTime startTimeActual = converter.convertStringTimeToDate(resultSet.getString("start_time_actual"));
@@ -1072,5 +1075,60 @@ public class RouteDao {
         excelExportData.put("tripPeriods", tripPeriods);
         return excelExportData;
 
+    }
+
+    public ArrayList<TripPeriod2X> getCountedTripPeriods(String routeNumber, String dateStamps, String type, String percents, String height) {
+        int percentsInt = Integer.valueOf(percents);
+        ArrayList<TripPeriod2X> tripPeriods = new ArrayList<>();
+        StringBuilder query = new StringBuilder();
+        StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT route_number, date_stamp,  bus_number, exodus_number, driver_name, type, start_time_scheduled, start_time_actual, arrival_time_scheduled, arrival_time_actual FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number=");
+        query = queryBuilderInitialPart.append("'").append(routeNumber).append("'").
+                append(" AND date_stamp IN ").append(dateStamps).
+                append(" AND type=").append("'").append(type).append("'").
+                append(" ORDER BY prefix, suffix, date_stamp, exodus_number, start_time_scheduled ;");
+        try {
+            connection = dataBaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query.toString());
+            while (resultSet.next()) {
+                LocalDateTime startTimeActual = converter.convertStringTimeToDate(resultSet.getString("start_time_actual"));
+                LocalDateTime startTimeScheduled = converter.convertStringTimeToDate(resultSet.getString("start_time_scheduled"));
+
+                LocalDateTime arrivalTimeScheduled = converter.convertStringTimeToDate(resultSet.getString("arrival_time_scheduled"));
+                LocalDateTime arrivalTimeActual = converter.convertStringTimeToDate(resultSet.getString("arrival_time_actual"));
+
+                if (startTimeActual != null && arrivalTimeActual != null) {
+
+                    Duration tripPeriodTimeActual = Duration.between(startTimeActual, arrivalTimeActual);
+                    Duration tripPeriodTimeScheduled = Duration.between(startTimeScheduled, arrivalTimeScheduled);
+
+                    if ((height.equals("low") && lowPercentageChecks(tripPeriodTimeScheduled, tripPeriodTimeActual, percentsInt))
+                            || (height.equals("high") && highPercentageChecks(tripPeriodTimeScheduled, tripPeriodTimeActual, percentsInt))
+                            || (height.equals("both") && lowPercentageChecks(tripPeriodTimeScheduled, tripPeriodTimeActual, percentsInt))
+                            || (height.equals("both") && highPercentageChecks(tripPeriodTimeScheduled, tripPeriodTimeActual, percentsInt))) {
+                        TripPeriod2X tripPeriod = new TripPeriod2X();
+                        tripPeriod.setRouteNumber(resultSet.getString("route_number"));
+                        tripPeriod.setDateStamp(resultSet.getString("date_stamp"));
+                        tripPeriod.setBusNumber(resultSet.getString("bus_number"));
+                        tripPeriod.setExodusNumber(resultSet.getShort("exodus_number"));
+                        tripPeriod.setDriverName(resultSet.getString("driver_name"));
+                        tripPeriod.setType(resultSet.getString("type"));
+                        tripPeriod.setStartTimeScheduled(startTimeScheduled);
+                        tripPeriod.setStartTimeActual(startTimeActual);
+                        tripPeriod.setArrivalTimeScheduled(arrivalTimeScheduled);
+                        tripPeriod.setArrivalTimeActual(arrivalTimeActual);
+
+                        tripPeriods.add(tripPeriod);
+                    }
+                }
+            }
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(RouteDao.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+        return tripPeriods;
     }
 }

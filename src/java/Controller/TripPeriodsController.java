@@ -450,4 +450,18 @@ public class TripPeriodsController {
         }
         return "redirect:/tripPeriodsExcelExportDashboard.htm";
     }
+
+    @RequestMapping(value = "countedTripPeriods", method = RequestMethod.GET)
+    public String countedTripPeriods(@RequestParam("routeNumber") String routeNumber,
+            @RequestParam("dateStamps") String dateStamps,
+            @RequestParam("type") String type,
+            @RequestParam("percents") String percents,
+            @RequestParam("height") String height,
+            ModelMap model) {
+
+        ArrayList<TripPeriod2X> countedTripPeriods = routeDao.getCountedTripPeriods(routeNumber, dateStamps, type, percents, height);
+        model.addAttribute("countedTripPeriods", countedTripPeriods);
+        return "countedTripPeriods";
+    }
+
 }

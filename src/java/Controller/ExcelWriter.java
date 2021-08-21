@@ -1677,11 +1677,8 @@ public class ExcelWriter {
             }
 
             String path;
-            if (request.getServerName().equals("localhost")) {
-                path = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
-            } else {
-                path = request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
-            }
+            path = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+
             columnIndex = 0;
             while (columnIndex < 13) {
                 Cell cell = averagesHeaderRow1.createCell(columnIndex);
@@ -1766,10 +1763,10 @@ public class ExcelWriter {
                 Cell cell_AB_2 = rowAB.createCell(2);
                 cell_AB_2.setCellValue(routeAverages.getAbLowCount());
                 cell_AB_2.setCellStyle(rowStyleWhiteNumber);
-                Hyperlink hyperlink = workbook.getCreationHelper()
+                Hyperlink hyperlink_AB_2 = workbook.getCreationHelper()
                         .createHyperlink(HyperlinkType.URL);
-                hyperlink.setAddress(path + "countedTripPeriods.htm?routeNumber="+routeAverages.getRouteNumber()+"&dateStamps=" + routeAverages.getDateStamps() + "&type=ab&percents="+percents+"&height=low");
-                cell_AB_2.setHyperlink((XSSFHyperlink) hyperlink);
+                hyperlink_AB_2.setAddress(path + "countedTripPeriods.htm?routeNumber=" + routeAverages.getRouteNumber() + "&dateStamps=" + routeAverages.getDateStamps() + "&type=ab&percents=" + percents + "&height=low");
+                cell_AB_2.setHyperlink((XSSFHyperlink) hyperlink_AB_2);
 
                 Cell cell_AB_3 = rowAB.createCell(3);
                 cell_AB_3.setCellValue(routeAverages.getAbLowAverageString());
@@ -1778,6 +1775,10 @@ public class ExcelWriter {
                 Cell cell_AB_4 = rowAB.createCell(4);
                 cell_AB_4.setCellValue(routeAverages.getAbHighCount());
                 cell_AB_4.setCellStyle(rowStyleWhiteNumber);
+                Hyperlink hyperlink_AB_4 = workbook.getCreationHelper()
+                        .createHyperlink(HyperlinkType.URL);
+                hyperlink_AB_4.setAddress(path + "countedTripPeriods.htm?routeNumber=" + routeAverages.getRouteNumber() + "&dateStamps=" + routeAverages.getDateStamps() + "&type=ab&percents=" + percents + "&height=high");
+                cell_AB_4.setHyperlink((XSSFHyperlink) hyperlink_AB_4);
 
                 Cell cell_AB_5 = rowAB.createCell(5);
                 cell_AB_5.setCellValue(routeAverages.getAbHighAverageString());
@@ -1786,6 +1787,10 @@ public class ExcelWriter {
                 Cell cell_AB_6 = rowAB.createCell(6);
                 cell_AB_6.setCellValue(routeAverages.getAbLowAndHighCount());
                 cell_AB_6.setCellStyle(rowStyleWhiteNumber);
+                Hyperlink hyperlink_AB_6 = workbook.getCreationHelper()
+                        .createHyperlink(HyperlinkType.URL);
+                hyperlink_AB_6.setAddress(path + "countedTripPeriods.htm?routeNumber=" + routeAverages.getRouteNumber() + "&dateStamps=" + routeAverages.getDateStamps() + "&type=ab&percents=" + percents + "&height=both");
+                cell_AB_6.setHyperlink((XSSFHyperlink) hyperlink_AB_6);
 
                 Cell cell_AB_7 = rowAB.createCell(7);
                 cell_AB_7.setCellValue(routeAverages.getAbLowAndHighAverage());
@@ -1827,6 +1832,10 @@ public class ExcelWriter {
                 Cell cell_BA_2 = rowBA.createCell(2);
                 cell_BA_2.setCellValue(routeAverages.getBaLowCount());
                 cell_BA_2.setCellStyle(rowStyleWhiteNumber);
+                Hyperlink hyperlink_BA_2 = workbook.getCreationHelper()
+                        .createHyperlink(HyperlinkType.URL);
+                hyperlink_BA_2.setAddress(path + "countedTripPeriods.htm?routeNumber=" + routeAverages.getRouteNumber() + "&dateStamps=" + routeAverages.getDateStamps() + "&type=ba&percents=" + percents + "&height=low");
+                cell_BA_2.setHyperlink((XSSFHyperlink) hyperlink_BA_2);
 
                 Cell cell_BA_3 = rowBA.createCell(3);
                 cell_BA_3.setCellValue(routeAverages.getBaLowAverageString());
@@ -1835,6 +1844,10 @@ public class ExcelWriter {
                 Cell cell_BA_4 = rowBA.createCell(4);
                 cell_BA_4.setCellValue(routeAverages.getBaHighCount());
                 cell_BA_4.setCellStyle(rowStyleWhiteNumber);
+                Hyperlink hyperlink_BA_4 = workbook.getCreationHelper()
+                        .createHyperlink(HyperlinkType.URL);
+                hyperlink_BA_4.setAddress(path + "countedTripPeriods.htm?routeNumber=" + routeAverages.getRouteNumber() + "&dateStamps=" + routeAverages.getDateStamps() + "&type=ba&percents=" + percents + "&height=high");
+                cell_BA_4.setHyperlink((XSSFHyperlink) hyperlink_BA_4);
 
                 Cell cell_BA_5 = rowBA.createCell(5);
                 cell_BA_5.setCellValue(routeAverages.getBaHighAverageString());
@@ -1843,6 +1856,10 @@ public class ExcelWriter {
                 Cell cell_BA_6 = rowBA.createCell(6);
                 cell_BA_6.setCellValue(routeAverages.getBaLowAndHighCount());
                 cell_BA_6.setCellStyle(rowStyleWhiteNumber);
+                Hyperlink hyperlink_BA_6 = workbook.getCreationHelper()
+                        .createHyperlink(HyperlinkType.URL);
+                hyperlink_BA_6.setAddress(path + "countedTripPeriods.htm?routeNumber=" + routeAverages.getRouteNumber() + "&dateStamps=" + routeAverages.getDateStamps() + "&type=ba&percents=" + percents + "&height=both");
+                cell_BA_6.setHyperlink((XSSFHyperlink) hyperlink_BA_6);
 
                 Cell cell_BA_7 = rowBA.createCell(7);
                 cell_BA_7.setCellValue(routeAverages.getBaLowAndHighAverage());

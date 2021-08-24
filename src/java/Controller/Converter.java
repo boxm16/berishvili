@@ -173,4 +173,21 @@ public class Converter {
         return dateFormat.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
+    public String convertStringDurationToThreeColors(String stringDuration) {
+        if (stringDuration == null) {
+            return "inherited";
+        }
+        String isoStr = stringDuration.replaceFirst(
+                "^([+-]?)(\\d{2}):(\\d{2}):(\\d{2})$", "$1PT$2H$3M$4S");
+        // Parse to Duration
+        Duration differenceDuration = Duration.parse(isoStr);
+        if (differenceDuration.getSeconds() < 61 && differenceDuration.getSeconds() > -61) {
+            return "inherited";
+        }
+        if (differenceDuration.getSeconds() < 301 && differenceDuration.getSeconds() > -301) {
+            return "yellow";
+        }
+        return "red";
+    }
+
 }

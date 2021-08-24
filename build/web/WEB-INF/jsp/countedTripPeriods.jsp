@@ -335,13 +335,6 @@
                     </tbody>
                 </table>
                 <hr>
-                <center>
-
-                    ${tripPeriodsPager.display}
-
-                </center>
-                <hr>
-
             </div>
         </div>
         <!-- jQuery CDN - Slim version (=without AJAX) -->

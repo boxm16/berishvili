@@ -229,26 +229,37 @@
                     <h3> <a href="http://berishvili.eu5.org">ძველ სერვერზე გადასვლა</a> </h3>
                 </div>
                 <div class="sidebar-header">
-                    <h3>ფუნქციები</h3>
+                   <!--- <h3>ფუნქციები</h3> ---->
                 </div>
 
                 <ul class="list-unstyled components">
                     <li>
-                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">ბრუნების დროები</a>
-                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <a href="#detailedRoutesSubmenue" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>ბრუნები დეტალურად</h3></a>
+                        <ul class="collapse list-unstyled" id="detailedRoutesSubmenue">
                             <li>
-                                <a href="#" onclick="requestRouter('tripPeriodsInitialRequest.htm')">დათვალიერება</a>
+                                <a href="#" onclick="requestRouter('detailedRoutesInitialRequest.htm')"><h4>დათვალიერება</h4></a>
                             </li>
                             <li>
-                                <a href="#" onclick="requestRouter('tripPeriodsCalculationsInitialRequest.htm')">გამოთვლები</a>
-                            </li>
-                            <li>
-                                <a href="#" onclick="requestRouter('tripPeriodsExcelExportDashboardInitialRequest.htm')">ექსელში ექსპორტი</a>
+                                <a href="#" onclick="requestRouter('detailedRoutesExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a href="#guarantySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">საგარანტიოები</a>
+                        <a href="#routeTimesSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>ბრუნების დროები</h3></a>
+                        <ul class="collapse list-unstyled" id="routeTimesSubmenu">
+                            <li>
+                                <a href="#" onclick="requestRouter('tripPeriodsInitialRequest.htm')"><h4>დათვალიერება</h4></a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="requestRouter('tripPeriodsCalculationsInitialRequest.htm')"><h4>გამოთვლები</h4></a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="requestRouter('tripPeriodsExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#guarantySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>საგარანტიოები</h3></a>
                         <ul class="collapse list-unstyled" id="guarantySubmenu">
                             <li>
                                 <a href="#">Home 1</a>
@@ -257,55 +268,15 @@
                                 <a href="#">Home 2</a>
                             </li>
                             <li>
-                                <a href="guarantyTripsUploadPage.htm"">ავტობუსების მარშრუტების ანალიზი</a>
+                                <a href="guarantyTripsUploadPage.htm""><h4>ავტობუსების მარშრუტების ანალიზი</h4></a>
                             </li>
                         </ul>
-                    </li>
-
-                    <li>
-                        <a href="routes.htm">მარშრუტები</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                    <li>
-                        <a href="#">Portfolio</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                    <li>
-                        <a href="#">Portfolio</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                    <li>
-                        <a href="#">Portfolio</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                    <li>
-                        <a href="#">Portfolio</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                    <li>
-                        <a href="#">Portfolio</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
                     </li>
                 </ul>
 
                 <ul class="list-unstyled CTAs">
                     <li>
-                        <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
-                    </li>
-                    <li>
-                        <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>
+                        <a href="routes.htm"><h3>მარშრუტები</h3></a>
                     </li>
                 </ul>
             </nav>
@@ -444,7 +415,7 @@
                                         <td>
                                             <input type="checkbox" class="dates" checked="true" value="${dateEntry.value.dateStampExcelFormat}" onclick="checkDate(event)"> 
                                         </td>
-                                         <td style="color: ${dateEntry.value.dayColor}">
+                                        <td style="color: ${dateEntry.value.dayColor}">
                                             ${dateEntry.value.dateStampExcelFormat}
                                         </td>
                                         <td style="color: ${dateEntry.value.dayColor}">

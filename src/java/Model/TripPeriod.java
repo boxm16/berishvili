@@ -189,4 +189,11 @@ public class TripPeriod {
 
     }
 
+    public String getStartTimeDifferenceColor() {
+        return converter.convertStringDurationToThreeColors(startTimeDifference);
+    }
+
+    public String getArrivalTimeDifferenceColor() {
+        return converter.convertStringDurationToThreeColors(arrivalTimeDifference);
+    }
 }

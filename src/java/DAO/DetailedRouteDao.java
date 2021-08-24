@@ -4,8 +4,8 @@ import Controller.Converter;
 import Model.Day;
 import Model.DetailedRoute;
 import Model.DetailedRoutesPager;
+import Model.DetailedTripPeriod;
 import Model.Exodus;
-import Model.TripPeriod;
 import Model.TripVoucher;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -76,7 +76,7 @@ public class DetailedRouteDao {
                 }
                 TripVoucher tripVoucher = exodus.getTripVouchers().get(tripVoucherNumber);
 
-                TripPeriod newTripPeriod = new TripPeriod();
+                DetailedTripPeriod newTripPeriod = new DetailedTripPeriod();
 
                 newTripPeriod.setType(resultSet.getString("type"));
                 newTripPeriod.setStartTimeScheduled(converter.convertStringTimeToDate(resultSet.getString("start_time_scheduled")));

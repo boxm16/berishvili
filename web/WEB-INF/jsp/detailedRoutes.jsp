@@ -379,13 +379,15 @@
                                             <td align="center">${tripPeriod.typeG} </td>
                                             <td align="center">${tripPeriod.getArrivalTimeScheduledString()} </td>
                                             <td align="center">${tripPeriod.getArrivalTimeActualString()} </td>
-                                             <td align="center" style='background-color: ${tripPeriod.getArrivalTimeDifferenceColor()}'>${tripPeriod.getArrivalTimeDifference()}</td>
+                                            <td align="center" style='background-color: ${tripPeriod.getArrivalTimeDifferenceColor()}'>${tripPeriod.getArrivalTimeDifference()}</td>
 
                                             <td align="center">link</td>
                                             <td align="center">${tripPeriod.getTripPeriodTimeScheduledString()} </td>
                                             <td align="center">${tripPeriod.getTripPeriodTimeActualString()} </td>
                                             <td align="center" style="background-color: ${tripPeriod.getTripPeriodTimeDifferenceColor()}">${tripPeriod.getTripPeriodTimeDifferenceString()} </td>
-
+                                            <td align="center">${tripPeriod.getHaltTimeScheduledString()}</td>
+                                            <td align="center">${tripPeriod.getHaltTimeActualString()}</td>
+                                            <td align="center" style="background-color:${tripPeriod.getLostTimeColor()} ">${tripPeriod.lostTimeString}</td>
                                         </tr>
                                     </c:forEach>
                                 </c:forEach>

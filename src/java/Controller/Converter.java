@@ -173,8 +173,19 @@ public class Converter {
         return dateFormat.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
+    public Duration convertStringToDuration(String timeStamp) {
+        if (timeStamp == null) {
+            return null;
+        }
+        String isoStr = timeStamp.replaceFirst(
+                "^([+-]?)(\\d{2}):(\\d{2}):(\\d{2})$", "$1PT$2H$3M$4S");
+        // Parse to Duration
+        Duration duration = Duration.parse(isoStr);
+        return duration;
+    }
+
     public String convertStringDurationToThreeColors(String stringDuration) {
-        if (stringDuration == null) {
+        if (stringDuration == null || stringDuration.isEmpty()) {
             return "inherited";
         }
         String isoStr = stringDuration.replaceFirst(

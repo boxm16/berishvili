@@ -14,7 +14,7 @@ public class TripPeriod {
     private LocalDateTime arrivalTimeScheduled;
     private LocalDateTime arrivalTimeActual;
     private String arrivalTimeDifference;
-    private Converter converter;
+    protected Converter converter;
 
     public TripPeriod() {
         converter = new Converter();

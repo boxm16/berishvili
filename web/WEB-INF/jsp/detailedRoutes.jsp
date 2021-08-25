@@ -281,9 +281,9 @@
                     <center><h5>მარშრუტები</h5></center>
                 </div>
                 <ul class="list-unstyled components">
-                    <c:forEach var="routeNumber" items="${detailedRoutesPager.routeNumbers}" >
+                    <c:forEach var="routeNumber" items="${detailedRoutesPager.routeNumbers}"  >
                         <li >
-                            <a href="detailedRoutesRequest.htm?requestedPage=${routeNumber}">${routeNumber}</a>
+                            <a href="detailedRoutesRequest.htm?requestedRoute=${routeNumber}">${routeNumber}</a>
                         </li>
                     </c:forEach>
                 </ul>

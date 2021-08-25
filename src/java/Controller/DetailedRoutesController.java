@@ -1,12 +1,8 @@
 package Controller;
 
 import DAO.DetailedRouteDao;
-import Model.Day;
 import Model.DetailedRoute;
 import Model.DetailedRoutesPager;
-import java.util.Date;
-import java.util.Map;
-import java.util.TreeMap;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,17 +25,13 @@ public class DetailedRoutesController {
     public String detailedRoutesInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model, HttpSession session) {
 
         DetailedRoutesPager detailedRoutesPager = createDetailedRoutesPager(routeDates);
-        detailedRoutesPager.setCurrentPage(1);
+        detailedRoutesPager.setCurrentRoute("initial");
         DetailedRoute detailedRoute = detailedRouteDao.getDetailedRoute(detailedRoutesPager);
         session.setAttribute("detailedRoutesPager", detailedRoutesPager);
         if (session.getAttribute("percents") == null) {
             session.setAttribute("percents", 20);
         }
 
-        TreeMap<Date, Day> days = detailedRoute.getDays();
-        for (Map.Entry<Date, Day> entry : days.entrySet()) {
-            //System.out.println(entry.getValue().);
-        }
 
         detailedRoute.calculateData();
         model.addAttribute("detailedRoutesPager", detailedRoutesPager);
@@ -49,10 +41,10 @@ public class DetailedRoutesController {
     }
 
     @RequestMapping(value = "detailedRoutesRequest")
-    public String detailedRoutesRequest(@RequestParam("requestedPage") String requestedPage, ModelMap model, HttpSession session) {
+    public String detailedRoutesRequest(@RequestParam("requestedRoute") String requestedRoute, ModelMap model, HttpSession session) {
         DetailedRoutesPager detailedRoutesPager = (DetailedRoutesPager) session.getAttribute("detailedRoutesPager");
 
-        detailedRoutesPager.setCurrentPage(Integer.valueOf(requestedPage));
+        detailedRoutesPager.setCurrentRoute(requestedRoute);
         DetailedRoute detailedRoute = detailedRouteDao.getDetailedRoute(detailedRoutesPager);
         session.setAttribute("detailedRoutesPager", detailedRoutesPager);
         if (session.getAttribute("percents") == null) {

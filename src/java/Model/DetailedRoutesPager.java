@@ -6,7 +6,7 @@ public class DetailedRoutesPager {
 
     private ArrayList<String> routeNumbers;
     private ArrayList<String> dateStamps;
-    private int currentPage;
+    private String currentRoute;
 
     public DetailedRoutesPager() {
         routeNumbers = new ArrayList<>();
@@ -41,16 +41,19 @@ public class DetailedRoutesPager {
         this.dateStamps = dateStamps;
     }
 
-    public int getCurrentPage() {
-        return currentPage;
+    public String getCurrentRoute() {
+        return currentRoute;
     }
 
-    public void setCurrentPage(int currentPage) {
-        this.currentPage = currentPage;
+    public void setCurrentRoute(String currentRoute) {
+        if (currentRoute.equals("initial")) {
+            if (this.routeNumbers.size() > 0) {
+                this.currentRoute = this.routeNumbers.get(0);
+            } else {
+                this.currentRoute = null;
+            }
+        } else {
+            this.currentRoute = currentRoute;
+        }
     }
-
-    public String getCurrentRouteNumber() {
-        return this.routeNumbers.get(this.currentPage - 1);
-    }
-
 }

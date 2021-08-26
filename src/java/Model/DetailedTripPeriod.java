@@ -8,6 +8,8 @@ public class DetailedTripPeriod extends TripPeriod {
     private Duration haltTimeActual;
     private String lostTimeString;
 
+    private Duration interval;
+
     public Duration getHaltTimeScheduled() {
         return haltTimeScheduled;
     }
@@ -74,12 +76,21 @@ public class DetailedTripPeriod extends TripPeriod {
         this.lostTimeString = lostTimeString;
     }
 
-    
-    
     public String getLostTimeColor() {
-        if (lostTimeString.isEmpty()) {
-            System.out.println("-------------");
-        }
+
         return converter.convertStringDurationToThreeColors(lostTimeString);
     }
+
+    public Duration getInterval() {
+        return interval;
+    }
+
+    public void setInterval(Duration interval) {
+        this.interval = interval;
+    }
+
+    public String getIntervalString() {
+        return converter.convertDurationToString(interval);
+    }
+
 }

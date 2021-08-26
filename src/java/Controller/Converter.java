@@ -111,6 +111,9 @@ public class Converter {
     }
 
     public String convertDurationToString(Duration duration) {
+        if (duration == null) {
+            return "";
+        }
         if (duration.isNegative()) {
             long seconds = duration.getSeconds() * (-1);
             int h = (int) seconds / 3600;

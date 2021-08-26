@@ -229,10 +229,11 @@
                     <h3> <a href="http://berishvili.eu5.org">ძველ სერვერზე გადასვლა</a> </h3>
                 </div>
                 <div class="sidebar-header">
-                   <!--- <h3>ფუნქციები</h3> ---->
+                    <!--- <h3>ფუნქციები</h3> ---->
                 </div>
 
                 <ul class="list-unstyled components">
+
                     <li>
                         <a href="#detailedRoutesSubmenue" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>ბრუნები დეტალურად</h3></a>
                         <ul class="collapse list-unstyled" id="detailedRoutesSubmenue">
@@ -241,6 +242,17 @@
                             </li>
                             <li>
                                 <a href="#" onclick="requestRouter('detailedRoutesExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#intervalsSubmenue" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>ინტერვალები</h3></a>
+                        <ul class="collapse list-unstyled" id="intervalsSubmenue">
+                            <li>
+                                <a href="#" onclick="requestRouter('intervalsInitialRequest.htm')"><h4>დათვალიერება</h4></a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="requestRouter('intervalsExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
                             </li>
                         </ul>
                     </li>

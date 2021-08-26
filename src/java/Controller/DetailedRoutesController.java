@@ -32,7 +32,6 @@ public class DetailedRoutesController {
             session.setAttribute("percents", 20);
         }
 
-
         detailedRoute.calculateData();
         model.addAttribute("detailedRoutesPager", detailedRoutesPager);
         model.addAttribute("detailedRoute", detailedRoute);
@@ -47,9 +46,7 @@ public class DetailedRoutesController {
         detailedRoutesPager.setCurrentRoute(requestedRoute);
         DetailedRoute detailedRoute = detailedRouteDao.getDetailedRoute(detailedRoutesPager);
         session.setAttribute("detailedRoutesPager", detailedRoutesPager);
-        if (session.getAttribute("percents") == null) {
-            session.setAttribute("percents", 20);
-        }
+        
         detailedRoute.calculateData();
         model.addAttribute("detailedRoutesPager", detailedRoutesPager);
         model.addAttribute("detailedRoute", detailedRoute);
@@ -79,5 +76,4 @@ public class DetailedRoutesController {
         }
         return detailedRoutesPager;
     }
-
 }

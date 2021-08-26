@@ -2,6 +2,7 @@ package DAO;
 
 import Controller.Converter;
 import Model.Day;
+import Model.DetailedDay;
 import Model.DetailedRoute;
 import Model.DetailedRoutesPager;
 import Model.DetailedTripPeriod;
@@ -53,7 +54,7 @@ public class DetailedRouteDao {
                 String dateStamp = resultSet.getString("date_stamp");
                 Date date = converter.convertDateStampDatabaseFormatToDate(dateStamp);
                 if (!detailedRoute.getDays().containsKey(date)) {
-                    Day newDay = new Day();
+                    DetailedDay newDay = new DetailedDay();
                     newDay.setDateStamp(dateStamp);
                     detailedRoute.getDays().put(date, newDay);
                 }
@@ -119,4 +120,6 @@ public class DetailedRouteDao {
         }
         return stringBuilder;
     }
+
+    
 }

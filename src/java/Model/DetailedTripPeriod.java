@@ -91,7 +91,5 @@ public class DetailedTripPeriod extends TripPeriod {
     public String getGpsIntervalString() {
         return converter.convertDurationToString(gpsInterval);
     }
-    
- 
 
 }

@@ -43,6 +43,7 @@
             }
 
             .navbar {
+                width:2200px;
                 padding: 0px 0px;
                 background: #fff;
                 border: none;
@@ -369,7 +370,7 @@
                                                                     <td style="background-color:${abTimetableEntry.value.lostTimeColor}">${abTimetableEntry.value.lostTimeString}</td>
                                                                     <td>${abTimetableEntry.value.getScheduledIntervalString()}</td>
                                                                     <td style="background-color:${abTimetableEntry.value.getActualIntervalColor()}">${abTimetableEntry.value.getActualIntervalString()}</td>
-                                                                    <td>---</td>
+                                                                    <td>--</td>
                                                                     <td>${abTimetableEntry.value.exodusNumber}</td>
                                                                 </tr>
                                                             </c:forEach>
@@ -405,8 +406,8 @@
                                                                     <td style="background-color:${abGpsTimetableEntry.value.lostTimeColor}">${abGpsTimetableEntry.value.lostTimeString}</td>
                                                                     <td>${abGpsTimetableEntry.value.getScheduledIntervalString()}</td>
                                                                     <td style="background-color:${abGpsTimetableEntry.value.getGpsIntervalColor()}">${abGpsTimetableEntry.value.getGpsIntervalString()}</td>
+                                                                    <td style="background-color:${abGpsTimetableEntry.value.getMisconductColor()}">${abGpsTimetableEntry.value.misconduct}</td>
 
-                                                                    <td>--</td>
                                                                     <td>--</td>
 
                                                                 </tr>
@@ -487,8 +488,8 @@
                                                                     <td style="background-color:${baGpsTimetableEntry.value.lostTimeColor}">${baGpsTimetableEntry.value.lostTimeString}</td>
                                                                     <td>${baGpsTimetableEntry.value.getScheduledIntervalString()}</td>
                                                                     <td style="background-color:${baGpsTimetableEntry.value.getGpsIntervalColor()}">${baGpsTimetableEntry.value.getGpsIntervalString()}</td>
+                                                                    <td style="background-color:${baGpsTimetableEntry.value.getMisconductColor()}">${baGpsTimetableEntry.value.misconduct}</td>
 
-                                                                    <td>--</td>
                                                                     <td>--</td>
 
                                                                 </tr>

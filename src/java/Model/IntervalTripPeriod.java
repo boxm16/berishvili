@@ -7,6 +7,8 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     private short exodusNumber;
     private Duration scheduledInterval;
     private Duration actualInterval;
+    private String misconduct;
+    private String misconductColor;
 
     public short getExodusNumber() {
         return exodusNumber;
@@ -56,4 +58,38 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
         }
         return converter.convertDurationToThreeColors(scheduledInterval.minus(getGpsInterval()));
     }
+
+    public String getMisconductColor() {
+
+        if (this.scheduledInterval != null && this.getGpsInterval() != null && !this.getLostTimeString().equals("")) {
+
+            Duration intervalDifference = this.getGpsInterval().minus(this.scheduledInterval);
+            Duration lostTimeDuration = converter.convertStringToDuration(this.getLostTimeString());
+
+            if (intervalDifference.getSeconds() < -301 && lostTimeDuration.getSeconds() < -301) {
+                misconduct = "-";
+                return "green";
+            } else if (intervalDifference.getSeconds() > 300 && lostTimeDuration.getSeconds() > 300) {
+                misconduct = "+";
+                return "green";
+
+            } else {
+                misconduct = "";
+                return "";
+
+            }
+        } else {
+            misconduct = "";
+            return "";
+        }
+    }
+
+    public String getMisconduct() {
+        return misconduct;
+    }
+
+    public void setMisconduct(String misconduct) {
+        this.misconduct = misconduct;
+    }
+
 }

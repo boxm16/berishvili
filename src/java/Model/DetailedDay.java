@@ -37,7 +37,7 @@ public class DetailedDay extends Day {
                 if (index == 0) {
                     previousTripPeriodStartTimeActual = abGpsTimetableEntry.getValue().getStartTimeActual();
                 } else {
-                    abGpsTimetableEntry.getValue().setInterval(Duration.between(previousTripPeriodStartTimeActual, abGpsTimetableEntry.getValue().getStartTimeActual()));
+                    abGpsTimetableEntry.getValue().setGpsInterval(Duration.between(previousTripPeriodStartTimeActual, abGpsTimetableEntry.getValue().getStartTimeActual()));
                     previousTripPeriodStartTimeActual = abGpsTimetableEntry.getValue().getStartTimeActual();
                 }
                 index++;
@@ -51,7 +51,7 @@ public class DetailedDay extends Day {
                 if (index == 0) {
                     previousTripPeriodStartTimeActual = baGpsTimetableEntry.getValue().getStartTimeActual();
                 } else {
-                    baGpsTimetableEntry.getValue().setInterval(Duration.between(previousTripPeriodStartTimeActual, baGpsTimetableEntry.getValue().getStartTimeActual()));
+                    baGpsTimetableEntry.getValue().setGpsInterval(Duration.between(previousTripPeriodStartTimeActual, baGpsTimetableEntry.getValue().getStartTimeActual()));
                     previousTripPeriodStartTimeActual = baGpsTimetableEntry.getValue().getStartTimeActual();
                 }
                 index++;

@@ -204,4 +204,18 @@ public class Converter {
         return "red";
     }
 
+    public String convertDurationToThreeColors(Duration duration) {
+        if (duration == null) {
+            return "inherited";
+        }
+
+        if (duration.getSeconds() < 61 && duration.getSeconds() > -61) {
+            return "inherited";
+        }
+        if (duration.getSeconds() < 301 && duration.getSeconds() > -301) {
+            return "yellow";
+        }
+        return "red";
+    }
+
 }

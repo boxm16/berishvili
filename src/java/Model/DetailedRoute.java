@@ -72,20 +72,43 @@ public class DetailedRoute extends BasicRoute {
                     LocalDateTime previousTripPeriodArrivalTimeActual = tripPeriods.get(0).getArrivalTimeActual();
                     int index = 0;
                     for (TripPeriod tripPeriod : tripPeriods) {
-                        IntervalTripPeriod detailedTripPeriod = (IntervalTripPeriod) tripPeriod;
-                        if (detailedTripPeriod.getStartTimeActual() != null) {
-                            if (detailedTripPeriod.getType().equals("ab")) {
-                                intervalDay.getAbGpsTimetable().put(detailedTripPeriod.getStartTimeActual(), detailedTripPeriod);
+                        IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) tripPeriod;
+                        if (index > 0) {
+                            intervalTripPeriod.setHaltTimeScheduled(Duration.between(previousTripPeriodArrivalTimeScheduled, tripPeriod.getStartTimeScheduled()));
+
+                            if (previousTripPeriodArrivalTimeActual == null || tripPeriod.getStartTimeActual() == null) {
+                                intervalTripPeriod.setHaltTimeActual(null);
+                            } else {
+                                intervalTripPeriod.setHaltTimeActual(Duration.between(previousTripPeriodArrivalTimeActual, tripPeriod.getStartTimeActual()));
                             }
-                            if (detailedTripPeriod.getType().equals("ba")) {
-                                intervalDay.getBaGpsTimetable().put(detailedTripPeriod.getStartTimeActual(), detailedTripPeriod);
+                            previousTripPeriodArrivalTimeScheduled = tripPeriod.getArrivalTimeScheduled();
+                            previousTripPeriodArrivalTimeActual = tripPeriod.getArrivalTimeActual();
+
+                        }
+
+                        intervalTripPeriod.calculateLostTime();
+
+                        if (intervalTripPeriod.getType().equals("ab")) {
+                            intervalDay.getAbTimetable().put(intervalTripPeriod.getStartTimeScheduled(), intervalTripPeriod);
+                            if (intervalTripPeriod.getStartTimeActual() != null) {
+                                intervalDay.getAbGpsTimetable().put(intervalTripPeriod.getStartTimeActual(), intervalTripPeriod);
                             }
                         }
+                        if (intervalTripPeriod.getType().equals("ba")) {
+                            intervalDay.getBaTimetable().put(intervalTripPeriod.getStartTimeScheduled(), intervalTripPeriod);
+                            if (intervalTripPeriod.getStartTimeActual() != null) {
+                                intervalDay.getBaGpsTimetable().put(intervalTripPeriod.getStartTimeActual(), intervalTripPeriod);
+                            }
+                        }
+
                         index++;
                     }
                 }
             }
-            intervalDay.calculateIntervals();
+
+            intervalDay.calculateScheduledIntervals();
+            intervalDay.calculateActualIntervals();
+            intervalDay.calculateGpsIntervals();
         }
     }
 

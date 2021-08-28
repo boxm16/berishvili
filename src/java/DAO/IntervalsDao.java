@@ -79,6 +79,7 @@ public class IntervalsDao {
 
                 IntervalTripPeriod newTripPeriod = new IntervalTripPeriod();
 
+                newTripPeriod.setExodusNumber(exodusNumber);
                 newTripPeriod.setType(resultSet.getString("type"));
                 newTripPeriod.setStartTimeScheduled(converter.convertStringTimeToDate(resultSet.getString("start_time_scheduled")));
                 newTripPeriod.setStartTimeActual(converter.convertStringTimeToDate(resultSet.getString("start_time_actual")));

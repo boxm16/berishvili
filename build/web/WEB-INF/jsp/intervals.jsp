@@ -320,81 +320,194 @@
                     </div>
                 </nav>
 
-                <table>
+                <table style="width:100%">
                     <thead>
                         <tr>
-                            <th>გეგმიუირი<br>გასვლის<br>დრო</th>
-                            <th>ფაქტიური<br>გასვლის<br>დრო</th>
-                            <th>სხვაობა</th>
-                            <th>მიმართულება</th>
-                            <th>გეგმიუირი<br>მისვლის<br>დრო</th>
-                            <th>ფაქტიური<br>მისვლის<br>დრო</th>
-                            <th>სხვაობა</th>
-                            <th>link</th>
-                            <th>წირის<br>გეგმიური<br>დრო</th>
-                            <th>წირის<br>ფაქტიური<br>დრო</th>
-                            <th>სხვაობა</th>
-                            <th>დგომის<br>გეგმიური<br>დრო</th>   
-                            <th>დგომის<br>ფაქტიური<br>დრო</th>
-                            <th>'დაკარგული<br>დრო'</th>
-                            <th>GPS<br>ინტერვალი</th>
-                            <th>ინტერვალების<br>ლინკი</th>
+                            <th  style="text-align: center">A_B</th>
+                            <th  style="text-align: center">B_A</th>
                         </tr>
+
                     </thead>
                     <tbody>
                         <tr>
-                            <td colspan='16' align="center">
-                                მარშრუტა #: ${detailedRoute.number}
-                            </td>
+                            <td colspan="2" style="text-align: center; background-color:blue; color:white">  ${detailedRoute.number} </td>
                         </tr>
-                        <c:forEach var="day" items="${detailedRoute.days}">
-                            <tr>
-                                <td colspan='16' align="center">
-                                    თარიღი: ${day.value.dateStamp}
+                        <c:forEach var="dayEntry" items="${detailedRoute.days}">
+                            <tr >
+                                <td colspan="2" style="text-align: center; background-color:lightblue;">
+                                    ${dayEntry.value.dateStamp}
                                 </td>
                             </tr>
-                            <c:forEach var="exodus" items="${day.value.exoduses}">
-                                <tr>
-                                    <td colspan='16' align="center">
-                                        გასვლა #: ${exodus.value.number}
-                                    </td>
-                                </tr>
-                                <c:forEach var="tripVoucher" items="${exodus.value.tripVouchers}">
+                            <tr>
+                                <td style="vertical-align: top;">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td style="vertical-align: top;">
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan = "8" style="text-align: center">საგზურზე დაყრდნობით გამოთვლები</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>გეგმ.<br>გას.<br>დრო</th>
+                                                                <th>ფაქტ.<br>გას.<br>დრო</th>
+                                                                <th>სხვ.</th>
+                                                                <th>დაკ.<br> დრო</th>
+                                                                <th>გეგმ.<br>ინტ.</th>
+                                                                <th>ფაქტ.<br>ინტ.</th>
+                                                                <th>ხრვზ</th>
+                                                                <th>.<br>გას.<br>#</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <c:forEach var="abTimetableEntry" items="${dayEntry.value.abTimetable}">
+                                                                <tr>
+                                                                    <td>${abTimetableEntry.value.getStartTimeScheduledString()}</td>
+                                                                    <td>${abTimetableEntry.value.getStartTimeActualString()}</td>
+                                                                    <td style="background-color:${abTimetableEntry.value.startTimeDifferenceColor}">${abTimetableEntry.value.getStartTimeDifference()}</td>
+                                                                    <td style="background-color:${abTimetableEntry.value.lostTimeColor}">${abTimetableEntry.value.lostTimeString}</td>
+                                                                    <td>${abTimetableEntry.value.getScheduledIntervalString()}</td>
+                                                                    <td style="background-color:${abTimetableEntry.value.getActualIntervalColor()}">${abTimetableEntry.value.getActualIntervalString()}</td>
+                                                                    <td>---</td>
+                                                                    <td>${abTimetableEntry.value.exodusNumber}</td>
+                                                                </tr>
+                                                            </c:forEach>
 
-                                    <tr>
-                                        <td colspan='16' align="center">
-                                            მარშრუტა #: ${detailedRoute.number}
-                                            თარიღი: ${day.value.dateStamp}
-                                            გასვლა #: ${exodus.value.number}
-                                            შენიშვნები: ${tripVoucher.value.notes}
-                                        </td>
-                                    </tr>
-                                    <c:forEach var="tripPeriod" items="${tripVoucher.value.tripPeriods}">
-                                        <tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                <td style="vertical-align: top;">
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan = "9" style="text-align: center">GPS გამოთვლები</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>.<br>გას.<br>#</th>
+                                                                <th>გეგმ.<br>გას.<br>დრო</th>
+                                                                <th>ფაქტ.<br>გას.<br>დრო</th>
+                                                                <th>სხვ.</th>
+                                                                <th>დაკ.<br> დრო</th>
+                                                                <th>გეგმ.<br>ინტ.</th>
+                                                                <th>GPS<br>ინტ.</th>
+                                                                <th>ხრვზ.</th>
+                                                                <th>გად.</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <c:forEach var="abGpsTimetableEntry" items="${dayEntry.value.abGpsTimetable}">
+                                                                <tr>
+                                                                    <td>${abGpsTimetableEntry.value.exodusNumber}</td>
+                                                                    <td>${abGpsTimetableEntry.value.getStartTimeScheduledString()}</td>
+                                                                    <td>${abGpsTimetableEntry.value.getStartTimeActualString()}</td>
+                                                                    <td style="background-color:${abGpsTimetableEntry.value.startTimeDifferenceColor}">${abGpsTimetableEntry.value.getStartTimeDifference()}</td>
+                                                                    <td style="background-color:${abGpsTimetableEntry.value.lostTimeColor}">${abGpsTimetableEntry.value.lostTimeString}</td>
+                                                                    <td>${abGpsTimetableEntry.value.getScheduledIntervalString()}</td>
+                                                                    <td style="background-color:${abGpsTimetableEntry.value.getGpsIntervalColor()}">${abGpsTimetableEntry.value.getGpsIntervalString()}</td>
 
+                                                                    <td>--</td>
+                                                                    <td>--</td>
 
-                                            <td align="center">${tripPeriod.getStartTimeScheduledString()} </td>
-                                            <td align="center">${tripPeriod.getStartTimeActualString()} </td>
-                                            <td align="center" style='background-color: ${tripPeriod.getStartTimeDifferenceColor()}'>${tripPeriod.getStartTimeDifference()}</td>
-                                            <td align="center">${tripPeriod.typeG} </td>
-                                            <td align="center">${tripPeriod.getArrivalTimeScheduledString()} </td>
-                                            <td align="center">${tripPeriod.getArrivalTimeActualString()} </td>
-                                            <td align="center" style='background-color: ${tripPeriod.getArrivalTimeDifferenceColor()}'>${tripPeriod.getArrivalTimeDifference()}</td>
+                                                                </tr>
+                                                            </c:forEach> 
 
-                                            <td align="center">link</td>
-                                        </tr>
-                                    </c:forEach>
-                                </c:forEach>
-                            </c:forEach>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+                                </td>
+                                <td style="vertical-align: top;">
+                                    <table>
+
+                                        <tbody>
+                                            <tr>
+                                                <td style="vertical-align: top;">
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan = "8" style="text-align: center">საგზურზე დაყრდნობით გამოთვლები</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>გეგმ.<br>გას.<br>დრო</th>
+                                                                <th>ფაქტ.<br>გას.<br>დრო</th>
+                                                                <th>სხვ.</th>
+                                                                <th>დაკ.<br> დრო</th>
+                                                                <th>გეგმ.<br>ინტ.</th>
+                                                                <th>ფაქტ.<br>ინტ.</th>
+                                                                <th>ხრვზ</th>
+                                                                <th>.<br>გას.<br>#</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <c:forEach var="baTimetableEntry" items="${dayEntry.value.baTimetable}">
+                                                                <tr>
+                                                                    <td>${baTimetableEntry.value.getStartTimeScheduledString()}</td>
+                                                                    <td>${baTimetableEntry.value.getStartTimeActualString()}</td>
+                                                                    <td style="background-color:${baTimetableEntry.value.startTimeDifferenceColor}">${baTimetableEntry.value.getStartTimeDifference()}</td>
+                                                                    <td style="background-color:${baTimetableEntry.value.lostTimeColor}">${baTimetableEntry.value.lostTimeString}</td>
+                                                                    <td>${baTimetableEntry.value.getScheduledIntervalString()}</td>
+                                                                    <td style="background-color:${baTimetableEntry.value.getActualIntervalColor()}">${baTimetableEntry.value.getActualIntervalString()}</td>
+                                                                    <td>---</td>
+                                                                    <td>${abTimetableEntry.value.exodusNumber}</td>
+
+                                                                </tr>
+                                                            </c:forEach>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                <td style="vertical-align: top;">
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan = "9" style="text-align: center">GPS გამოთვლები</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>.<br>გას.<br>#</th>
+                                                                <th>გეგმ.<br>გას.<br>დრო</th>
+                                                                <th>ფაქტ.<br>გას.<br>დრო</th>
+                                                                <th>სხვ.</th>
+                                                                <th>დაკ.<br> დრო</th>
+                                                                <th>გეგმ.<br>ინტ.</th>
+                                                                <th>GPS<br>ინტ.</th>
+                                                                <th>ხრვზ.</th>
+                                                                <th>გად.</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <c:forEach var="baGpsTimetableEntry" items="${dayEntry.value.baGpsTimetable}">
+                                                                <tr>
+                                                                    <td>${baGpsTimetableEntry.value.exodusNumber}</td>
+                                                                    <td>${baGpsTimetableEntry.value.getStartTimeScheduledString()}</td>
+                                                                    <td>${baGpsTimetableEntry.value.getStartTimeActualString()}</td>
+                                                                    <td style="background-color:${baGpsTimetableEntry.value.startTimeDifferenceColor}">${baGpsTimetableEntry.value.getStartTimeDifference()}</td>
+                                                                    <td style="background-color:${baGpsTimetableEntry.value.lostTimeColor}">${baGpsTimetableEntry.value.lostTimeString}</td>
+                                                                    <td>${baGpsTimetableEntry.value.getScheduledIntervalString()}</td>
+                                                                    <td style="background-color:${baGpsTimetableEntry.value.getGpsIntervalColor()}">${baGpsTimetableEntry.value.getGpsIntervalString()}</td>
+
+                                                                    <td>--</td>
+                                                                    <td>--</td>
+
+                                                                </tr>
+                                                            </c:forEach> 
+
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
                         </c:forEach>
+
                     </tbody>
                 </table>
-                <hr>
-                <center>
 
-                    ${tripPeriodsPager.display}
-
-                </center>
                 <hr>
 
             </div>

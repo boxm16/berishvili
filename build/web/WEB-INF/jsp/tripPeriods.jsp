@@ -263,6 +263,7 @@
             }
 
             .pagination a.active {
+                width:100px;
                 background-color: #4CAF50;
                 color: white;
                 border: 1px solid #4CAF50;
@@ -297,7 +298,7 @@
                     <div class="container-fluid">
                         <button type="button" id="sidebarCollapse" class="btn btn-info">
                             <i class="fas fa-align-left"></i>
-                            <span>Toggle Sidebar</span>
+                            <span>< ></span>
                         </button>
                         &nbsp
                         <button type="button" class="btn btn-outline-success">

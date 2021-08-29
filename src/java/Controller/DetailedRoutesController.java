@@ -55,7 +55,7 @@ public class DetailedRoutesController {
 
     private DetailedRoutesPager createDetailedRoutesPager(String routeDates) {
 
-        DetailedRoutesPager detailedRoutesPager = new DetailedRoutesPager();
+        DetailedRoutesPager detailedRoutesPager = new DetailedRoutesPager("detailedRoutes");
 
         //trimming and cleaning input
         routeDates = routeDates.trim();

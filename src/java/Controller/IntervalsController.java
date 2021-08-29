@@ -28,13 +28,13 @@ public class IntervalsController {
 
     @RequestMapping(value = "intervalsInitialRequest")
     public String intervalsInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model, HttpSession session) {
-        DetailedRoutesPager detailedRoutesPager = createDetailedRoutesPager(routeDates);
-        detailedRoutesPager.setCurrentRoute("initial");
-        DetailedRoute detailedRoute = intervalsDao.getRoutesForIntervals(detailedRoutesPager);
-        session.setAttribute("detailedRoutesPager", detailedRoutesPager);
+        DetailedRoutesPager intervalsPager = createDetailedRoutesPager(routeDates);
+        intervalsPager.setCurrentRoute("initial");
+        DetailedRoute detailedRoute = intervalsDao.getRoutesForIntervals(intervalsPager);
+        session.setAttribute("intervalsPager", intervalsPager);
 
         detailedRoute.calculateIntervalsData();
-        model.addAttribute("detailedRoutesPager", detailedRoutesPager);
+        model.addAttribute("intervalsPager", intervalsPager);
         model.addAttribute("detailedRoute", detailedRoute);
 
         return "intervals";
@@ -42,14 +42,14 @@ public class IntervalsController {
 
     @RequestMapping(value = "intervalsRequest")
     public String intervalsRequest(@RequestParam("requestedRoute") String requestedRoute, ModelMap model, HttpSession session) {
-        DetailedRoutesPager detailedRoutesPager = (DetailedRoutesPager) session.getAttribute("detailedRoutesPager");
+        DetailedRoutesPager intervalsPager = (DetailedRoutesPager) session.getAttribute("intervalsPager");
 
-        detailedRoutesPager.setCurrentRoute(requestedRoute);
-        DetailedRoute detailedRoute = intervalsDao.getRoutesForIntervals(detailedRoutesPager);
-        session.setAttribute("detailedRoutesPager", detailedRoutesPager);
+        intervalsPager.setCurrentRoute(requestedRoute);
+        DetailedRoute detailedRoute = intervalsDao.getRoutesForIntervals(intervalsPager);
+        session.setAttribute("intervalsPager", intervalsPager);
 
         detailedRoute.calculateIntervalsData();
-        model.addAttribute("detailedRoutesPager", detailedRoutesPager);
+        model.addAttribute("intervalsPager", intervalsPager);
         model.addAttribute("detailedRoute", detailedRoute);
 
         return "intervals";
@@ -57,7 +57,7 @@ public class IntervalsController {
 
     private DetailedRoutesPager createDetailedRoutesPager(String routeDates) {
 
-        DetailedRoutesPager detailedRoutesPager = new DetailedRoutesPager();
+        DetailedRoutesPager detailedRoutesPager = new DetailedRoutesPager("intervals");
 
         //trimming and cleaning input
         routeDates = routeDates.trim();

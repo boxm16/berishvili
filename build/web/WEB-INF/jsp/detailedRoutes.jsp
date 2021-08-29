@@ -263,6 +263,7 @@
             }
 
             .pagination a.active {
+                width:100px;
                 background-color: #4CAF50;
                 color: white;
                 border: 1px solid #4CAF50;
@@ -296,7 +297,7 @@
                     <div class="container-fluid">
                         <button type="button" id="sidebarCollapse" class="btn btn-info">
                             <i class="fas fa-align-left"></i>
-                            <span>Toggle Sidebar</span>
+                            <span>< ></span>
                         </button>
                         &nbsp &nbsp &nbsp
                         <button type="button" class="btn btn-outline-success">
@@ -304,19 +305,17 @@
                         </button>
 
                         &nbsp  &nbsp  &nbsp
+                        &nbsp &nbsp &nbsp 
+                        <center>
+                            ${detailedRoutesPager.display}
+                        </center>
 
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        &nbsp  &nbsp  &nbsp &nbsp  &nbsp  &nbsp &nbsp  &nbsp  &nbsp &nbsp  &nbsp  &nbsp 
+                        &nbsp  &nbsp  &nbsp &nbsp  &nbsp  &nbsp &nbsp  &nbsp  &nbsp &nbsp  &nbsp  &nbsp 
+                        <button type="button" class="btn btn-outline-success">
+                            <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
+                        </button>
 
-                            &nbsp &nbsp &nbsp 
-                            <center>
-                                ${tripPeriodsPager.display}
-                            </center>
-
-                            &nbsp  &nbsp  &nbsp 
-                            <button type="button" class="btn btn-outline-success">
-                                <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
-                            </button>
-                        </div>
                     </div>
                 </nav>
 
@@ -400,7 +399,7 @@
                 <hr>
                 <center>
 
-                    ${tripPeriodsPager.display}
+                    ${detailedRoutesPager.display}
 
                 </center>
                 <hr>

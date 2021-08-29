@@ -282,7 +282,7 @@
                     <center><h5>მარშრუტები</h5></center>
                 </div>
                 <ul class="list-unstyled components">
-                    <c:forEach var="routeNumber" items="${detailedRoutesPager.routeNumbers}"  >
+                    <c:forEach var="routeNumber" items="${intervalsPager.routeNumbers}"  >
                         <li >
                             <a href="intervalsRequest.htm?requestedRoute=${routeNumber}">${routeNumber}</a>
                         </li>
@@ -310,7 +310,7 @@
 
                             &nbsp &nbsp &nbsp 
                             <center>
-                                ${tripPeriodsPager.display}
+                                ${intervalsPager.display}
                             </center>
 
                             &nbsp  &nbsp  &nbsp 
@@ -454,8 +454,8 @@
                                                                     <td>${baTimetableEntry.value.getScheduledIntervalString()}</td>
                                                                     <td style="background-color:${baTimetableEntry.value.getActualIntervalColor()}">${baTimetableEntry.value.getActualIntervalString()}</td>
                                                                     <td>---</td>
-                                                                     <td><a href="exodus.htm?routeNumber=${detailedRoute.number}&dateStamp=${dayEntry.value.dateStamp}&exodusNumber=${baTimetableEntry.value.exodusNumber}&startTimeScheduled=${baTimetableEntry.value.startTimeScheduled}"  target="_blank">${baTimetableEntry.value.exodusNumber}</a></td>
-                                                                   
+                                                                    <td><a href="exodus.htm?routeNumber=${detailedRoute.number}&dateStamp=${dayEntry.value.dateStamp}&exodusNumber=${baTimetableEntry.value.exodusNumber}&startTimeScheduled=${baTimetableEntry.value.startTimeScheduled}"  target="_blank">${baTimetableEntry.value.exodusNumber}</a></td>
+
                                                                 </tr>
                                                             </c:forEach>
                                                         </tbody>
@@ -482,7 +482,7 @@
                                                         <tbody>
                                                             <c:forEach var="baGpsTimetableEntry" items="${dayEntry.value.baGpsTimetable}">
                                                                 <tr>
-                                                                     <td><a href="exodus.htm?routeNumber=${detailedRoute.number}&dateStamp=${dayEntry.value.dateStamp}&exodusNumber=${baGpsTimetableEntry.value.exodusNumber}&startTimeScheduled=${baGpsTimetableEntry.value.startTimeScheduled}"  target="_blank">${baGpsTimetableEntry.value.exodusNumber}</a></td>
+                                                                    <td><a href="exodus.htm?routeNumber=${detailedRoute.number}&dateStamp=${dayEntry.value.dateStamp}&exodusNumber=${baGpsTimetableEntry.value.exodusNumber}&startTimeScheduled=${baGpsTimetableEntry.value.startTimeScheduled}"  target="_blank">${baGpsTimetableEntry.value.exodusNumber}</a></td>
                                                                     <td>${baGpsTimetableEntry.value.getStartTimeScheduledString()}</td>
                                                                     <td>${baGpsTimetableEntry.value.getStartTimeActualString()}</td>
                                                                     <td style="background-color:${baGpsTimetableEntry.value.startTimeDifferenceColor}">${baGpsTimetableEntry.value.getStartTimeDifference()}</td>
@@ -511,7 +511,9 @@
                 </table>
 
                 <hr>
-
+                <center>
+                  ${intervalsPager.display}
+                </center>
             </div>
         </div>
 

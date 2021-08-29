@@ -264,6 +264,7 @@
             }
 
             .pagination a.active {
+                 width:100px;
                 background-color: #4CAF50;
                 color: white;
                 border: 1px solid #4CAF50;

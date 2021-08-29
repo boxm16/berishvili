@@ -322,7 +322,7 @@
                         &nbsp; &nbsp; &nbsp;
                         <div>
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
-                                თარიღის ერთიანად მონშვნა
+                                თარიღის ერთიანად მონიშვნა
                             </button>
                         </div>
 

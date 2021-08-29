@@ -371,7 +371,7 @@
                                                                     <td>${abTimetableEntry.value.getScheduledIntervalString()}</td>
                                                                     <td style="background-color:${abTimetableEntry.value.getActualIntervalColor()}">${abTimetableEntry.value.getActualIntervalString()}</td>
                                                                     <td>--</td>
-                                                                    <td>${abTimetableEntry.value.exodusNumber}</td>
+                                                                    <td><a href="exodus.htm?routeNumber=${detailedRoute.number}&dateStamp=${dayEntry.value.dateStamp}&exodusNumber=${abTimetableEntry.value.exodusNumber}&startTimeScheduled=${abTimetableEntry.value.startTimeScheduled}"  target="_blank">${abTimetableEntry.value.exodusNumber}</a></td>
                                                                 </tr>
                                                             </c:forEach>
 

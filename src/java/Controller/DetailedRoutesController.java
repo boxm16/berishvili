@@ -46,7 +46,7 @@ public class DetailedRoutesController {
         detailedRoutesPager.setCurrentRoute(requestedRoute);
         DetailedRoute detailedRoute = detailedRouteDao.getDetailedRoute(detailedRoutesPager);
         session.setAttribute("detailedRoutesPager", detailedRoutesPager);
-        
+
         detailedRoute.calculateData();
         model.addAttribute("detailedRoutesPager", detailedRoutesPager);
         model.addAttribute("detailedRoute", detailedRoute);
@@ -75,5 +75,18 @@ public class DetailedRoutesController {
             detailedRoutesPager.addDateStamp(dateStamp);
         }
         return detailedRoutesPager;
+    }
+
+    @RequestMapping(value = "exodus")
+    public String exodus(@RequestParam("routeNumber") String routeNumber, @RequestParam("dateStamp") String dateStamp, @RequestParam("exodusNumber") String exodusNumber, @RequestParam("startTimeScheduled") String startTimeScheduled, ModelMap model, HttpSession session) {
+
+        DetailedRoute detailedRoute = detailedRouteDao.getDetailedRouteExodus(routeNumber, dateStamp, exodusNumber);
+        detailedRoute.calculateData();
+        model.addAttribute("detailedRoute", detailedRoute);
+        model.addAttribute("anchor", startTimeScheduled);
+        String exodusHeader = "მარშრუტი # " + routeNumber + ", " + dateStamp + ", გასვლა #" + exodusNumber;
+        model.addAttribute("exodusHeader", exodusHeader);
+
+        return "exodus";
     }
 }

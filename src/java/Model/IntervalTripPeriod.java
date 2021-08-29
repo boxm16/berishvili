@@ -8,7 +8,7 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     private Duration scheduledInterval;
     private Duration actualInterval;
     private String misconduct;
-    private String misconductColor;
+ 
 
     public short getExodusNumber() {
         return exodusNumber;

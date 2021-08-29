@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>ბრუნები დეტალურად</title>
+        <title>ინტერვალები</title>
         <!-- Bootstrap CSS CDN -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 
@@ -399,7 +399,7 @@
                                                         <tbody>
                                                             <c:forEach var="abGpsTimetableEntry" items="${dayEntry.value.abGpsTimetable}">
                                                                 <tr>
-                                                                    <td>${abGpsTimetableEntry.value.exodusNumber}</td>
+                                                                    <td><a href="exodus.htm?routeNumber=${detailedRoute.number}&dateStamp=${dayEntry.value.dateStamp}&exodusNumber=${abGpsTimetableEntry.value.exodusNumber}&startTimeScheduled=${abGpsTimetableEntry.value.startTimeScheduled}"  target="_blank">${abGpsTimetableEntry.value.exodusNumber}</a></td>
                                                                     <td>${abGpsTimetableEntry.value.getStartTimeScheduledString()}</td>
                                                                     <td>${abGpsTimetableEntry.value.getStartTimeActualString()}</td>
                                                                     <td style="background-color:${abGpsTimetableEntry.value.startTimeDifferenceColor}">${abGpsTimetableEntry.value.getStartTimeDifference()}</td>
@@ -446,6 +446,7 @@
                                                         <tbody>
                                                             <c:forEach var="baTimetableEntry" items="${dayEntry.value.baTimetable}">
                                                                 <tr>
+
                                                                     <td>${baTimetableEntry.value.getStartTimeScheduledString()}</td>
                                                                     <td>${baTimetableEntry.value.getStartTimeActualString()}</td>
                                                                     <td style="background-color:${baTimetableEntry.value.startTimeDifferenceColor}">${baTimetableEntry.value.getStartTimeDifference()}</td>
@@ -453,8 +454,8 @@
                                                                     <td>${baTimetableEntry.value.getScheduledIntervalString()}</td>
                                                                     <td style="background-color:${baTimetableEntry.value.getActualIntervalColor()}">${baTimetableEntry.value.getActualIntervalString()}</td>
                                                                     <td>---</td>
-                                                                    <td>${abTimetableEntry.value.exodusNumber}</td>
-
+                                                                     <td><a href="exodus.htm?routeNumber=${detailedRoute.number}&dateStamp=${dayEntry.value.dateStamp}&exodusNumber=${baTimetableEntry.value.exodusNumber}&startTimeScheduled=${baTimetableEntry.value.startTimeScheduled}"  target="_blank">${baTimetableEntry.value.exodusNumber}</a></td>
+                                                                   
                                                                 </tr>
                                                             </c:forEach>
                                                         </tbody>
@@ -481,7 +482,7 @@
                                                         <tbody>
                                                             <c:forEach var="baGpsTimetableEntry" items="${dayEntry.value.baGpsTimetable}">
                                                                 <tr>
-                                                                    <td>${baGpsTimetableEntry.value.exodusNumber}</td>
+                                                                     <td><a href="exodus.htm?routeNumber=${detailedRoute.number}&dateStamp=${dayEntry.value.dateStamp}&exodusNumber=${baGpsTimetableEntry.value.exodusNumber}&startTimeScheduled=${baGpsTimetableEntry.value.startTimeScheduled}"  target="_blank">${baGpsTimetableEntry.value.exodusNumber}</a></td>
                                                                     <td>${baGpsTimetableEntry.value.getStartTimeScheduledString()}</td>
                                                                     <td>${baGpsTimetableEntry.value.getStartTimeActualString()}</td>
                                                                     <td style="background-color:${baGpsTimetableEntry.value.startTimeDifferenceColor}">${baGpsTimetableEntry.value.getStartTimeDifference()}</td>

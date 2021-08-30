@@ -224,74 +224,7 @@
 
         <div class="wrapper">
             <!-- Sidebar  -->
-            <nav id="sidebar">
-                <div class="sidebar-header" style="background-color: coral">
-                    <h3> <a href="http://berishvili.eu5.org">ძველ სერვერზე გადასვლა</a> </h3>
-                </div>
-                <div class="sidebar-header">
-                    <!--- <h3>ფუნქციები</h3> ---->
-                </div>
-
-                <ul class="list-unstyled components">
-
-                    <li>
-                        <a href="#detailedRoutesSubmenue" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>ბრუნები დეტალურად</h3></a>
-                        <ul class="collapse list-unstyled" id="detailedRoutesSubmenue">
-                            <li>
-                                <a href="#" onclick="requestRouter('detailedRoutesInitialRequest.htm')"><h4>დათვალიერება</h4></a>
-                            </li>
-                            <li>
-                                <a href="#" onclick="requestRouter('detailedRoutesExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#intervalsSubmenue" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>ინტერვალები</h3></a>
-                        <ul class="collapse list-unstyled" id="intervalsSubmenue">
-                            <li>
-                                <a href="#" onclick="requestRouter('intervalsInitialRequest.htm')"><h4>დათვალიერება</h4></a>
-                            </li>
-                            <li>
-                                <a href="#" onclick="requestRouter('intervalsExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#routeTimesSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>ბრუნების დროები</h3></a>
-                        <ul class="collapse list-unstyled" id="routeTimesSubmenu">
-                            <li>
-                                <a href="#" onclick="requestRouter('tripPeriodsInitialRequest.htm')"><h4>დათვალიერება</h4></a>
-                            </li>
-                            <li>
-                                <a href="#" onclick="requestRouter('tripPeriodsCalculationsInitialRequest.htm')"><h4>გამოთვლები</h4></a>
-                            </li>
-                            <li>
-                                <a href="#" onclick="requestRouter('tripPeriodsExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#guarantySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>საგარანტიოები</h3></a>
-                        <ul class="collapse list-unstyled" id="guarantySubmenu">
-                            <li>
-                                <a href="#">Home 1</a>
-                            </li>
-                            <li>
-                                <a href="#">Home 2</a>
-                            </li>
-                            <li>
-                                <a href="guarantyTripsUploadPage.htm""><h4>ავტობუსების მარშრუტების ანალიზი</h4></a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-
-                <ul class="list-unstyled CTAs">
-                    <li>
-                        <a href="routes.htm"><h3>მარშრუტები</h3></a>
-                    </li>
-                </ul>
-            </nav>
+            
 
             <!-- Page Content  -->
             <div id="content">
@@ -397,8 +330,75 @@
 
                     </c:forEach> 
                 </div>
-
             </div>
+            <nav id="sidebar">
+                <div class="sidebar-header" style="background-color: coral">
+                    <h3> <a href="http://berishvili.eu5.org">ძველ სერვერზე გადასვლა</a> </h3>
+                </div>
+                <div class="sidebar-header">
+                    <!--- <h3>ფუნქციები</h3> ---->
+                </div>
+
+                <ul class="list-unstyled components">
+
+                    <li>
+                        <a href="#detailedRoutesSubmenue" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>ბრუნები დეტალურად</h3></a>
+                        <ul class="collapse list-unstyled" id="detailedRoutesSubmenue">
+                            <li>
+                                <a href="#" onclick="requestRouter('detailedRoutesInitialRequest.htm')"><h4>დათვალიერება</h4></a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="requestRouter('detailedRoutesExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#intervalsSubmenue" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>ინტერვალები</h3></a>
+                        <ul class="collapse list-unstyled" id="intervalsSubmenue">
+                            <li>
+                                <a href="#" onclick="requestRouter('intervalsInitialRequest.htm')"><h4>დათვალიერება</h4></a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="requestRouter('intervalsExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#routeTimesSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>ბრუნების დროები</h3></a>
+                        <ul class="collapse list-unstyled" id="routeTimesSubmenu">
+                            <li>
+                                <a href="#" onclick="requestRouter('tripPeriodsInitialRequest.htm')"><h4>დათვალიერება</h4></a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="requestRouter('tripPeriodsCalculationsInitialRequest.htm')"><h4>გამოთვლები</h4></a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="requestRouter('tripPeriodsExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#guarantySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>საგარანტიოები</h3></a>
+                        <ul class="collapse list-unstyled" id="guarantySubmenu">
+                            <li>
+                                <a href="#">Home 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Home 2</a>
+                            </li>
+                            <li>
+                                <a href="guarantyTripsUploadPage.htm""><h4>ავტობუსების მარშრუტების ანალიზი</h4></a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <ul class="list-unstyled CTAs">
+                    <li>
+                        <a href="routes.htm"><h3>მარშრუტები</h3></a>
+                    </li>
+                </ul>
+            </nav>
         </div>
         <form id="form" action="#" method="POST">
             <input hidden type="text" id="routes_dates" name="routes:dates">

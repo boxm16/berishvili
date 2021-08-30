@@ -43,7 +43,9 @@ public class IntervalsController {
     @RequestMapping(value = "intervalsRequest")
     public String intervalsRequest(@RequestParam("requestedRoute") String requestedRoute, ModelMap model, HttpSession session) {
         DetailedRoutesPager intervalsPager = (DetailedRoutesPager) session.getAttribute("intervalsPager");
-
+        if (intervalsPager == null) {
+            return "errorPage";
+        }
         intervalsPager.setCurrentRoute(requestedRoute);
         DetailedRoute detailedRoute = intervalsDao.getRoutesForIntervals(intervalsPager);
         session.setAttribute("intervalsPager", intervalsPager);

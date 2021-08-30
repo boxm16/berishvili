@@ -42,7 +42,9 @@ public class DetailedRoutesController {
     @RequestMapping(value = "detailedRoutesRequest")
     public String detailedRoutesRequest(@RequestParam("requestedRoute") String requestedRoute, ModelMap model, HttpSession session) {
         DetailedRoutesPager detailedRoutesPager = (DetailedRoutesPager) session.getAttribute("detailedRoutesPager");
-
+        if (detailedRoutesPager == null) {
+            return "errorPage";
+        }
         detailedRoutesPager.setCurrentRoute(requestedRoute);
         DetailedRoute detailedRoute = detailedRouteDao.getDetailedRoute(detailedRoutesPager);
         session.setAttribute("detailedRoutesPager", detailedRoutesPager);

@@ -130,7 +130,6 @@ public class DetailedRouteDao {
 
         query = queryBuilderInitialPart.append(requestedRouteNumber).
                 append(" AND date_stamp ='").append(requestedDateStamp).append("'").
-                append(" AND exodus_number =").append(requestedExodusNumber).
                 append(" ORDER BY prefix, suffix, date_stamp, exodus_number, start_time_scheduled ;");
         System.out.println(query);
         try {

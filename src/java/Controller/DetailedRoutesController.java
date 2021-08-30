@@ -3,6 +3,9 @@ package Controller;
 import DAO.DetailedRouteDao;
 import Model.DetailedRoute;
 import Model.DetailedRoutesPager;
+import Model.Exodus;
+import java.util.Date;
+import java.util.TreeMap;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,9 +19,11 @@ public class DetailedRoutesController {
     @Autowired
     private DetailedRouteDao detailedRouteDao;
     private MemoryUsage memoryUsage;
+    private Converter converter;
 
     public DetailedRoutesController() {
         memoryUsage = new MemoryUsage();
+        converter = new Converter();
     }
 
     @RequestMapping(value = "detailedRoutesInitialRequest")
@@ -84,6 +89,11 @@ public class DetailedRoutesController {
 
         DetailedRoute detailedRoute = detailedRouteDao.getDetailedRouteExodus(routeNumber, dateStamp, exodusNumber);
         detailedRoute.calculateData();
+        Date requestedDate = converter.convertDateStampDatabaseFormatToDate(dateStamp);
+        Exodus requestedExodus = detailedRoute.getDays().get(requestedDate).getExoduses().get(Short.valueOf(exodusNumber));
+        TreeMap<Short, Exodus> requestedExodusMap = new TreeMap();
+        requestedExodusMap.put(Short.valueOf(exodusNumber), requestedExodus);
+        detailedRoute.getDays().get(requestedDate).setExoduses(requestedExodusMap);
         model.addAttribute("detailedRoute", detailedRoute);
         model.addAttribute("anchor", startTimeScheduled);
         String exodusHeader = "მარშრუტი # " + routeNumber + ", " + dateStamp + ", გასვლა #" + exodusNumber;

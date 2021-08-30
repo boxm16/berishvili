@@ -264,7 +264,7 @@
             }
 
             .pagination a.active {
-                 width:100px;
+                width:100px;
                 background-color: #4CAF50;
                 color: white;
                 border: 1px solid #4CAF50;
@@ -349,16 +349,11 @@
                                                     <table>
                                                         <thead>
                                                             <tr>
-                                                                <th colspan = "8" style="text-align: center">საგზურზე დაყრდნობით გამოთვლები</th>
+                                                                <th colspan = "8" style="text-align: center">განრიგი</th>
                                                             </tr>
                                                             <tr>
                                                                 <th>გეგმ.<br>გას.<br>დრო</th>
                                                                 <th>ფაქტ.<br>გას.<br>დრო</th>
-                                                                <th>სხვ.</th>
-                                                                <th>დაკ.<br> დრო</th>
-                                                                <th>გეგმ.<br>ინტ.</th>
-                                                                <th>ფაქტ.<br>ინტ.</th>
-                                                                <th>ხრვზ</th>
                                                                 <th>.<br>გას.<br>#</th>
                                                             </tr>
                                                         </thead>
@@ -367,11 +362,6 @@
                                                                 <tr>
                                                                     <td>${abTimetableEntry.value.getStartTimeScheduledString()}</td>
                                                                     <td>${abTimetableEntry.value.getStartTimeActualString()}</td>
-                                                                    <td style="background-color:${abTimetableEntry.value.startTimeDifferenceColor}">${abTimetableEntry.value.getStartTimeDifference()}</td>
-                                                                    <td style="background-color:${abTimetableEntry.value.lostTimeColor}">${abTimetableEntry.value.lostTimeString}</td>
-                                                                    <td>${abTimetableEntry.value.getScheduledIntervalString()}</td>
-                                                                    <td style="background-color:${abTimetableEntry.value.getActualIntervalColor()}">${abTimetableEntry.value.getActualIntervalString()}</td>
-                                                                    <td>--</td>
                                                                     <td><a href="exodus.htm?routeNumber=${detailedRoute.number}&dateStamp=${dayEntry.value.dateStamp}&exodusNumber=${abTimetableEntry.value.exodusNumber}&startTimeScheduled=${abTimetableEntry.value.startTimeScheduled}"  target="_blank">${abTimetableEntry.value.exodusNumber}</a></td>
                                                                 </tr>
                                                             </c:forEach>
@@ -431,16 +421,11 @@
                                                     <table>
                                                         <thead>
                                                             <tr>
-                                                                <th colspan = "8" style="text-align: center">საგზურზე დაყრდნობით გამოთვლები</th>
+                                                                <th colspan = "8" style="text-align: center">განრიგი</th>
                                                             </tr>
                                                             <tr>
                                                                 <th>გეგმ.<br>გას.<br>დრო</th>
                                                                 <th>ფაქტ.<br>გას.<br>დრო</th>
-                                                                <th>სხვ.</th>
-                                                                <th>დაკ.<br> დრო</th>
-                                                                <th>გეგმ.<br>ინტ.</th>
-                                                                <th>ფაქტ.<br>ინტ.</th>
-                                                                <th>ხრვზ</th>
                                                                 <th>.<br>გას.<br>#</th>
                                                             </tr>
                                                         </thead>
@@ -450,11 +435,6 @@
 
                                                                     <td>${baTimetableEntry.value.getStartTimeScheduledString()}</td>
                                                                     <td>${baTimetableEntry.value.getStartTimeActualString()}</td>
-                                                                    <td style="background-color:${baTimetableEntry.value.startTimeDifferenceColor}">${baTimetableEntry.value.getStartTimeDifference()}</td>
-                                                                    <td style="background-color:${baTimetableEntry.value.lostTimeColor}">${baTimetableEntry.value.lostTimeString}</td>
-                                                                    <td>${baTimetableEntry.value.getScheduledIntervalString()}</td>
-                                                                    <td style="background-color:${baTimetableEntry.value.getActualIntervalColor()}">${baTimetableEntry.value.getActualIntervalString()}</td>
-                                                                    <td>---</td>
                                                                     <td><a href="exodus.htm?routeNumber=${detailedRoute.number}&dateStamp=${dayEntry.value.dateStamp}&exodusNumber=${baTimetableEntry.value.exodusNumber}&startTimeScheduled=${baTimetableEntry.value.startTimeScheduled}"  target="_blank">${baTimetableEntry.value.exodusNumber}</a></td>
 
                                                                 </tr>
@@ -513,7 +493,7 @@
 
                 <hr>
                 <center>
-                  ${intervalsPager.display}
+                    ${intervalsPager.display}
                 </center>
             </div>
         </div>

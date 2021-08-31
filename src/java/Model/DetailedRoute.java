@@ -114,9 +114,9 @@ public class DetailedRoute extends BasicRoute {
                     }
                 }
             }
-
+              //seuquence do matter
             intervalDay.calculateScheduledIntervals();
-            intervalDay.calculateActualIntervals();
+           // intervalDay.calculateActualIntervals()//dont need anymore
             intervalDay.calculateGpsIntervals();
         }
     }

@@ -60,6 +60,22 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     }
 
     public String getMisconductColor() {
+        if (misconduct == "-") {
+            return "green";
+        }
+        if (misconduct == "+") {
+            return "green";
+        }
+        misconduct = "";
+        return "";
+
+    }
+
+    public String getMisconduct() {
+        return misconduct;
+    }
+
+    public void calculateMisconduct() {
 
         if (this.scheduledInterval != null && this.getGpsInterval() != null && !this.getLostTimeString().equals("")) {
 
@@ -68,24 +84,17 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
 
             if (intervalDifference.getSeconds() < -301 && lostTimeDuration.getSeconds() < -301) {
                 misconduct = "-";
-                return "green";
+
             } else if (intervalDifference.getSeconds() > 300 && lostTimeDuration.getSeconds() > 300) {
                 misconduct = "+";
-                return "green";
 
             } else {
                 misconduct = "";
-                return "";
-
             }
         } else {
             misconduct = "";
-            return "";
-        }
-    }
 
-    public String getMisconduct() {
-        return misconduct;
+        }
     }
 
     public void setMisconduct(String misconduct) {
@@ -99,6 +108,5 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     public void setScheduledTimetableSequenceNumber(short scheduledTimetableSequenceNumber) {
         this.scheduledTimetableSequenceNumber = scheduledTimetableSequenceNumber;
     }
-    
 
 }

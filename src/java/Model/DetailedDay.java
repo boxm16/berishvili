@@ -40,6 +40,7 @@ public class DetailedDay extends Day {
                     abGpsTimetableEntry.getValue().setGpsInterval(Duration.between(previousTripPeriodStartTimeActual, abGpsTimetableEntry.getValue().getStartTimeActual()));
                     previousTripPeriodStartTimeActual = abGpsTimetableEntry.getValue().getStartTimeActual();
                 }
+                DetailedTripPeriod value = (IntervalTripPeriod) abGpsTimetableEntry.getValue();
                 index++;
             }
         }

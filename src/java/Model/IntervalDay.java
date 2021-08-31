@@ -33,14 +33,20 @@ public class IntervalDay extends DetailedDay {
         this.baTimetable = baTimetable;
     }
 
+    //this method sets intervals and scheduledTimetableSequenceNumber
     public void calculateScheduledIntervals() {
         if (abTimetable.size() > 0) {
 
             LocalDateTime previousTripPeriodStartTimeScheduled = null;
             int index = 0;
+            short scheduledTimetableSequenceNumber = 0;
             for (Map.Entry<LocalDateTime, IntervalTripPeriod> abTimetableEntry : abTimetable.entrySet()) {
+                scheduledTimetableSequenceNumber++;
+                abTimetableEntry.getValue().setScheduledTimetableSequenceNumber(scheduledTimetableSequenceNumber);
+
                 if (index == 0) {
                     previousTripPeriodStartTimeScheduled = abTimetableEntry.getValue().getStartTimeScheduled();
+
                 } else {
                     abTimetableEntry.getValue().setScheduledInterval(Duration.between(previousTripPeriodStartTimeScheduled, abTimetableEntry.getValue().getStartTimeScheduled()));
                     previousTripPeriodStartTimeScheduled = abTimetableEntry.getValue().getStartTimeScheduled();
@@ -52,7 +58,11 @@ public class IntervalDay extends DetailedDay {
 
             LocalDateTime previousTripPeriodStartTimeScheduled = null;
             int index = 0;
+            short scheduledTimetableSequenceNumber = 0;
             for (Map.Entry<LocalDateTime, IntervalTripPeriod> baTimetableEntry : baTimetable.entrySet()) {
+                 scheduledTimetableSequenceNumber++;
+                baTimetableEntry.getValue().setScheduledTimetableSequenceNumber(scheduledTimetableSequenceNumber);
+
                 if (index == 0) {
                     previousTripPeriodStartTimeScheduled = baTimetableEntry.getValue().getStartTimeScheduled();
                 } else {

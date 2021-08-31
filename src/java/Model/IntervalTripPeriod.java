@@ -4,11 +4,11 @@ import java.time.Duration;
 
 public class IntervalTripPeriod extends DetailedTripPeriod {
 
+    private short scheduledTimetableSequenceNumber;
     private short exodusNumber;
     private Duration scheduledInterval;
     private Duration actualInterval;
     private String misconduct;
- 
 
     public short getExodusNumber() {
         return exodusNumber;
@@ -91,5 +91,14 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     public void setMisconduct(String misconduct) {
         this.misconduct = misconduct;
     }
+
+    public short getScheduledTimetableSequenceNumber() {
+        return scheduledTimetableSequenceNumber;
+    }
+
+    public void setScheduledTimetableSequenceNumber(short scheduledTimetableSequenceNumber) {
+        this.scheduledTimetableSequenceNumber = scheduledTimetableSequenceNumber;
+    }
+    
 
 }

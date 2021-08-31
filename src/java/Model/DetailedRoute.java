@@ -89,14 +89,23 @@ public class DetailedRoute extends BasicRoute {
                         intervalTripPeriod.calculateLostTime();
 
                         if (intervalTripPeriod.getType().equals("ab")) {
-                            intervalDay.getAbTimetable().put(intervalTripPeriod.getStartTimeScheduled(), intervalTripPeriod);
                             if (intervalTripPeriod.getStartTimeActual() != null) {
+                                if (intervalDay.getAbGpsTimetable().containsKey(intervalTripPeriod.getStartTimeActual())) {
+                                    //in unlikable, but possible case when two busses dispatch at the same time from the same point
+                                    intervalTripPeriod.setStartTimeActual(intervalTripPeriod.getStartTimeActual().plusNanos(1l));
+                                }
+                                intervalDay.getAbTimetable().put(intervalTripPeriod.getStartTimeScheduled(), intervalTripPeriod);
+
                                 intervalDay.getAbGpsTimetable().put(intervalTripPeriod.getStartTimeActual(), intervalTripPeriod);
                             }
                         }
                         if (intervalTripPeriod.getType().equals("ba")) {
                             intervalDay.getBaTimetable().put(intervalTripPeriod.getStartTimeScheduled(), intervalTripPeriod);
                             if (intervalTripPeriod.getStartTimeActual() != null) {
+                                if (intervalDay.getBaGpsTimetable().containsKey(intervalTripPeriod.getStartTimeActual())) {
+                                    //in unlikable, but possible case when two busses dispatch at the same time from the same point
+                                    intervalTripPeriod.setStartTimeActual(intervalTripPeriod.getStartTimeActual().plusNanos(1l));
+                                }
                                 intervalDay.getBaGpsTimetable().put(intervalTripPeriod.getStartTimeActual(), intervalTripPeriod);
                             }
                         }

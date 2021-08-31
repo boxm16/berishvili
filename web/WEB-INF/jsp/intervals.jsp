@@ -352,6 +352,7 @@
                                                                 <th colspan = "8" style="text-align: center">განრიგი</th>
                                                             </tr>
                                                             <tr>
+                                                                <th>რიგ.<br>#</th>
                                                                 <th>გეგმ.<br>გას.<br>დრო</th>
                                                                 <th>ფაქტ.<br>გას.<br>დრო</th>
                                                                 <th>.<br>გას.<br>#</th>
@@ -360,6 +361,7 @@
                                                         <tbody>
                                                             <c:forEach var="abTimetableEntry" items="${dayEntry.value.abTimetable}">
                                                                 <tr>
+                                                                    <td  style="background-color:#b6ccf0">${abTimetableEntry.value.scheduledTimetableSequenceNumber}</td>
                                                                     <td>${abTimetableEntry.value.getStartTimeScheduledString()}</td>
                                                                     <td>${abTimetableEntry.value.getStartTimeActualString()}</td>
                                                                     <td><a href="exodus.htm?routeNumber=${detailedRoute.number}&dateStamp=${dayEntry.value.dateStamp}&exodusNumber=${abTimetableEntry.value.exodusNumber}&startTimeScheduled=${abTimetableEntry.value.startTimeScheduled}"  target="_blank">${abTimetableEntry.value.exodusNumber}</a></td>
@@ -377,6 +379,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <th>.<br>გას.<br>#</th>
+                                                                <th>რიგ.<br>#</th>
                                                                 <th>გეგმ.<br>გას.<br>დრო</th>
                                                                 <th>ფაქტ.<br>გას.<br>დრო</th>
                                                                 <th>სხვ.</th>
@@ -391,6 +394,7 @@
                                                             <c:forEach var="abGpsTimetableEntry" items="${dayEntry.value.abGpsTimetable}">
                                                                 <tr>
                                                                     <td><a href="exodus.htm?routeNumber=${detailedRoute.number}&dateStamp=${dayEntry.value.dateStamp}&exodusNumber=${abGpsTimetableEntry.value.exodusNumber}&startTimeScheduled=${abGpsTimetableEntry.value.startTimeScheduled}"  target="_blank">${abGpsTimetableEntry.value.exodusNumber}</a></td>
+                                                                    <td  style="background-color:#b6ccf0">${abGpsTimetableEntry.value.scheduledTimetableSequenceNumber}</td>
                                                                     <td>${abGpsTimetableEntry.value.getStartTimeScheduledString()}</td>
                                                                     <td>${abGpsTimetableEntry.value.getStartTimeActualString()}</td>
                                                                     <td style="background-color:${abGpsTimetableEntry.value.startTimeDifferenceColor}">${abGpsTimetableEntry.value.getStartTimeDifference()}</td>
@@ -424,6 +428,7 @@
                                                                 <th colspan = "8" style="text-align: center">განრიგი</th>
                                                             </tr>
                                                             <tr>
+                                                                <th>რიგ.<br>#</th>
                                                                 <th>გეგმ.<br>გას.<br>დრო</th>
                                                                 <th>ფაქტ.<br>გას.<br>დრო</th>
                                                                 <th>.<br>გას.<br>#</th>
@@ -432,7 +437,7 @@
                                                         <tbody>
                                                             <c:forEach var="baTimetableEntry" items="${dayEntry.value.baTimetable}">
                                                                 <tr>
-
+                                                                    <td style="background-color:#b6ccf0">${baTimetableEntry.value.scheduledTimetableSequenceNumber}</td>
                                                                     <td>${baTimetableEntry.value.getStartTimeScheduledString()}</td>
                                                                     <td>${baTimetableEntry.value.getStartTimeActualString()}</td>
                                                                     <td><a href="exodus.htm?routeNumber=${detailedRoute.number}&dateStamp=${dayEntry.value.dateStamp}&exodusNumber=${baTimetableEntry.value.exodusNumber}&startTimeScheduled=${baTimetableEntry.value.startTimeScheduled}"  target="_blank">${baTimetableEntry.value.exodusNumber}</a></td>
@@ -450,6 +455,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <th>.<br>გას.<br>#</th>
+                                                                <th>რიგ.<br>#</th>
                                                                 <th>გეგმ.<br>გას.<br>დრო</th>
                                                                 <th>ფაქტ.<br>გას.<br>დრო</th>
                                                                 <th>სხვ.</th>
@@ -464,6 +470,7 @@
                                                             <c:forEach var="baGpsTimetableEntry" items="${dayEntry.value.baGpsTimetable}">
                                                                 <tr>
                                                                     <td><a href="exodus.htm?routeNumber=${detailedRoute.number}&dateStamp=${dayEntry.value.dateStamp}&exodusNumber=${baGpsTimetableEntry.value.exodusNumber}&startTimeScheduled=${baGpsTimetableEntry.value.startTimeScheduled}"  target="_blank">${baGpsTimetableEntry.value.exodusNumber}</a></td>
+                                                                    <td style="background-color:#b6ccf0">${baGpsTimetableEntry.value.scheduledTimetableSequenceNumber}</td>
                                                                     <td>${baGpsTimetableEntry.value.getStartTimeScheduledString()}</td>
                                                                     <td>${baGpsTimetableEntry.value.getStartTimeActualString()}</td>
                                                                     <td style="background-color:${baGpsTimetableEntry.value.startTimeDifferenceColor}">${baGpsTimetableEntry.value.getStartTimeDifference()}</td>

@@ -9,6 +9,11 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     private Duration scheduledInterval;
     private Duration actualInterval;
     private String misconduct;
+    private String runOver;
+
+    public IntervalTripPeriod() {
+        runOver = "";
+    }
 
     public short getExodusNumber() {
         return exodusNumber;
@@ -61,10 +66,10 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
 
     public String getMisconductColor() {
         if (misconduct == "-") {
-            return "green";
+            return "lightgreen";
         }
         if (misconduct == "+") {
-            return "green";
+            return "lightgreen";
         }
         misconduct = "";
         return "";
@@ -107,6 +112,22 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
 
     public void setScheduledTimetableSequenceNumber(short scheduledTimetableSequenceNumber) {
         this.scheduledTimetableSequenceNumber = scheduledTimetableSequenceNumber;
+    }
+
+    public String getRunOver() {
+        return runOver;
+    }
+
+    public void setRunOver(String runOver) {
+        this.runOver = runOver;
+    }
+
+    public String getRunOverColor() {
+        if (runOver.equals("")) {
+            return "inherited";
+        } else {
+            return "lightgreen";
+        }
     }
 
 }

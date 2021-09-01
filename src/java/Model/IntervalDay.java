@@ -116,34 +116,49 @@ public class IntervalDay extends DetailedDay {
 
     @Override
     public void calculateGpsIntervals() {
+        IntervalTripPeriod intervalTripPeriod;
+        IntervalTripPeriod previousTripPeriod = null;
+
+        LocalDateTime previousTripPeriodStartTimeActual = null;
+
         if (getAbGpsTimetable().size() > 0) {
 
-            LocalDateTime previousTripPeriodStartTimeActual = null;
             int index = 0;
             for (Map.Entry<LocalDateTime, DetailedTripPeriod> abGpsTimetableEntry : getAbGpsTimetable().entrySet()) {
+                intervalTripPeriod = (IntervalTripPeriod) abGpsTimetableEntry.getValue();
                 if (index == 0) {
-                    previousTripPeriodStartTimeActual = abGpsTimetableEntry.getValue().getStartTimeActual();
+                    previousTripPeriodStartTimeActual = intervalTripPeriod.getStartTimeActual();
+                    previousTripPeriod = intervalTripPeriod;
                 } else {
-                    abGpsTimetableEntry.getValue().setGpsInterval(Duration.between(previousTripPeriodStartTimeActual, abGpsTimetableEntry.getValue().getStartTimeActual()));
-                    previousTripPeriodStartTimeActual = abGpsTimetableEntry.getValue().getStartTimeActual();
+                    intervalTripPeriod.setGpsInterval(Duration.between(previousTripPeriodStartTimeActual, intervalTripPeriod.getStartTimeActual()));
+                    if (previousTripPeriod.getScheduledTimetableSequenceNumber() > intervalTripPeriod.getScheduledTimetableSequenceNumber()) {
+                        previousTripPeriod.setRunOver(">");
+                    }
+                    previousTripPeriodStartTimeActual = intervalTripPeriod.getStartTimeActual();
+                    previousTripPeriod = intervalTripPeriod;
                 }
-                IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetableEntry.getValue();
+
                 intervalTripPeriod.calculateMisconduct();
                 index++;
             }
         }
         if (getBaGpsTimetable().size() > 0) {
 
-            LocalDateTime previousTripPeriodStartTimeActual = null;
             int index = 0;
             for (Map.Entry<LocalDateTime, DetailedTripPeriod> baGpsTimetableEntry : getBaGpsTimetable().entrySet()) {
+                intervalTripPeriod = (IntervalTripPeriod) baGpsTimetableEntry.getValue();
                 if (index == 0) {
-                    previousTripPeriodStartTimeActual = baGpsTimetableEntry.getValue().getStartTimeActual();
+                    previousTripPeriodStartTimeActual = intervalTripPeriod.getStartTimeActual();
+                    previousTripPeriod = intervalTripPeriod;
                 } else {
-                    baGpsTimetableEntry.getValue().setGpsInterval(Duration.between(previousTripPeriodStartTimeActual, baGpsTimetableEntry.getValue().getStartTimeActual()));
-                    previousTripPeriodStartTimeActual = baGpsTimetableEntry.getValue().getStartTimeActual();
+                    intervalTripPeriod.setGpsInterval(Duration.between(previousTripPeriodStartTimeActual, intervalTripPeriod.getStartTimeActual()));
+                    if (previousTripPeriod.getScheduledTimetableSequenceNumber() > intervalTripPeriod.getScheduledTimetableSequenceNumber()) {
+                        previousTripPeriod.setRunOver(">");
+                    }
+                    previousTripPeriodStartTimeActual = intervalTripPeriod.getStartTimeActual();
+                    previousTripPeriod = intervalTripPeriod;
                 }
-                IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetableEntry.getValue();
+
                 intervalTripPeriod.calculateMisconduct();
                 index++;
             }

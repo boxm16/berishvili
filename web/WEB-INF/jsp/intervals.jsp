@@ -349,7 +349,7 @@
                                                     <table>
                                                         <thead>
                                                             <tr>
-                                                                <th colspan = "8" style="text-align: center">განრიგი</th>
+                                                                <th colspan = "4" style="text-align: center">განრიგი</th>
                                                             </tr>
                                                             <tr>
                                                                 <th>რიგ.<br>#</th>
@@ -375,7 +375,7 @@
                                                     <table>
                                                         <thead>
                                                             <tr>
-                                                                <th colspan = "9" style="text-align: center">GPS გამოთვლები</th>
+                                                                <th colspan = "10" style="text-align: center">GPS გამოთვლები</th>
                                                             </tr>
                                                             <tr>
                                                                 <th>.<br>გას.<br>#</th>
@@ -402,8 +402,7 @@
                                                                     <td>${abGpsTimetableEntry.value.getScheduledIntervalString()}</td>
                                                                     <td style="background-color:${abGpsTimetableEntry.value.getGpsIntervalColor()}">${abGpsTimetableEntry.value.getGpsIntervalString()}</td>
                                                                     <td style="background-color:${abGpsTimetableEntry.value.getMisconductColor()}">${abGpsTimetableEntry.value.misconduct}</td>
-
-                                                                    <td>--</td>
+                                                                    <td style="background-color:${abGpsTimetableEntry.value.getRunOverColor()}">${abGpsTimetableEntry.value.runOver}</td>
 
                                                                 </tr>
                                                             </c:forEach> 
@@ -425,7 +424,7 @@
                                                     <table>
                                                         <thead>
                                                             <tr>
-                                                                <th colspan = "8" style="text-align: center">განრიგი</th>
+                                                                <th colspan = "4" style="text-align: center">განრიგი</th>
                                                             </tr>
                                                             <tr>
                                                                 <th>რიგ.<br>#</th>
@@ -451,7 +450,7 @@
                                                     <table>
                                                         <thead>
                                                             <tr>
-                                                                <th colspan = "9" style="text-align: center">GPS გამოთვლები</th>
+                                                                <th colspan = "10" style="text-align: center">GPS გამოთვლები</th>
                                                             </tr>
                                                             <tr>
                                                                 <th>.<br>გას.<br>#</th>
@@ -478,8 +477,8 @@
                                                                     <td>${baGpsTimetableEntry.value.getScheduledIntervalString()}</td>
                                                                     <td style="background-color:${baGpsTimetableEntry.value.getGpsIntervalColor()}">${baGpsTimetableEntry.value.getGpsIntervalString()}</td>
                                                                     <td style="background-color:${baGpsTimetableEntry.value.getMisconductColor()}">${baGpsTimetableEntry.value.misconduct}</td>
+                                                                    <td style="background-color:${baGpsTimetableEntry.value.getRunOverColor()}">${baGpsTimetableEntry.value.runOver}</td>
 
-                                                                    <td>--</td>
 
                                                                 </tr>
                                                             </c:forEach> 

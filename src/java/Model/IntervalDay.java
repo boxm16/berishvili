@@ -132,7 +132,8 @@ public class IntervalDay extends DetailedDay {
                 } else {
                     intervalTripPeriod.setGpsInterval(Duration.between(previousTripPeriodStartTimeActual, intervalTripPeriod.getStartTimeActual()));
                     if (previousTripPeriod.getScheduledTimetableSequenceNumber() > intervalTripPeriod.getScheduledTimetableSequenceNumber()) {
-                        previousTripPeriod.setRunOver(">");
+                        intervalTripPeriod.addRunOver("<");
+                        previousTripPeriod.addRunOver(">");
                     }
                     previousTripPeriodStartTimeActual = intervalTripPeriod.getStartTimeActual();
                     previousTripPeriod = intervalTripPeriod;
@@ -153,7 +154,8 @@ public class IntervalDay extends DetailedDay {
                 } else {
                     intervalTripPeriod.setGpsInterval(Duration.between(previousTripPeriodStartTimeActual, intervalTripPeriod.getStartTimeActual()));
                     if (previousTripPeriod.getScheduledTimetableSequenceNumber() > intervalTripPeriod.getScheduledTimetableSequenceNumber()) {
-                        previousTripPeriod.setRunOver(">");
+                        intervalTripPeriod.addRunOver("<");
+                        previousTripPeriod.addRunOver(">");
                     }
                     previousTripPeriodStartTimeActual = intervalTripPeriod.getStartTimeActual();
                     previousTripPeriod = intervalTripPeriod;

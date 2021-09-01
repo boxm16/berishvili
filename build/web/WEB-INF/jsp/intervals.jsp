@@ -75,7 +75,7 @@
             }
 
             #sidebar {
-                width: 150px;
+                width: 80px;
                 position: fixed;
                 top: 0;
                 left: 0;
@@ -168,7 +168,7 @@
             ----------------------------------------------------- */
 
             #content {
-                width: calc(100% - 150px);
+                width: calc(100% - 80px);
                 padding: 5px;
                 min-height: 100vh;
                 transition: all 0.3s;
@@ -280,7 +280,7 @@
             <!-- Sidebar  -->
             <nav id="sidebar">
                 <div class="sidebar-header">
-                    <center><h5>მარშრუტები</h5></center>
+                    <center><h6>მარშ. #</h6></center>
                 </div>
                 <ul class="list-unstyled components">
                     <c:forEach var="routeNumber" items="${intervalsPager.routeNumbers}"  >
@@ -337,7 +337,7 @@
                         <c:forEach var="dayEntry" items="${detailedRoute.days}">
                             <tr >
                                 <td colspan="2" style="text-align: center; background-color:lightblue;">
-                                    ${dayEntry.value.dateStamp}
+                                    ${dayEntry.value.getDateStampWeekFormat()}
                                 </td>
                             </tr>
                             <tr>

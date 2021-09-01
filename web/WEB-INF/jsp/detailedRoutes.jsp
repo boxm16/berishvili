@@ -349,7 +349,7 @@
                         <c:forEach var="day" items="${detailedRoute.days}">
                             <tr>
                                 <td colspan='16' align="center">
-                                    თარიღი: ${day.value.dateStamp}
+                                    თარიღი: ${day.value.getDateStampWeekFormat()}
                                 </td>
                             </tr>
                             <c:forEach var="exodus" items="${day.value.exoduses}">

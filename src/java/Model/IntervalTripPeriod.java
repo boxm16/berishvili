@@ -122,6 +122,10 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
         this.runOver = runOver;
     }
 
+    public void addRunOver(String runOver) {
+        this.runOver += runOver;
+    }
+
     public String getRunOverColor() {
         if (runOver.equals("")) {
             return "inherited";

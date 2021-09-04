@@ -224,7 +224,7 @@
 
         <div class="wrapper">
             <!-- Sidebar  -->
-            
+
 
             <!-- Page Content  -->
             <div id="content">
@@ -391,7 +391,20 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="#misconductsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>დარღვევები</h3></a>
+                        <ul class="collapse list-unstyled" id="misconductsSubmenu">
+                            <li>
+                                <a href="#" onclick="requestRouter('misconducts.htm')"><h4>დათვალიერება</h4></a>
+                            </li>
+                            <li>
+                                <a href="#"><h4>ექსელში ექსპორტი</h4></a>
+                            </li>
+
+                        </ul>
+                    </li>
                 </ul>
+
 
                 <ul class="list-unstyled CTAs">
                     <li>

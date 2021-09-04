@@ -58,6 +58,7 @@ public class DetailedRoute extends BasicRoute {
     }
 
     public void calculateIntervalsData() {
+        MisconductTripPeriod misconductTripPeriod;
         TreeMap<Date, Day> days = super.getDays();
         for (Map.Entry<Date, Day> dayEntry : days.entrySet()) {
 
@@ -80,6 +81,12 @@ public class DetailedRoute extends BasicRoute {
                                 intervalTripPeriod.setHaltTimeActual(null);
                             } else {
                                 intervalTripPeriod.setHaltTimeActual(Duration.between(previousTripPeriodArrivalTimeActual, tripPeriod.getStartTimeActual()));
+
+                                if (tripPeriod instanceof MisconductTripPeriod) {
+                                    misconductTripPeriod = (MisconductTripPeriod) tripPeriod;
+                                    misconductTripPeriod.setPreviousTripPeriodArrvialTimeActual(previousTripPeriodArrivalTimeActual);
+                                }
+
                             }
                             previousTripPeriodArrivalTimeScheduled = tripPeriod.getArrivalTimeScheduled();
                             previousTripPeriodArrivalTimeActual = tripPeriod.getArrivalTimeActual();

@@ -81,4 +81,23 @@ public class IntervalsController {
         return detailedRoutesPager;
     }
 
+    @RequestMapping(value = "interval")
+    public String interval(@RequestParam("routeNumber") String routeNumber, @RequestParam("startTimeScheduled") String startTimeScheduled, @RequestParam("tripPeriodType") String tripPeriodType, @RequestParam("dateStamp") String dateStamp, ModelMap model) {
+        DetailedRoutesPager intervalsPager = new DetailedRoutesPager("intervals");
+        intervalsPager.addRouteNumber(routeNumber);
+        intervalsPager.addDateStamp(dateStamp);
+        intervalsPager.setCurrentRoute("initial");
+        DetailedRoute detailedRoute = intervalsDao.getRoutesForIntervals(intervalsPager);
+
+        detailedRoute.calculateIntervalsData();
+
+        model.addAttribute("typeAnchor", tripPeriodType);
+        model.addAttribute("startTimeAnchor", startTimeScheduled);
+
+        model.addAttribute("intervalsPager", intervalsPager);
+        model.addAttribute("detailedRoute", detailedRoute);
+
+        return "interval";
+    }
+
 }

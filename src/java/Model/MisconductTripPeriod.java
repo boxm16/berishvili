@@ -76,6 +76,14 @@ public class MisconductTripPeriod extends IntervalTripPeriod {
         return previousTripPeriodArrvialTimeActual;
     }
 
+    public String getPreviousTripPeriodArrvialTimeActualString() {
+        if (previousTripPeriodArrvialTimeActual == null) {
+            return "";
+        }
+        return previousTripPeriodArrvialTimeActual.format(DateTimeFormatter.ofPattern("HH:mm"));
+
+    }
+
     public void setPreviousTripPeriodArrvialTimeActual(LocalDateTime previousTripPeriodArrvialTimeActual) {
         this.previousTripPeriodArrvialTimeActual = previousTripPeriodArrvialTimeActual;
     }

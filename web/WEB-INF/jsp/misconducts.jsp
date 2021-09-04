@@ -308,14 +308,6 @@
                         &nbsp  &nbsp  &nbsp
 
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            &nbsp  &nbsp  
-                            <button type="button" class="btn btn-outline-success">
-                                <span> <a href="tripPeriodsCalculations.htm">გამოთვლები</a> </span>
-                            </button>
-                            &nbsp &nbsp &nbsp 
-                            <center>
-                                ${tripPeriodsPager.display}
-                            </center>
 
                             &nbsp  &nbsp  &nbsp 
                             <button type="button" class="btn btn-outline-success">
@@ -358,11 +350,11 @@
 
 
                                 <td align="center">${tripPeriod.busNumber} </td>
-                                
-                                 <td> </td>
-                                <td align="center">${tripPeriod.driverName} </td>
 
                                 <td> </td>
+                                <td align="center">${tripPeriod.driverName} </td>
+
+                                <td> ${tripPeriod.getPreviousTripPeriodArrvialTimeActualString()} </td>
                                 <td> ${tripPeriod.getStartTimeScheduledString()}</td>
                                 <td> ${tripPeriod.getStartTimeActualString()}</td>
                                 <td align="center">${tripPeriod.getPreviousBusStartTimeActualString()} </td>

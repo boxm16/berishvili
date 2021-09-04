@@ -388,7 +388,7 @@
                                             <td align="center">${tripPeriod.getHaltTimeActualString()}</td>
                                             <td align="center" style="background-color:${tripPeriod.getLostTimeColor()} ">${tripPeriod.lostTimeString}</td>
                                             <td align="center">${tripPeriod.getGpsIntervalString()}</td>
-                                            <td align="center">link</td>
+                                            <td align="center"><a href="interval.htm?routeNumber=${detailedRoute.number}&dateStamp=${day.value.dateStamp}&tripPeriodType=${tripPeriod.type}&startTimeScheduled=${tripPeriod.getStartTimeScheduled()}" target="_blank">link</a></td>
                                         </tr>
                                     </c:forEach>
                                 </c:forEach>

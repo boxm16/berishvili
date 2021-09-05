@@ -165,7 +165,7 @@
                             <th>დგომის<br>ფაქტიური<br>დრო</th>
                             <th>'დაკარგული<br>დრო'</th>
                             <th>GPS<br>ინტერვალი</th>
-                            <th>ინტერვალების<br>ლინკი</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -215,8 +215,7 @@
                                             <td align="center">${tripPeriod.getHaltTimeScheduledString()}</td>
                                             <td align="center">${tripPeriod.getHaltTimeActualString()}</td>
                                             <td align="center" style="background-color:${tripPeriod.getLostTimeColor()} ">${tripPeriod.lostTimeString}</td>
-                                            <td align="center">${tripPeriod.getGpsIntervalString()}</td>
-                                            <td align="center">link</td>
+                                            <td align="center"><a href="interval.htm?routeNumber=${detailedRoute.number}&dateStamp=${day.value.dateStamp}&tripPeriodType=${tripPeriod.type}&startTimeScheduled=${tripPeriod.getStartTimeScheduled()}" target="_blank">${tripPeriod.getGpsIntervalString()}</a></td>
                                         </tr>
                                     </c:forEach>
                                 </c:forEach>

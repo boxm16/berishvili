@@ -141,7 +141,7 @@
             ul ul a {
                 font-size: 0.9em !important;
                 padding-left: 30px !important;
-                background: #6d7fcc;
+                background: #59c1d4;
             }
 
             ul.CTAs {
@@ -561,7 +561,7 @@
                                                 }
                                                 ////--------------------
                                                 function requestRouter(requestTarget) {
-                                                    form.target = "_self";
+                                                    form.target = "_blank";
                                                     form.action = requestTarget;
                                                     routes_dates.value = collectSellectedCheckBoxes();
                                                     console.log(form.action);

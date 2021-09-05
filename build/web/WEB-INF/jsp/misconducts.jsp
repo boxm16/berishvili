@@ -336,7 +336,8 @@
                             <th>ხაზზე გასვლის<br>დრო ფაქტიური</th>
                             <th>წინა მანქანის<br>ხაზზე<br>გასვლის დრო</th>
 
-                            <th>misconduct</th>
+                            <th>დარღვევა</th>
+                            <th>შესადავებელი<br>დრო</th>
                             <th>runOver</th>
                         </tr>
                     </thead>
@@ -359,9 +360,9 @@
                                 <td> ${tripPeriod.getStartTimeActualString()}</td>
                                 <td align="center">${tripPeriod.getPreviousBusStartTimeActualString()} </td>
 
-
-                                <td align="center"><a href="exodus.htm?routeNumber=${tripPeriod.routeNumber}&dateStamp=${tripPeriod.dateStamp}&exodusNumber=${tripPeriod.exodusNumber}&startTimeScheduled=${tripPeriod.startTimeScheduled}"  target="_blank">${tripPeriod.misconduct}</a></td>
-                                <td align="center"><a href="exodus.htm?routeNumber=${tripPeriod.routeNumber}&dateStamp=${tripPeriod.dateStamp}&exodusNumber=${tripPeriod.exodusNumber}&startTimeScheduled=${tripPeriod.startTimeScheduled}"  target="_blank">${tripPeriod.runOver}</a> </td>
+                                <td align="center"><a href="interval.htm?routeNumber=${tripPeriod.routeNumber}&dateStamp=${tripPeriod.dateStamp}&tripPeriodType=${tripPeriod.type}&startTimeScheduled=${tripPeriod.startTimeScheduled}"  target="_blank">${tripPeriod.misconduct}</a></td>
+                                <td align="center">${tripPeriod.misconductDuration}</a></td>
+                                <td align="center"><a href="interval.htm?routeNumber=${tripPeriod.routeNumber}&dateStamp=${tripPeriod.dateStamp}&tripPeriodType=${tripPeriod.type}&startTimeScheduled=${tripPeriod.startTimeScheduled}"  target="_blank">${tripPeriod.runOver}</a> </td>
 
                             </tr>
                         </c:forEach>

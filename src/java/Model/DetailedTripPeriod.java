@@ -49,13 +49,13 @@ public class DetailedTripPeriod extends TripPeriod {
                 lostTimeString = super.getStartTimeDifference();
 
             } else {
-                //dialdi, if a driver starts later then he shoud start, while he could start (has enough halt time) 
+                //dialdi, if a driver starts later than he shoud start, while he could start (has enough halt time) 
                 if (this.getHaltTimeActual() == null) {
                     lostTimeString = "";
 
                 } else {
-                    if (startTimeDifferenceDuration.getSeconds() >= this.getHaltTimeActual().getSeconds()) {
-                        lostTimeString = getHaltTimeActualString();
+                    if (startTimeDifferenceDuration.getSeconds() >= this.getHaltTimeActual().getSeconds() - this.getHaltTimeScheduled().getSeconds()) {
+                        lostTimeString = converter.convertDurationToString(getHaltTimeActual().minus(getHaltTimeScheduled()));
 
                     } else {
                         lostTimeString = super.getStartTimeDifference();

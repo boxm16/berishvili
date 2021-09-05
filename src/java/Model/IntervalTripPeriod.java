@@ -9,6 +9,7 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     private Duration scheduledInterval;
     private Duration actualInterval;
     private String misconduct;
+    private String misconductDuration;
     private String runOver;
 
     public IntervalTripPeriod() {
@@ -89,9 +90,11 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
 
             if (intervalDifference.getSeconds() < -301 && lostTimeDuration.getSeconds() < -301) {
                 misconduct = "-";
+                misconductDuration = converter.convertDurationToString(lostTimeDuration);
 
             } else if (intervalDifference.getSeconds() > 300 && lostTimeDuration.getSeconds() > 300) {
                 misconduct = "+";
+                misconductDuration = converter.convertDurationToString(lostTimeDuration);
 
             } else {
                 misconduct = "";
@@ -132,6 +135,14 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
         } else {
             return "lightgreen";
         }
+    }
+
+    public String getMisconductDuration() {
+        return misconductDuration;
+    }
+
+    public void setMisconductDuration(String misconductDuration) {
+        this.misconductDuration = misconductDuration;
     }
 
 }

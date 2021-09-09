@@ -397,6 +397,9 @@
                             <li>
                                 <a href="#" onclick="requestRouter('misconducts.htm')"><h4>დათვალიერება</h4></a>
                             </li>
+                              <li>
+                                <a href="#" onclick="requestRouter('firstTripMisconduct.htm')"><h4>ა/ბ დარღვევების დათვალიერება</h4></a>
+                            </li>
                             <li>
                                 <a href="#"><h4>ექსელში ექსპორტი</h4></a>
                             </li>

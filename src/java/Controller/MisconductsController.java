@@ -2,6 +2,7 @@ package Controller;
 
 import DAO.MisconductsDao;
 import Model.DetailedRoutesPager;
+import Model.FirstTripPeriod;
 import Model.MisconductTripPeriod;
 import java.time.Duration;
 import java.time.Instant;
@@ -64,5 +65,11 @@ public class MisconductsController {
         return detailedRoutesPager;
     }
 
-   
+    @RequestMapping(value = "firstTripMisconduct")
+    public String baseMisconducts(@RequestParam("routes:dates") String routeDates, ModelMap model) {
+        DetailedRoutesPager detailedRoutesPager = createDetailedRoutesPager(routeDates);;
+        ArrayList<FirstTripPeriod> misconductedFirstTripPeriods = misconductsDao.getMisconductedFirstTripPeriods(detailedRoutesPager);
+        model.addAttribute("misconductedFirstTripPeriods", misconductedFirstTripPeriods);
+        return "firstTripMisconduct";
+    }
 }

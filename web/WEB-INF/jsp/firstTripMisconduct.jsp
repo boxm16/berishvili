@@ -340,7 +340,7 @@
                     </thead>
                     <tbody>
                         <c:forEach var="tripPeriod" items="${misconductedFirstTripPeriods}">
-                            <tr>
+                            <tr style="background-color:${tripPeriod.getColor()} ">
                                 <td align="center">${tripPeriod.dateStamp} </td>
                                 <td> </td>
                                 <td align="center">${tripPeriod.routeNumber} </td>

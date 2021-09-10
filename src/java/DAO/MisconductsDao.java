@@ -53,7 +53,7 @@ public class MisconductsDao {
             
             query = queryBuilderInitialPart.append(routeNumber).
                     append(" AND date_stamp IN ").append(queryBuilderDateStampPart).
-                    append(" ORDER BY prefix, suffix, date_stamp, exodus_number, start_time_scheduled ;");
+                    append(" ORDER BY prefix, suffix, date_stamp, exodus_number ;");
             
             try {
                 connection = dataBaseConnection.getConnection();
@@ -236,6 +236,8 @@ public class MisconductsDao {
                                 firstTripPeriod.setDateStamp(dateStamp);
                                 firstTripPeriod.setBusNumber(resultSet.getString("bus_number"));
                                 firstTripPeriod.setExodusNumber(exodusNumber);
+                                if(exodus.getTripVouchers().size()>1){
+                                firstTripPeriod.setBrokenExodus(true);}
                                 misocnductedFirstTripPeriods.add(firstTripPeriod);
                                 
                             }
@@ -256,17 +258,7 @@ public class MisconductsDao {
     private FirstTripPeriod calculateFirstTripPeriodAndBaseMisconduct(TripPeriod baseTripPeriod, TripPeriod firstTripPeriod) {
         Duration firstTripPeriodStartTimeDifference = converter.convertStringToDuration(firstTripPeriod.getStartTimeDifference());
         if (firstTripPeriodStartTimeDifference != null) {
-            if (firstTripPeriodStartTimeDifference.getSeconds() < -60) {
-                FirstTripPeriod misconductedFirstTripPeriod = new FirstTripPeriod();
-                misconductedFirstTripPeriod.setStartTimeScheduled(firstTripPeriod.getStartTimeScheduled());
-                misconductedFirstTripPeriod.setStartTimeActual(firstTripPeriod.getStartTimeActual());
-                misconductedFirstTripPeriod.setStartTimeDifference(firstTripPeriod.getStartTimeDifference());
-                misconductedFirstTripPeriod.setBaseTripStartTimeScheduled(baseTripPeriod.getStartTimeScheduled());
-                misconductedFirstTripPeriod.setBaseTripStartTimeActual(baseTripPeriod.getStartTimeActual());
-                misconductedFirstTripPeriod.setBaseTripStartTimeDifference(baseTripPeriod.getStartTimeDifference());
-                
-                return misconductedFirstTripPeriod;
-            }
+           
             if (firstTripPeriodStartTimeDifference.getSeconds() > 60) {
                 Duration baseTripPeriodStartTimeDifference = converter.convertStringToDuration(baseTripPeriod.getStartTimeDifference());
                 if (baseTripPeriodStartTimeDifference != null && baseTripPeriodStartTimeDifference.getSeconds() > 60) {

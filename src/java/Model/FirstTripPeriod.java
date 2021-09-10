@@ -8,6 +8,7 @@ public class FirstTripPeriod extends TripPeriod {
     private LocalDateTime baseTripStartTimeScheduled;
     private LocalDateTime baseTripStartTimeActual;
     private String baseTripStartTimeDifference;
+    private boolean brokenExodus;
 
     private String routeNumber;
     private String dateStamp;
@@ -90,6 +91,19 @@ public class FirstTripPeriod extends TripPeriod {
         this.exodusNumber = exodusNumber;
     }
 
-    
-    
+    public boolean isBrokenExodus() {
+        return brokenExodus;
+    }
+
+    public void setBrokenExodus(boolean brokenExodus) {
+        this.brokenExodus = brokenExodus;
+    }
+
+    public String getColor() {
+        if (this.isBrokenExodus()) {
+            return "#bf00ff";
+        }
+        return "inherited";
+    }
+
 }

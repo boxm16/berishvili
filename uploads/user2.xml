@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<user id="2">
+    <admin>false</admin>
+    <email>tom.doe@example.com</email>
+    <name>Tom Deo</name>
+    <roles>
+        <role>Member</role>
+        <role>Moderator</role>
+    </roles>
+</user>

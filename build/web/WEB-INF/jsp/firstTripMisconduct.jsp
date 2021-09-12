@@ -241,7 +241,7 @@
             th {
                 vertical-align: bottom;
                 background-color: yellow;
-                color: black;
+                color: #fff;
                 border:solid black 1px;
             }
 
@@ -283,11 +283,7 @@
                     <center><h5>First Trip Misconducts</h5></center>
                 </div>
                 <ul class="list-unstyled components">
-                    <c:forEach var="routeNumberEntry" items="${tripPeriodsPager.routeNumbers}" varStatus="loop">
-                        <li >
-                            <a href="tripPeriodsRequest.htm?requestedPage=${routeNumberEntry.value}">${routeNumberEntry.key}</a>
-                        </li>
-                    </c:forEach>
+
                 </ul>
             </nav>
 
@@ -307,8 +303,12 @@
 
                         &nbsp  &nbsp  &nbsp
 
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <form action="firstTripMisconduct.htm" method="POST" class="form-inline my-2 my-lg-0">
+                            <input name="misconductTimeBound" class="form-control mr-sm-2" type="number" value="${misconductTimeBound}" >
+                            <button class="btn btn-primary my-2 my-sm-0" type="submit">წუთიანი დაგვიანებების გამოსახვა</button>
+                        </form>
 
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             &nbsp  &nbsp  &nbsp 
                             <button type="button" class="btn btn-outline-success">
                                 <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>

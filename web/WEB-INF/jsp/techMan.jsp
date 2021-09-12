@@ -44,6 +44,13 @@
         <hr>
         <a href="createTables.htm" >Create Tables </a>
         <br>${routeTableCreationStatus}
+
+        <hr><hr>
+        <h1>Create ConfigXML file</h1>
+        <a href="createConfigXML.htm" >Create ConfigXML file</a>
+        <hr>
+
+        <hr>
         <h3>Upload Excel File With Routes Data </h3>
         <h4>Careful, routes that exists in database but are not included in uploaded files will be deleted</h4>
         <form action="uploadRoutesDataFile.htm" method="post" enctype="multipart/form-data">  
@@ -60,9 +67,9 @@
         <form action="startNewThread.htm" method="POST">
             <input type="number" name="sleepTime" value="3">
             <button type="submit">Start New Thread</button>
-             <input type="number" name="count" value="3">
+            <input type="number" name="count" value="3">
         </form>
-       
-       
+
+
     </body>
 </html>

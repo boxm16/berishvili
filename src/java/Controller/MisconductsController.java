@@ -65,11 +65,46 @@ public class MisconductsController {
         return detailedRoutesPager;
     }
 
+    @RequestMapping(value = "firstTripMisconductInitialRequest")
+    public String firstTripMisconductInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model, HttpSession session) {
+        Object sessionMisconductTimeBoundt = session.getAttribute("misconductTimeBound");
+        if (sessionMisconductTimeBoundt == null) {
+            ConfigReader configReader = new ConfigReader();
+            sessionMisconductTimeBoundt = configReader.getMisconductTimeBound();
+            session.setAttribute("misconductTimeBound", sessionMisconductTimeBoundt);
+        }
+        int misconductTimeBound = (Integer) session.getAttribute("misconductTimeBound");;
+        DetailedRoutesPager firstTripMisconductPager = createDetailedRoutesPager(routeDates);;
+        session.setAttribute("firstTripMisconductPager", firstTripMisconductPager);
+
+        model.addAttribute("misconductTimeBound", misconductTimeBound);
+
+        return "firstTripMisconduct";
+    }
+
     @RequestMapping(value = "firstTripMisconduct")
-    public String baseMisconducts(@RequestParam("routes:dates") String routeDates, ModelMap model) {
-        DetailedRoutesPager detailedRoutesPager = createDetailedRoutesPager(routeDates);;
-        ArrayList<FirstTripPeriod> misconductedFirstTripPeriods = misconductsDao.getMisconductedFirstTripPeriods(detailedRoutesPager);
-        model.addAttribute("misconductedFirstTripPeriods", misconductedFirstTripPeriods);
+    public String baseMisconducts(@RequestParam("misconductTimeBound") String misconductTimeBound, HttpSession session, ModelMap model) {
+
+        int sessionMisconductTimeBound = (int) session.getAttribute("misconductTimeBound");
+        try {
+            int requestMisconductTimeBound = Integer.valueOf(misconductTimeBound);
+
+            if (requestMisconductTimeBound != sessionMisconductTimeBound) {
+                //here i save requestMisconductTImeBound into xml
+                ConfigWriter configWriter = new ConfigWriter();
+                configWriter.saveConfigFile(requestMisconductTimeBound);
+
+                session.setAttribute("misconductTimeBound", requestMisconductTimeBound);
+            }
+            DetailedRoutesPager detailedRoutesPager = (DetailedRoutesPager) session.getAttribute("firstTripMisconductPager");
+            if (detailedRoutesPager == null) {
+                return "errorPage";
+            }
+            ArrayList<FirstTripPeriod> misconductedFirstTripPeriods = misconductsDao.getMisconductedFirstTripPeriods(detailedRoutesPager, requestMisconductTimeBound);
+            model.addAttribute("misconductedFirstTripPeriods", misconductedFirstTripPeriods);
+        } catch (Exception ex) {
+            return "errorPage";
+        }
         return "firstTripMisconduct";
     }
 }

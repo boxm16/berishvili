@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>დარღვევები</title>
+        <title>ა/ბ დარღვევები</title>
         <!-- Bootstrap CSS CDN -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 
@@ -241,7 +241,7 @@
             th {
                 vertical-align: bottom;
                 background-color: yellow;
-                color: #fff;
+                color: black;
                 border:solid black 1px;
             }
 

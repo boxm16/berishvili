@@ -107,4 +107,48 @@ public class MisconductsController {
         }
         return "firstTripMisconduct";
     }
+
+    @RequestMapping(value = "firstTripMisconductMinusVersionInitialRequest")
+    public String firstTripMisconductMinusVersionInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model, HttpSession session) {
+        Object sessionMisconductTimeBoundt = session.getAttribute("misconductTimeBound");
+        if (sessionMisconductTimeBoundt == null) {
+            ConfigReader configReader = new ConfigReader();
+            sessionMisconductTimeBoundt = configReader.getMisconductTimeBound();
+            session.setAttribute("misconductTimeBound", sessionMisconductTimeBoundt);
+        }
+        int misconductTimeBound = (Integer) session.getAttribute("misconductTimeBound");;
+        DetailedRoutesPager firstTripMisconductPager = createDetailedRoutesPager(routeDates);;
+        session.setAttribute("firstTripMisconductPager", firstTripMisconductPager);
+
+        model.addAttribute("misconductTimeBound", misconductTimeBound);
+
+        return "firstTripMisconductMinusVersion";
+    }
+
+    @RequestMapping(value = "firstTripMisconductMinusVersion")
+    public String firstTripMisconductMinusVersion(@RequestParam("misconductTimeBound") String misconductTimeBound, HttpSession session, ModelMap model) {
+
+        int sessionMisconductTimeBound = (int) session.getAttribute("misconductTimeBound");
+        try {
+            int requestMisconductTimeBound = Integer.valueOf(misconductTimeBound);
+
+            if (requestMisconductTimeBound != sessionMisconductTimeBound) {
+                //here i save requestMisconductTImeBound into xml
+                ConfigWriter configWriter = new ConfigWriter();
+                configWriter.saveConfigFile(requestMisconductTimeBound);
+
+                session.setAttribute("misconductTimeBound", requestMisconductTimeBound);
+            }
+            DetailedRoutesPager detailedRoutesPager = (DetailedRoutesPager) session.getAttribute("firstTripMisconductPager");
+            if (detailedRoutesPager == null) {
+                return "errorPage";
+            }
+            ArrayList<FirstTripPeriod> firstTripMisconductMinusVersion = misconductsDao.getMisconductedFirstTripPeriodsMinusVersion(detailedRoutesPager, requestMisconductTimeBound);
+            model.addAttribute("firstTripMisconductMinusVersion", firstTripMisconductMinusVersion);
+        } catch (Exception ex) {
+            return "errorPage";
+        }
+        return "firstTripMisconductMinusVersion";
+    }
+
 }

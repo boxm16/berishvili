@@ -27,7 +27,7 @@ public class ConfigReader {
             Element root = dom.getDocumentElement();
 
             // print elements
-            misconductTimeBound = Integer.valueOf(root.getElementsByTagName("storedConstant").item(0).getTextContent());
+            misconductTimeBound = Integer.valueOf(root.getElementsByTagName("misconductTimeBound").item(0).getTextContent());
 
         } catch (Exception ex) {
             ex.printStackTrace();

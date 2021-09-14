@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class TripVoucher {
 
     private String number;
+    private short baseNumber;
     private String busNumber;
     private String busType;
     private String driverNumber;
@@ -71,5 +72,15 @@ public class TripVoucher {
     public void setTripPeriods(ArrayList<TripPeriod> tripPeriods) {
         this.tripPeriods = tripPeriods;
     }
+
+    public short getBaseNumber() {
+        return baseNumber;
+    }
+
+    public void setBaseNumber(short baseNumber) {
+        this.baseNumber = baseNumber;
+    }
+    
+    
 
 }

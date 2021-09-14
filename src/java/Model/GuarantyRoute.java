@@ -15,6 +15,7 @@ public class GuarantyRoute extends BasicRoute {
     private String aPoint;
     private String bPoint;
     private String scheme;
+    private short baseNumber;
     //-------------
     private Duration standardIntervalTime;
     private Duration standardTripPeriodTime;
@@ -270,7 +271,14 @@ public class GuarantyRoute extends BasicRoute {
         this.standardBreakTime = standardBreakTime;
     }
 
+    public short getBaseNumber() {
+        return baseNumber;
+    }
 
+    public void setBaseNumber(short baseNumber) {
+        this.baseNumber = baseNumber;
+    }
 
-   
+    
+    
 }

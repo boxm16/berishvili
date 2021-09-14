@@ -6,7 +6,7 @@ import java.util.TreeMap;
 public class BasicRoute {
 
     private String number;
-    private short baseNumber;
+   
     private TreeMap<Date, Day> days;
 
     public BasicRoute() {
@@ -21,13 +21,7 @@ public class BasicRoute {
         this.number = number;
     }
 
-    public short getBaseNumber() {
-        return baseNumber;
-    }
-
-    public void setBaseNumber(short baseNumber) {
-        this.baseNumber = baseNumber;
-    }
+   
 
     public TreeMap<Date, Day> getDays() {
         return days;

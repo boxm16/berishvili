@@ -98,6 +98,7 @@ public class TechDao {
                 + "`number` VARCHAR(20) NOT NULL, "
                 + "`route_number` VARCHAR(10) NOT NULL, "
                 + "`date_stamp` DATE NOT NULL, "
+                + "`base_number` INT(2) NOT NULL, "
                 + "`exodus_number` INT(2) NOT NULL, "
                 + "`driver_number` VARCHAR(10) NULL, "
                 + "`driver_name` VARCHAR(45) NULL, "

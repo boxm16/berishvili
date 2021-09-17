@@ -6,6 +6,7 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
 
     private short scheduledTimetableSequenceNumber;
     private short exodusNumber;
+    private short baseNumber;
     private Duration scheduledInterval;
     private Duration actualInterval;
     private String misconduct;
@@ -144,5 +145,15 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     public void setMisconductDuration(String misconductDuration) {
         this.misconductDuration = misconductDuration;
     }
+
+    public short getBaseNumber() {
+        return baseNumber;
+    }
+
+    public void setBaseNumber(short baseNumber) {
+        this.baseNumber = baseNumber;
+    }
+    
+    
 
 }

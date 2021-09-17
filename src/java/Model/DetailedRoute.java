@@ -81,12 +81,11 @@ public class DetailedRoute extends BasicRoute {
                                 intervalTripPeriod.setHaltTimeActual(null);
                             } else {
                                 intervalTripPeriod.setHaltTimeActual(Duration.between(previousTripPeriodArrivalTimeActual, tripPeriod.getStartTimeActual()));
-
-                                if (tripPeriod instanceof MisconductTripPeriod) {
-                                    misconductTripPeriod = (MisconductTripPeriod) tripPeriod;
-                                    misconductTripPeriod.setPreviousTripPeriodArrvialTimeActual(previousTripPeriodArrivalTimeActual);
-                                }
-
+                            }
+                            //here is insertion for MisconductTripPeriod 
+                            if (tripPeriod instanceof MisconductTripPeriod) {
+                                misconductTripPeriod = (MisconductTripPeriod) tripPeriod;
+                                misconductTripPeriod.setPreviousTripPeriodArrvialTimeActual(previousTripPeriodArrivalTimeActual);
                             }
                             previousTripPeriodArrivalTimeScheduled = tripPeriod.getArrivalTimeScheduled();
                             previousTripPeriodArrivalTimeActual = tripPeriod.getArrivalTimeActual();

@@ -48,12 +48,12 @@ public class MisconductsDao {
             detailedRoute = new DetailedRoute();
 
             StringBuilder query = new StringBuilder();
-            StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT exodus_number, date_stamp, t2.number, driver_number, driver_name, notes, type, start_time_scheduled, start_time_actual,start_time_difference, arrival_time_scheduled, arrival_time_actual, arrival_time_difference FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number=");
+            StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT exodus_number, date_stamp, t2.number, base_number, bus_number, driver_number, driver_name, notes, type, start_time_scheduled, start_time_actual,start_time_difference, arrival_time_scheduled, arrival_time_actual, arrival_time_difference FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number=");
             StringBuilder queryBuilderDateStampPart = buildStringFromArrayList(detailedRoutesPager.getDateStamps());
 
             query = queryBuilderInitialPart.append(routeNumber).
                     append(" AND date_stamp IN ").append(queryBuilderDateStampPart).
-                    append(" ORDER BY prefix, suffix, date_stamp, exodus_number ;");
+                    append(" ORDER BY prefix, suffix, date_stamp, exodus_number, start_time_scheduled ;");
 
             try {
                 connection = dataBaseConnection.getConnection();
@@ -84,6 +84,7 @@ public class MisconductsDao {
                         TripVoucher newTripVoucher = new TripVoucher();
                         newTripVoucher.setNumber(tripVoucherNumber);
                         newTripVoucher.setNotes(resultSet.getString("notes"));
+                        newTripVoucher.setBaseNumber(resultSet.getShort("base_number"));
                         exodus.getTripVouchers().put(tripVoucherNumber, newTripVoucher);
                     }
                     TripVoucher tripVoucher = exodus.getTripVouchers().get(tripVoucherNumber);
@@ -94,6 +95,7 @@ public class MisconductsDao {
                     newTripPeriod.setRouteNumber(routeNumber);
                     newTripPeriod.setDateStamp(dateStamp);
                     newTripPeriod.setType(resultSet.getString("type"));
+                    newTripPeriod.setBusNumber(resultSet.getString("bus_number"));
                     newTripPeriod.setDriverNumber(resultSet.getShort("driver_number"));
                     newTripPeriod.setDriverName(resultSet.getString("driver_name"));
                     newTripPeriod.setStartTimeScheduled(converter.convertStringTimeToDate(resultSet.getString("start_time_scheduled")));
@@ -157,9 +159,11 @@ public class MisconductsDao {
                     ArrayList<TripPeriod> tripPeriods = tripVoucherEntry.getValue().getTripPeriods();
                     for (TripPeriod tripPeriod : tripPeriods) {
                         IntervalTripPeriod tripPeriodM = (IntervalTripPeriod) tripPeriod;
+
                         if (tripPeriodM.getMisconduct() != null) {
                             if (!tripPeriodM.getMisconduct().equals("") || !tripPeriodM.getRunOver().equals("")) {
-
+                                tripPeriodM.setBaseNumber(tripVoucherEntry.getValue().getBaseNumber());
+                                MisconductTripPeriod tripPeriodMB = (MisconductTripPeriod) tripPeriod;
                                 returnArrayList.add(tripPeriodM);
                             }
                         }

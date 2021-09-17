@@ -345,14 +345,13 @@
                         <c:forEach var="tripPeriod" items="${misconductTripPeriods}">
                             <tr>
                                 <td align="center">${tripPeriod.dateStamp} </td>
-                                <td> </td>
+                                <td align="center">${tripPeriod.baseNumber} </td>
                                 <td align="center">${tripPeriod.routeNumber} </td>
                                 <td align="center">${tripPeriod.exodusNumber} </td>
 
-
                                 <td align="center">${tripPeriod.busNumber} </td>
 
-                                <td> </td>
+                                <td align="center">${tripPeriod.driverNumber} </td>
                                 <td align="center">${tripPeriod.driverName} </td>
 
                                 <td> ${tripPeriod.getPreviousTripPeriodArrvialTimeActualString()} </td>

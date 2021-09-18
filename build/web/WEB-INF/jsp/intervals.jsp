@@ -43,7 +43,7 @@
             }
 
             .navbar {
-                width:2200px;
+               
                 padding: 0px 0px;
                 background: #fff;
                 border: none;
@@ -300,25 +300,13 @@
                             <i class=" fa-align-left"></i>
                             <span> < > </span>
                         </button>
-                        &nbsp &nbsp &nbsp
-                        <button type="button" class="btn btn-outline-success">
-                            <span> <a href="index.htm">საწყისი გვერდი</a> </span>
+                        <center>
+                            ${intervalsPager.display}
+                        </center>
+                        <button type="button" class="btn btn-warning">
+                            <span> <a href="intervalsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
                         </button>
 
-                        &nbsp  &nbsp  &nbsp
-
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-                            &nbsp &nbsp &nbsp 
-                            <center>
-                                ${intervalsPager.display}
-                            </center>
-
-                            &nbsp  &nbsp  &nbsp 
-                            <button type="button" class="btn btn-outline-success">
-                                <span> <a href="intervalsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
-                            </button>
-                        </div>
                     </div>
                 </nav>
 

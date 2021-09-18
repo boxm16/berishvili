@@ -427,7 +427,6 @@ public class TripPeriodsController {
     @RequestMapping(value = "tripPeriodsCalculations")
     public String tripPeriodsCalculations(HttpSession session) {
         int percents = (Integer) session.getAttribute("percents");
-        System.out.println(percents);
         return "tripPeriodsCalculations";
     }
 

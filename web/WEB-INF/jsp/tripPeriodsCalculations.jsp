@@ -18,27 +18,21 @@
         გამოთვლისთვის გამოიყენება მხოლოდ A-B და B-A წირები, რომლების გეგმიური და ფაქტიური დროს შორის აცდენა უდრის ან ნაკლებია( =< ) მითუთებულ ფროცენტს(ზე)
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button type="button" class="btn btn-outline-success">
+                    <span> <a href="tripPeriodsRequest.htm?requestedPage=1">ბრუნების დროების დათვალიერება</a> </span>
+                </button>
 
-            <button type="button" class="btn btn-outline-success">
-                <span> <a href="index.htm">საწყისი გვერდი</a> </span>
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <button type="button" class="btn btn-outline-success">
-                <span> <a href="tripPeriodsRequest.htm?requestedPage=1">ბრუნების დროების დათვალიერება</a> </span>
-            </button>
+                <form action="tripPeriodsCalculatePercentage.htm" method="POST" class="form-inline my-2 my-lg-0">
+                    <input name="percents" class="form-control mr-sm-2" type="number" value="${percents}" >
+                    <button class="btn btn-primary my-2 my-sm-0" type="submit">პროცენტის დაფიქსირება და გამოთვლა</button>
+                </form>
 
-            &nbsp;&nbsp;&nbsp;&nbsp;
 
-            <form action="tripPeriodsCalculatePercentage.htm" method="POST" class="form-inline my-2 my-lg-0">
-                <input name="percents" class="form-control mr-sm-2" type="number" value="${percents}" >
-                <button class="btn btn-primary my-2 my-sm-0" type="submit">პროცენტის დაფიქსირება და გამოთვლა</button>
-            </form>
-
-            &nbsp  &nbsp  &nbsp 
-            <button type="button" class="btn btn-outline-success">
-                <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
-            </button>
-
+                <button type="button" class="btn btn-warning">
+                    <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
+                </button>
+            </div>
         </nav>
 
         <hr>

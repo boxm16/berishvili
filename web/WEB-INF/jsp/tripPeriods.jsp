@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>ბრუნების დროები</title>
         <!-- Bootstrap CSS CDN -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 
@@ -300,28 +300,15 @@
                             <i class="fas fa-align-left"></i>
                             <span>< ></span>
                         </button>
-                        &nbsp
                         <button type="button" class="btn btn-outline-success">
-                            <span> <a href="index.htm">საწყისი გვერდი</a> </span>
+                            <span> <a href="tripPeriodsCalculations.htm">გამოთვლები</a> </span>
                         </button>
-
-                        &nbsp  &nbsp  &nbsp
-
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            &nbsp  &nbsp  
-                            <button type="button" class="btn btn-outline-success">
-                                <span> <a href="tripPeriodsCalculations.htm">გამოთვლები</a> </span>
-                            </button>
-                            &nbsp &nbsp &nbsp 
-                            <center>
-                                ${tripPeriodsPager.display}
-                            </center>
-
-                            &nbsp  &nbsp  &nbsp 
-                            <button type="button" class="btn btn-outline-success">
-                                <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
-                            </button>
-                        </div>
+                        <center>
+                            ${tripPeriodsPager.display}
+                        </center>
+                        <button type="button" class="btn btn-warning">
+                            <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
+                        </button>
                     </div>
                 </nav>
 

@@ -299,20 +299,12 @@
                             <i class="fas fa-align-left"></i>
                             <span>< ></span>
                         </button>
-                        &nbsp &nbsp &nbsp
-                        <button type="button" class="btn btn-outline-success">
-                            <span> <a href="index.htm">საწყისი გვერდი</a> </span>
-                        </button>
 
-                        &nbsp  &nbsp  &nbsp
-                        &nbsp &nbsp &nbsp 
                         <center>
                             ${detailedRoutesPager.display}
                         </center>
 
-                        &nbsp  &nbsp  &nbsp &nbsp  &nbsp  &nbsp &nbsp  &nbsp  &nbsp &nbsp  &nbsp  &nbsp 
-                        &nbsp  &nbsp  &nbsp &nbsp  &nbsp  &nbsp &nbsp  &nbsp  &nbsp &nbsp  &nbsp  &nbsp 
-                        <button type="button" class="btn btn-outline-success">
+                        <button type="button" class="btn btn-warning">
                             <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
                         </button>
 
@@ -337,7 +329,7 @@
                             <th>დგომის<br>ფაქტიური<br>დრო</th>
                             <th>'დაკარგული<br>დრო'</th>
                             <th>GPS<br>ინტერვალი</th>
-                           
+
                         </tr>
                     </thead>
                     <tbody>

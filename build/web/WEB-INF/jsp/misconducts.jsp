@@ -65,109 +65,11 @@
             }
 
             /* ---------------------------------------------------
-                SIDEBAR STYLE
-            ----------------------------------------------------- */
-
-            .wrapper {
-                display: flex;
-                width: 100%;
-            }
-
-            #sidebar {
-                width: 150px;
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100vh;
-                z-index: 999;
-                background: #7386D5;
-                color: #fff;
-                transition: all 0.3s;
-            }
-
-            #sidebar.active {
-                margin-left: -150px;
-            }
-
-            #sidebar .sidebar-header {
-                padding: 20px;
-                background: #6d7fcc;
-            }
-
-            #sidebar ul.components {
-                padding: 20px 0;
-                border-bottom: 1px solid #47748b;
-            }
-
-            #sidebar ul p {
-                color: #fff;
-                padding: 10px;
-            }
-
-            #sidebar ul li a {
-                padding: 10px;
-                font-size: 1.1em;
-                display: block;
-            }
-
-            #sidebar ul li a:hover {
-                color: #7386D5;
-                background: #fff;
-            }
-
-            #sidebar ul li.active>a,
-            a[aria-expanded="true"] {
-                color: #fff;
-                background: #6d7fcc;
-            }
-
-            a[data-toggle="collapse"] {
-                position: relative;
-            }
-
-            .dropdown-toggle::after {
-                display: block;
-                position: absolute;
-                top: 50%;
-                right: 20px;
-                transform: translateY(-50%);
-            }
-
-            ul ul a {
-                font-size: 0.9em !important;
-                padding-left: 30px !important;
-                background: #6d7fcc;
-            }
-
-            ul.CTAs {
-                padding: 20px;
-            }
-
-            ul.CTAs a {
-                text-align: center;
-                font-size: 0.9em !important;
-                display: block;
-                border-radius: 5px;
-                margin-bottom: 5px;
-            }
-
-            a.download {
-                background: #fff;
-                color: #7386D5;
-            }
-
-            a.article,
-            a.article:hover {
-                background: #6d7fcc !important;
-                color: #fff !important;
-            }
-
-            /* ---------------------------------------------------
                 CONTENT STYLE
             ----------------------------------------------------- */
 
             #content {
-                width: calc(100% - 150px);
+                width: 100% ;
                 padding: 5px;
                 min-height: 100vh;
                 transition: all 0.3s;
@@ -277,45 +179,27 @@
 
     <body>
         <div class="wrapper">
-            <!-- Sidebar  -->
-            <nav id="sidebar">
-                <div class="sidebar-header">
-                    <center><h5>მარშრუტები</h5></center>
-                </div>
-                <ul class="list-unstyled components">
-                    <c:forEach var="routeNumberEntry" items="${tripPeriodsPager.routeNumbers}" varStatus="loop">
-                        <li >
-                            <a href="tripPeriodsRequest.htm?requestedPage=${routeNumberEntry.value}">${routeNumberEntry.key}</a>
-                        </li>
-                    </c:forEach>
-                </ul>
-            </nav>
-
             <!-- Page Content  -->
             <div id="content">
-
+                <center><h1>დარღვევები</h1></center>
                 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+
+
                     <div class="container-fluid">
-                        <button type="button" id="sidebarCollapse" class="btn btn-info">
-                            <i class="fas fa-align-left"></i>
-                            <span>< ></span>
-                        </button>
-                        &nbsp
                         <button type="button" class="btn btn-outline-success">
-                            <span> <a href="index.htm">საწყისი გვერდი</a> </span>
+                            <span> <a href="firstTripMisconductRedirect.htm">ა/ბ დარღვევების დათვალიერება</a> </span>
                         </button>
 
-                        &nbsp  &nbsp  &nbsp
+                        <button type="button" class="btn btn-outline-success">
+                            <span> <a href="firstTripMisconductMinusVersionRedirect.htm">ა/ბ დარღვევების დათვალიერება (ნაადრევად გასვლების ჩათვლით)</a> </span>
+                        </button>
 
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-                            &nbsp  &nbsp  &nbsp 
-                            <button type="button" class="btn btn-outline-success">
-                                <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
-                            </button>
-                        </div>
+                        <button type="button" class="btn btn-warning">
+                            <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
+                        </button>
                     </div>
                 </nav>
+
 
                 <table>
                     <thead>

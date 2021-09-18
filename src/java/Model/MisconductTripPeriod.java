@@ -93,6 +93,9 @@ public class MisconductTripPeriod extends IntervalTripPeriod {
     }
 
     public String getPreviousBusStartTimeActualString() {
+        if (previousBusStartTimeActual == null) {
+            return "";
+        }
         return previousBusStartTimeActual.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 

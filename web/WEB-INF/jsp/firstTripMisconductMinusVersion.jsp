@@ -277,40 +277,30 @@
 
     <body>
         <div class="wrapper">
-            <!-- Sidebar  -->
-            <nav id="sidebar">
-                <div class="sidebar-header">
-                    <center><h5>First Trip Misconducts Minus Version</h5></center>
-                </div>
-                <ul class="list-unstyled components">
-
-                </ul>
-            </nav>
-
             <!-- Page Content  -->
             <div id="content">
-
+                <h1>ა/ბ დარღვევები (ნაადრევი გასვლების ჩათვლით)</h1>
                 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-                    <div class="container-fluid">
-                        <button type="button" id="sidebarCollapse" class="btn btn-info">
-                            <i class="fas fa-align-left"></i>
-                            <span>< ></span>
-                        </button>
-                        &nbsp
-                        <button type="button" class="btn btn-outline-success">
-                            <span> <a href="index.htm">საწყისი გვერდი</a> </span>
-                        </button>
 
-                        &nbsp  &nbsp  &nbsp
+                    <div class="container-fluid">
+
+                        <button type="button" class="btn btn-outline-success">
+                            <span> <a href="misconductsRedirect.htm">ხარვეზების დარღვევების<br>დათვალიერება</a> </span>
+                        </button>
+                        &nbsp;
+                        <button type="button" class="btn btn-outline-success">
+                            <span> <a href="firstTripMisconductRedirect.htm">ა/ბ დარღვევების<br>დათვალიერება</a> </span>
+                        </button>
+                        &nbsp;
 
                         <form action="firstTripMisconductMinusVersion.htm" method="POST" class="form-inline my-2 my-lg-0">
                             <input name="misconductTimeBound" class="form-control mr-sm-2" type="number" value="${misconductTimeBound}" >
-                            <button class="btn btn-primary my-2 my-sm-0" type="submit">წუთიანი დაგვიანებების გამოსახვა</button>
+                            <button class="btn btn-primary my-2 my-sm-0" type="submit">წუთიანი დაგვიანებების<br>გამოსახვა</button>
                         </form>
 
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             &nbsp  &nbsp  &nbsp 
-                            <button type="button" class="btn btn-outline-success">
+                            <button type="button" class="btn btn-warning">
                                 <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
                             </button>
                         </div>

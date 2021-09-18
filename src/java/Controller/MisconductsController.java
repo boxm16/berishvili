@@ -30,7 +30,22 @@ public class MisconductsController {
         System.out.println("---------------------------Starting Collecting Misconducts----------------");
         Instant start = Instant.now();
         DetailedRoutesPager misconductsPager = createDetailedRoutesPager(routeDates);
+        session.setAttribute("firstTripMisconductPager", misconductsPager);
+        ArrayList<MisconductTripPeriod> misconductTripPeriods = misconductsDao.getMisconductTripPeriods(misconductsPager);
 
+        Instant end = Instant.now();
+
+        System.out.println("End of collecting misconducts. Time neede:" + Duration.between(start, end));
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        model.addAttribute("misconductTripPeriods", misconductTripPeriods);
+        return "misconducts";
+    }
+
+    @RequestMapping(value = "misconductsRedirect")
+    public String misconductsRedirect(ModelMap model, HttpSession session) {
+        System.out.println("---------------------------Starting Collecting Misconducts----------------");
+        Instant start = Instant.now();
+        DetailedRoutesPager misconductsPager = (DetailedRoutesPager) session.getAttribute("firstTripMisconductPager");
         ArrayList<MisconductTripPeriod> misconductTripPeriods = misconductsDao.getMisconductTripPeriods(misconductsPager);
 
         Instant end = Instant.now();
@@ -76,6 +91,19 @@ public class MisconductsController {
         int misconductTimeBound = (Integer) session.getAttribute("misconductTimeBound");;
         DetailedRoutesPager firstTripMisconductPager = createDetailedRoutesPager(routeDates);;
         session.setAttribute("firstTripMisconductPager", firstTripMisconductPager);
+        model.addAttribute("misconductTimeBound", misconductTimeBound);
+        return "firstTripMisconduct";
+    }
+
+    @RequestMapping(value = "firstTripMisconductRedirect")
+    public String firstTripMisconductRedirect(ModelMap model, HttpSession session) {
+        Object sessionMisconductTimeBoundt = session.getAttribute("misconductTimeBound");
+        if (sessionMisconductTimeBoundt == null) {
+            ConfigReader configReader = new ConfigReader();
+            sessionMisconductTimeBoundt = configReader.getMisconductTimeBound();
+            session.setAttribute("misconductTimeBound", sessionMisconductTimeBoundt);
+        }
+        int misconductTimeBound = (Integer) session.getAttribute("misconductTimeBound");;
 
         model.addAttribute("misconductTimeBound", misconductTimeBound);
 
@@ -119,6 +147,21 @@ public class MisconductsController {
         int misconductTimeBound = (Integer) session.getAttribute("misconductTimeBound");;
         DetailedRoutesPager firstTripMisconductPager = createDetailedRoutesPager(routeDates);;
         session.setAttribute("firstTripMisconductPager", firstTripMisconductPager);
+
+        model.addAttribute("misconductTimeBound", misconductTimeBound);
+
+        return "firstTripMisconductMinusVersion";
+    }
+
+    @RequestMapping(value = "firstTripMisconductMinusVersionRedirect")
+    public String firstTripMisconductMinusVersionRedirect(ModelMap model, HttpSession session) {
+        Object sessionMisconductTimeBoundt = session.getAttribute("misconductTimeBound");
+        if (sessionMisconductTimeBoundt == null) {
+            ConfigReader configReader = new ConfigReader();
+            sessionMisconductTimeBoundt = configReader.getMisconductTimeBound();
+            session.setAttribute("misconductTimeBound", sessionMisconductTimeBoundt);
+        }
+        int misconductTimeBound = (Integer) session.getAttribute("misconductTimeBound");;
 
         model.addAttribute("misconductTimeBound", misconductTimeBound);
 

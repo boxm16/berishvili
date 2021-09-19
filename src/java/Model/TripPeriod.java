@@ -196,4 +196,74 @@ public class TripPeriod {
     public String getArrivalTimeDifferenceColor() {
         return converter.convertStringDurationToThreeColors(arrivalTimeDifference);
     }
+
+    public Double getStartTimeScheduledExcelFormat() {
+        if (getStartTimeScheduled() == null) {
+            return null;
+        }
+        long h = getStartTimeScheduled().getHour();
+        long m = getStartTimeScheduled().getMinute();
+        long s = getStartTimeScheduled().getSecond();
+        double ss = (h * 3600) + (m * 60) + s;
+        return ss / 86400;
+    }
+
+    public Double getStartTimeActualExcelFormat() {
+        if (getStartTimeActual() == null) {
+            return null;
+        }
+        long h = getStartTimeActual().getHour();
+        long m = getStartTimeActual().getMinute();
+        long s = getStartTimeActual().getSecond();
+        double ss = (h * 3600) + (m * 60) + s;
+        return ss / 86400;
+    }
+
+    public Double getArrivaltTimeScheduledExcelFormat() {
+        if (getArrivalTimeScheduled() == null) {
+            return null;
+        }
+        long h = getArrivalTimeScheduled().getHour();
+        long m = getArrivalTimeScheduled().getMinute();
+        long s = getArrivalTimeScheduled().getSecond();
+        double ss = (h * 3600) + (m * 60) + s;
+        return ss / 86400;
+    }
+
+    public Double getArrivalTimeActualExcelFormat() {
+        if (getArrivalTimeActual() == null) {
+            return null;
+        }
+        long h = getArrivalTimeActual().getHour();
+        long m = getArrivalTimeActual().getMinute();
+        long s = getArrivalTimeActual().getSecond();
+        double ss = (h * 3600) + (m * 60) + s;
+        return ss / 86400;
+    }
+
+    public Double getTripPeriodTimeScheduledExcelFormat() {
+        if (getTripPeriodTimeScheduled() == null) {
+            return null;
+        }
+        double ss = getTripPeriodTimeScheduled().getSeconds();
+        return ss / 86400;
+    }
+
+    public Double getTripPeriodTimeActualExcelFormat() {
+        if (getTripPeriodTimeActual() == null) {
+            return null;
+        }
+        double ss = getTripPeriodTimeActual().getSeconds();
+        return ss / 86400;
+    }
+
+    public Double getTripPeriodTimeDifferenceExcelFormat() {
+        if (getTripPeriodTimeDifference() == null) {
+            return null;
+        }
+        double ss = getTripPeriodTimeDifference().getSeconds();
+        return ss / 86400;
+    }
+    
+    
 }

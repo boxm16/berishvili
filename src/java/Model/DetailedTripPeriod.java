@@ -6,7 +6,7 @@ public class DetailedTripPeriod extends TripPeriod {
 
     private Duration haltTimeScheduled;
     private Duration haltTimeActual;
-    private String lostTimeString;
+    private String lostTimeString;//stupid that you left time as String and not duration
 
     private Duration gpsInterval;
 
@@ -90,6 +90,43 @@ public class DetailedTripPeriod extends TripPeriod {
 
     public String getGpsIntervalString() {
         return converter.convertDurationToString(gpsInterval);
+    }
+
+    public Double getHaltTimeScheduledExcelFormat() {
+        if (getHaltTimeScheduled() == null) {
+            return null;
+        } else {
+            double ss = getHaltTimeScheduled().getSeconds();
+            return ss / 86400;
+        }
+    }
+
+    public Double getHaltTimeActualExcelFormat() {
+        if (getHaltTimeActual() == null) {
+            return null;
+        } else {
+            double ss = getHaltTimeActual().getSeconds();
+            return ss / 86400;
+        }
+    }
+
+    public Double getLostTimeExcelFormat() {
+        Duration lostTimeDuration = converter.convertStringToDuration(lostTimeString);
+        if (lostTimeDuration == null) {
+            return null;
+        } else {
+            double ss = lostTimeDuration.getSeconds();
+            return ss / 86400;
+        }
+    }
+
+    public Double getGpsIntervalExcelFormat() {
+        if (getGpsInterval() == null) {
+            return null;
+        } else {
+            double ss = getGpsInterval().getSeconds();
+            return ss / 86400;
+        }
     }
 
 }

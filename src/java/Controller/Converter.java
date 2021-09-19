@@ -177,7 +177,7 @@ public class Converter {
     }
 
     public Duration convertStringToDuration(String timeStamp) {
-        if (timeStamp == null) {
+        if (timeStamp == null||timeStamp.equals("")) {
             return null;
         }
         String isoStr = timeStamp.replaceFirst(

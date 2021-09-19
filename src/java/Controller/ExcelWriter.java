@@ -2268,9 +2268,9 @@ public class ExcelWriter {
                                 Cell arrivalTimeScheduledCell = row.createCell(8);
                                 arrivalTimeScheduledCell.setCellValue(tripPeriod.getArrivaltTimeScheduledExcelFormat());
                                 if (routeLightOn) {
-                                    arrivalTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                                    arrivalTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                                 } else {
-                                    arrivalTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                                    arrivalTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmss);
                                 }
 
                                 //-------------------------------

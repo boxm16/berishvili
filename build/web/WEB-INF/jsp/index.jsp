@@ -395,7 +395,7 @@
                         <a href="#misconductsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>დარღვევები</h3></a>
                         <ul class="collapse list-unstyled" id="misconductsSubmenu">
                             <li>
-                                <a href="#" onclick="requestRouter('misconducts.htm')"><h4>დათვალიერება</h4></a>
+                                <a href="#" onclick="requestRouter('misconducts.htm')"><h4>ხაზზე დარღვევების დათვალიერება</h4></a>
                             </li>
                             <li>
                                 <a href="#" onclick="requestRouter('firstTripMisconductInitialRequest.htm')"><h4>ა/ბ დარღვევების დათვალიერება</h4></a>

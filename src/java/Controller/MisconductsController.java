@@ -194,4 +194,19 @@ public class MisconductsController {
         return "firstTripMisconductMinusVersion";
     }
 
+    @RequestMapping(value = "misconductsExcelExportInitialRequest")
+    public String misconductsExcelExportInitialRequest(ModelMap model) {
+        
+
+        model.addAttribute("message", "-++");
+        return "excelExportDashboard";
+    }
+
+    @RequestMapping(value = "misconductsExcelExportDashboard")
+    public String misconductsExcelExportDashboard(ModelMap model) {
+
+        model.addAttribute("message", "--");
+        return "excelExportDashboard";
+    }
+
 }

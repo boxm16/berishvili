@@ -200,7 +200,7 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             &nbsp  &nbsp  &nbsp 
                             <button type="button" class="btn btn-warning">
-                                <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
+                                <span> <a href="misconductsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
                             </button>
                         </div>
                     </div>
@@ -231,7 +231,7 @@
                         <c:forEach var="tripPeriod" items="${misconductedFirstTripPeriods}">
                             <tr style="background-color:${tripPeriod.getColor()} ">
                                 <td align="center">${tripPeriod.dateStamp} </td>
-                                <td> </td>
+                                <td align="center"> ${tripPeriod.baseNumber}</td>
                                 <td align="center">${tripPeriod.routeNumber} </td>
                                 <td align="center"><a href="exodus.htm?routeNumber=${tripPeriod.routeNumber}&dateStamp=${tripPeriod.dateStamp}&exodusNumber=${tripPeriod.getExodusNumber()}&startTimeScheduled=${tripPeriod.startTimeScheduled}"  target="_blank">${tripPeriod.exodusNumber}</a> </td>
                                 <td>${tripPeriod.busNumber}</td>

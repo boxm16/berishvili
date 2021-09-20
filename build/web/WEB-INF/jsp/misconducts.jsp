@@ -195,7 +195,7 @@
                         </button>
 
                         <button type="button" class="btn btn-warning">
-                            <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
+                            <span> <a href="misconductsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
                         </button>
                     </div>
                 </nav>

@@ -182,7 +182,7 @@ public class MisconductsDao {
             basicRoute = new BasicRoute();
 
             StringBuilder query = new StringBuilder();
-            StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT exodus_number, date_stamp, t2.number, bus_number, type, start_time_scheduled, start_time_actual,start_time_difference, arrival_time_scheduled, arrival_time_actual, arrival_time_difference FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number=");
+            StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT exodus_number, date_stamp, base_number, t2.number, bus_number, type, start_time_scheduled, start_time_actual,start_time_difference, arrival_time_scheduled, arrival_time_actual, arrival_time_difference FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number=");
             StringBuilder queryBuilderDateStampPart = buildStringFromArrayList(detailedRoutesPager.getDateStamps());
 
             query = queryBuilderInitialPart.append(routeNumber).
@@ -239,6 +239,7 @@ public class MisconductsDao {
                                 firstTripPeriod.setRouteNumber(routeNumber);
                                 firstTripPeriod.setDateStamp(dateStamp);
                                 firstTripPeriod.setBusNumber(resultSet.getString("bus_number"));
+                                firstTripPeriod.setBaseNumber(resultSet.getShort("base_number"));
                                 firstTripPeriod.setExodusNumber(exodusNumber);
                                 if (exodus.getTripVouchers().size() > 1) {
                                     firstTripPeriod.setBrokenExodus(true);
@@ -294,7 +295,7 @@ public class MisconductsDao {
             basicRoute = new BasicRoute();
 
             StringBuilder query = new StringBuilder();
-            StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT exodus_number, date_stamp, t2.number, bus_number, type, start_time_scheduled, start_time_actual,start_time_difference, arrival_time_scheduled, arrival_time_actual, arrival_time_difference FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number=");
+            StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT exodus_number, date_stamp, base_number, t2.number, bus_number, type, start_time_scheduled, start_time_actual,start_time_difference, arrival_time_scheduled, arrival_time_actual, arrival_time_difference FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number=");
             StringBuilder queryBuilderDateStampPart = buildStringFromArrayList(detailedRoutesPager.getDateStamps());
 
             query = queryBuilderInitialPart.append(routeNumber).
@@ -351,6 +352,7 @@ public class MisconductsDao {
                                 firstTripPeriod.setRouteNumber(routeNumber);
                                 firstTripPeriod.setDateStamp(dateStamp);
                                 firstTripPeriod.setBusNumber(resultSet.getString("bus_number"));
+                                firstTripPeriod.setBaseNumber(resultSet.getShort("base_number"));
                                 firstTripPeriod.setExodusNumber(exodusNumber);
                                 if (exodus.getTripVouchers().size() > 1) {
                                     firstTripPeriod.setBrokenExodus(true);

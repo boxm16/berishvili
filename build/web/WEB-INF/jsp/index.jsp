@@ -404,7 +404,7 @@
                                 <a href="#" onclick="requestRouter('firstTripMisconductMinusVersionInitialRequest.htm')"><h4>ა/ბ დარღვევების დათვალიერება (ნაადრევად გასვლების ჩათვლით)</h4></a>
                             </li>
                             <li>
-                                <a href="#"><h4>ექსელში ექსპორტი</h4></a>
+                                <a href="#" onclick="requestRouter('misconductsExcelExportInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
                             </li>
 
                         </ul>

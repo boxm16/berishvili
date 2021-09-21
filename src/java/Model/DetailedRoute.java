@@ -43,10 +43,34 @@ public class DetailedRoute extends BasicRoute {
 
                         if (detailedTripPeriod.getStartTimeActual() != null) {
                             if (detailedTripPeriod.getType().equals("ab")) {
-                                detailedDay.getAbGpsTimetable().put(detailedTripPeriod.getStartTimeActual(), detailedTripPeriod);
+                                if (detailedDay.getAbGpsTimetable().containsKey(detailedTripPeriod.getStartTimeActual())) {
+                                    //in unlikable, but possible case when two busses dispatch at the same time from the same point
+                                    DetailedTripPeriod alterTripPeriod = detailedDay.getAbGpsTimetable().remove(detailedTripPeriod.getStartTimeActual());
+                                    if (alterTripPeriod.getStartTimeScheduled().isAfter(detailedTripPeriod.getStartTimeScheduled())) {
+                                        alterTripPeriod.setStartTimeActual(detailedTripPeriod.getStartTimeActual().plusNanos(1l));
+                                    } else {
+                                        detailedTripPeriod.setStartTimeActual(detailedTripPeriod.getStartTimeActual().plusNanos(1l));
+                                    }
+                                    detailedDay.getAbGpsTimetable().put(detailedTripPeriod.getStartTimeActual(), alterTripPeriod);
+                                    detailedDay.getAbGpsTimetable().put(detailedTripPeriod.getStartTimeActual(), detailedTripPeriod);
+                                } else {
+                                    detailedDay.getAbGpsTimetable().put(detailedTripPeriod.getStartTimeActual(), detailedTripPeriod);
+                                }
                             }
                             if (detailedTripPeriod.getType().equals("ba")) {
-                                detailedDay.getBaGpsTimetable().put(detailedTripPeriod.getStartTimeActual(), detailedTripPeriod);
+                                if (detailedDay.getBaGpsTimetable().containsKey(detailedTripPeriod.getStartTimeActual())) {
+                                    //in unlikable, but possible case when two busses dispatch at the same time from the same point
+                                    DetailedTripPeriod alterTripPeriod = detailedDay.getBaGpsTimetable().remove(detailedTripPeriod.getStartTimeActual());
+                                    if (alterTripPeriod.getStartTimeScheduled().isAfter(detailedTripPeriod.getStartTimeScheduled())) {
+                                        alterTripPeriod.setStartTimeActual(detailedTripPeriod.getStartTimeActual().plusNanos(1l));
+                                    } else {
+                                        detailedTripPeriod.setStartTimeActual(detailedTripPeriod.getStartTimeActual().plusNanos(1l));
+                                    }
+                                    detailedDay.getBaGpsTimetable().put(detailedTripPeriod.getStartTimeActual(), alterTripPeriod);
+                                    detailedDay.getBaGpsTimetable().put(detailedTripPeriod.getStartTimeActual(), detailedTripPeriod);
+                                } else {
+                                    detailedDay.getBaGpsTimetable().put(detailedTripPeriod.getStartTimeActual(), detailedTripPeriod);
+                                }
                             }
                         }
                         index++;
@@ -98,21 +122,41 @@ public class DetailedRoute extends BasicRoute {
                             intervalDay.getAbTimetable().put(intervalTripPeriod.getStartTimeScheduled(), intervalTripPeriod);
                             if (intervalTripPeriod.getStartTimeActual() != null) {
                                 if (intervalDay.getAbGpsTimetable().containsKey(intervalTripPeriod.getStartTimeActual())) {
-                                    //in unlikable, but possible case when two busses dispatch at the same time from the same point
-                                    intervalTripPeriod.setStartTimeActual(intervalTripPeriod.getStartTimeActual().plusNanos(1l));
-                                }
 
-                                intervalDay.getAbGpsTimetable().put(intervalTripPeriod.getStartTimeActual(), intervalTripPeriod);
+                                    IntervalTripPeriod alterTripPeriod = (IntervalTripPeriod) intervalDay.getAbGpsTimetable().remove(intervalTripPeriod.getStartTimeActual());
+
+                                    if (alterTripPeriod.getStartTimeScheduled().isAfter(intervalTripPeriod.getStartTimeScheduled())) {
+                                        alterTripPeriod.setStartTimeActual(alterTripPeriod.getStartTimeActual().plusNanos(1l));
+                                    } else {
+                                        intervalTripPeriod.setStartTimeActual(intervalTripPeriod.getStartTimeActual().plusNanos(1l));
+                                    }
+                                    intervalDay.getAbGpsTimetable().put(alterTripPeriod.getStartTimeActual(), alterTripPeriod);
+                                    intervalDay.getAbGpsTimetable().put(intervalTripPeriod.getStartTimeActual(), intervalTripPeriod);
+
+                                } else {
+
+                                    intervalDay.getAbGpsTimetable().put(intervalTripPeriod.getStartTimeActual(), intervalTripPeriod);
+                                }
                             }
                         }
                         if (intervalTripPeriod.getType().equals("ba")) {
                             intervalDay.getBaTimetable().put(intervalTripPeriod.getStartTimeScheduled(), intervalTripPeriod);
                             if (intervalTripPeriod.getStartTimeActual() != null) {
                                 if (intervalDay.getBaGpsTimetable().containsKey(intervalTripPeriod.getStartTimeActual())) {
-                                    //in unlikable, but possible case when two busses dispatch at the same time from the same point
-                                    intervalTripPeriod.setStartTimeActual(intervalTripPeriod.getStartTimeActual().plusNanos(1l));
+
+                                    IntervalTripPeriod alterTripPeriod = (IntervalTripPeriod) intervalDay.getBaGpsTimetable().remove(intervalTripPeriod.getStartTimeActual());
+
+                                    if (alterTripPeriod.getStartTimeScheduled().isAfter(intervalTripPeriod.getStartTimeScheduled())) {
+                                        alterTripPeriod.setStartTimeActual(alterTripPeriod.getStartTimeActual().plusNanos(1l));
+                                    } else {
+                                        intervalTripPeriod.setStartTimeActual(intervalTripPeriod.getStartTimeActual().plusNanos(1l));
+                                    }
+                                    intervalDay.getBaGpsTimetable().put(alterTripPeriod.getStartTimeActual(), alterTripPeriod);
+                                    intervalDay.getBaGpsTimetable().put(intervalTripPeriod.getStartTimeActual(), intervalTripPeriod);
+                                } else {
+
+                                    intervalDay.getBaGpsTimetable().put(intervalTripPeriod.getStartTimeActual(), intervalTripPeriod);
                                 }
-                                intervalDay.getBaGpsTimetable().put(intervalTripPeriod.getStartTimeActual(), intervalTripPeriod);
                             }
                         }
 

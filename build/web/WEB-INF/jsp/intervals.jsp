@@ -43,7 +43,7 @@
             }
 
             .navbar {
-               
+
                 padding: 0px 0px;
                 background: #fff;
                 border: none;
@@ -371,6 +371,7 @@
                                                                 <th>გეგმ.<br>გას.<br>დრო</th>
                                                                 <th>ფაქტ.<br>გას.<br>დრო</th>
                                                                 <th>სხვ.</th>
+                                                                <th>ფაქტ.<br>დგომ.<br>დრო</th>
                                                                 <th>დაკ.<br> დრო</th>
                                                                 <th>გეგმ.<br>ინტ.</th>
                                                                 <th>GPS<br>ინტ.</th>
@@ -386,6 +387,9 @@
                                                                     <td>${abGpsTimetableEntry.value.getStartTimeScheduledString()}</td>
                                                                     <td>${abGpsTimetableEntry.value.getStartTimeActualString()}</td>
                                                                     <td style="background-color:${abGpsTimetableEntry.value.startTimeDifferenceColor}">${abGpsTimetableEntry.value.getStartTimeDifference()}</td>
+
+                                                                    <td>${abGpsTimetableEntry.value.getHaltTimeActualString()}</td>
+
                                                                     <td style="background-color:${abGpsTimetableEntry.value.lostTimeColor}">${abGpsTimetableEntry.value.lostTimeString}</td>
                                                                     <td>${abGpsTimetableEntry.value.getScheduledIntervalString()}</td>
                                                                     <td style="background-color:${abGpsTimetableEntry.value.getGpsIntervalColor()}">${abGpsTimetableEntry.value.getGpsIntervalString()}</td>
@@ -446,6 +450,7 @@
                                                                 <th>გეგმ.<br>გას.<br>დრო</th>
                                                                 <th>ფაქტ.<br>გას.<br>დრო</th>
                                                                 <th>სხვ.</th>
+                                                                <th>ფაქტ.<br>დგომ.<br>დრო</th>
                                                                 <th>დაკ.<br> დრო</th>
                                                                 <th>გეგმ.<br>ინტ.</th>
                                                                 <th>GPS<br>ინტ.</th>
@@ -461,6 +466,9 @@
                                                                     <td>${baGpsTimetableEntry.value.getStartTimeScheduledString()}</td>
                                                                     <td>${baGpsTimetableEntry.value.getStartTimeActualString()}</td>
                                                                     <td style="background-color:${baGpsTimetableEntry.value.startTimeDifferenceColor}">${baGpsTimetableEntry.value.getStartTimeDifference()}</td>
+
+                                                                    <td>${baGpsTimetableEntry.value.getHaltTimeActualString()}</td>
+
                                                                     <td style="background-color:${baGpsTimetableEntry.value.lostTimeColor}">${baGpsTimetableEntry.value.lostTimeString}</td>
                                                                     <td>${baGpsTimetableEntry.value.getScheduledIntervalString()}</td>
                                                                     <td style="background-color:${baGpsTimetableEntry.value.getGpsIntervalColor()}">${baGpsTimetableEntry.value.getGpsIntervalString()}</td>

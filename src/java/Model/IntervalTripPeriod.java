@@ -89,11 +89,11 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
             Duration intervalDifference = this.getGpsInterval().minus(this.scheduledInterval);
             Duration lostTimeDuration = converter.convertStringToDuration(this.getLostTimeString());
 
-            if (intervalDifference.getSeconds() < -301 && lostTimeDuration.getSeconds() < -301) {
+            if (intervalDifference.getSeconds() < -301 && lostTimeDuration.getSeconds() < -61) {
                 misconduct = "-";
                 misconductDuration = converter.convertDurationToString(lostTimeDuration);
 
-            } else if (intervalDifference.getSeconds() > 300 && lostTimeDuration.getSeconds() > 300) {
+            } else if (intervalDifference.getSeconds() > 300 && lostTimeDuration.getSeconds() > 60) {
                 misconduct = "+";
                 misconductDuration = converter.convertDurationToString(lostTimeDuration);
 

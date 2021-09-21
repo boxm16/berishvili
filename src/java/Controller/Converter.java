@@ -177,7 +177,7 @@ public class Converter {
     }
 
     public Duration convertStringToDuration(String timeStamp) {
-        if (timeStamp == null||timeStamp.equals("")) {
+        if (timeStamp == null || timeStamp.equals("")) {
             return null;
         }
         String isoStr = timeStamp.replaceFirst(
@@ -200,6 +200,23 @@ public class Converter {
         }
         if (differenceDuration.getSeconds() < 301 && differenceDuration.getSeconds() > -301) {
             return "yellow";
+        }
+        return "red";
+    }
+
+    public String convertStringDurationToThreeColorsMinuteVersion(String stringDuration) {
+        if (stringDuration == null || stringDuration.isEmpty()) {
+            return "inherited";
+        }
+        String isoStr = stringDuration.replaceFirst(
+                "^([+-]?)(\\d{2}):(\\d{2}):(\\d{2})$", "$1PT$2H$3M$4S");
+        // Parse to Duration
+        Duration differenceDuration = Duration.parse(isoStr);
+        if (differenceDuration.getSeconds() < 61 && differenceDuration.getSeconds() > -61) {
+            return "inherited";
+        }
+        if (differenceDuration.getSeconds() < 301 && differenceDuration.getSeconds() > -301) {
+            return "red";
         }
         return "red";
     }

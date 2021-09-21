@@ -77,7 +77,7 @@ public class DetailedTripPeriod extends TripPeriod {
     }
 
     public String getLostTimeColor() {
-        return converter.convertStringDurationToThreeColors(lostTimeString);
+        return converter.convertStringDurationToThreeColorsMinuteVersion(lostTimeString);
     }
 
     public Duration getGpsInterval() {

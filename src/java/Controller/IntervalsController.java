@@ -99,5 +99,7 @@ public class IntervalsController {
 
         return "interval";
     }
+    
+  
 
 }

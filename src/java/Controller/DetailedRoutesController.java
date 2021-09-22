@@ -118,6 +118,18 @@ public class DetailedRoutesController {
         return "excelExportDashboard";
     }
 
+    @RequestMapping(value = "detailedRoutesExcelExportDashboard")
+    public String detailedRoutesExcelExportDashboard(ModelMap model, HttpSession session) {
+
+        DetailedRoutesPager detailedRoutesPager = (DetailedRoutesPager) session.getAttribute("detailedRoutesPager");
+        if (detailedRoutesPager == null) {
+            return "errorPage";
+        }
+        model.addAttribute("excelExportLink", "exportDetailedRoutes.htm");
+        model.addAttribute("message", "");
+        return "excelExportDashboard";
+    }
+
     @RequestMapping(value = "exportDetailedRoutes", method = RequestMethod.POST)
     public String exportDetailedRoutes(String fileName, ModelMap model, HttpSession session, HttpServletRequest request) {
         System.out.println("---------------Detailed Routes Excel Export Starting ------------------------------");

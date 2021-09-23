@@ -363,7 +363,7 @@
                                                     <table>
                                                         <thead>
                                                             <tr>
-                                                                <th colspan = "10" style="text-align: center">GPS გამოთვლები</th>
+                                                                <th colspan = "11" style="text-align: center">GPS გამოთვლები</th>
                                                             </tr>
                                                             <tr>
                                                                 <th>.<br>გას.<br>#</th>
@@ -442,7 +442,7 @@
                                                     <table>
                                                         <thead>
                                                             <tr>
-                                                                <th colspan = "10" style="text-align: center">GPS გამოთვლები</th>
+                                                                <th colspan = "11" style="text-align: center">GPS გამოთვლები</th>
                                                             </tr>
                                                             <tr>
                                                                 <th>.<br>გას.<br>#</th>

@@ -8,11 +8,16 @@ package Controller;
 import DAO.IntervalsDao;
 import Model.DetailedRoute;
 import Model.DetailedRoutesPager;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -99,7 +104,59 @@ public class IntervalsController {
 
         return "interval";
     }
-    
-  
+
+    //-------------------------excel export==-----------------------------
+    @RequestMapping(value = "intervalsExcelExportDashboardInitialRequest")
+    public String intervalsExcelExportDashboardInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model, HttpSession session) {
+        DetailedRoutesPager intervalsPager = createDetailedRoutesPager(routeDates);
+        intervalsPager.setCurrentRoute("initial");
+        session.setAttribute("intervalsPager", intervalsPager);
+        model.addAttribute("excelExportLink", "exportIntervals.htm");
+        model.addAttribute("message", "");
+        return "excelExportDashboard";
+    }
+
+    @RequestMapping(value = "intervalsExcelExportDashboard")
+    public String intervalsExcelExportDashboard(ModelMap model, HttpSession session) {
+
+        DetailedRoutesPager intervalsPager = (DetailedRoutesPager) session.getAttribute("intervalsPager");
+        if (intervalsPager == null) {
+            return "errorPage";
+        }
+        model.addAttribute("excelExportLink", "exportIntervals.htm");
+        model.addAttribute("message", "");
+        return "excelExportDashboard";
+    }
+
+    @RequestMapping(value = "exportIntervals", method = RequestMethod.POST)
+    public String exportIntervals(String fileName, ModelMap model, HttpSession session) {
+        System.out.println("---------------Intervals Excel Export Starting ------------------------------");
+        Instant start = Instant.now();
+//first get data
+        DetailedRoutesPager intervalsPager = (DetailedRoutesPager) session.getAttribute("intervalsPager");
+
+        TreeMap<Float, DetailedRoute> detailedRoutes = intervalsDao.getRoutesForIntervalsForExcelExport(intervalsPager);
+        System.out.println("---Intervals Excel Export Data Created------");
+        for (Map.Entry<Float, DetailedRoute> detailedRouteEntry : detailedRoutes.entrySet()) {
+            detailedRouteEntry.getValue().calculateIntervalsData();
+        }
+        System.out.println("---Intervals Data Calculations Completed------");
+        memoryUsage.printMemoryUsage();
+
+        //now write the results
+        ExcelWriter excelWriter = new ExcelWriter();
+
+        System.out.println("---Writing Excel File Started---");
+        memoryUsage.printMemoryUsage();
+        //excelWriter.exportTripPeriodsAndRoutesAverages(tripPeriods, routesAveragesTreeMap, percents, fileName);
+        excelWriter.SXSSF_Intervals(detailedRoutes, fileName);
+
+        model.addAttribute("excelExportLink", "exportIntervals.htm");
+        model.addAttribute("fileName", fileName);
+        Instant end = Instant.now();
+        System.out.println("++++++++Intervals Excel Export completed. Time needed:" + Duration.between(start, end) + "+++++++++++");
+        model.addAttribute("message", "");
+        return "excelExportDashboard";
+    }
 
 }

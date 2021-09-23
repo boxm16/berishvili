@@ -50,7 +50,7 @@ public class RouteFactory {
     
     private TreeMap<Float, BasicRoute> convertExcelDataToBasicRoutes(HashMap<String, String> data) {
         TreeMap<Float, BasicRoute> routes = new TreeMap<>();
-        int rowIndex = 8;
+        int rowIndex = 7;
         while (!data.isEmpty()) {
             String routeNumberLocationInTheRow = new StringBuilder("H").append(String.valueOf(rowIndex)).toString();
             String routeNumberString = data.remove(routeNumberLocationInTheRow);//at the same time reading and removing the cell from hash Map
@@ -364,7 +364,7 @@ public class RouteFactory {
     
     private TreeMap<Float, GuarantyRoute> convertExcelDataToGuarantyRoutes(HashMap<String, String> data) {
         TreeMap<Float, GuarantyRoute> guarantyRoutes = new TreeMap<>();
-        int rowIndex = 8;
+        int rowIndex = 7;
         while (!data.isEmpty()) {
             
             String startTimeActualLocationInTheRow = new StringBuilder("K").append(String.valueOf(rowIndex)).toString();
@@ -655,7 +655,7 @@ public class RouteFactory {
         HashMap<String, String> data = er.getCellsFromExcelFile(filePath);
         
         TreeMap<Float, BasicRoute> routes = new TreeMap<>();
-        int rowIndex = 8;
+        int rowIndex = 7;
         while (!data.isEmpty()) {
             String routeNumberLocationInTheRow = new StringBuilder("H").append(String.valueOf(rowIndex)).toString();
             String routeNumberString = data.remove(routeNumberLocationInTheRow);//at the same time reading and removing the cell from hash Map

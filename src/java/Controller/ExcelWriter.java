@@ -25,6 +25,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
@@ -2447,10 +2448,10 @@ public class ExcelWriter {
             int columnWidth = 0;
 
             //column width
-            while (columnIndex < 21) {
+            while (columnIndex < 37) {
                 switch (columnIndex) {
                     case 0:
-                        columnWidth = 1500;
+                        columnWidth = 1100;
                         break;
                     case 1:
                         columnWidth = 3000;
@@ -2462,34 +2463,34 @@ public class ExcelWriter {
                         columnWidth = 4000;
                         break;
                     case 4:
-                        columnWidth = 2800;
+                        columnWidth = 800;
                         break;
                     case 5:
-                        columnWidth = 2800;
+                        columnWidth = 2000;
                         break;
                     case 6:
-                        columnWidth = 2800;
+                        columnWidth = 2000;
                         break;
                     case 7:
-                        columnWidth = 2800;
+                        columnWidth = 800;
                         break;
                     case 8:
-                        columnWidth = 2800;
+                        columnWidth = 800;
                         break;
                     case 9:
-                        columnWidth = 2800;
+                        columnWidth = 800;
                         break;
                     case 10:
-                        columnWidth = 2800;
+                        columnWidth = 2000;
                         break;
                     case 11:
-                        columnWidth = 2800;
+                        columnWidth = 2000;
                         break;
                     case 12:
                         columnWidth = 2800;
                         break;
                     case 13:
-                        columnWidth = 2800;
+                        columnWidth = 2000;
                         break;
                     case 14:
                         columnWidth = 2800;
@@ -2501,7 +2502,60 @@ public class ExcelWriter {
                         columnWidth = 2800;
                         break;
                     case 17:
+                        columnWidth = 800;
+                        break;
+                    case 18:
+                        columnWidth = 800;
+                        break;
+                    //-----------
+                    case 19:
+                        columnWidth = 800;
+                        break;
+                    //--------
+                    case 20:
+                        columnWidth = 800;
+                        break;
+                    case 21:
+                        columnWidth = 2000;
+                        break;
+                    case 22:
+                        columnWidth = 2000;
+                        break;
+                    case 23:
+                        columnWidth = 800;
+                        break;
+                    case 24:
+                        columnWidth = 800;
+                        break;
+                    case 25:
+                        columnWidth = 800;
+                        break;
+                    case 26:
                         columnWidth = 2800;
+                        break;
+                    case 27:
+                        columnWidth = 2000;
+                        break;
+                    case 28:
+                        columnWidth = 2800;
+                        break;
+                    case 29:
+                        columnWidth = 2000;
+                        break;
+                    case 30:
+                        columnWidth = 2800;
+                        break;
+                    case 31:
+                        columnWidth = 2800;
+                        break;
+                    case 32:
+                        columnWidth = 2800;
+                        break;
+                    case 33:
+                        columnWidth = 800;
+                        break;
+                    case 34:
+                        columnWidth = 800;
                         break;
 
                 }
@@ -2519,7 +2573,7 @@ public class ExcelWriter {
             XSSFCellStyle headerStyleVertical = getHeaderStyle(workbook, 102, 102, 102, 90, false);
             XSSFCellStyle headerStyleWhite = getHeaderStyle(workbook, 255, 255, 255, 0, false);
             columnIndex = 0;
-            while (columnIndex < 29) {
+            while (columnIndex < 35) {
                 Cell cell = headerRow1.createCell(columnIndex);
                 switch (columnIndex) {
                     case 0:
@@ -2532,113 +2586,142 @@ public class ExcelWriter {
                         break;
                     case 2:
                         cell.setCellValue("ავტობუსის #");
-                        cell.setCellStyle(headerStyle);
+                        cell.setCellStyle(headerStyleVertical);
                         break;
                     case 3:
                         cell.setCellValue("მძღოლი");
                         cell.setCellStyle(headerStyle);
                         break;
+
                     case 4:
-                        cell.setCellValue("გასვლის #(საგზ)");
-                        cell.setCellStyle(headerStyleVertical);
-                        break;
-                    case 5:
-                        cell.setCellValue("გასვლის #(GPS)");
+                        cell.setCellValue("რიგითი #");
                         cell.setCellStyle(headerStyleVertical);
                         break;
 
-                    case 6:
+                    case 5:
                         cell.setCellValue("გასვლის გეგმიური დრო");
                         cell.setCellStyle(headerStyle);
                         break;
-                    case 7:
-                        cell.setCellValue("გასვლის ფაქტიური დრო");
+                    case 6:
+                        cell.setCellValue("გასვილი ფაქტიური დრო");
                         cell.setCellStyle(headerStyle);
                         break;
 
+                    case 7:
+                        cell.setCellValue("გასვლის #");
+                        cell.setCellStyle(headerStyleVertical);
+                        break;
+                    //-----gps here ---
                     case 8:
-                        cell.setCellValue("სხვაობა");
+                        cell.setCellValue("გასვლის #");
                         cell.setCellStyle(headerStyleVertical);
                         break;
                     case 9:
-                        cell.setCellValue("დაკარგული დრო");
-                        cell.setCellStyle(headerStyle);
-                        break;
-                    case 10:
-                        cell.setCellValue("გეგმიური ინტერვალი");
-                        cell.setCellStyle(headerStyle);
-                        break;
-                    case 11:
-                        cell.setCellValue("GPS ინტერვალი");
-                        cell.setCellStyle(headerStyle);
-                        break;
-                    case 12:
-                        cell.setCellValue("ხარცეზი");
+                        cell.setCellValue("რიგითი #");
                         cell.setCellStyle(headerStyleVertical);
                         break;
+                    case 10:
+                        cell.setCellValue("გასვლის გეგმიური დრო");
+                        cell.setCellStyle(headerStyleVertical);
+                        break;
+                    case 11:
+                        cell.setCellValue("გასვლის ფაქტიური დრო");
+                        cell.setCellStyle(headerStyleVertical);
+                        break;
+                    case 12:
+                        cell.setCellValue("სხვაობა");
+                        cell.setCellStyle(headerStyle);
+                        break;
+
                     case 13:
-                        cell.setCellValue("გადასწრება");
+                        cell.setCellValue("დგომის ფაქტიური დრო");
                         cell.setCellStyle(headerStyleVertical);
                         break;
                     case 14:
-                        cell.setCellValue("");
-                        cell.setCellStyle(headerStyleWhite);
+                        cell.setCellValue("დაკარგული დრო");
+                        cell.setCellStyle(headerStyle);
                         break;
                     case 15:
-                        cell.setCellValue("მარშრუტი #");
+                        cell.setCellValue("გეგმიური ინტერვალი");
                         cell.setCellStyle(headerStyleVertical);
                         break;
                     case 16:
-                        cell.setCellValue("თარიღი");
-                        cell.setCellStyle(headerStyle);
-                        break;
-                    case 17:
-                        cell.setCellValue("ავტობუსის #");
-                        cell.setCellStyle(headerStyle);
-                        break;
-                    case 18:
-                        cell.setCellValue("მძღოლი");
-                        cell.setCellStyle(headerStyle);
-                        break;
-                    case 19:
-                        cell.setCellValue("გასვლის #(საგზ)");
+                        cell.setCellValue("GPS ინტერვალი");
                         cell.setCellStyle(headerStyleVertical);
                         break;
+                    case 17:
+                        cell.setCellValue("ხარცეზი");
+                        cell.setCellStyle(headerStyleVertical);
+                        break;
+                    case 18:
+                        cell.setCellValue("გადასწრება");
+                        cell.setCellStyle(headerStyleVertical);
+                        break;
+                    case 19:
+                        cell.setCellValue("");
+                        cell.setCellStyle(headerStyleWhite);
+                        break;
                     case 20:
-                        cell.setCellValue("გასვლის #(GPS)");
+                        cell.setCellValue("რიგითი #");
                         cell.setCellStyle(headerStyleVertical);
                         break;
 
                     case 21:
                         cell.setCellValue("გასვლის გეგმიური დრო");
-                        cell.setCellStyle(headerStyle);
+                        cell.setCellStyle(headerStyleVertical);
                         break;
                     case 22:
-                        cell.setCellValue("გასვლის ფაქტიური დრო");
-                        cell.setCellStyle(headerStyle);
+                        cell.setCellValue("გასვილი ფაქტიური დრო");
+                        cell.setCellStyle(headerStyleVertical);
                         break;
 
                     case 23:
-                        cell.setCellValue("სხვაობა");
+                        cell.setCellValue("გასვლის #");
                         cell.setCellStyle(headerStyleVertical);
                         break;
+                    //-----gps here ---
                     case 24:
-                        cell.setCellValue("დაკარგული დრო");
-                        cell.setCellStyle(headerStyle);
+                        cell.setCellValue("გასვლის #");
+                        cell.setCellStyle(headerStyleVertical);
                         break;
                     case 25:
-                        cell.setCellValue("გეგმიური ინტერვალი");
-                        cell.setCellStyle(headerStyle);
+                        cell.setCellValue("რიგითი #");
+                        cell.setCellStyle(headerStyleVertical);
                         break;
                     case 26:
-                        cell.setCellValue("GPS ინტერვალი");
+                        cell.setCellValue("გასვლის გეგმიური დრო");
                         cell.setCellStyle(headerStyle);
                         break;
                     case 27:
+                        cell.setCellValue("გასვლის ფაქტიური დრო");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 28:
+                        cell.setCellValue("სხვაობა");
+                        cell.setCellStyle(headerStyle);
+                        break;
+
+                    case 29:
+                        cell.setCellValue("დგომის ფაქტიური დრო");
+                        cell.setCellStyle(headerStyleVertical);
+                        break;
+                    case 30:
+                        cell.setCellValue("დაკარგული დრო");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 31:
+                        cell.setCellValue("გეგმიური ინტერვალი");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 32:
+                        cell.setCellValue("GPS ინტერვალი");
+                        cell.setCellStyle(headerStyle);
+                        break;
+                    case 33:
                         cell.setCellValue("ხარცეზი");
                         cell.setCellStyle(headerStyleVertical);
                         break;
-                    case 28:
+                    case 34:
                         cell.setCellValue("გადასწრება");
                         cell.setCellStyle(headerStyleVertical);
                         break;
@@ -2654,6 +2737,7 @@ public class ExcelWriter {
 
             XSSFCellStyle rowStyleWhiteNumber = getRowStyle(workbook, 255, 255, 255, false, false, "0"); //"0" makes cell numeric type
             XSSFCellStyle rowStyleWhiteNumberLightOn = getRowStyle(workbook, 240, 240, 240, false, false, "0"); //"0" makes cell numeric type
+            XSSFCellStyle rowStyleWhiteNumberLightBlue = getRowStyle(workbook, 63, 219, 203, false, false, "0"); //"0" makes cell numeric type
 
             XSSFCellStyle rowStyleWhiteTimeHHmm = getRowStyle(workbook, 255, 255, 255, false, false, "[hh]:mm");
             XSSFCellStyle rowStyleWhiteTimeHHmmLightOn = getRowStyle(workbook, 240, 240, 240, false, false, "[hh]:mm");
@@ -2664,10 +2748,14 @@ public class ExcelWriter {
             XSSFCellStyle rowStyleYellowTimeHHmmss = getRowStyle(workbook, 255, 255, 0, false, false, "[hh]:mm:ss");
 
             XSSFCellStyle rowStyleRedTimeHHmmss = getRowStyle(workbook, 255, 0, 0, false, false, "[hh]:mm:ss");
+            XSSFCellStyle rowStyleLightGreenRegular = getRowStyle(workbook, 144, 238, 144, false, false, "");
+            XSSFCellStyle rowStyleBlueRegular = getRowStyle(workbook, 0, 0, 255, false, false, "");
 
             rowHeigth = 30;
             //--------------------------------starting writing cells---------------  
             boolean routeLightOn = true;
+
+            rowIndex++;
 
             for (Map.Entry<Float, DetailedRoute> detailedRouteEntry : detailedRoutes.entrySet()) {
                 if (routeLightOn) {
@@ -2675,37 +2763,582 @@ public class ExcelWriter {
                 } else {
                     routeLightOn = true;
                 }
-                DetailedRoute detailedRoute = detailedRouteEntry.getValue();
 
-                TreeMap<Date, Day> days = detailedRoute.getDays();
+                TreeMap<Date, Day> days = detailedRouteEntry.getValue().getDays();
                 for (Map.Entry<Date, Day> dayEntry : days.entrySet()) {
-                    Row row = sheet.createRow(rowIndex++);
-
-                    Cell routeNumberCell = row.createCell(0);
-                    routeNumberCell.setCellValue(detailedRoute.getNumber());
-                    if (routeLightOn) {
-                        routeNumberCell.setCellStyle(rowStyleWhiteRegularLightOn);
-                    } else {
-                        routeNumberCell.setCellStyle(rowStyleWhiteRegular);
-                    }
-
                     IntervalDay day = (IntervalDay) dayEntry.getValue();
-                    Cell dateStampCell = row.createCell(1);
-                    dateStampCell.setCellValue(day.getDateStamp());
-                    if (routeLightOn) {
-                        dateStampCell.setCellStyle(rowStyleWhiteRegularLightOn);
-                    } else {
-                        dateStampCell.setCellStyle(rowStyleWhiteRegular);
+                    TreeMap<LocalDateTime, IntervalTripPeriod> abTimetableTreeMap = day.getAbTimetable();
+                    TreeMap<LocalDateTime, IntervalTripPeriod> baTimetableTreeMap = day.getBaTimetable();
+                    TreeMap<LocalDateTime, DetailedTripPeriod> abGpsTimetableTreeMap = day.getAbGpsTimetable();
+                    TreeMap<LocalDateTime, DetailedTripPeriod> baGpsTimetableTreeMap = day.getBaGpsTimetable();
+
+                    Collection<IntervalTripPeriod> abTimetableValues = abTimetableTreeMap.values();
+                    ArrayList<IntervalTripPeriod> abTimetable = new ArrayList<>(abTimetableValues);
+
+                    Collection<IntervalTripPeriod> baTimetableValues = baTimetableTreeMap.values();
+                    ArrayList<IntervalTripPeriod> baTimetable = new ArrayList<>(baTimetableValues);
+
+                    Collection<DetailedTripPeriod> abGpsTimetableValues = abGpsTimetableTreeMap.values();
+                    ArrayList<DetailedTripPeriod> abGpsTimetable = new ArrayList<>(abGpsTimetableValues);
+
+                    Collection<DetailedTripPeriod> baGpsTimetableValues = baGpsTimetableTreeMap.values();
+                    ArrayList<DetailedTripPeriod> baGpsTimetable = new ArrayList<>(baGpsTimetableValues);
+
+                    int maxCount = abTimetable.size() >= baTimetable.size() ? abTimetable.size() : baTimetable.size();
+
+                    for (int count = 0; count < maxCount; count++) {
+                        Row row = sheet.createRow(rowIndex);
+                        //------------------------------------------
+                        Cell routeNumberCell = row.createCell(0);
+                        routeNumberCell.setCellValue(detailedRouteEntry.getValue().getNumber());
+                        if (routeLightOn) {
+                            routeNumberCell.setCellStyle(rowStyleWhiteNumber);
+                        } else {
+                            routeNumberCell.setCellStyle(rowStyleWhiteNumberLightOn);
+                        }
+                        //------------------------------------------
+                        Cell dateStampCell = row.createCell(1);
+                        dateStampCell.setCellValue(day.getDateStamp());
+                        if (routeLightOn) {
+                            dateStampCell.setCellStyle(rowStyleWhiteNumber);
+                        } else {
+                            dateStampCell.setCellStyle(rowStyleWhiteNumberLightOn);
+                        }
+                        //------------------------------------------
+                        Cell busNumberCell = row.createCell(2);
+                        busNumberCell.setCellValue("----");
+                        if (routeLightOn) {
+                            busNumberCell.setCellStyle(rowStyleWhiteNumber);
+                        } else {
+                            busNumberCell.setCellStyle(rowStyleWhiteNumberLightOn);
+                        }
+                        //------------------------------------------
+                        Cell busDriver = row.createCell(3);
+                        busDriver.setCellValue("----");
+                        if (routeLightOn) {
+                            busDriver.setCellStyle(rowStyleWhiteNumber);
+                        } else {
+                            busDriver.setCellStyle(rowStyleWhiteNumberLightOn);
+                        }
+                        //------------------------------------------
+
+                        Cell abTimetableScheduledTimetableSequenceNumberCell = row.createCell(4);
+
+                        if (count < abTimetable.size()) {
+                            abTimetableScheduledTimetableSequenceNumberCell.setCellValue(abTimetable.get(count).getScheduledTimetableSequenceNumber());
+                        } else {
+                            abTimetableScheduledTimetableSequenceNumberCell.setCellValue("");
+                        }
+                        abTimetableScheduledTimetableSequenceNumberCell.setCellStyle(rowStyleWhiteNumberLightBlue);
+                        //------------------------------------------
+                        Cell abTimetableStartTimeScheduledCell = row.createCell(5);
+                        if (count < abTimetable.size()) {
+                            abTimetableStartTimeScheduledCell.setCellValue(abTimetable.get(count).getStartTimeScheduledExcelFormat());
+                        } else {
+                            abTimetableStartTimeScheduledCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            abTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                        } else {
+                            abTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                        }
+
+                        //------------------------------------------
+                        Cell abTimetableStartTimeActualCell = row.createCell(6);
+                        if (count < abTimetable.size()) {
+                            Double startTimeActualExcelFormat = abTimetable.get(count).getStartTimeActualExcelFormat();
+                            if (startTimeActualExcelFormat == null) {
+                                abTimetableStartTimeActualCell.setCellValue("");
+                            } else {
+                                abTimetableStartTimeActualCell.setCellValue(startTimeActualExcelFormat);
+                            }
+                        } else {
+                            abTimetableStartTimeActualCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            abTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                        } else {
+                            abTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                        }
+                        //------------------------------------------
+                        Cell abTimetableExodusNumberCell = row.createCell(7);
+                        if (count < abTimetable.size()) {
+                            abTimetableExodusNumberCell.setCellValue(abTimetable.get(count).getExodusNumber());
+                        } else {
+                            abTimetableExodusNumberCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            abTimetableExodusNumberCell.setCellStyle(rowStyleWhiteNumber);
+                        } else {
+                            abTimetableExodusNumberCell.setCellStyle(rowStyleWhiteNumberLightOn);
+                        }
+                        //------------------------------------------
+                        Cell abGpsTimetableExodusNumberCell = row.createCell(8);
+                        if (count < abGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
+                            abGpsTimetableExodusNumberCell.setCellValue(intervalTripPeriod.getExodusNumber());
+                        } else {
+                            abGpsTimetableExodusNumberCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            abGpsTimetableExodusNumberCell.setCellStyle(rowStyleWhiteNumber);
+                        } else {
+                            abGpsTimetableExodusNumberCell.setCellStyle(rowStyleWhiteNumberLightOn);
+                        }
+                        //------------------------------------------
+                        Cell abGpsTimetableScheduledTimetableSequenceNumberCell = row.createCell(9);
+                        if (count < abGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
+                            abGpsTimetableScheduledTimetableSequenceNumberCell.setCellValue(intervalTripPeriod.getScheduledTimetableSequenceNumber());
+                        } else {
+                            abGpsTimetableScheduledTimetableSequenceNumberCell.setCellValue("");
+                        }
+                        abGpsTimetableScheduledTimetableSequenceNumberCell.setCellStyle(rowStyleWhiteNumberLightBlue);
+
+                        //------------------------------------------
+                        Cell abGpsTimetableStartTimeScheduledCell = row.createCell(10);
+                        if (count < abGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
+                            abGpsTimetableStartTimeScheduledCell.setCellValue(intervalTripPeriod.getStartTimeScheduledExcelFormat());
+                        } else {
+                            abGpsTimetableStartTimeScheduledCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            abGpsTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                        } else {
+                            abGpsTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                        }
+                        //------------------------------------------
+                        Cell abGpsTimetableStartTimeActualCell = row.createCell(11);
+                        if (count < abGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
+                            abGpsTimetableStartTimeActualCell.setCellValue(intervalTripPeriod.getStartTimeActualExcelFormat());
+                        } else {
+                            abGpsTimetableStartTimeActualCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            abGpsTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                        } else {
+                            abGpsTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                        }
+
+                        Cell abGpsTimetableStartTimeDifferenceCell = row.createCell(12);
+                        if (count < abGpsTimetable.size()) {
+                            abGpsTimetableStartTimeDifferenceCell.setCellValue(abGpsTimetable.get(count).getStartTimeDifference());
+                        } else {
+                            abGpsTimetableStartTimeDifferenceCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            abGpsTimetableStartTimeDifferenceCell.setCellStyle(rowStyleWhiteTimeHHmmss);
+                        } else {
+                            abGpsTimetableStartTimeDifferenceCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
+                        }
+                        if (count < abGpsTimetable.size()) {
+                            if (abGpsTimetable.get(count).getStartTimeDifferenceColor().equals("yellow")) {
+                                abGpsTimetableStartTimeDifferenceCell.setCellStyle(rowStyleYellowTimeHHmmss);
+                            }
+                            if (abGpsTimetable.get(count).getStartTimeDifferenceColor().equals("red")) {
+                                abGpsTimetableStartTimeDifferenceCell.setCellStyle(rowStyleRedTimeHHmmss);
+                            }
+                        }
+
+                        //------------------------------------------
+                        Cell abGpsTimetableHaltTimeScheduledCell = row.createCell(13);
+                        if (count < abGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
+                            abGpsTimetableHaltTimeScheduledCell.setCellValue(intervalTripPeriod.getHaltTimeScheduledExcelFormat());
+                        } else {
+                            abGpsTimetableHaltTimeScheduledCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            abGpsTimetableHaltTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                        } else {
+                            abGpsTimetableHaltTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                        }
+
+                        //------------------------------------------
+                        Cell abGpsTimetableLostTimeCell = row.createCell(14);
+                        if (count < abGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
+                            if (intervalTripPeriod.getLostTimeExcelFormat() == null) {
+                                abGpsTimetableLostTimeCell.setCellValue("");
+                            } else {
+                                abGpsTimetableLostTimeCell.setCellValue(intervalTripPeriod.getLostTimeExcelFormat());
+                            }
+                        } else {
+                            abGpsTimetableLostTimeCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            abGpsTimetableLostTimeCell.setCellStyle(rowStyleWhiteTimeHHmmss);
+                        } else {
+                            abGpsTimetableLostTimeCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
+                        }
+                        if (count < abGpsTimetable.size()) {
+                            if (abGpsTimetable.get(count).getLostTimeColor().equals("yellow")) {
+                                abGpsTimetableLostTimeCell.setCellStyle(rowStyleYellowTimeHHmmss);
+                            }
+                            if (abGpsTimetable.get(count).getLostTimeColor().equals("red")) {
+                                abGpsTimetableLostTimeCell.setCellStyle(rowStyleRedTimeHHmmss);
+                            }
+                        }
+
+                        //------------------------------------------
+                        Cell abGpsTimetableScheduledIntervalCell = row.createCell(15);
+                        if (count < abGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
+                            abGpsTimetableScheduledIntervalCell.setCellValue(intervalTripPeriod.getScheduledIntervalString());
+                        } else {
+                            abGpsTimetableScheduledIntervalCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            abGpsTimetableScheduledIntervalCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                        } else {
+                            abGpsTimetableScheduledIntervalCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                        }
+
+                        //------------------------------------------
+                        Cell abGpsTimetableGpsIntervalCell = row.createCell(16);
+                        if (count < abGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
+                            if (intervalTripPeriod.getGpsIntervalExcelFormat() == null) {
+                                abGpsTimetableGpsIntervalCell.setCellValue("");
+                            } else {
+                                abGpsTimetableGpsIntervalCell.setCellValue(intervalTripPeriod.getGpsIntervalExcelFormat());
+                            }
+                        } else {
+                            abGpsTimetableGpsIntervalCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            abGpsTimetableGpsIntervalCell.setCellStyle(rowStyleWhiteTimeHHmmss);
+                        } else {
+                            abGpsTimetableGpsIntervalCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
+                        }
+                        if (count < abGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
+                            if (intervalTripPeriod.getGpsIntervalColor().equals("yellow")) {
+                                abGpsTimetableGpsIntervalCell.setCellStyle(rowStyleYellowTimeHHmmss);
+                            }
+                            if (intervalTripPeriod.getGpsIntervalColor().equals("red")) {
+                                abGpsTimetableGpsIntervalCell.setCellStyle(rowStyleRedTimeHHmmss);
+                            }
+                        }
+                        //------------------------------------------
+                        Cell abGpsTimetableMisconductCell = row.createCell(17);
+                        if (count < abGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
+                            abGpsTimetableMisconductCell.setCellValue(intervalTripPeriod.getMisconduct());
+                        } else {
+                            abGpsTimetableMisconductCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            abGpsTimetableMisconductCell.setCellStyle(rowStyleWhiteRegular);
+                        } else {
+                            abGpsTimetableMisconductCell.setCellStyle(rowStyleWhiteRegularLightOn);
+                        }
+                        if (count < abGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
+                            if (intervalTripPeriod.getMisconductColor().equals("lightgreen")) {
+                                abGpsTimetableMisconductCell.setCellStyle(rowStyleLightGreenRegular);
+                            }
+                        }
+
+                        //------------------------------------------
+                        Cell abGpsTimetableRunOverCell = row.createCell(18);
+                        if (count < abGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
+                            abGpsTimetableRunOverCell.setCellValue(intervalTripPeriod.getRunOver());
+                        } else {
+                            abGpsTimetableRunOverCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            abGpsTimetableRunOverCell.setCellStyle(rowStyleWhiteRegular);
+                        } else {
+                            abGpsTimetableRunOverCell.setCellStyle(rowStyleWhiteRegularLightOn);
+                        }
+                        if (count < abGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
+                            if (intervalTripPeriod.getRunOverColor().equals("lightgreen")) {
+                                abGpsTimetableRunOverCell.setCellStyle(rowStyleLightGreenRegular);
+                            }
+                        }
+                        //-----------------------------------
+
+                        Cell middleOutCell = row.createCell(19);
+                        middleOutCell.setCellValue("");
+                        IntervalTripPeriod abIntervalTripPeriod = null;
+                        IntervalTripPeriod baIntervalTripPeriod = null;
+                        if (count < abGpsTimetable.size()) {
+                            abIntervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
+                        }
+                        if (count < baGpsTimetable.size()) {
+                            baIntervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
+                        }
+                        if ((abIntervalTripPeriod != null && (abIntervalTripPeriod.getMisconductColor().equals("lightgreen") || abIntervalTripPeriod.getRunOverColor().equals("lightgreen")))
+                                || (baIntervalTripPeriod != null && (baIntervalTripPeriod.getMisconductColor().equals("lightgreen") || baIntervalTripPeriod.getRunOverColor().equals("lightgreen")))) {
+                            middleOutCell.setCellStyle(rowStyleBlueRegular);
+                        } else {
+                            if (routeLightOn) {
+                                middleOutCell.setCellStyle(rowStyleWhiteRegular);
+                            } else {
+                                middleOutCell.setCellStyle(rowStyleWhiteRegularLightOn);
+                            }
+                        }
+
+                        // ----------------------------------
+                        //+++++++++++++++++++++++++++++++++++
+                        //==========================================
+                        //------------------------------------------
+                        Cell baTimetableScheduledTimetableSequenceNumberCell = row.createCell(20);
+
+                        if (count < baTimetable.size()) {
+                            baTimetableScheduledTimetableSequenceNumberCell.setCellValue(baTimetable.get(count).getScheduledTimetableSequenceNumber());
+                        } else {
+                            baTimetableScheduledTimetableSequenceNumberCell.setCellValue("");
+                        }
+                        baTimetableScheduledTimetableSequenceNumberCell.setCellStyle(rowStyleWhiteNumberLightBlue);
+                        //------------------------------------------
+                        Cell baTimetableStartTimeScheduledCell = row.createCell(21);
+                        if (count < baTimetable.size()) {
+                            baTimetableStartTimeScheduledCell.setCellValue(baTimetable.get(count).getStartTimeScheduledExcelFormat());
+                        } else {
+                            baTimetableStartTimeScheduledCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            baTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                        } else {
+                            baTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                        }
+
+                        //------------------------------------------
+                        Cell baTimetableStartTimeActualCell = row.createCell(22);
+                        if (count < baTimetable.size()) {
+                            Double startTimeActualExcelFormat = baTimetable.get(count).getStartTimeActualExcelFormat();
+                            if (startTimeActualExcelFormat == null) {
+                                baTimetableStartTimeActualCell.setCellValue("");
+                            } else {
+                                baTimetableStartTimeActualCell.setCellValue(startTimeActualExcelFormat);
+                            }
+                        } else {
+                            baTimetableStartTimeActualCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            baTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                        } else {
+                            baTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                        }
+                        //------------------------------------------
+                        Cell baTimetableExodusNumberCell = row.createCell(23);
+                        if (count < baTimetable.size()) {
+                            baTimetableExodusNumberCell.setCellValue(baTimetable.get(count).getExodusNumber());
+                        } else {
+                            baTimetableExodusNumberCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            baTimetableExodusNumberCell.setCellStyle(rowStyleWhiteNumber);
+                        } else {
+                            baTimetableExodusNumberCell.setCellStyle(rowStyleWhiteNumberLightOn);
+                        }
+                        //------------------------------------------
+                        Cell baGpsTimetableExodusNumberCell = row.createCell(24);
+                        if (count < baGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
+                            baGpsTimetableExodusNumberCell.setCellValue(intervalTripPeriod.getExodusNumber());
+                        } else {
+                            baGpsTimetableExodusNumberCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            baGpsTimetableExodusNumberCell.setCellStyle(rowStyleWhiteNumber);
+                        } else {
+                            baGpsTimetableExodusNumberCell.setCellStyle(rowStyleWhiteNumberLightOn);
+                        }
+                        //------------------------------------------
+                        Cell baGpsTimetableScheduledTimetableSequenceNumberCell = row.createCell(25);
+                        if (count < baGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
+                            baGpsTimetableScheduledTimetableSequenceNumberCell.setCellValue(intervalTripPeriod.getScheduledTimetableSequenceNumber());
+                        } else {
+                            baGpsTimetableScheduledTimetableSequenceNumberCell.setCellValue("");
+                        }
+                        baGpsTimetableScheduledTimetableSequenceNumberCell.setCellStyle(rowStyleWhiteNumberLightBlue);
+
+                        //------------------------------------------
+                        Cell baGpsTimetableStartTimeScheduledCell = row.createCell(26);
+                        if (count < baGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
+                            baGpsTimetableStartTimeScheduledCell.setCellValue(intervalTripPeriod.getStartTimeScheduledExcelFormat());
+                        } else {
+                            baGpsTimetableStartTimeScheduledCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            baGpsTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                        } else {
+                            baGpsTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                        }
+                        //------------------------------------------
+                        Cell baGpsTimetableStartTimeActualCell = row.createCell(27);
+                        if (count < baGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
+                            baGpsTimetableStartTimeActualCell.setCellValue(intervalTripPeriod.getStartTimeActualExcelFormat());
+                        } else {
+                            baGpsTimetableStartTimeActualCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            baGpsTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                        } else {
+                            baGpsTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                        }
+
+                        Cell baGpsTimetableStartTimeDifferenceCell = row.createCell(28);
+                        if (count < baGpsTimetable.size()) {
+                            baGpsTimetableStartTimeDifferenceCell.setCellValue(baGpsTimetable.get(count).getStartTimeDifference());
+                        } else {
+                            baGpsTimetableStartTimeDifferenceCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            baGpsTimetableStartTimeDifferenceCell.setCellStyle(rowStyleWhiteTimeHHmmss);
+                        } else {
+                            baGpsTimetableStartTimeDifferenceCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
+                        }
+                        if (count < baGpsTimetable.size()) {
+                            if (baGpsTimetable.get(count).getStartTimeDifferenceColor().equals("yellow")) {
+                                baGpsTimetableStartTimeDifferenceCell.setCellStyle(rowStyleYellowTimeHHmmss);
+                            }
+                            if (baGpsTimetable.get(count).getStartTimeDifferenceColor().equals("red")) {
+                                baGpsTimetableStartTimeDifferenceCell.setCellStyle(rowStyleRedTimeHHmmss);
+                            }
+                        }
+
+                        //------------------------------------------
+                        Cell baGpsTimetableHaltTimeScheduledCell = row.createCell(29);
+                        if (count < baGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
+                            baGpsTimetableHaltTimeScheduledCell.setCellValue(intervalTripPeriod.getHaltTimeScheduledExcelFormat());
+                        } else {
+                            baGpsTimetableHaltTimeScheduledCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            baGpsTimetableHaltTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                        } else {
+                            baGpsTimetableHaltTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                        }
+
+                        //------------------------------------------
+                        Cell baGpsTimetableLostTimeCell = row.createCell(30);
+                        if (count < baGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
+                            if (intervalTripPeriod.getLostTimeExcelFormat() == null) {
+                                baGpsTimetableLostTimeCell.setCellValue("");
+                            } else {
+                                baGpsTimetableLostTimeCell.setCellValue(intervalTripPeriod.getLostTimeExcelFormat());
+                            }
+                        } else {
+                            baGpsTimetableLostTimeCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            baGpsTimetableLostTimeCell.setCellStyle(rowStyleWhiteTimeHHmmss);
+                        } else {
+                            baGpsTimetableLostTimeCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
+                        }
+                        if (count < baGpsTimetable.size()) {
+                            if (baGpsTimetable.get(count).getLostTimeColor().equals("yellow")) {
+                                baGpsTimetableLostTimeCell.setCellStyle(rowStyleYellowTimeHHmmss);
+                            }
+                            if (baGpsTimetable.get(count).getLostTimeColor().equals("red")) {
+                                baGpsTimetableLostTimeCell.setCellStyle(rowStyleRedTimeHHmmss);
+                            }
+                        }
+
+                        //------------------------------------------
+                        Cell baGpsTimetableScheduledIntervalCell = row.createCell(31);
+                        if (count < baGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
+                            baGpsTimetableScheduledIntervalCell.setCellValue(intervalTripPeriod.getScheduledIntervalString());
+                        } else {
+                            baGpsTimetableScheduledIntervalCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            baGpsTimetableScheduledIntervalCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                        } else {
+                            baGpsTimetableScheduledIntervalCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                        }
+
+                        //------------------------------------------
+                        Cell baGpsTimetableGpsIntervalCell = row.createCell(32);
+                        if (count < baGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
+                            if (intervalTripPeriod.getGpsIntervalExcelFormat() == null) {
+                                baGpsTimetableGpsIntervalCell.setCellValue("");
+                            } else {
+                                baGpsTimetableGpsIntervalCell.setCellValue(intervalTripPeriod.getGpsIntervalExcelFormat());
+                            }
+                        } else {
+                            baGpsTimetableGpsIntervalCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            baGpsTimetableGpsIntervalCell.setCellStyle(rowStyleWhiteTimeHHmmss);
+                        } else {
+                            baGpsTimetableGpsIntervalCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
+                        }
+                        if (count < baGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
+                            if (intervalTripPeriod.getGpsIntervalColor().equals("yellow")) {
+                                baGpsTimetableGpsIntervalCell.setCellStyle(rowStyleYellowTimeHHmmss);
+                            }
+                            if (intervalTripPeriod.getGpsIntervalColor().equals("red")) {
+                                baGpsTimetableGpsIntervalCell.setCellStyle(rowStyleRedTimeHHmmss);
+                            }
+                        }
+                        //------------------------------------------
+                        Cell baGpsTimetableMisconductCell = row.createCell(33);
+                        if (count < baGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
+                            baGpsTimetableMisconductCell.setCellValue(intervalTripPeriod.getMisconduct());
+                        } else {
+                            baGpsTimetableMisconductCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            baGpsTimetableMisconductCell.setCellStyle(rowStyleWhiteRegular);
+                        } else {
+                            baGpsTimetableMisconductCell.setCellStyle(rowStyleWhiteRegularLightOn);
+                        }
+                        if (count < baGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
+                            if (intervalTripPeriod.getMisconductColor().equals("lightgreen")) {
+                                baGpsTimetableMisconductCell.setCellStyle(rowStyleLightGreenRegular);
+                            }
+                        }
+
+                        //------------------------------------------
+                        Cell baGpsTimetableRunOverCell = row.createCell(34);
+                        if (count < baGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
+                            baGpsTimetableRunOverCell.setCellValue(intervalTripPeriod.getRunOver());
+                        } else {
+                            baGpsTimetableRunOverCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            baGpsTimetableRunOverCell.setCellStyle(rowStyleWhiteRegular);
+                        } else {
+                            baGpsTimetableRunOverCell.setCellStyle(rowStyleWhiteRegularLightOn);
+                        }
+                        if (count < baGpsTimetable.size()) {
+                            IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
+                            if (intervalTripPeriod.getRunOverColor().equals("lightgreen")) {
+                                baGpsTimetableRunOverCell.setCellStyle(rowStyleLightGreenRegular);
+                            }
+                        }
+                        rowIndex++;
                     }
-
-                    TreeMap<LocalDateTime, IntervalTripPeriod> abTimetable = day.getAbTimetable();
-                    TreeMap<LocalDateTime, IntervalTripPeriod> baTimetable = day.getBaTimetable();
-                    int rowsCountOfDay = abTimetable.size() >= baTimetable.size() ? abTimetable.size() : baTimetable.size();
-                    for (int x = rowIndex; x < rowsCountOfDay; x++) {
-
+                    //-----------------------
+                    //++++++++++++++++++++++++++
+                    Row dayChangerRow = sheet.createRow(rowIndex++);
+                    for (int a = 0; a < 20; a++) {
+                        Cell cell = dayChangerRow.createCell(a);
+                        cell.setCellValue("====");
                     }
                 }
             }
+
             workbook.write(os);
             System.out.println("++++Intervals Excel Writing Completed++++");
 

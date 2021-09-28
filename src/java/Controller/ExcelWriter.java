@@ -2448,7 +2448,7 @@ public class ExcelWriter {
             int columnWidth = 0;
 
             //column width
-            while (columnIndex < 37) {
+            while (columnIndex < 39) {
                 switch (columnIndex) {
                     case 0:
                         columnWidth = 1100;
@@ -2457,10 +2457,10 @@ public class ExcelWriter {
                         columnWidth = 3000;
                         break;
                     case 2:
-                        columnWidth = 1500;
+                        columnWidth = 3500;
                         break;
                     case 3:
-                        columnWidth = 4000;
+                        columnWidth = 7000;
                         break;
                     case 4:
                         columnWidth = 800;
@@ -2513,28 +2513,28 @@ public class ExcelWriter {
                         break;
                     //--------
                     case 20:
-                        columnWidth = 800;
+                        columnWidth = 3500;
                         break;
                     case 21:
-                        columnWidth = 2000;
+                        columnWidth = 7000;
                         break;
                     case 22:
-                        columnWidth = 2000;
+                        columnWidth = 800;
                         break;
                     case 23:
-                        columnWidth = 800;
+                        columnWidth = 2000;
                         break;
                     case 24:
-                        columnWidth = 800;
+                        columnWidth = 2000;
                         break;
                     case 25:
                         columnWidth = 800;
                         break;
                     case 26:
-                        columnWidth = 2800;
+                        columnWidth = 800;
                         break;
                     case 27:
-                        columnWidth = 2000;
+                        columnWidth = 800;
                         break;
                     case 28:
                         columnWidth = 2800;
@@ -2546,15 +2546,21 @@ public class ExcelWriter {
                         columnWidth = 2800;
                         break;
                     case 31:
-                        columnWidth = 2800;
+                        columnWidth = 2000;
                         break;
                     case 32:
                         columnWidth = 2800;
                         break;
                     case 33:
-                        columnWidth = 800;
+                        columnWidth = 2800;
                         break;
                     case 34:
+                        columnWidth = 2800;
+                        break;
+                    case 35:
+                        columnWidth = 800;
+                        break;
+                    case 36:
                         columnWidth = 800;
                         break;
 
@@ -2564,17 +2570,57 @@ public class ExcelWriter {
             }
 
             //now headers
-            //first header row
-            Row headerRow1 = sheet.createRow(rowIndex);
-            rowHeigth = 80;
-            headerRow1.setHeightInPoints(rowHeigth);
-
             XSSFCellStyle headerStyle = getHeaderStyle(workbook, 102, 102, 102, 0, false);
             XSSFCellStyle headerStyleVertical = getHeaderStyle(workbook, 102, 102, 102, 90, false);
             XSSFCellStyle headerStyleWhite = getHeaderStyle(workbook, 255, 255, 255, 0, false);
+            //first header row
+            Row headerRow1 = sheet.createRow(rowIndex);
             columnIndex = 0;
-            while (columnIndex < 35) {
-                Cell cell = headerRow1.createCell(columnIndex);
+            while (columnIndex < 37) {
+                if (columnIndex == 0) {
+                    Cell cell = headerRow1.createCell(columnIndex);
+                    cell.setCellValue("");
+                    cell.setCellStyle(headerStyleWhite);
+                    sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, columnIndex, columnIndex + 1));
+
+                } else if (columnIndex == 2) {
+                    Cell cell = headerRow1.createCell(columnIndex);
+                    cell.setCellValue("A-B განრიგი");
+                    cell.setCellStyle(headerStyleWhite);
+                    sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, columnIndex, columnIndex + 5));
+
+                } else if (columnIndex == 8) {
+                    Cell cell = headerRow1.createCell(columnIndex);
+                    cell.setCellValue("A-B GPS გამოთვლები");
+                    cell.setCellStyle(headerStyleWhite);
+                    sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, columnIndex, columnIndex + 10));
+
+                } else if (columnIndex == 22) {
+                    Cell cell = headerRow1.createCell(columnIndex);
+                    cell.setCellValue("B-A განრიგი");
+                    cell.setCellStyle(headerStyleWhite);
+                    sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, columnIndex, columnIndex + 5));
+
+                } else if (columnIndex == 28) {
+                    Cell cell = headerRow1.createCell(columnIndex);
+                    cell.setCellValue("B-A GPS გამოთვლები");
+                    cell.setCellStyle(headerStyleWhite);
+                    sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, columnIndex, columnIndex + 10));
+
+                }
+                columnIndex++;
+            }
+
+            rowIndex++;
+
+            //second header row
+            Row headerRow2 = sheet.createRow(rowIndex);
+            rowHeigth = 80;
+            headerRow2.setHeightInPoints(rowHeigth);
+
+            columnIndex = 0;
+            while (columnIndex < 37) {
+                Cell cell = headerRow2.createCell(columnIndex);
                 switch (columnIndex) {
                     case 0:
                         cell.setCellValue("მარშრუტი #");
@@ -2662,66 +2708,74 @@ public class ExcelWriter {
                         cell.setCellStyle(headerStyleWhite);
                         break;
                     case 20:
-                        cell.setCellValue("რიგითი #");
+                        cell.setCellValue("ავტობუსის #");
                         cell.setCellStyle(headerStyleVertical);
                         break;
-
                     case 21:
-                        cell.setCellValue("გასვლის გეგმიური დრო");
-                        cell.setCellStyle(headerStyleVertical);
+                        cell.setCellValue("მძღოლი");
+                        cell.setCellStyle(headerStyle);
                         break;
                     case 22:
-                        cell.setCellValue("გასვილი ფაქტიური დრო");
+                        cell.setCellValue("რიგითი #");
                         cell.setCellStyle(headerStyleVertical);
                         break;
 
                     case 23:
+                        cell.setCellValue("გასვლის გეგმიური დრო");
+                        cell.setCellStyle(headerStyleVertical);
+                        break;
+                    case 24:
+                        cell.setCellValue("გასვილი ფაქტიური დრო");
+                        cell.setCellStyle(headerStyleVertical);
+                        break;
+
+                    case 25:
                         cell.setCellValue("გასვლის #");
                         cell.setCellStyle(headerStyleVertical);
                         break;
                     //-----gps here ---
-                    case 24:
+                    case 26:
                         cell.setCellValue("გასვლის #");
                         cell.setCellStyle(headerStyleVertical);
                         break;
-                    case 25:
+                    case 27:
                         cell.setCellValue("რიგითი #");
                         cell.setCellStyle(headerStyleVertical);
                         break;
-                    case 26:
+                    case 28:
                         cell.setCellValue("გასვლის გეგმიური დრო");
                         cell.setCellStyle(headerStyle);
                         break;
-                    case 27:
+                    case 29:
                         cell.setCellValue("გასვლის ფაქტიური დრო");
                         cell.setCellStyle(headerStyle);
                         break;
-                    case 28:
+                    case 30:
                         cell.setCellValue("სხვაობა");
                         cell.setCellStyle(headerStyle);
                         break;
 
-                    case 29:
+                    case 31:
                         cell.setCellValue("დგომის ფაქტიური დრო");
                         cell.setCellStyle(headerStyleVertical);
                         break;
-                    case 30:
+                    case 32:
                         cell.setCellValue("დაკარგული დრო");
                         cell.setCellStyle(headerStyle);
                         break;
-                    case 31:
+                    case 33:
                         cell.setCellValue("გეგმიური ინტერვალი");
                         cell.setCellStyle(headerStyle);
                         break;
-                    case 32:
+                    case 34:
                         cell.setCellValue("GPS ინტერვალი");
                         cell.setCellStyle(headerStyle);
                         break;
-                    case 33:
+                    case 35:
                         cell.setCellValue("ხარცეზი");
                         cell.setCellStyle(headerStyleVertical);
                         break;
-                    case 34:
+                    case 36:
                         cell.setCellValue("გადასწრება");
                         cell.setCellStyle(headerStyleVertical);
                         break;
@@ -2806,7 +2860,12 @@ public class ExcelWriter {
                         }
                         //------------------------------------------
                         Cell busNumberCell = row.createCell(2);
-                        busNumberCell.setCellValue("----");
+                        if (count < abTimetable.size()) {
+                            busNumberCell.setCellValue(abTimetable.get(count).getBusNumber());
+                        } else {
+                            busNumberCell.setCellValue("");
+                        }
+
                         if (routeLightOn) {
                             busNumberCell.setCellStyle(rowStyleWhiteNumber);
                         } else {
@@ -2814,7 +2873,12 @@ public class ExcelWriter {
                         }
                         //------------------------------------------
                         Cell busDriver = row.createCell(3);
-                        busDriver.setCellValue("----");
+
+                        if (count < abTimetable.size()) {
+                            busDriver.setCellValue(abTimetable.get(count).getDriverName());
+                        } else {
+                            busDriver.setCellValue("");
+                        }
                         if (routeLightOn) {
                             busDriver.setCellStyle(rowStyleWhiteNumber);
                         } else {
@@ -3088,7 +3152,31 @@ public class ExcelWriter {
                         //+++++++++++++++++++++++++++++++++++
                         //==========================================
                         //------------------------------------------
-                        Cell baTimetableScheduledTimetableSequenceNumberCell = row.createCell(20);
+                        Cell baBusNumberCell = row.createCell(20);
+                        if (count < baTimetable.size()) {
+                            baBusNumberCell.setCellValue(baTimetable.get(count).getBusNumber());
+                        } else {
+                            baBusNumberCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            baBusNumberCell.setCellStyle(rowStyleWhiteRegular);
+                        } else {
+                            baBusNumberCell.setCellStyle(rowStyleWhiteRegularLightOn);
+                        }
+
+                        Cell baDriverName = row.createCell(21);
+                        if (count < baTimetable.size()) {
+                            baDriverName.setCellValue(baTimetable.get(count).getDriverName());
+                        } else {
+                            baBusNumberCell.setCellValue("");
+                        }
+                        if (routeLightOn) {
+                            baDriverName.setCellStyle(rowStyleWhiteRegular);
+                        } else {
+                            baDriverName.setCellStyle(rowStyleWhiteRegularLightOn);
+                        }
+
+                        Cell baTimetableScheduledTimetableSequenceNumberCell = row.createCell(22);
 
                         if (count < baTimetable.size()) {
                             baTimetableScheduledTimetableSequenceNumberCell.setCellValue(baTimetable.get(count).getScheduledTimetableSequenceNumber());
@@ -3097,7 +3185,7 @@ public class ExcelWriter {
                         }
                         baTimetableScheduledTimetableSequenceNumberCell.setCellStyle(rowStyleWhiteNumberLightBlue);
                         //------------------------------------------
-                        Cell baTimetableStartTimeScheduledCell = row.createCell(21);
+                        Cell baTimetableStartTimeScheduledCell = row.createCell(23);
                         if (count < baTimetable.size()) {
                             baTimetableStartTimeScheduledCell.setCellValue(baTimetable.get(count).getStartTimeScheduledExcelFormat());
                         } else {
@@ -3110,7 +3198,7 @@ public class ExcelWriter {
                         }
 
                         //------------------------------------------
-                        Cell baTimetableStartTimeActualCell = row.createCell(22);
+                        Cell baTimetableStartTimeActualCell = row.createCell(24);
                         if (count < baTimetable.size()) {
                             Double startTimeActualExcelFormat = baTimetable.get(count).getStartTimeActualExcelFormat();
                             if (startTimeActualExcelFormat == null) {
@@ -3127,7 +3215,7 @@ public class ExcelWriter {
                             baTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
                         }
                         //------------------------------------------
-                        Cell baTimetableExodusNumberCell = row.createCell(23);
+                        Cell baTimetableExodusNumberCell = row.createCell(25);
                         if (count < baTimetable.size()) {
                             baTimetableExodusNumberCell.setCellValue(baTimetable.get(count).getExodusNumber());
                         } else {
@@ -3139,7 +3227,7 @@ public class ExcelWriter {
                             baTimetableExodusNumberCell.setCellStyle(rowStyleWhiteNumberLightOn);
                         }
                         //------------------------------------------
-                        Cell baGpsTimetableExodusNumberCell = row.createCell(24);
+                        Cell baGpsTimetableExodusNumberCell = row.createCell(26);
                         if (count < baGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
                             baGpsTimetableExodusNumberCell.setCellValue(intervalTripPeriod.getExodusNumber());
@@ -3152,7 +3240,7 @@ public class ExcelWriter {
                             baGpsTimetableExodusNumberCell.setCellStyle(rowStyleWhiteNumberLightOn);
                         }
                         //------------------------------------------
-                        Cell baGpsTimetableScheduledTimetableSequenceNumberCell = row.createCell(25);
+                        Cell baGpsTimetableScheduledTimetableSequenceNumberCell = row.createCell(27);
                         if (count < baGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
                             baGpsTimetableScheduledTimetableSequenceNumberCell.setCellValue(intervalTripPeriod.getScheduledTimetableSequenceNumber());
@@ -3162,7 +3250,7 @@ public class ExcelWriter {
                         baGpsTimetableScheduledTimetableSequenceNumberCell.setCellStyle(rowStyleWhiteNumberLightBlue);
 
                         //------------------------------------------
-                        Cell baGpsTimetableStartTimeScheduledCell = row.createCell(26);
+                        Cell baGpsTimetableStartTimeScheduledCell = row.createCell(28);
                         if (count < baGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
                             baGpsTimetableStartTimeScheduledCell.setCellValue(intervalTripPeriod.getStartTimeScheduledExcelFormat());
@@ -3175,7 +3263,7 @@ public class ExcelWriter {
                             baGpsTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
                         }
                         //------------------------------------------
-                        Cell baGpsTimetableStartTimeActualCell = row.createCell(27);
+                        Cell baGpsTimetableStartTimeActualCell = row.createCell(29);
                         if (count < baGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
                             baGpsTimetableStartTimeActualCell.setCellValue(intervalTripPeriod.getStartTimeActualExcelFormat());
@@ -3188,7 +3276,7 @@ public class ExcelWriter {
                             baGpsTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
                         }
 
-                        Cell baGpsTimetableStartTimeDifferenceCell = row.createCell(28);
+                        Cell baGpsTimetableStartTimeDifferenceCell = row.createCell(30);
                         if (count < baGpsTimetable.size()) {
                             baGpsTimetableStartTimeDifferenceCell.setCellValue(baGpsTimetable.get(count).getStartTimeDifference());
                         } else {
@@ -3209,7 +3297,7 @@ public class ExcelWriter {
                         }
 
                         //------------------------------------------
-                        Cell baGpsTimetableHaltTimeScheduledCell = row.createCell(29);
+                        Cell baGpsTimetableHaltTimeScheduledCell = row.createCell(31);
                         if (count < baGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
                             baGpsTimetableHaltTimeScheduledCell.setCellValue(intervalTripPeriod.getHaltTimeScheduledExcelFormat());
@@ -3223,7 +3311,7 @@ public class ExcelWriter {
                         }
 
                         //------------------------------------------
-                        Cell baGpsTimetableLostTimeCell = row.createCell(30);
+                        Cell baGpsTimetableLostTimeCell = row.createCell(32);
                         if (count < baGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
                             if (intervalTripPeriod.getLostTimeExcelFormat() == null) {
@@ -3249,7 +3337,7 @@ public class ExcelWriter {
                         }
 
                         //------------------------------------------
-                        Cell baGpsTimetableScheduledIntervalCell = row.createCell(31);
+                        Cell baGpsTimetableScheduledIntervalCell = row.createCell(33);
                         if (count < baGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
                             baGpsTimetableScheduledIntervalCell.setCellValue(intervalTripPeriod.getScheduledIntervalString());
@@ -3263,7 +3351,7 @@ public class ExcelWriter {
                         }
 
                         //------------------------------------------
-                        Cell baGpsTimetableGpsIntervalCell = row.createCell(32);
+                        Cell baGpsTimetableGpsIntervalCell = row.createCell(34);
                         if (count < baGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
                             if (intervalTripPeriod.getGpsIntervalExcelFormat() == null) {
@@ -3289,7 +3377,7 @@ public class ExcelWriter {
                             }
                         }
                         //------------------------------------------
-                        Cell baGpsTimetableMisconductCell = row.createCell(33);
+                        Cell baGpsTimetableMisconductCell = row.createCell(35);
                         if (count < baGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
                             baGpsTimetableMisconductCell.setCellValue(intervalTripPeriod.getMisconduct());
@@ -3309,7 +3397,7 @@ public class ExcelWriter {
                         }
 
                         //------------------------------------------
-                        Cell baGpsTimetableRunOverCell = row.createCell(34);
+                        Cell baGpsTimetableRunOverCell = row.createCell(36);
                         if (count < baGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
                             baGpsTimetableRunOverCell.setCellValue(intervalTripPeriod.getRunOver());

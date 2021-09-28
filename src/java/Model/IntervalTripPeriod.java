@@ -4,6 +4,8 @@ import java.time.Duration;
 
 public class IntervalTripPeriod extends DetailedTripPeriod {
 
+    private String busNumber;
+    private String driverName;
     private short scheduledTimetableSequenceNumber;
     private short exodusNumber;
     private short baseNumber;
@@ -153,7 +155,22 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     public void setBaseNumber(short baseNumber) {
         this.baseNumber = baseNumber;
     }
-    
+
+    public String getBusNumber() {
+        return busNumber;
+    }
+
+    public void setBusNumber(String busNumber) {
+        this.busNumber = busNumber;
+    }
+
+    public String getDriverName() {
+        return driverName;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
     
 
 }

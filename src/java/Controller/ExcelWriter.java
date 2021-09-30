@@ -2429,7 +2429,7 @@ public class ExcelWriter {
         }
     }
 
-    void SXSSF_Intervals(TreeMap<Float, DetailedRoute> detailedRoutes, String fileName) {
+    void SXSSF_Intervals(TreeMap<Float, DetailedRoute> detailedRoutes, String fileName, HttpServletRequest request) {
         long begin = System.currentTimeMillis();
         Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 
@@ -2807,7 +2807,11 @@ public class ExcelWriter {
 
             rowHeigth = 30;
             //--------------------------------starting writing cells---------------  
+
             boolean routeLightOn = true;
+
+            String path;
+            path = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
 
             rowIndex++;
 
@@ -2850,6 +2854,7 @@ public class ExcelWriter {
                         } else {
                             routeNumberCell.setCellStyle(rowStyleWhiteNumberLightOn);
                         }
+
                         //------------------------------------------
                         Cell dateStampCell = row.createCell(1);
                         dateStampCell.setCellValue(day.getDateStamp());
@@ -2858,6 +2863,7 @@ public class ExcelWriter {
                         } else {
                             dateStampCell.setCellStyle(rowStyleWhiteNumberLightOn);
                         }
+
                         //------------------------------------------
                         Cell busNumberCell = row.createCell(2);
                         if (count < abTimetable.size()) {
@@ -2928,6 +2934,13 @@ public class ExcelWriter {
                         Cell abTimetableExodusNumberCell = row.createCell(7);
                         if (count < abTimetable.size()) {
                             abTimetableExodusNumberCell.setCellValue(abTimetable.get(count).getExodusNumber());
+
+                            // baTimetableExodusNumberCell.setCellValue("+++");
+                            Hyperlink hyperlink_DD = workbook.getCreationHelper()
+                                    .createHyperlink(HyperlinkType.URL);
+                            hyperlink_DD.setAddress(path + "exodus.htm?routeNumber=" + detailedRouteEntry.getValue().getNumber() + "&dateStamp=" + day.getDateStamp() + "&exodusNumber=" + abTimetable.get(count).getExodusNumber() + "&startTimeScheduled=" + abTimetable.get(count).getStartTimeScheduled());
+                            abTimetableExodusNumberCell.setHyperlink((XSSFHyperlink) hyperlink_DD);
+
                         } else {
                             abTimetableExodusNumberCell.setCellValue("");
                         }
@@ -2936,11 +2949,18 @@ public class ExcelWriter {
                         } else {
                             abTimetableExodusNumberCell.setCellStyle(rowStyleWhiteNumberLightOn);
                         }
+
                         //------------------------------------------
                         Cell abGpsTimetableExodusNumberCell = row.createCell(8);
                         if (count < abGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
                             abGpsTimetableExodusNumberCell.setCellValue(intervalTripPeriod.getExodusNumber());
+
+                            //  baGpsTimetableExodusNumberCell.setCellValue("----");
+                              Hyperlink hyperlink_BB = workbook.getCreationHelper()
+                                    .createHyperlink(HyperlinkType.URL);
+                            hyperlink_BB.setAddress(path + "exodus.htm?routeNumber=" + detailedRouteEntry.getValue().getNumber() + "&dateStamp=" + day.getDateStamp() + "&exodusNumber=" + intervalTripPeriod.getExodusNumber() + "&startTimeScheduled=" + intervalTripPeriod.getStartTimeScheduled());
+                            abGpsTimetableExodusNumberCell.setHyperlink((XSSFHyperlink) hyperlink_BB);
                         } else {
                             abGpsTimetableExodusNumberCell.setCellValue("");
                         }
@@ -3218,6 +3238,13 @@ public class ExcelWriter {
                         Cell baTimetableExodusNumberCell = row.createCell(25);
                         if (count < baTimetable.size()) {
                             baTimetableExodusNumberCell.setCellValue(baTimetable.get(count).getExodusNumber());
+
+                            // baTimetableExodusNumberCell.setCellValue("+++");
+                            Hyperlink hyperlink_CC = workbook.getCreationHelper()
+                                    .createHyperlink(HyperlinkType.URL);
+                            hyperlink_CC.setAddress(path + "exodus.htm?routeNumber=" + detailedRouteEntry.getValue().getNumber() + "&dateStamp=" + day.getDateStamp() + "&exodusNumber=" + baTimetable.get(count).getExodusNumber() + "&startTimeScheduled=" + baTimetable.get(count).getStartTimeScheduled());
+                            baTimetableExodusNumberCell.setHyperlink((XSSFHyperlink) hyperlink_CC);
+
                         } else {
                             baTimetableExodusNumberCell.setCellValue("");
                         }
@@ -3231,6 +3258,12 @@ public class ExcelWriter {
                         if (count < baGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
                             baGpsTimetableExodusNumberCell.setCellValue(intervalTripPeriod.getExodusNumber());
+
+                            //  baGpsTimetableExodusNumberCell.setCellValue("----");
+                            Hyperlink hyperlink_BB = workbook.getCreationHelper()
+                                    .createHyperlink(HyperlinkType.URL);
+                            hyperlink_BB.setAddress(path + "exodus.htm?routeNumber=" + detailedRouteEntry.getValue().getNumber() + "&dateStamp=" + day.getDateStamp() + "&exodusNumber=" + intervalTripPeriod.getExodusNumber() + "&startTimeScheduled=" + intervalTripPeriod.getStartTimeScheduled());
+                            baGpsTimetableExodusNumberCell.setHyperlink((XSSFHyperlink) hyperlink_BB);
                         } else {
                             baGpsTimetableExodusNumberCell.setCellValue("");
                         }
@@ -3381,6 +3414,7 @@ public class ExcelWriter {
                         if (count < baGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
                             baGpsTimetableMisconductCell.setCellValue(intervalTripPeriod.getMisconduct());
+
                         } else {
                             baGpsTimetableMisconductCell.setCellValue("");
                         }
@@ -3401,6 +3435,7 @@ public class ExcelWriter {
                         if (count < baGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
                             baGpsTimetableRunOverCell.setCellValue(intervalTripPeriod.getRunOver());
+
                         } else {
                             baGpsTimetableRunOverCell.setCellValue("");
                         }
@@ -3435,6 +3470,51 @@ public class ExcelWriter {
         } catch (IOException ex) {
             Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    void SXSSF_Misconducts(String fileName, HttpServletRequest request) {
+        long begin = System.currentTimeMillis();
+        Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
+
+        // keep 100 rows in memory, exceeding rows will be flushed to disk
+        try (SXSSFWorkbook workbook = new SXSSFWorkbook(100);
+                OutputStream os = new FileOutputStream(this.basementDirectory + "/downloads/" + fileName + ".xlsx")) {
+
+//setting date 1904 system (to show negative duration in excel workbook)
+            workbook.getXSSFWorkbook().getCTWorkbook().getWorkbookPr().setDate1904(true);
+
+            Sheet sheet = workbook.createSheet("bulbulub");
+            String path;
+            path = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+
+            //  int rowIndex = 0;
+            for (int rowIndex = 0; rowIndex < 3000; rowIndex++) {
+                Row row = sheet.createRow(rowIndex);
+                Cell cell_1 = row.createCell(0);
+                cell_1.setCellValue("---sd--");
+                Hyperlink hyperlink_AB_2 = workbook.getCreationHelper()
+                        .createHyperlink(HyperlinkType.URL);
+                hyperlink_AB_2.setAddress(path + "countedTripPeriods.htm?routeNumber=1&dateStamps=1&type=ab&percents=1&height=low");
+                cell_1.setHyperlink((XSSFHyperlink) hyperlink_AB_2);
+
+                Cell cell_2 = row.createCell(1);
+                cell_2.setCellValue("-+++++++");
+                Hyperlink hyperlink_AB_22 = workbook.getCreationHelper()
+                        .createHyperlink(HyperlinkType.URL);
+                hyperlink_AB_22.setAddress(path + "countedTripPeriods.htm?routeNumber=1&dateStamps=1&type=ab&percents=1&height=low");
+                cell_2.setHyperlink((XSSFHyperlink) hyperlink_AB_22);
+
+            }
+
+            workbook.write(os);
+            System.out.println("++++Intervals Excel Writing Completed++++");
+
+            LOGGER.info("Time needed:" + (System.currentTimeMillis() - begin) / 1000);
+
+        } catch (IOException ex) {
+            Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
 }

@@ -12,6 +12,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -129,7 +130,7 @@ public class IntervalsController {
     }
 
     @RequestMapping(value = "exportIntervals", method = RequestMethod.POST)
-    public String exportIntervals(String fileName, ModelMap model, HttpSession session) {
+    public String exportIntervals(String fileName, ModelMap model, HttpSession session, HttpServletRequest request) {
         System.out.println("---------------Intervals Excel Export Starting ------------------------------");
         Instant start = Instant.now();
 //first get data
@@ -149,7 +150,7 @@ public class IntervalsController {
         System.out.println("---Writing Excel File Started---");
         memoryUsage.printMemoryUsage();
         //excelWriter.exportTripPeriodsAndRoutesAverages(tripPeriods, routesAveragesTreeMap, percents, fileName);
-        excelWriter.SXSSF_Intervals(detailedRoutes, fileName);
+        excelWriter.SXSSF_Intervals(detailedRoutes, fileName, request);
 
         model.addAttribute("excelExportLink", "exportIntervals.htm");
         model.addAttribute("fileName", fileName);

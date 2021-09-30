@@ -7,11 +7,13 @@ import Model.MisconductTripPeriod;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -196,16 +198,33 @@ public class MisconductsController {
 
     @RequestMapping(value = "misconductsExcelExportInitialRequest")
     public String misconductsExcelExportInitialRequest(ModelMap model) {
-        
 
-        model.addAttribute("message", "-++");
+        model.addAttribute("excelExportLink", "exportMisconducts.htm");
+        model.addAttribute("message", "--");
         return "excelExportDashboard";
     }
 
     @RequestMapping(value = "misconductsExcelExportDashboard")
     public String misconductsExcelExportDashboard(ModelMap model) {
 
+        model.addAttribute("excelExportLink", "exportMisconducts.htm");
         model.addAttribute("message", "--");
+        return "excelExportDashboard";
+    }
+
+    @RequestMapping(value = "exportMisconducts", method = RequestMethod.POST)
+    public String exportMisconducts(String fileName, ModelMap model, HttpSession session, HttpServletRequest request) {
+
+        ExcelWriter excelWriter = new ExcelWriter();
+
+        System.out.println("---Writing Excel File Started---");
+        memoryUsage.printMemoryUsage();
+        //excelWriter.exportTripPeriodsAndRoutesAverages(tripPeriods, routesAveragesTreeMap, percents, fileName);
+        excelWriter.SXSSF_Misconducts(fileName, request);
+
+        model.addAttribute("fileName", fileName);
+        model.addAttribute("excelExportLink", "exportMisconducts.htm");
+        model.addAttribute("message", "++");
         return "excelExportDashboard";
     }
 

@@ -163,7 +163,7 @@ public class MisconductsController {
             sessionMisconductTimeBoundt = configReader.getMisconductTimeBound();
             session.setAttribute("misconductTimeBound", sessionMisconductTimeBoundt);
         }
-        int misconductTimeBound = (Integer) session.getAttribute("misconductTimeBound");;
+        int misconductTimeBound = (Integer) session.getAttribute("misconductTimeBound");
 
         model.addAttribute("misconductTimeBound", misconductTimeBound);
 
@@ -197,34 +197,63 @@ public class MisconductsController {
     }
 
     @RequestMapping(value = "misconductsExcelExportInitialRequest")
-    public String misconductsExcelExportInitialRequest(ModelMap model) {
+    public String misconductsExcelExportInitialRequest(@RequestParam("routes:dates") String routeDates, HttpSession session, ModelMap model) {
+        DetailedRoutesPager misconductsPager = createDetailedRoutesPager(routeDates);
+        session.setAttribute("firstTripMisconductPager", misconductsPager);
 
         model.addAttribute("excelExportLink", "exportMisconducts.htm");
-        model.addAttribute("message", "--");
+        Object sessionMisconductTimeBoundt = session.getAttribute("misconductTimeBound");
+        if (sessionMisconductTimeBoundt == null) {
+            ConfigReader configReader = new ConfigReader();
+            sessionMisconductTimeBoundt = configReader.getMisconductTimeBound();
+            session.setAttribute("misconductTimeBound", sessionMisconductTimeBoundt);
+        }
+        int misconductTimeBound = (Integer) session.getAttribute("misconductTimeBound");
+        String message = "დაფიქსირებულია " + misconductTimeBound + " წუთიანი ხარვეზის ზღვარი. შესაცვლელად გადადი ბმულზე.";
+        model.addAttribute("message", message);
+
         return "excelExportDashboard";
     }
 
     @RequestMapping(value = "misconductsExcelExportDashboard")
-    public String misconductsExcelExportDashboard(ModelMap model) {
+    public String misconductsExcelExportDashboard(ModelMap model, HttpSession session) {
 
         model.addAttribute("excelExportLink", "exportMisconducts.htm");
-        model.addAttribute("message", "--");
+        Object sessionMisconductTimeBoundt = session.getAttribute("misconductTimeBound");
+        if (sessionMisconductTimeBoundt == null) {
+            ConfigReader configReader = new ConfigReader();
+            sessionMisconductTimeBoundt = configReader.getMisconductTimeBound();
+            session.setAttribute("misconductTimeBound", sessionMisconductTimeBoundt);
+        }
+        int misconductTimeBound = (Integer) session.getAttribute("misconductTimeBound");
+        String message = "დაფიქსირებულია " + misconductTimeBound + " წუთიანი ხარვეზის ზღვარი. შესაცვლელად გადადი ბმულზე.";
+        model.addAttribute("message", message);
         return "excelExportDashboard";
     }
 
     @RequestMapping(value = "exportMisconducts", method = RequestMethod.POST)
     public String exportMisconducts(String fileName, ModelMap model, HttpSession session, HttpServletRequest request) {
+        DetailedRoutesPager misconductsPager = (DetailedRoutesPager) session.getAttribute("firstTripMisconductPager");
+        ArrayList<MisconductTripPeriod> misconductTripPeriods = misconductsDao.getMisconductTripPeriods(misconductsPager);
+        Object sessionMisconductTimeBoundt = session.getAttribute("misconductTimeBound");
+        if (sessionMisconductTimeBoundt == null) {
+            ConfigReader configReader = new ConfigReader();
+            sessionMisconductTimeBoundt = configReader.getMisconductTimeBound();
+            session.setAttribute("misconductTimeBound", sessionMisconductTimeBoundt);
+        }
+        int misconductTimeBound = (Integer) session.getAttribute("misconductTimeBound");
+        ArrayList<FirstTripPeriod> misconductedFirstTripPeriods = misconductsDao.getMisconductedFirstTripPeriodsMinusVersion(misconductsPager, misconductTimeBound);
 
         ExcelWriter excelWriter = new ExcelWriter();
 
         System.out.println("---Writing Excel File Started---");
         memoryUsage.printMemoryUsage();
         //excelWriter.exportTripPeriodsAndRoutesAverages(tripPeriods, routesAveragesTreeMap, percents, fileName);
-        excelWriter.SXSSF_Misconducts(fileName, request);
+        excelWriter.SXSSF_Misconducts(misconductTripPeriods, misconductedFirstTripPeriods, fileName, request);
 
         model.addAttribute("fileName", fileName);
         model.addAttribute("excelExportLink", "exportMisconducts.htm");
-        model.addAttribute("message", "++");
+        model.addAttribute("message", "");
         return "excelExportDashboard";
     }
 

@@ -10,9 +10,11 @@ import Model.Day;
 import Model.DetailedRoute;
 import Model.DetailedTripPeriod;
 import Model.Exodus;
+import Model.FirstTripPeriod;
 import Model.GuarantyRoute;
 import Model.IntervalDay;
 import Model.IntervalTripPeriod;
+import Model.MisconductTripPeriod;
 import Model.RouteAverages;
 import Model.TripPeriod;
 import Model.TripPeriod2X;
@@ -2935,12 +2937,6 @@ public class ExcelWriter {
                         if (count < abTimetable.size()) {
                             abTimetableExodusNumberCell.setCellValue(abTimetable.get(count).getExodusNumber());
 
-                            // baTimetableExodusNumberCell.setCellValue("+++");
-                            Hyperlink hyperlink_DD = workbook.getCreationHelper()
-                                    .createHyperlink(HyperlinkType.URL);
-                            hyperlink_DD.setAddress(path + "exodus.htm?routeNumber=" + detailedRouteEntry.getValue().getNumber() + "&dateStamp=" + day.getDateStamp() + "&exodusNumber=" + abTimetable.get(count).getExodusNumber() + "&startTimeScheduled=" + abTimetable.get(count).getStartTimeScheduled());
-                            abTimetableExodusNumberCell.setHyperlink((XSSFHyperlink) hyperlink_DD);
-
                         } else {
                             abTimetableExodusNumberCell.setCellValue("");
                         }
@@ -2956,11 +2952,6 @@ public class ExcelWriter {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
                             abGpsTimetableExodusNumberCell.setCellValue(intervalTripPeriod.getExodusNumber());
 
-                            //  baGpsTimetableExodusNumberCell.setCellValue("----");
-                              Hyperlink hyperlink_BB = workbook.getCreationHelper()
-                                    .createHyperlink(HyperlinkType.URL);
-                            hyperlink_BB.setAddress(path + "exodus.htm?routeNumber=" + detailedRouteEntry.getValue().getNumber() + "&dateStamp=" + day.getDateStamp() + "&exodusNumber=" + intervalTripPeriod.getExodusNumber() + "&startTimeScheduled=" + intervalTripPeriod.getStartTimeScheduled());
-                            abGpsTimetableExodusNumberCell.setHyperlink((XSSFHyperlink) hyperlink_BB);
                         } else {
                             abGpsTimetableExodusNumberCell.setCellValue("");
                         }
@@ -3111,6 +3102,13 @@ public class ExcelWriter {
                         if (count < abGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
                             abGpsTimetableMisconductCell.setCellValue(intervalTripPeriod.getMisconduct());
+
+                            //  baGpsTimetableExodusNumberCell.setCellValue("----");
+                            Hyperlink hyperlink_BB = workbook.getCreationHelper()
+                                    .createHyperlink(HyperlinkType.URL);
+                            hyperlink_BB.setAddress(path + "exodus.htm?routeNumber=" + detailedRouteEntry.getValue().getNumber() + "&dateStamp=" + day.getDateStamp() + "&exodusNumber=" + intervalTripPeriod.getExodusNumber() + "&startTimeScheduled=" + intervalTripPeriod.getStartTimeScheduled());
+                            abGpsTimetableMisconductCell.setHyperlink((XSSFHyperlink) hyperlink_BB);
+
                         } else {
                             abGpsTimetableMisconductCell.setCellValue("");
                         }
@@ -3239,12 +3237,6 @@ public class ExcelWriter {
                         if (count < baTimetable.size()) {
                             baTimetableExodusNumberCell.setCellValue(baTimetable.get(count).getExodusNumber());
 
-                            // baTimetableExodusNumberCell.setCellValue("+++");
-                            Hyperlink hyperlink_CC = workbook.getCreationHelper()
-                                    .createHyperlink(HyperlinkType.URL);
-                            hyperlink_CC.setAddress(path + "exodus.htm?routeNumber=" + detailedRouteEntry.getValue().getNumber() + "&dateStamp=" + day.getDateStamp() + "&exodusNumber=" + baTimetable.get(count).getExodusNumber() + "&startTimeScheduled=" + baTimetable.get(count).getStartTimeScheduled());
-                            baTimetableExodusNumberCell.setHyperlink((XSSFHyperlink) hyperlink_CC);
-
                         } else {
                             baTimetableExodusNumberCell.setCellValue("");
                         }
@@ -3259,11 +3251,6 @@ public class ExcelWriter {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
                             baGpsTimetableExodusNumberCell.setCellValue(intervalTripPeriod.getExodusNumber());
 
-                            //  baGpsTimetableExodusNumberCell.setCellValue("----");
-                            Hyperlink hyperlink_BB = workbook.getCreationHelper()
-                                    .createHyperlink(HyperlinkType.URL);
-                            hyperlink_BB.setAddress(path + "exodus.htm?routeNumber=" + detailedRouteEntry.getValue().getNumber() + "&dateStamp=" + day.getDateStamp() + "&exodusNumber=" + intervalTripPeriod.getExodusNumber() + "&startTimeScheduled=" + intervalTripPeriod.getStartTimeScheduled());
-                            baGpsTimetableExodusNumberCell.setHyperlink((XSSFHyperlink) hyperlink_BB);
                         } else {
                             baGpsTimetableExodusNumberCell.setCellValue("");
                         }
@@ -3415,6 +3402,12 @@ public class ExcelWriter {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
                             baGpsTimetableMisconductCell.setCellValue(intervalTripPeriod.getMisconduct());
 
+                            //  baGpsTimetableExodusNumberCell.setCellValue("----");
+                            Hyperlink hyperlink_BB = workbook.getCreationHelper()
+                                    .createHyperlink(HyperlinkType.URL);
+                            hyperlink_BB.setAddress(path + "exodus.htm?routeNumber=" + detailedRouteEntry.getValue().getNumber() + "&dateStamp=" + day.getDateStamp() + "&exodusNumber=" + intervalTripPeriod.getExodusNumber() + "&startTimeScheduled=" + intervalTripPeriod.getStartTimeScheduled());
+                            baGpsTimetableMisconductCell.setHyperlink((XSSFHyperlink) hyperlink_BB);
+
                         } else {
                             baGpsTimetableMisconductCell.setCellValue("");
                         }
@@ -3472,7 +3465,7 @@ public class ExcelWriter {
         }
     }
 
-    void SXSSF_Misconducts(String fileName, HttpServletRequest request) {
+    void SXSSF_Misconducts(ArrayList<MisconductTripPeriod> misconductTripPeriods, ArrayList<FirstTripPeriod> misconductedFirstTripPeriods, String fileName, HttpServletRequest request) {
         long begin = System.currentTimeMillis();
         Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 
@@ -3483,27 +3476,402 @@ public class ExcelWriter {
 //setting date 1904 system (to show negative duration in excel workbook)
             workbook.getXSSFWorkbook().getCTWorkbook().getWorkbookPr().setDate1904(true);
 
-            Sheet sheet = workbook.createSheet("bulbulub");
+            Sheet sheet = workbook.createSheet("ხაზზე დარღვევები");
             String path;
             path = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
 
             //  int rowIndex = 0;
-            for (int rowIndex = 0; rowIndex < 3000; rowIndex++) {
+            //------------------------------------------------------------------
+            int rowIndex = 0;
+            int columnIndex = 0;
+            int rowHeigth = 0;
+            int columnWidth = 0;
+
+            //column width
+            while (columnIndex < 14) {
+                switch (columnIndex) {
+                    case 0:
+                        columnWidth = 3000;
+                        break;
+                    case 1:
+                        columnWidth = 1000;
+                        break;
+                    case 2:
+                        columnWidth = 1500;
+                        break;
+                    case 3:
+                        columnWidth = 1000;
+                        break;
+                    case 4:
+                        columnWidth = 3000;
+                        break;
+                    case 5:
+                        columnWidth = 2000;
+                        break;
+                    case 6:
+                        columnWidth = 7000;
+                        break;
+                    case 7:
+                        columnWidth = 1500;
+                        break;
+                    case 8:
+                        columnWidth = 1500;
+                        break;
+                    case 9:
+                        columnWidth = 1500;
+                        break;
+                    case 10:
+                        columnWidth = 1500;
+                        break;
+                    case 11:
+                        columnWidth = 1500;
+                        break;
+                    case 12:
+                        columnWidth = 2500;
+                        break;
+                    case 13:
+                        columnWidth = 1500;
+                        break;
+
+                }
+                sheet.setColumnWidth(columnIndex, columnWidth);
+                columnIndex++;
+            }
+
+            //now headers
+            XSSFCellStyle headerStyle = getHeaderStyle(workbook, 255, 255, 0, 0, false);
+            XSSFCellStyle headerStyleVertical = getHeaderStyle(workbook, 255, 255, 0, 90, false);
+            XSSFCellStyle headerStyleWhite = getHeaderStyle(workbook, 255, 255, 255, 0, false);
+
+            //  XSSFCellStyle rowStyleWhiteItalic = getRowStyle(workbook, 255, 255, 255, true, false, "");
+            XSSFCellStyle rowStyleWhiteRegular = getRowStyle(workbook, 255, 255, 255, false, false, "");
+            XSSFCellStyle rowStyleWhiteRegularLightOn = getRowStyle(workbook, 240, 240, 240, false, false, "");
+
+            XSSFCellStyle rowStyleWhiteNumber = getRowStyle(workbook, 255, 255, 255, false, false, "0"); //"0" makes cell numeric type
+            XSSFCellStyle rowStyleWhiteNumberLightOn = getRowStyle(workbook, 240, 240, 240, false, false, "0"); //"0" makes cell numeric type
+            XSSFCellStyle rowStyleWhiteNumberLightBlue = getRowStyle(workbook, 63, 219, 203, false, false, "0"); //"0" makes cell numeric type
+
+            XSSFCellStyle rowStyleWhiteTimeHHmm = getRowStyle(workbook, 255, 255, 255, false, false, "[hh]:mm");
+            XSSFCellStyle rowStyleWhiteTimeHHmmLightOn = getRowStyle(workbook, 240, 240, 240, false, false, "[hh]:mm");
+
+            XSSFCellStyle rowStyleWhiteTimeHHmmss = getRowStyle(workbook, 255, 255, 255, false, false, "[hh]:mm:ss");
+            XSSFCellStyle rowStyleWhiteTimeHHmmssLightOn = getRowStyle(workbook, 240, 240, 240, false, false, "[hh]:mm:ss");
+
+            XSSFCellStyle rowStyleYellowTimeHHmmss = getRowStyle(workbook, 255, 255, 0, false, false, "[hh]:mm:ss");
+
+            XSSFCellStyle rowStyleRedTimeHHmmss = getRowStyle(workbook, 255, 0, 0, false, false, "[hh]:mm:ss");
+            XSSFCellStyle rowStyleLightGreenRegular = getRowStyle(workbook, 144, 238, 144, false, false, "");
+            XSSFCellStyle rowStyleBlueRegular = getRowStyle(workbook, 0, 0, 255, false, false, "");
+
+//first header row
+            Row headerRow = sheet.createRow(rowIndex);
+            columnIndex = 0;
+            while (columnIndex < 37) {
+
+                switch (columnIndex) {
+                    case 0:
+                        Cell cell_0 = headerRow.createCell(columnIndex);
+                        cell_0.setCellValue("თარიღი");
+                        cell_0.setCellStyle(headerStyle);
+                        break;
+                    case 1:
+                        Cell cell_1 = headerRow.createCell(columnIndex);
+                        cell_1.setCellValue("ავტობაზა");
+                        cell_1.setCellStyle(headerStyleVertical);
+                        break;
+                    case 2:
+                        Cell cell_2 = headerRow.createCell(columnIndex);
+                        cell_2.setCellValue("მარშრუტის #");
+                        cell_2.setCellStyle(headerStyleVertical);
+                        break;
+                    case 3:
+                        Cell cell_3 = headerRow.createCell(columnIndex);
+                        cell_3.setCellValue("გასვლის #");
+                        cell_3.setCellStyle(headerStyleVertical);
+                        break;
+                    case 4:
+                        Cell cell_4 = headerRow.createCell(columnIndex);
+                        cell_4.setCellValue("ავტობუსის #");
+                        cell_4.setCellStyle(headerStyle);
+                        break;
+                    case 5:
+                        Cell cell_5 = headerRow.createCell(columnIndex);
+                        cell_5.setCellValue("მძღოლის ტაბელი");
+                        cell_5.setCellStyle(headerStyleVertical);
+                        break;
+                    case 6:
+                        Cell cell_6 = headerRow.createCell(columnIndex);
+                        cell_6.setCellValue("მძღოლი");
+                        cell_6.setCellStyle(headerStyle);
+                        break;
+                    case 7:
+                        Cell cell_7 = headerRow.createCell(columnIndex);
+                        cell_7.setCellValue("პუნქტში მისვლის დრო");
+                        cell_7.setCellStyle(headerStyleVertical);
+                        break;
+                    case 8:
+                        Cell cell_8 = headerRow.createCell(columnIndex);
+                        cell_8.setCellValue("ხაზზე გასვლის დრო გეგმიური");
+                        cell_8.setCellStyle(headerStyleVertical);
+                        break;
+                    case 9:
+                        Cell cell_9 = headerRow.createCell(columnIndex);
+                        cell_9.setCellValue("ხაზზე გასვლის დრო ფაქტიური");
+                        cell_9.setCellStyle(headerStyleVertical);
+                        break;
+                    case 10:
+                        Cell cell_10 = headerRow.createCell(columnIndex);
+                        cell_10.setCellValue("წინა მანქანის ხაზზე გასვლის დრო");
+                        cell_10.setCellStyle(headerStyleVertical);
+                        break;
+
+                    case 11:
+                        Cell cell_11 = headerRow.createCell(columnIndex);
+                        cell_11.setCellValue("დარღვევა");
+                        cell_11.setCellStyle(headerStyleVertical);
+                        break;
+                    case 12:
+                        Cell cell_12 = headerRow.createCell(columnIndex);
+                        cell_12.setCellValue("შესადავებელი დრო");
+                        cell_12.setCellStyle(headerStyleVertical);
+                        break;
+                    case 13:
+                        Cell cell_13 = headerRow.createCell(columnIndex);
+                        cell_13.setCellValue("გადასწრება");
+                        cell_13.setCellStyle(headerStyleVertical);
+                        break;
+                }
+                columnIndex++;
+            }
+
+            //now rows
+            rowIndex++;
+            for (MisconductTripPeriod misconductTripPeriod : misconductTripPeriods) {
                 Row row = sheet.createRow(rowIndex);
-                Cell cell_1 = row.createCell(0);
-                cell_1.setCellValue("---sd--");
-                Hyperlink hyperlink_AB_2 = workbook.getCreationHelper()
-                        .createHyperlink(HyperlinkType.URL);
-                hyperlink_AB_2.setAddress(path + "countedTripPeriods.htm?routeNumber=1&dateStamps=1&type=ab&percents=1&height=low");
-                cell_1.setHyperlink((XSSFHyperlink) hyperlink_AB_2);
 
-                Cell cell_2 = row.createCell(1);
-                cell_2.setCellValue("-+++++++");
-                Hyperlink hyperlink_AB_22 = workbook.getCreationHelper()
-                        .createHyperlink(HyperlinkType.URL);
-                hyperlink_AB_22.setAddress(path + "countedTripPeriods.htm?routeNumber=1&dateStamps=1&type=ab&percents=1&height=low");
-                cell_2.setHyperlink((XSSFHyperlink) hyperlink_AB_22);
+                Cell cell_0 = row.createCell(0);
+                cell_0.setCellValue(misconductTripPeriod.getDateStamp());
+                cell_0.setCellStyle(rowStyleWhiteRegular);
 
+                Cell cell_1 = row.createCell(1);
+                cell_1.setCellValue(misconductTripPeriod.getBaseNumber());
+                cell_1.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_2 = row.createCell(2);
+                cell_2.setCellValue(misconductTripPeriod.getRouteNumber());
+                cell_2.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_3 = row.createCell(3);
+                cell_3.setCellValue(misconductTripPeriod.getExodusNumber());
+                cell_3.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_4 = row.createCell(4);
+                cell_4.setCellValue(misconductTripPeriod.getBusNumber());
+                cell_4.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_5 = row.createCell(5);
+                cell_5.setCellValue(misconductTripPeriod.getDriverNumber());
+                cell_5.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_6 = row.createCell(6);
+                cell_6.setCellValue(misconductTripPeriod.getDriverName());
+                cell_6.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_7 = row.createCell(7);
+                cell_7.setCellValue(misconductTripPeriod.getPreviousTripPeriodArrvialTimeActualString());
+                cell_7.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_8 = row.createCell(8);
+                cell_8.setCellValue(misconductTripPeriod.getStartTimeScheduledString());
+                cell_8.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_9 = row.createCell(9);
+                cell_9.setCellValue(misconductTripPeriod.getStartTimeActualString());
+                cell_9.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_10 = row.createCell(10);
+                cell_10.setCellValue(misconductTripPeriod.getPreviousBusStartTimeActualString());
+                cell_10.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_11 = row.createCell(11);
+                cell_11.setCellValue(misconductTripPeriod.getMisconduct());
+                cell_11.setCellStyle(rowStyleWhiteRegular);
+
+                Cell cell_12 = row.createCell(12);
+                cell_12.setCellValue(misconductTripPeriod.getMisconductDuration());
+                cell_12.setCellStyle(rowStyleWhiteTimeHHmmss);
+
+                Cell cell_13 = row.createCell(13);
+                cell_13.setCellValue(misconductTripPeriod.getRunOver());
+                cell_13.setCellStyle(rowStyleWhiteRegular);
+
+                rowIndex++;
+            }
+
+            //now second sheet
+            rowIndex = 0;
+            Sheet sheet_2 = workbook.createSheet("ავტობაზის დარღვევები");
+
+            columnIndex = 0;
+            while (columnIndex < 14) {
+                switch (columnIndex) {
+                    case 0:
+                        columnWidth = 3000;
+                        break;
+                    case 1:
+                        columnWidth = 1000;
+                        break;
+                    case 2:
+                        columnWidth = 1500;
+                        break;
+                    case 3:
+                        columnWidth = 1000;
+                        break;
+                    case 4:
+                        columnWidth = 3000;
+                        break;
+                    case 5:
+                        columnWidth = 1500;
+                        break;
+                    case 6:
+                        columnWidth = 1500;
+                        break;
+                    case 7:
+                        columnWidth = 2800;
+                        break;
+                    case 8:
+                        columnWidth = 1500;
+                        break;
+                    case 9:
+                        columnWidth = 1500;
+                        break;
+                    case 10:
+                        columnWidth = 2800;
+                        break;
+                   
+
+                }
+                sheet_2.setColumnWidth(columnIndex, columnWidth);
+                columnIndex++;
+            }
+
+            Row headerRow_2 = sheet_2.createRow(rowIndex);
+
+            columnIndex = 0;
+            while (columnIndex < 37) {
+
+                switch (columnIndex) {
+                    case 0:
+                        Cell cell_0 = headerRow_2.createCell(columnIndex);
+                        cell_0.setCellValue("თარიღი");
+                        cell_0.setCellStyle(headerStyle);
+                        break;
+                    case 1:
+                        Cell cell_1 = headerRow_2.createCell(columnIndex);
+                        cell_1.setCellValue("ავტობაზა");
+                        cell_1.setCellStyle(headerStyleVertical);
+                        break;
+                    case 2:
+                        Cell cell_2 = headerRow_2.createCell(columnIndex);
+                        cell_2.setCellValue("მარშრუტის #");
+                        cell_2.setCellStyle(headerStyleVertical);
+                        break;
+                    case 3:
+                        Cell cell_3 = headerRow_2.createCell(columnIndex);
+                        cell_3.setCellValue("გასვლის #");
+                        cell_3.setCellStyle(headerStyleVertical);
+                        break;
+                    case 4:
+                        Cell cell_4 = headerRow_2.createCell(columnIndex);
+                        cell_4.setCellValue("ავტობუსის #");
+                        cell_4.setCellStyle(headerStyle);
+                        break;
+
+                    case 5:
+                        Cell cell_5 = headerRow_2.createCell(columnIndex);
+                        cell_5.setCellValue("გეგმიუირი გასვლის დრო");
+                        cell_5.setCellStyle(headerStyleVertical);
+                        break;
+                    case 6:
+                        Cell cell_6 = headerRow_2.createCell(columnIndex);
+                        cell_6.setCellValue("ფაქტიური გასვლის დრო");
+                        cell_6.setCellStyle(headerStyleVertical);
+                        break;
+                    case 7:
+                        Cell cell_7 = headerRow_2.createCell(columnIndex);
+                        cell_7.setCellValue("სხვაობა");
+                        cell_7.setCellStyle(headerStyleVertical);
+                        break;
+
+                    case 8:
+                        Cell cell_8 = headerRow_2.createCell(columnIndex);
+                        cell_8.setCellValue("ბაზიდან გეგმიუირი გასვლის დრო");
+                        cell_8.setCellStyle(headerStyleVertical);
+                        break;
+                    case 9:
+                        Cell cell_9 = headerRow_2.createCell(columnIndex);
+                        cell_9.setCellValue("ბაზიდან ფაქტიური გასვლის დრო");
+                        cell_9.setCellStyle(headerStyleVertical);
+                        break;
+                    case 10:
+                        Cell cell_10 = headerRow_2.createCell(columnIndex);
+                        cell_10.setCellValue("სხვაობა");
+                        cell_10.setCellStyle(headerStyleVertical);
+                        break;
+                }
+                columnIndex++;
+            }
+
+            //now rows
+            rowIndex++;
+            for (FirstTripPeriod misconductTripPeriod : misconductedFirstTripPeriods) {
+                Row row = sheet_2.createRow(rowIndex);
+
+                Cell cell_0 = row.createCell(0);
+                cell_0.setCellValue(misconductTripPeriod.getDateStamp());
+                cell_0.setCellStyle(rowStyleWhiteRegular);
+
+                Cell cell_1 = row.createCell(1);
+                cell_1.setCellValue(misconductTripPeriod.getBaseNumber());
+                cell_1.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_2 = row.createCell(2);
+                cell_2.setCellValue(misconductTripPeriod.getRouteNumber());
+                cell_2.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_3 = row.createCell(3);
+                cell_3.setCellValue(misconductTripPeriod.getExodusNumber());
+                cell_3.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_4 = row.createCell(4);
+                cell_4.setCellValue(misconductTripPeriod.getBusNumber());
+                cell_4.setCellStyle(rowStyleWhiteNumber);
+
+                Cell cell_5 = row.createCell(5);
+                cell_5.setCellValue(misconductTripPeriod.getStartTimeScheduledString());
+                cell_5.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_6 = row.createCell(6);
+                cell_6.setCellValue(misconductTripPeriod.getStartTimeActualString());
+                cell_6.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_7 = row.createCell(7);
+                cell_7.setCellValue(misconductTripPeriod.getStartTimeDifference());
+                cell_7.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_8 = row.createCell(8);
+                cell_8.setCellValue(misconductTripPeriod.getBaseTripStartTimeScheduledString());
+                cell_8.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_9 = row.createCell(9);
+                cell_9.setCellValue(misconductTripPeriod.getBaseTripStartTimeActualString());
+                cell_9.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                Cell cell_10 = row.createCell(10);
+                cell_10.setCellValue(misconductTripPeriod.getBaseTripStartTimeDifference());
+                cell_10.setCellStyle(rowStyleWhiteTimeHHmm);
+
+                rowIndex++;
             }
 
             workbook.write(os);
@@ -3514,7 +3882,5 @@ public class ExcelWriter {
         } catch (IOException ex) {
             Logger.getLogger(ExcelWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-
 }

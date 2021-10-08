@@ -209,7 +209,7 @@ public class MisconductsController {
             session.setAttribute("misconductTimeBound", sessionMisconductTimeBoundt);
         }
         int misconductTimeBound = (Integer) session.getAttribute("misconductTimeBound");
-        String message = "დაფიქსირებულია " + misconductTimeBound + " წუთიანი ხარვეზის ზღვარი. შესაცვლელად გადადი ბმულზე.";
+        String message = "დაფიქსირებულია " + misconductTimeBound + " წუთიანი ხარვეზის ზღვარი. შესაცვლელად გადადი  <a href='misconductTimeBoundDashboard.htm'>ბმულზე.</a>";
         model.addAttribute("message", message);
 
         return "excelExportDashboard";
@@ -226,7 +226,7 @@ public class MisconductsController {
             session.setAttribute("misconductTimeBound", sessionMisconductTimeBoundt);
         }
         int misconductTimeBound = (Integer) session.getAttribute("misconductTimeBound");
-        String message = "დაფიქსირებულია " + misconductTimeBound + " წუთიანი ხარვეზის ზღვარი. შესაცვლელად გადადი ბმულზე.";
+        String message = "დაფიქსირებულია " + misconductTimeBound + " წუთიანი ხარვეზის ზღვარი. შესაცვლელად გადადი <a href='misconductTimeBoundDashboard.htm'>ბმულზე.</a>";
         model.addAttribute("message", message);
         return "excelExportDashboard";
     }
@@ -255,6 +255,41 @@ public class MisconductsController {
         model.addAttribute("excelExportLink", "exportMisconducts.htm");
         model.addAttribute("message", "");
         return "excelExportDashboard";
+    }
+
+    @RequestMapping(value = "misconductTimeBoundDashboard.htm")
+    public String misconductTimeBoundDashboard(HttpSession session, ModelMap model) {
+        Object sessionMisconductTimeBoundt = session.getAttribute("misconductTimeBound");
+        if (sessionMisconductTimeBoundt == null) {
+            ConfigReader configReader = new ConfigReader();
+            sessionMisconductTimeBoundt = configReader.getMisconductTimeBound();
+            session.setAttribute("misconductTimeBound", sessionMisconductTimeBoundt);
+        }
+        int misconductTimeBound = (Integer) session.getAttribute("misconductTimeBound");
+        model.addAttribute("misconductTimeBound", misconductTimeBound);
+        return "misconductTimeBoundDashboard";
+    }
+
+    @RequestMapping(value = "saveMisconductTimeBound.htm", method = RequestMethod.POST)
+    public String saveMisconductTimeBound(HttpSession session, ModelMap model, String misconductTimeBound) {
+        System.out.println(misconductTimeBound);
+
+        int sessionMisconductTimeBound = (int) session.getAttribute("misconductTimeBound");
+        try {
+            int requestMisconductTimeBound = Integer.valueOf(misconductTimeBound);
+
+            if (requestMisconductTimeBound != sessionMisconductTimeBound) {
+                //here i save requestMisconductTImeBound into xml
+                ConfigWriter configWriter = new ConfigWriter();
+                configWriter.saveConfigFile(requestMisconductTimeBound);
+
+                session.setAttribute("misconductTimeBound", requestMisconductTimeBound);
+            }
+        } catch (Exception ex) {
+            return "errorPage";
+        }
+
+        return "redirect:/misconductsExcelExportDashboard.htm";
     }
 
 }

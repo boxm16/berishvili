@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.invoke.MethodHandles;
+import java.lang.management.ManagementFactory;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -3447,6 +3448,13 @@ public class ExcelWriter {
                         if (rowIndex % 1000 == 0) {
                             System.out.println(rowIndex + " rows has been written.");
                             memoryUsage.printMemoryUsage();
+                            double averLoad = ManagementFactory.getPlatformMXBean(
+                                    com.sun.management.OperatingSystemMXBean.class).getSystemLoadAverage();
+                            System.out.println("Average Load:" + averLoad);
+                            double cpuLoad = ManagementFactory.getPlatformMXBean(
+                                    com.sun.management.OperatingSystemMXBean.class).getSystemCpuLoad();
+                            System.out.println("CPU Load:" + cpuLoad);
+
                         }
                     }
                     //-----------------------

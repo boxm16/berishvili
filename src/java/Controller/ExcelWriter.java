@@ -3444,6 +3444,10 @@ public class ExcelWriter {
                             }
                         }
                         rowIndex++;
+                        if (rowIndex % 1000 == 0) {
+                            System.out.println(rowIndex + " rows has been written.");
+                            memoryUsage.printMemoryUsage();
+                        }
                     }
                     //-----------------------
                     //++++++++++++++++++++++++++
@@ -3748,7 +3752,6 @@ public class ExcelWriter {
                     case 10:
                         columnWidth = 2800;
                         break;
-                   
 
                 }
                 sheet_2.setColumnWidth(columnIndex, columnWidth);

@@ -140,6 +140,8 @@ public class IntervalsController {
         System.out.println("---Intervals Excel Export Data Created------");
         for (Map.Entry<Float, DetailedRoute> detailedRouteEntry : detailedRoutes.entrySet()) {
             detailedRouteEntry.getValue().calculateIntervalsData();
+            System.out.println("Calculations of Route #" + detailedRouteEntry.getValue().getNumber() + " completes");
+            memoryUsage.printMemoryUsage();
         }
         System.out.println("---Intervals Data Calculations Completed------");
         memoryUsage.printMemoryUsage();

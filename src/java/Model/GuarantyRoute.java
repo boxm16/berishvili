@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class GuarantyRoute extends BasicRoute {
-
+//next time i will create ενδιαμεσο class for guaranty route gps calculations
     private String dateStamp;
     private String busType;
     private TreeMap<Short, GuarantyExodus> exoduses;

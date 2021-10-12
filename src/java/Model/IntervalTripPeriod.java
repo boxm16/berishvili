@@ -13,6 +13,7 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     private Duration actualInterval;
     private String misconduct;
     private String misconductDuration;
+    private Duration misconductDurationDuration;
     private String runOver;
 
     public IntervalTripPeriod() {
@@ -94,11 +95,11 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
             if (intervalDifference.getSeconds() < -301 && lostTimeDuration.getSeconds() < -61) {
                 misconduct = "-";
                 misconductDuration = converter.convertDurationToString(lostTimeDuration);
-
+                misconductDurationDuration = lostTimeDuration;
             } else if (intervalDifference.getSeconds() > 300 && lostTimeDuration.getSeconds() > 60) {
                 misconduct = "+";
                 misconductDuration = converter.convertDurationToString(lostTimeDuration);
-
+                misconductDurationDuration = lostTimeDuration;
             } else {
                 misconduct = "";
             }
@@ -144,6 +145,16 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
         return misconductDuration;
     }
 
+    public Double getMisconductDurationExcelFormat() {
+        if (misconductDurationDuration == null) {
+            return null;
+        } else {
+            double ss = misconductDurationDuration.getSeconds();
+            return ss / 86400;
+        }
+
+    }
+
     public void setMisconductDuration(String misconductDuration) {
         this.misconductDuration = misconductDuration;
     }
@@ -171,6 +182,5 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     public void setDriverName(String driverName) {
         this.driverName = driverName;
     }
-    
 
 }

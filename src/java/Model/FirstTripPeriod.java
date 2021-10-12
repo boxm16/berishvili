@@ -1,5 +1,6 @@
 package Model;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -104,6 +105,26 @@ public class FirstTripPeriod extends TripPeriod {
             return "#bf00ff";
         }
         return "inherited";
+    }
+
+    public Double getBaseTripStartTimeDifferenceExcelFormat() {
+        Duration convertStringToDuration = converter.convertStringToDuration(baseTripStartTimeDifference);
+        if (convertStringToDuration == null) {
+            return null;
+        } else {
+            double ss = convertStringToDuration.getSeconds();
+            return ss / 86400;
+        }
+    }
+
+    public Double getStartTimeDifferenceExcelFormat() {
+        Duration convertStringToDuration = converter.convertStringToDuration(getStartTimeDifference());
+        if (convertStringToDuration == null) {
+            return null;
+        } else {
+            double ss = convertStringToDuration.getSeconds();
+            return ss / 86400;
+        }
     }
 
 }

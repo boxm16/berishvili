@@ -3477,7 +3477,7 @@ public class ExcelWriter {
         }
     }
 
-    void SXSSF_Misconducts(ArrayList<MisconductTripPeriod> misconductTripPeriods, ArrayList<FirstTripPeriod> misconductedFirstTripPeriods, String fileName, HttpServletRequest request) {
+    void SXSSF_Misconducts(ArrayList<MisconductTripPeriod> misconductTripPeriods, ArrayList<FirstTripPeriod> misconductedFirstTripPeriods, ArrayList<FirstTripPeriod> misconductedFirstTripPeriodsMinusVersion, String fileName, HttpServletRequest request) {
         long begin = System.currentTimeMillis();
         Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 
@@ -3558,13 +3558,16 @@ public class ExcelWriter {
             //  XSSFCellStyle rowStyleWhiteItalic = getRowStyle(workbook, 255, 255, 255, true, false, "");
             XSSFCellStyle rowStyleWhiteRegular = getRowStyle(workbook, 255, 255, 255, false, false, "");
             XSSFCellStyle rowStyleWhiteRegularLightOn = getRowStyle(workbook, 240, 240, 240, false, false, "");
+            XSSFCellStyle rowStylePurpleRegular = getRowStyle(workbook, 191, 0, 255, false, false, "");
 
             XSSFCellStyle rowStyleWhiteNumber = getRowStyle(workbook, 255, 255, 255, false, false, "0"); //"0" makes cell numeric type
             XSSFCellStyle rowStyleWhiteNumberLightOn = getRowStyle(workbook, 240, 240, 240, false, false, "0"); //"0" makes cell numeric type
             XSSFCellStyle rowStyleWhiteNumberLightBlue = getRowStyle(workbook, 63, 219, 203, false, false, "0"); //"0" makes cell numeric type
+            XSSFCellStyle rowStylePurpleNumber = getRowStyle(workbook, 191, 0, 255, false, false, "0"); //"0" makes cell numeric type
 
             XSSFCellStyle rowStyleWhiteTimeHHmm = getRowStyle(workbook, 255, 255, 255, false, false, "[hh]:mm");
             XSSFCellStyle rowStyleWhiteTimeHHmmLightOn = getRowStyle(workbook, 240, 240, 240, false, false, "[hh]:mm");
+            XSSFCellStyle rowStylePurpleTimeHHmm = getRowStyle(workbook, 191, 0, 255, false, false, "[hh]:mm");
 
             XSSFCellStyle rowStyleWhiteTimeHHmmss = getRowStyle(workbook, 255, 255, 255, false, false, "[hh]:mm:ss");
             XSSFCellStyle rowStyleWhiteTimeHHmmssLightOn = getRowStyle(workbook, 240, 240, 240, false, false, "[hh]:mm:ss");
@@ -3572,6 +3575,9 @@ public class ExcelWriter {
             XSSFCellStyle rowStyleYellowTimeHHmmss = getRowStyle(workbook, 255, 255, 0, false, false, "[hh]:mm:ss");
 
             XSSFCellStyle rowStyleRedTimeHHmmss = getRowStyle(workbook, 255, 0, 0, false, false, "[hh]:mm:ss");
+
+            XSSFCellStyle rowStylePurpleTimeHHmmss = getRowStyle(workbook, 191, 0, 255, false, false, "[hh]:mm:ss");
+
             XSSFCellStyle rowStyleLightGreenRegular = getRowStyle(workbook, 144, 238, 144, false, false, "");
             XSSFCellStyle rowStyleBlueRegular = getRowStyle(workbook, 0, 0, 255, false, false, "");
 
@@ -3710,7 +3716,11 @@ public class ExcelWriter {
                 cell_11.setCellStyle(rowStyleWhiteRegular);
 
                 Cell cell_12 = row.createCell(12);
-                cell_12.setCellValue(misconductTripPeriod.getMisconductDuration());
+                if (misconductTripPeriod.getMisconductDurationExcelFormat() == null) {
+                    cell_12.setCellValue("");
+                } else {
+                    cell_12.setCellValue(misconductTripPeriod.getMisconductDurationExcelFormat());
+                }
                 cell_12.setCellStyle(rowStyleWhiteTimeHHmmss);
 
                 Cell cell_13 = row.createCell(13);
@@ -3840,47 +3850,91 @@ public class ExcelWriter {
 
                 Cell cell_0 = row.createCell(0);
                 cell_0.setCellValue(misconductTripPeriod.getDateStamp());
-                cell_0.setCellStyle(rowStyleWhiteRegular);
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_0.setCellStyle(rowStylePurpleRegular);
+                } else {
+                    cell_0.setCellStyle(rowStyleWhiteRegular);
+                }
 
                 Cell cell_1 = row.createCell(1);
                 cell_1.setCellValue(misconductTripPeriod.getBaseNumber());
-                cell_1.setCellStyle(rowStyleWhiteNumber);
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_1.setCellStyle(rowStylePurpleNumber);
+                } else {
+                    cell_1.setCellStyle(rowStyleWhiteNumber);
+                }
 
                 Cell cell_2 = row.createCell(2);
                 cell_2.setCellValue(misconductTripPeriod.getRouteNumber());
-                cell_2.setCellStyle(rowStyleWhiteNumber);
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_2.setCellStyle(rowStylePurpleNumber);
+                } else {
+                    cell_2.setCellStyle(rowStyleWhiteNumber);
+                }
 
                 Cell cell_3 = row.createCell(3);
                 cell_3.setCellValue(misconductTripPeriod.getExodusNumber());
-                cell_3.setCellStyle(rowStyleWhiteNumber);
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_3.setCellStyle(rowStylePurpleNumber);
+                } else {
+                    cell_3.setCellStyle(rowStyleWhiteNumber);
+                }
 
                 Cell cell_4 = row.createCell(4);
                 cell_4.setCellValue(misconductTripPeriod.getBusNumber());
-                cell_4.setCellStyle(rowStyleWhiteNumber);
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_4.setCellStyle(rowStylePurpleNumber);
+                } else {
+                    cell_4.setCellStyle(rowStyleWhiteNumber);
+                }
 
                 Cell cell_5 = row.createCell(5);
                 cell_5.setCellValue(misconductTripPeriod.getStartTimeScheduledString());
-                cell_5.setCellStyle(rowStyleWhiteTimeHHmm);
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_5.setCellStyle(rowStylePurpleTimeHHmm);
+                } else {
+                    cell_5.setCellStyle(rowStyleWhiteTimeHHmm);
+                }
 
                 Cell cell_6 = row.createCell(6);
                 cell_6.setCellValue(misconductTripPeriod.getStartTimeActualString());
-                cell_6.setCellStyle(rowStyleWhiteTimeHHmm);
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_6.setCellStyle(rowStylePurpleTimeHHmm);
+                } else {
+                    cell_6.setCellStyle(rowStyleWhiteTimeHHmm);
+                }
 
                 Cell cell_7 = row.createCell(7);
-                cell_7.setCellValue(misconductTripPeriod.getStartTimeDifference());
-                cell_7.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_7.setCellValue(misconductTripPeriod.getStartTimeDifferenceExcelFormat());
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_7.setCellStyle(rowStylePurpleTimeHHmmss);
+                } else {
+                    cell_7.setCellStyle(rowStyleWhiteTimeHHmmss);
+                }
 
                 Cell cell_8 = row.createCell(8);
                 cell_8.setCellValue(misconductTripPeriod.getBaseTripStartTimeScheduledString());
-                cell_8.setCellStyle(rowStyleWhiteTimeHHmm);
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_8.setCellStyle(rowStylePurpleTimeHHmm);
+                } else {
+                    cell_8.setCellStyle(rowStyleWhiteTimeHHmm);
+                }
 
                 Cell cell_9 = row.createCell(9);
                 cell_9.setCellValue(misconductTripPeriod.getBaseTripStartTimeActualString());
-                cell_9.setCellStyle(rowStyleWhiteTimeHHmm);
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_9.setCellStyle(rowStylePurpleTimeHHmm);
+                } else {
+                    cell_9.setCellStyle(rowStyleWhiteTimeHHmm);
+                }
 
                 Cell cell_10 = row.createCell(10);
-                cell_10.setCellValue(misconductTripPeriod.getBaseTripStartTimeDifference());
-                cell_10.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_10.setCellValue(misconductTripPeriod.getBaseTripStartTimeDifferenceExcelFormat());
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_10.setCellStyle(rowStylePurpleTimeHHmmss);
+                } else {
+                    cell_10.setCellStyle(rowStyleWhiteTimeHHmmss);
+                }
 
                 rowIndex++;
             }

@@ -262,7 +262,6 @@ public class MisconductsDao {
     }
 
     private FirstTripPeriod calculateFirstTripPeriodAndBaseMisconduct(TripPeriod baseTripPeriod, TripPeriod firstTripPeriod, int requestMisconductTimeBound) {
-
         Duration firstTripPeriodStartTimeDifference = converter.convertStringToDuration(firstTripPeriod.getStartTimeDifference());
         if (firstTripPeriodStartTimeDifference != null) {
 
@@ -380,7 +379,7 @@ public class MisconductsDao {
 
             if (firstTripPeriodStartTimeDifference.getSeconds() > (requestMisconductTimeBound * 60) || firstTripPeriodStartTimeDifference.getSeconds() < (requestMisconductTimeBound * 60 * (-1))) {
                 Duration baseTripPeriodStartTimeDifference = converter.convertStringToDuration(baseTripPeriod.getStartTimeDifference());
-                if (baseTripPeriodStartTimeDifference != null) {
+                if (baseTripPeriodStartTimeDifference != null && (baseTripPeriodStartTimeDifference.getSeconds() > (requestMisconductTimeBound * 60) || baseTripPeriodStartTimeDifference.getSeconds() < (requestMisconductTimeBound * 60 * (-1)))) {
                     FirstTripPeriod misconductedFirstTripPeriod = new FirstTripPeriod();
                     misconductedFirstTripPeriod.setStartTimeScheduled(firstTripPeriod.getStartTimeScheduled());
                     misconductedFirstTripPeriod.setStartTimeActual(firstTripPeriod.getStartTimeActual());

@@ -3939,6 +3939,216 @@ public class ExcelWriter {
                 rowIndex++;
             }
 
+            ///now third sheet
+            //now second sheet
+            rowIndex = 0;
+            Sheet sheet_3 = workbook.createSheet("ავტობაზის დარღვევები(ნაადრევად გასვლების ჩათვლით)");
+
+            columnIndex = 0;
+            while (columnIndex < 14) {
+                switch (columnIndex) {
+                    case 0:
+                        columnWidth = 3000;
+                        break;
+                    case 1:
+                        columnWidth = 1000;
+                        break;
+                    case 2:
+                        columnWidth = 1500;
+                        break;
+                    case 3:
+                        columnWidth = 1000;
+                        break;
+                    case 4:
+                        columnWidth = 3000;
+                        break;
+                    case 5:
+                        columnWidth = 1500;
+                        break;
+                    case 6:
+                        columnWidth = 1500;
+                        break;
+                    case 7:
+                        columnWidth = 2800;
+                        break;
+                    case 8:
+                        columnWidth = 1500;
+                        break;
+                    case 9:
+                        columnWidth = 1500;
+                        break;
+                    case 10:
+                        columnWidth = 2800;
+                        break;
+
+                }
+                sheet_3.setColumnWidth(columnIndex, columnWidth);
+                columnIndex++;
+            }
+
+            Row headerRow_3 = sheet_3.createRow(rowIndex);
+
+            columnIndex = 0;
+            while (columnIndex < 37) {
+
+                switch (columnIndex) {
+                    case 0:
+                        Cell cell_0 = headerRow_3.createCell(columnIndex);
+                        cell_0.setCellValue("თარიღი");
+                        cell_0.setCellStyle(headerStyle);
+                        break;
+                    case 1:
+                        Cell cell_1 = headerRow_3.createCell(columnIndex);
+                        cell_1.setCellValue("ავტობაზა");
+                        cell_1.setCellStyle(headerStyleVertical);
+                        break;
+                    case 2:
+                        Cell cell_2 = headerRow_3.createCell(columnIndex);
+                        cell_2.setCellValue("მარშრუტის #");
+                        cell_2.setCellStyle(headerStyleVertical);
+                        break;
+                    case 3:
+                        Cell cell_3 = headerRow_3.createCell(columnIndex);
+                        cell_3.setCellValue("გასვლის #");
+                        cell_3.setCellStyle(headerStyleVertical);
+                        break;
+                    case 4:
+                        Cell cell_4 = headerRow_3.createCell(columnIndex);
+                        cell_4.setCellValue("ავტობუსის #");
+                        cell_4.setCellStyle(headerStyle);
+                        break;
+
+                    case 5:
+                        Cell cell_5 = headerRow_3.createCell(columnIndex);
+                        cell_5.setCellValue("გეგმიუირი გასვლის დრო");
+                        cell_5.setCellStyle(headerStyleVertical);
+                        break;
+                    case 6:
+                        Cell cell_6 = headerRow_3.createCell(columnIndex);
+                        cell_6.setCellValue("ფაქტიური გასვლის დრო");
+                        cell_6.setCellStyle(headerStyleVertical);
+                        break;
+                    case 7:
+                        Cell cell_7 = headerRow_3.createCell(columnIndex);
+                        cell_7.setCellValue("სხვაობა");
+                        cell_7.setCellStyle(headerStyleVertical);
+                        break;
+
+                    case 8:
+                        Cell cell_8 = headerRow_3.createCell(columnIndex);
+                        cell_8.setCellValue("ბაზიდან გეგმიუირი გასვლის დრო");
+                        cell_8.setCellStyle(headerStyleVertical);
+                        break;
+                    case 9:
+                        Cell cell_9 = headerRow_3.createCell(columnIndex);
+                        cell_9.setCellValue("ბაზიდან ფაქტიური გასვლის დრო");
+                        cell_9.setCellStyle(headerStyleVertical);
+                        break;
+                    case 10:
+                        Cell cell_10 = headerRow_3.createCell(columnIndex);
+                        cell_10.setCellValue("სხვაობა");
+                        cell_10.setCellStyle(headerStyleVertical);
+                        break;
+                }
+                columnIndex++;
+            }
+
+            //now rows
+            rowIndex++;
+            for (FirstTripPeriod misconductTripPeriod : misconductedFirstTripPeriodsMinusVersion) {
+                Row row = sheet_3.createRow(rowIndex);
+
+                Cell cell_0 = row.createCell(0);
+                cell_0.setCellValue(misconductTripPeriod.getDateStamp());
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_0.setCellStyle(rowStylePurpleRegular);
+                } else {
+                    cell_0.setCellStyle(rowStyleWhiteRegular);
+                }
+
+                Cell cell_1 = row.createCell(1);
+                cell_1.setCellValue(misconductTripPeriod.getBaseNumber());
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_1.setCellStyle(rowStylePurpleNumber);
+                } else {
+                    cell_1.setCellStyle(rowStyleWhiteNumber);
+                }
+
+                Cell cell_2 = row.createCell(2);
+                cell_2.setCellValue(misconductTripPeriod.getRouteNumber());
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_2.setCellStyle(rowStylePurpleNumber);
+                } else {
+                    cell_2.setCellStyle(rowStyleWhiteNumber);
+                }
+
+                Cell cell_3 = row.createCell(3);
+                cell_3.setCellValue(misconductTripPeriod.getExodusNumber());
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_3.setCellStyle(rowStylePurpleNumber);
+                } else {
+                    cell_3.setCellStyle(rowStyleWhiteNumber);
+                }
+
+                Cell cell_4 = row.createCell(4);
+                cell_4.setCellValue(misconductTripPeriod.getBusNumber());
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_4.setCellStyle(rowStylePurpleNumber);
+                } else {
+                    cell_4.setCellStyle(rowStyleWhiteNumber);
+                }
+
+                Cell cell_5 = row.createCell(5);
+                cell_5.setCellValue(misconductTripPeriod.getStartTimeScheduledString());
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_5.setCellStyle(rowStylePurpleTimeHHmm);
+                } else {
+                    cell_5.setCellStyle(rowStyleWhiteTimeHHmm);
+                }
+
+                Cell cell_6 = row.createCell(6);
+                cell_6.setCellValue(misconductTripPeriod.getStartTimeActualString());
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_6.setCellStyle(rowStylePurpleTimeHHmm);
+                } else {
+                    cell_6.setCellStyle(rowStyleWhiteTimeHHmm);
+                }
+
+                Cell cell_7 = row.createCell(7);
+                cell_7.setCellValue(misconductTripPeriod.getStartTimeDifferenceExcelFormat());
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_7.setCellStyle(rowStylePurpleTimeHHmmss);
+                } else {
+                    cell_7.setCellStyle(rowStyleWhiteTimeHHmmss);
+                }
+
+                Cell cell_8 = row.createCell(8);
+                cell_8.setCellValue(misconductTripPeriod.getBaseTripStartTimeScheduledString());
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_8.setCellStyle(rowStylePurpleTimeHHmm);
+                } else {
+                    cell_8.setCellStyle(rowStyleWhiteTimeHHmm);
+                }
+
+                Cell cell_9 = row.createCell(9);
+                cell_9.setCellValue(misconductTripPeriod.getBaseTripStartTimeActualString());
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_9.setCellStyle(rowStylePurpleTimeHHmm);
+                } else {
+                    cell_9.setCellStyle(rowStyleWhiteTimeHHmm);
+                }
+
+                Cell cell_10 = row.createCell(10);
+                cell_10.setCellValue(misconductTripPeriod.getBaseTripStartTimeDifferenceExcelFormat());
+                if (misconductTripPeriod.isBrokenExodus()) {
+                    cell_10.setCellStyle(rowStylePurpleTimeHHmmss);
+                } else {
+                    cell_10.setCellStyle(rowStyleWhiteTimeHHmmss);
+                }
+
+                rowIndex++;
+            }
+
             workbook.write(os);
             System.out.println("++++Intervals Excel Writing Completed++++");
 

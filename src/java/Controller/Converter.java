@@ -91,8 +91,8 @@ public class Converter {
         if (stringTime == null) {
             return null;
         }
-        SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("HH:mm");
-        String turnOverStringTime = "03:00";
+        SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("HH:mm:ss");
+        String turnOverStringTime = "03:00:00";
         Date dateTime = null;
         try {
             dateTime = dateTimeFormatter.parse(stringTime);

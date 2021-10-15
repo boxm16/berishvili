@@ -242,14 +242,15 @@ public class MisconductsController {
             session.setAttribute("misconductTimeBound", sessionMisconductTimeBoundt);
         }
         int misconductTimeBound = (Integer) session.getAttribute("misconductTimeBound");
-        ArrayList<FirstTripPeriod> misconductedFirstTripPeriods = misconductsDao.getMisconductedFirstTripPeriodsMinusVersion(misconductsPager, misconductTimeBound);
+        ArrayList<FirstTripPeriod> misconductedFirstTripPeriods = misconductsDao.getMisconductedFirstTripPeriods(misconductsPager, misconductTimeBound);
         ArrayList<FirstTripPeriod> misconductedFirstTripPeriodsMinusVersion = misconductsDao.getMisconductedFirstTripPeriodsMinusVersion(misconductsPager, misconductTimeBound);
+
         ExcelWriter excelWriter = new ExcelWriter();
 
         System.out.println("---Writing Excel File Started---");
         memoryUsage.printMemoryUsage();
         //excelWriter.exportTripPeriodsAndRoutesAverages(tripPeriods, routesAveragesTreeMap, percents, fileName);
-        excelWriter.SXSSF_Misconducts(misconductTripPeriods, misconductedFirstTripPeriods, misconductedFirstTripPeriodsMinusVersion, fileName, request);
+        excelWriter.SXSSF_Misconducts(misconductTripPeriods,  misconductedFirstTripPeriods,misconductedFirstTripPeriodsMinusVersion, fileName, request);
 
         model.addAttribute("fileName", fileName);
         model.addAttribute("excelExportLink", "exportMisconducts.htm");

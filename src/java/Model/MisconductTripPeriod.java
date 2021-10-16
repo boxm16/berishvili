@@ -80,7 +80,7 @@ public class MisconductTripPeriod extends IntervalTripPeriod {
         if (previousTripPeriodArrvialTimeActual == null) {
             return "";
         }
-        return previousTripPeriodArrvialTimeActual.format(DateTimeFormatter.ofPattern("HH:mm"));
+        return previousTripPeriodArrvialTimeActual.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
     }
 
@@ -96,7 +96,7 @@ public class MisconductTripPeriod extends IntervalTripPeriod {
         if (previousBusStartTimeActual == null) {
             return "";
         }
-        return previousBusStartTimeActual.format(DateTimeFormatter.ofPattern("HH:mm"));
+        return previousBusStartTimeActual.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
 
     public void setPreviousBusStartTimeActual(LocalDateTime previousBusStartTimeActual) {

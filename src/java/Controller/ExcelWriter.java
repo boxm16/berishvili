@@ -811,7 +811,7 @@ public class ExcelWriter {
 
             Cell cell_6 = row.createCell(6);
             cell_6.setCellValue(tripPeriod.getStartTimeScheduledExcelFormat());
-            cell_6.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_6.setCellStyle(rowStyleWhiteTimeHHmmss);
 
             Cell cell_7 = row.createCell(7);
             if (tripPeriod.getStartTimeActualExcelFormat() == null) {
@@ -819,11 +819,11 @@ public class ExcelWriter {
             } else {
                 cell_7.setCellValue(tripPeriod.getStartTimeActualExcelFormat());
             }
-            cell_7.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_7.setCellStyle(rowStyleWhiteTimeHHmmss);
 
             Cell cell_8 = row.createCell(8);
             cell_8.setCellValue(tripPeriod.getArrivaltTimeScheduledExcelFormat());
-            cell_8.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_8.setCellStyle(rowStyleWhiteTimeHHmmss);
 
             Cell cell_9 = row.createCell(9);
             if (tripPeriod.getArrivalTimeActualExcelFormat() == null) {
@@ -831,7 +831,7 @@ public class ExcelWriter {
             } else {
                 cell_9.setCellValue(tripPeriod.getArrivalTimeActualExcelFormat());
             }
-            cell_9.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_9.setCellStyle(rowStyleWhiteTimeHHmmss);
 
             Duration tripPeriodTimeScheduled = tripPeriod.getTripPeriodTimeScheduled();
             Cell cell_10 = row.createCell(10);
@@ -1057,7 +1057,7 @@ public class ExcelWriter {
 
             Cell cell_6 = row.createCell(6);
             cell_6.setCellValue(tripPeriod.getStartTimeScheduledExcelFormat());
-            cell_6.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_6.setCellStyle(rowStyleWhiteTimeHHmmss);
 
             Cell cell_7 = row.createCell(7);
             if (tripPeriod.getStartTimeActualExcelFormat() == null) {
@@ -1065,11 +1065,11 @@ public class ExcelWriter {
             } else {
                 cell_7.setCellValue(tripPeriod.getStartTimeActualExcelFormat());
             }
-            cell_7.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_7.setCellStyle(rowStyleWhiteTimeHHmmss);
 
             Cell cell_8 = row.createCell(8);
             cell_8.setCellValue(tripPeriod.getArrivaltTimeScheduledExcelFormat());
-            cell_8.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_8.setCellStyle(rowStyleWhiteTimeHHmmss);
 
             Cell cell_9 = row.createCell(9);
             if (tripPeriod.getArrivalTimeActualExcelFormat() == null) {
@@ -1077,7 +1077,7 @@ public class ExcelWriter {
             } else {
                 cell_9.setCellValue(tripPeriod.getArrivalTimeActualExcelFormat());
             }
-            cell_9.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_9.setCellStyle(rowStyleWhiteTimeHHmmss);
 
             Duration tripPeriodTimeScheduled = tripPeriod.getTripPeriodTimeScheduled();
             Cell cell_10 = row.createCell(10);
@@ -1287,7 +1287,7 @@ public class ExcelWriter {
 
             Cell cell_AB_7 = rowAB.createCell(7);
             cell_AB_7.setCellValue(routeAverages.getAbLowAndHighAverage());
-            cell_AB_7.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_AB_7.setCellStyle(rowStyleWhiteTimeHHmmss);
 
             Cell cell_AB_8 = rowAB.createCell(8);
             cell_AB_8.setCellValue(routeAverages.abTripPeriodTimeIsMultiple());
@@ -1295,11 +1295,11 @@ public class ExcelWriter {
 
             Cell cell_AB_9 = rowAB.createCell(9);
             cell_AB_9.setCellValue(routeAverages.getABTripPeriodStandartTimeString());
-            cell_AB_9.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_AB_9.setCellStyle(rowStyleWhiteTimeHHmmss);
 
             Cell cell_AB_10 = rowAB.createCell(10);
             cell_AB_10.setCellValue(routeAverages.getTripRoundStandartTimeString());
-            cell_AB_10.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_AB_10.setCellStyle(rowStyleWhiteTimeHHmmss);
             averagesSheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 1, 10, 10));
 
             Cell cell_AB_11 = rowAB.createCell(11);
@@ -1309,7 +1309,7 @@ public class ExcelWriter {
 
             Cell cell_AB_12 = rowAB.createCell(12);
             cell_AB_12.setCellValue(routeAverages.getAllAverage());
-            cell_AB_12.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_AB_12.setCellStyle(rowStyleWhiteTimeHHmmss);
             averagesSheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 1, 12, 12));
 
             Row rowBA = averagesSheet.createRow(++rowIndex);
@@ -1344,7 +1344,7 @@ public class ExcelWriter {
 
             Cell cell_BA_7 = rowBA.createCell(7);
             cell_BA_7.setCellValue(routeAverages.getBaLowAndHighAverage());
-            cell_BA_7.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_BA_7.setCellStyle(rowStyleWhiteTimeHHmmss);
 
             Cell cell_BA_8 = rowBA.createCell(8);
             cell_BA_8.setCellValue(routeAverages.baTripPeriodTimeIsMultiple());
@@ -1352,16 +1352,16 @@ public class ExcelWriter {
 
             Cell cell_BA_9 = rowBA.createCell(9);
             cell_BA_9.setCellValue(routeAverages.getBATripPeriodStandartTimeString());
-            cell_BA_9.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_BA_9.setCellStyle(rowStyleWhiteTimeHHmmss);
 
             Cell cell_BA_10 = rowBA.createCell(10);
-            cell_BA_10.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_BA_10.setCellStyle(rowStyleWhiteTimeHHmmss);
 
             Cell cell_BA_11 = rowBA.createCell(11);
             cell_BA_11.setCellStyle(rowStyleWhiteNumber);
 
             Cell cell_BA_12 = rowBA.createCell(12);
-            cell_BA_12.setCellStyle(rowStyleWhiteTimeHHmm);
+            cell_BA_12.setCellStyle(rowStyleWhiteTimeHHmmss);
             System.out.println("Route N" + routeAverages.getRouteNumber() + " Completed");
         }
         System.out.println("++++Routes Averages Excel Writing Completed++++");
@@ -1560,7 +1560,7 @@ public class ExcelWriter {
 
                 Cell cell_6 = row.createCell(6);
                 cell_6.setCellValue(tripPeriod.getStartTimeScheduledExcelFormat());
-                cell_6.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_6.setCellStyle(rowStyleWhiteTimeHHmmss);
 
                 Cell cell_7 = row.createCell(7);
                 if (tripPeriod.getStartTimeActualExcelFormat() == null) {
@@ -1568,11 +1568,11 @@ public class ExcelWriter {
                 } else {
                     cell_7.setCellValue(tripPeriod.getStartTimeActualExcelFormat());
                 }
-                cell_7.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_7.setCellStyle(rowStyleWhiteTimeHHmmss);
 
                 Cell cell_8 = row.createCell(8);
                 cell_8.setCellValue(tripPeriod.getArrivaltTimeScheduledExcelFormat());
-                cell_8.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_8.setCellStyle(rowStyleWhiteTimeHHmmss);
 
                 Cell cell_9 = row.createCell(9);
                 if (tripPeriod.getArrivalTimeActualExcelFormat() == null) {
@@ -1580,7 +1580,7 @@ public class ExcelWriter {
                 } else {
                     cell_9.setCellValue(tripPeriod.getArrivalTimeActualExcelFormat());
                 }
-                cell_9.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_9.setCellStyle(rowStyleWhiteTimeHHmmss);
 
                 Duration tripPeriodTimeScheduled = tripPeriod.getTripPeriodTimeScheduled();
                 Cell cell_10 = row.createCell(10);
@@ -1806,7 +1806,7 @@ public class ExcelWriter {
 
                 Cell cell_AB_7 = rowAB.createCell(7);
                 cell_AB_7.setCellValue(routeAverages.getAbLowAndHighAverage());
-                cell_AB_7.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_AB_7.setCellStyle(rowStyleWhiteTimeHHmmss);
 
                 Cell cell_AB_8 = rowAB.createCell(8);
                 cell_AB_8.setCellValue(routeAverages.abTripPeriodTimeIsMultiple());
@@ -1814,11 +1814,11 @@ public class ExcelWriter {
 
                 Cell cell_AB_9 = rowAB.createCell(9);
                 cell_AB_9.setCellValue(routeAverages.getABTripPeriodStandartTimeString());
-                cell_AB_9.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_AB_9.setCellStyle(rowStyleWhiteTimeHHmmss);
 
                 Cell cell_AB_10 = rowAB.createCell(10);
                 cell_AB_10.setCellValue(routeAverages.getTripRoundStandartTimeString());
-                cell_AB_10.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_AB_10.setCellStyle(rowStyleWhiteTimeHHmmss);
                 averagesSheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 1, 10, 10));
 
                 Cell cell_AB_11 = rowAB.createCell(11);
@@ -1828,7 +1828,7 @@ public class ExcelWriter {
 
                 Cell cell_AB_12 = rowAB.createCell(12);
                 cell_AB_12.setCellValue(routeAverages.getAllAverage());
-                cell_AB_12.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_AB_12.setCellStyle(rowStyleWhiteTimeHHmmss);
                 averagesSheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + 1, 12, 12));
 
                 Row rowBA = averagesSheet.createRow(++rowIndex);
@@ -1875,7 +1875,7 @@ public class ExcelWriter {
 
                 Cell cell_BA_7 = rowBA.createCell(7);
                 cell_BA_7.setCellValue(routeAverages.getBaLowAndHighAverage());
-                cell_BA_7.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_BA_7.setCellStyle(rowStyleWhiteTimeHHmmss);
 
                 Cell cell_BA_8 = rowBA.createCell(8);
                 cell_BA_8.setCellValue(routeAverages.baTripPeriodTimeIsMultiple());
@@ -1883,16 +1883,16 @@ public class ExcelWriter {
 
                 Cell cell_BA_9 = rowBA.createCell(9);
                 cell_BA_9.setCellValue(routeAverages.getBATripPeriodStandartTimeString());
-                cell_BA_9.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_BA_9.setCellStyle(rowStyleWhiteTimeHHmmss);
 
                 Cell cell_BA_10 = rowBA.createCell(10);
-                cell_BA_10.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_BA_10.setCellStyle(rowStyleWhiteTimeHHmmss);
 
                 Cell cell_BA_11 = rowBA.createCell(11);
                 cell_BA_11.setCellStyle(rowStyleWhiteNumber);
 
                 Cell cell_BA_12 = rowBA.createCell(12);
-                cell_BA_12.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_BA_12.setCellStyle(rowStyleWhiteTimeHHmmss);
                 System.out.println("Route N" + routeAverages.getRouteNumber() + " Completed");
             }
             workbook.write(os);
@@ -2469,10 +2469,10 @@ public class ExcelWriter {
                         columnWidth = 800;
                         break;
                     case 5:
-                        columnWidth = 2000;
+                        columnWidth = 2800;
                         break;
                     case 6:
-                        columnWidth = 2000;
+                        columnWidth = 2800;
                         break;
                     case 7:
                         columnWidth = 800;
@@ -2484,16 +2484,16 @@ public class ExcelWriter {
                         columnWidth = 800;
                         break;
                     case 10:
-                        columnWidth = 2000;
+                        columnWidth = 2800;
                         break;
                     case 11:
-                        columnWidth = 2000;
+                        columnWidth = 2800;
                         break;
                     case 12:
                         columnWidth = 2800;
                         break;
                     case 13:
-                        columnWidth = 2000;
+                        columnWidth = 2800;
                         break;
                     case 14:
                         columnWidth = 2800;
@@ -2525,10 +2525,10 @@ public class ExcelWriter {
                         columnWidth = 800;
                         break;
                     case 23:
-                        columnWidth = 2000;
+                        columnWidth = 2800;
                         break;
                     case 24:
-                        columnWidth = 2000;
+                        columnWidth = 2800;
                         break;
                     case 25:
                         columnWidth = 800;
@@ -2543,13 +2543,13 @@ public class ExcelWriter {
                         columnWidth = 2800;
                         break;
                     case 29:
-                        columnWidth = 2000;
+                        columnWidth = 2800;
                         break;
                     case 30:
                         columnWidth = 2800;
                         break;
                     case 31:
-                        columnWidth = 2000;
+                        columnWidth = 2800;
                         break;
                     case 32:
                         columnWidth = 2800;
@@ -2911,9 +2911,9 @@ public class ExcelWriter {
                             abTimetableStartTimeScheduledCell.setCellValue("");
                         }
                         if (routeLightOn) {
-                            abTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                            abTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmss);
                         } else {
-                            abTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                            abTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                         }
 
                         //------------------------------------------
@@ -2929,9 +2929,9 @@ public class ExcelWriter {
                             abTimetableStartTimeActualCell.setCellValue("");
                         }
                         if (routeLightOn) {
-                            abTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                            abTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmss);
                         } else {
-                            abTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                            abTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                         }
                         //------------------------------------------
                         Cell abTimetableExodusNumberCell = row.createCell(7);
@@ -2980,9 +2980,9 @@ public class ExcelWriter {
                             abGpsTimetableStartTimeScheduledCell.setCellValue("");
                         }
                         if (routeLightOn) {
-                            abGpsTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                            abGpsTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmss);
                         } else {
-                            abGpsTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                            abGpsTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                         }
                         //------------------------------------------
                         Cell abGpsTimetableStartTimeActualCell = row.createCell(11);
@@ -2993,9 +2993,9 @@ public class ExcelWriter {
                             abGpsTimetableStartTimeActualCell.setCellValue("");
                         }
                         if (routeLightOn) {
-                            abGpsTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                            abGpsTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmss);
                         } else {
-                            abGpsTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                            abGpsTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                         }
 
                         Cell abGpsTimetableStartTimeDifferenceCell = row.createCell(12);
@@ -3027,9 +3027,9 @@ public class ExcelWriter {
                             abGpsTimetableHaltTimeScheduledCell.setCellValue("");
                         }
                         if (routeLightOn) {
-                            abGpsTimetableHaltTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                            abGpsTimetableHaltTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmss);
                         } else {
-                            abGpsTimetableHaltTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                            abGpsTimetableHaltTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                         }
 
                         //------------------------------------------
@@ -3067,9 +3067,9 @@ public class ExcelWriter {
                             abGpsTimetableScheduledIntervalCell.setCellValue("");
                         }
                         if (routeLightOn) {
-                            abGpsTimetableScheduledIntervalCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                            abGpsTimetableScheduledIntervalCell.setCellStyle(rowStyleWhiteTimeHHmmss);
                         } else {
-                            abGpsTimetableScheduledIntervalCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                            abGpsTimetableScheduledIntervalCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                         }
 
                         //------------------------------------------
@@ -3211,9 +3211,9 @@ public class ExcelWriter {
                             baTimetableStartTimeScheduledCell.setCellValue("");
                         }
                         if (routeLightOn) {
-                            baTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                            baTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmss);
                         } else {
-                            baTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                            baTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                         }
 
                         //------------------------------------------
@@ -3229,9 +3229,9 @@ public class ExcelWriter {
                             baTimetableStartTimeActualCell.setCellValue("");
                         }
                         if (routeLightOn) {
-                            baTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                            baTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmss);
                         } else {
-                            baTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                            baTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                         }
                         //------------------------------------------
                         Cell baTimetableExodusNumberCell = row.createCell(25);
@@ -3279,9 +3279,9 @@ public class ExcelWriter {
                             baGpsTimetableStartTimeScheduledCell.setCellValue("");
                         }
                         if (routeLightOn) {
-                            baGpsTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                            baGpsTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmss);
                         } else {
-                            baGpsTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                            baGpsTimetableStartTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                         }
                         //------------------------------------------
                         Cell baGpsTimetableStartTimeActualCell = row.createCell(29);
@@ -3292,9 +3292,9 @@ public class ExcelWriter {
                             baGpsTimetableStartTimeActualCell.setCellValue("");
                         }
                         if (routeLightOn) {
-                            baGpsTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                            baGpsTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmss);
                         } else {
-                            baGpsTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                            baGpsTimetableStartTimeActualCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                         }
 
                         Cell baGpsTimetableStartTimeDifferenceCell = row.createCell(30);
@@ -3326,9 +3326,9 @@ public class ExcelWriter {
                             baGpsTimetableHaltTimeScheduledCell.setCellValue("");
                         }
                         if (routeLightOn) {
-                            baGpsTimetableHaltTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                            baGpsTimetableHaltTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmss);
                         } else {
-                            baGpsTimetableHaltTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                            baGpsTimetableHaltTimeScheduledCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                         }
 
                         //------------------------------------------
@@ -3366,9 +3366,9 @@ public class ExcelWriter {
                             baGpsTimetableScheduledIntervalCell.setCellValue("");
                         }
                         if (routeLightOn) {
-                            baGpsTimetableScheduledIntervalCell.setCellStyle(rowStyleWhiteTimeHHmm);
+                            baGpsTimetableScheduledIntervalCell.setCellStyle(rowStyleWhiteTimeHHmmss);
                         } else {
-                            baGpsTimetableScheduledIntervalCell.setCellStyle(rowStyleWhiteTimeHHmmLightOn);
+                            baGpsTimetableScheduledIntervalCell.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                         }
 
                         //------------------------------------------
@@ -3524,16 +3524,16 @@ public class ExcelWriter {
                         columnWidth = 7000;
                         break;
                     case 7:
-                        columnWidth = 1500;
+                        columnWidth = 2800;
                         break;
                     case 8:
-                        columnWidth = 1500;
+                        columnWidth = 2800;
                         break;
                     case 9:
-                        columnWidth = 1500;
+                        columnWidth = 2800;
                         break;
                     case 10:
-                        columnWidth = 1500;
+                        columnWidth = 2800;
                         break;
                     case 11:
                         columnWidth = 1500;
@@ -3697,19 +3697,19 @@ public class ExcelWriter {
 
                 Cell cell_7 = row.createCell(7);
                 cell_7.setCellValue(misconductTripPeriod.getPreviousTripPeriodArrvialTimeActualString());
-                cell_7.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_7.setCellStyle(rowStyleWhiteTimeHHmmss);
 
                 Cell cell_8 = row.createCell(8);
                 cell_8.setCellValue(misconductTripPeriod.getStartTimeScheduledString());
-                cell_8.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_8.setCellStyle(rowStyleWhiteTimeHHmmss);
 
                 Cell cell_9 = row.createCell(9);
                 cell_9.setCellValue(misconductTripPeriod.getStartTimeActualString());
-                cell_9.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_9.setCellStyle(rowStyleWhiteTimeHHmmss);
 
                 Cell cell_10 = row.createCell(10);
                 cell_10.setCellValue(misconductTripPeriod.getPreviousBusStartTimeActualString());
-                cell_10.setCellStyle(rowStyleWhiteTimeHHmm);
+                cell_10.setCellStyle(rowStyleWhiteTimeHHmmss);
 
                 Cell cell_11 = row.createCell(11);
                 cell_11.setCellValue(misconductTripPeriod.getMisconduct());
@@ -3891,17 +3891,17 @@ public class ExcelWriter {
                 Cell cell_5 = row.createCell(5);
                 cell_5.setCellValue(misconductTripPeriod.getStartTimeScheduledString());
                 if (misconductTripPeriod.isBrokenExodus()) {
-                    cell_5.setCellStyle(rowStylePurpleTimeHHmm);
+                    cell_5.setCellStyle(rowStylePurpleTimeHHmmss);
                 } else {
-                    cell_5.setCellStyle(rowStyleWhiteTimeHHmm);
+                    cell_5.setCellStyle(rowStyleWhiteTimeHHmmss);
                 }
 
                 Cell cell_6 = row.createCell(6);
                 cell_6.setCellValue(misconductTripPeriod.getStartTimeActualString());
                 if (misconductTripPeriod.isBrokenExodus()) {
-                    cell_6.setCellStyle(rowStylePurpleTimeHHmm);
+                    cell_6.setCellStyle(rowStylePurpleTimeHHmmss);
                 } else {
-                    cell_6.setCellStyle(rowStyleWhiteTimeHHmm);
+                    cell_6.setCellStyle(rowStyleWhiteTimeHHmmss);
                 }
 
                 Cell cell_7 = row.createCell(7);
@@ -3915,17 +3915,17 @@ public class ExcelWriter {
                 Cell cell_8 = row.createCell(8);
                 cell_8.setCellValue(misconductTripPeriod.getBaseTripStartTimeScheduledString());
                 if (misconductTripPeriod.isBrokenExodus()) {
-                    cell_8.setCellStyle(rowStylePurpleTimeHHmm);
+                    cell_8.setCellStyle(rowStylePurpleTimeHHmmss);
                 } else {
-                    cell_8.setCellStyle(rowStyleWhiteTimeHHmm);
+                    cell_8.setCellStyle(rowStyleWhiteTimeHHmmss);
                 }
 
                 Cell cell_9 = row.createCell(9);
                 cell_9.setCellValue(misconductTripPeriod.getBaseTripStartTimeActualString());
                 if (misconductTripPeriod.isBrokenExodus()) {
-                    cell_9.setCellStyle(rowStylePurpleTimeHHmm);
+                    cell_9.setCellStyle(rowStylePurpleTimeHHmmss);
                 } else {
-                    cell_9.setCellStyle(rowStyleWhiteTimeHHmm);
+                    cell_9.setCellStyle(rowStyleWhiteTimeHHmmss);
                 }
 
                 Cell cell_10 = row.createCell(10);
@@ -4101,17 +4101,17 @@ public class ExcelWriter {
                 Cell cell_5 = row.createCell(5);
                 cell_5.setCellValue(misconductTripPeriod.getStartTimeScheduledString());
                 if (misconductTripPeriod.isBrokenExodus()) {
-                    cell_5.setCellStyle(rowStylePurpleTimeHHmm);
+                    cell_5.setCellStyle(rowStylePurpleTimeHHmmss);
                 } else {
-                    cell_5.setCellStyle(rowStyleWhiteTimeHHmm);
+                    cell_5.setCellStyle(rowStyleWhiteTimeHHmmss);
                 }
 
                 Cell cell_6 = row.createCell(6);
                 cell_6.setCellValue(misconductTripPeriod.getStartTimeActualString());
                 if (misconductTripPeriod.isBrokenExodus()) {
-                    cell_6.setCellStyle(rowStylePurpleTimeHHmm);
+                    cell_6.setCellStyle(rowStylePurpleTimeHHmmss);
                 } else {
-                    cell_6.setCellStyle(rowStyleWhiteTimeHHmm);
+                    cell_6.setCellStyle(rowStyleWhiteTimeHHmmss);
                 }
 
                 Cell cell_7 = row.createCell(7);
@@ -4125,17 +4125,17 @@ public class ExcelWriter {
                 Cell cell_8 = row.createCell(8);
                 cell_8.setCellValue(misconductTripPeriod.getBaseTripStartTimeScheduledString());
                 if (misconductTripPeriod.isBrokenExodus()) {
-                    cell_8.setCellStyle(rowStylePurpleTimeHHmm);
+                    cell_8.setCellStyle(rowStylePurpleTimeHHmmss);
                 } else {
-                    cell_8.setCellStyle(rowStyleWhiteTimeHHmm);
+                    cell_8.setCellStyle(rowStyleWhiteTimeHHmmss);
                 }
 
                 Cell cell_9 = row.createCell(9);
                 cell_9.setCellValue(misconductTripPeriod.getBaseTripStartTimeActualString());
                 if (misconductTripPeriod.isBrokenExodus()) {
-                    cell_9.setCellStyle(rowStylePurpleTimeHHmm);
+                    cell_9.setCellStyle(rowStylePurpleTimeHHmmss);
                 } else {
-                    cell_9.setCellStyle(rowStyleWhiteTimeHHmm);
+                    cell_9.setCellStyle(rowStyleWhiteTimeHHmmss);
                 }
 
                 Cell cell_10 = row.createCell(10);

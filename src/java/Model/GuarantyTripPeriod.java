@@ -42,11 +42,11 @@ public class GuarantyTripPeriod {
     }
 
     public String getStartTimeScheduledString() {
-        return startTimeScheduled.format(DateTimeFormatter.ofPattern("HH:mm"));
+        return startTimeScheduled.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
 
     public String getArrivalTimeScheduledString() {
-        return arrivalTimeScheduled.format(DateTimeFormatter.ofPattern("HH:mm"));
+        return arrivalTimeScheduled.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
 
     public Duration getTripPeriodTime() {

@@ -1,17 +1,58 @@
-<%-- 
-    Document   : guarantyTrips
-    Created on : Oct 10, 2021, 11:30:25 PM
-    Author     : Michail Sitmalidis
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <style>
+            tr td  {
+                border:solid black 1px;
+            }
+            th {
+
+                border:solid black 1px;
+            }
+        </style>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ა/ბაზა</th>
+                    <th>მარშრუტი</th>
+                    <th>თარიღი</th>
+                    <th>მიმართულება</th>
+                    <th>საგარანტიო გასვლის ტიპი</th>
+
+                    <th>გეგმიური გასვლის დრო</th>
+                    <th>ფაქტიური გასვლის დრო</th>
+
+                    <th>გეგმიური გასვლის ნომერი</th>
+                    <th>ფაქტიური გასვლის ნომერი</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <c:forEach var="guarantyTripPeriod" items="${guarantyData}">
+                    <tr>
+                        <td>${guarantyTripPeriod.baseNumber}</td>
+                        <td>${guarantyTripPeriod.routeNumber}</td>
+                        <td>${guarantyTripPeriod.dateStamp}</td>
+                        <td>${guarantyTripPeriod.getTypeG()}</td>
+                        <td>${guarantyTripPeriod.guarantyType}</td>
+
+
+                        <td>${guarantyTripPeriod.getGuarantyStartTimeScheduledString()}</td>
+                        <td>${guarantyTripPeriod.getGuarantyStartTimeActualString()}</td>
+
+                        <td>${guarantyTripPeriod.exodusScheduled}</td>
+                        <td>${guarantyTripPeriod.exodusActual}</td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
     </body>
 </html>

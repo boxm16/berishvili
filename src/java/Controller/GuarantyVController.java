@@ -177,6 +177,49 @@ public class GuarantyVController {
                 IntervalTripPeriod actualGuarantyTripBA = null;
                 IntervalTripPeriod actualSubGuarantyTripBA = null;
 
+                if (baTimetable.size() > 0) {
+                    scheduledGuarantyTripBA = baTimetable.pollLastEntry().getValue();
+                }
+                if (baTimetable.size() > 0) {
+                    scheduledSubGuarantyTripBA = baTimetable.pollLastEntry().getValue();
+                }
+
+                if (baGpsTimetable.size() > 0) {
+                    actualGuarantyTripBA = (IntervalTripPeriod) baGpsTimetable.pollLastEntry().getValue();
+                }
+                if (baGpsTimetable.size() > 0) {
+                    actualSubGuarantyTripBA = (IntervalTripPeriod) baGpsTimetable.pollLastEntry().getValue();
+                }
+
+                if (actualSubGuarantyTripBA != null) {
+                    GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
+                    guarantyTripsData.setType("ba");
+                    guarantyTripsData.setGuarantyType("qve-საგარანტიო");
+                    guarantyTripsData.setBaseNumber(actualSubGuarantyTripBA.getBaseNumber());
+                    guarantyTripsData.setRouteNumber(route.getNumber());
+                    guarantyTripsData.setDateStamp(day.getDateStamp());
+
+                    guarantyTripsData.setExodusScheduled(actualSubGuarantyTripBA.getExodusNumber());
+                    guarantyTripsData.setGuarantyStartTimeScheduled(actualSubGuarantyTripBA.getStartTimeScheduled());
+                    guarantyTripsData.setExodusActual(actualSubGuarantyTripBA.getExodusNumber());
+                    guarantyTripsData.setGuarantyStartTimeActual(actualSubGuarantyTripBA.getStartTimeActual());
+                    returnValue.add(guarantyTripsData);
+                }
+
+                if (actualGuarantyTripBA != null) {
+                    GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
+                    guarantyTripsData.setType("ba");
+                    guarantyTripsData.setGuarantyType("საგარანტიო");
+                    guarantyTripsData.setBaseNumber(actualGuarantyTripBA.getBaseNumber());
+                    guarantyTripsData.setRouteNumber(route.getNumber());
+                    guarantyTripsData.setDateStamp(day.getDateStamp());
+
+                    guarantyTripsData.setExodusScheduled(actualGuarantyTripBA.getExodusNumber());
+                    guarantyTripsData.setGuarantyStartTimeScheduled(actualGuarantyTripBA.getStartTimeScheduled());
+                    guarantyTripsData.setExodusActual(actualGuarantyTripBA.getExodusNumber());
+                    guarantyTripsData.setGuarantyStartTimeActual(actualGuarantyTripBA.getStartTimeActual());
+                    returnValue.add(guarantyTripsData);
+                }
             }
         }
         return returnValue;

@@ -171,4 +171,102 @@ public class DetailedRoute extends BasicRoute {
         }
     }
 
+    public void calculateIntervalsDataVVersion() {
+
+        TreeMap<Date, Day> days = super.getDays();
+        for (Map.Entry<Date, Day> dayEntry : days.entrySet()) {
+            IntervalDay intervalDay = (IntervalDay) dayEntry.getValue();
+
+            TreeMap<Short, Exodus> exoduses = intervalDay.getExoduses();
+
+            for (Map.Entry<Short, Exodus> exodusEntry : exoduses.entrySet()) {
+
+                TreeMap<String, TripVoucher> tripVouchers = exodusEntry.getValue().getTripVouchers();
+
+                for (Map.Entry<String, TripVoucher> tripVoucherEntry : tripVouchers.entrySet()) {
+                    ArrayList<TripPeriod> tripPeriods = tripVoucherEntry.getValue().getTripPeriods();
+                    for (TripPeriod tripPeriod : tripPeriods) {
+                        IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) tripPeriod;
+
+                        if (intervalTripPeriod.getType().equals("ab")) {
+                            //first af all putting trip into SCHEDULED TIMETABLE
+                            intervalDay.getAbTimetable().put(intervalTripPeriod.getStartTimeScheduled(), intervalTripPeriod);
+                            if (intervalDay.getAbTimetable().size() > 2) {
+                                intervalDay.getAbTimetable().pollFirstEntry();
+                                //keeping table with only two trips
+                            }
+                            //now going for GPS (Actual) TIMETABEL
+                            LocalDateTime startTimeActual = intervalTripPeriod.getStartTimeActual();
+                            if (startTimeActual == null) {
+                                //try to deside sequence by comparing arrivalTimeActual of this trip and those trips that are inside gpsTimetable
+                                if (intervalTripPeriod.getArrivalTimeActual() == null) {
+                                    //do nothing, you cant do here something
+                                } else {
+                                    if (intervalDay.getAbGpsTimetable().size() == 1) {
+                                        Map.Entry<LocalDateTime, DetailedTripPeriod> firstEntry = intervalDay.getAbGpsTimetable().firstEntry();
+                                        DetailedTripPeriod tabledTripPeriod = firstEntry.getValue();
+                                        if (tabledTripPeriod.getArrivalTimeActual() != null) {
+                                            LocalDateTime tabledTripPeriodArrivalTimeActual = tabledTripPeriod.getArrivalTimeActual();
+                                            LocalDateTime newTripPeriodArrivalTimeActual = intervalTripPeriod.getArrivalTimeActual();
+                                            if (newTripPeriodArrivalTimeActual.isAfter(tabledTripPeriodArrivalTimeActual)) {
+                                                LocalDateTime fakeStartTimeActual = firstEntry.getKey().plusSeconds(1);
+                                                intervalTripPeriod.setSpacialCase(true);
+                                                intervalDay.getAbGpsTimetable().put(fakeStartTimeActual, intervalTripPeriod);
+                                            } else {
+                                                LocalDateTime fakeStartTimeActual = firstEntry.getKey().minusSeconds(1);
+                                                intervalTripPeriod.setSpacialCase(true);
+                                                intervalDay.getAbGpsTimetable().put(fakeStartTimeActual, intervalTripPeriod);
+                                            }
+                                        }
+                                    }
+                                    if (intervalDay.getAbGpsTimetable().size() == 2) {
+                                        Map.Entry<LocalDateTime, DetailedTripPeriod> firstEntry = intervalDay.getAbGpsTimetable().firstEntry();
+                                        Map.Entry<LocalDateTime, DetailedTripPeriod> lastEntry = intervalDay.getAbGpsTimetable().lastEntry();
+                                        DetailedTripPeriod firstTabledTripPeriod = firstEntry.getValue();
+                                        DetailedTripPeriod secondTabledTripPeriod = lastEntry.getValue();
+                                        if (secondTabledTripPeriod.getArrivalTimeActual() != null) {
+                                            LocalDateTime secondTabledTripPeriodArrivalTimeActual = secondTabledTripPeriod.getArrivalTimeActual();
+                                            LocalDateTime newTripPeriodArrivalTimeActual = intervalTripPeriod.getArrivalTimeActual();
+                                            if (newTripPeriodArrivalTimeActual.isAfter(secondTabledTripPeriodArrivalTimeActual)) {
+                                                LocalDateTime fakeStartTimeActual = lastEntry.getKey().plusSeconds(1);
+                                                intervalTripPeriod.setSpacialCase(true);
+                                                intervalDay.getAbGpsTimetable().put(fakeStartTimeActual, intervalTripPeriod);
+                                            } else {
+                                                LocalDateTime firstTabledTripPeriodArrivalTimeActual = firstTabledTripPeriod.getArrivalTimeActual();
+                                                if (firstTabledTripPeriodArrivalTimeActual == null) {
+
+                                                    //if there is not arrivalTimeActual we cant use it in guaranty trips
+                                                    System.out.println("Ox mana mou; ROute Num:" + getNumber() + "//DateStamp:" + dayEntry.getValue().getDateStamp() + "//Exodus NUmb:" + exodusEntry.getValue().getNumber() + "//STS" + intervalTripPeriod.getStartTimeScheduledString());
+                                                } else {
+                                                    if (newTripPeriodArrivalTimeActual.isAfter(firstTabledTripPeriodArrivalTimeActual)) {
+                                                        LocalDateTime fakeStartTimeActual = firstEntry.getKey().plusSeconds(1);
+                                                        intervalTripPeriod.setSpacialCase(true);
+                                                        intervalDay.getAbGpsTimetable().put(fakeStartTimeActual, intervalTripPeriod);
+                                                    } else {
+                                                        LocalDateTime fakeStartTimeActual = firstEntry.getKey().minusSeconds(1);
+                                                        intervalTripPeriod.setSpacialCase(true);
+                                                        intervalDay.getAbGpsTimetable().put(fakeStartTimeActual, intervalTripPeriod);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                intervalDay.getAbGpsTimetable().put(startTimeActual, intervalTripPeriod);
+                            }
+
+                            //keeping gpsTimetable small
+                            if (intervalDay.getAbGpsTimetable().size() > 2) {
+                                intervalDay.getAbGpsTimetable().pollFirstEntry();
+                            }
+                        }
+
+                        //--------------ba-------------
+                    }
+                }
+            }
+        }
+    }
+
 }

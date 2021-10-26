@@ -69,143 +69,113 @@ public class GuarantyVController {
         ArrayList returnValue = new ArrayList();
         for (Map.Entry<Float, DetailedRoute> intervalRouteEntry : routesForIntervalsForExcelExport.entrySet()) {
             DetailedRoute route = intervalRouteEntry.getValue();
-            route.calculateIntervalsData();
+            route.calculateIntervalsDataVVersion();
             TreeMap<Date, Day> days = route.getDays();
             for (Map.Entry<Date, Day> dayEntry : days.entrySet()) {
                 IntervalDay day = (IntervalDay) dayEntry.getValue();
 
                 TreeMap<LocalDateTime, IntervalTripPeriod> abTimetable = day.getAbTimetable();
-                //--------
-                IntervalTripPeriod scheduledGuarantyTripAB = abTimetable.pollLastEntry().getValue();
-
-                LocalDateTime abGuarantyTripStartTimeScheduled = scheduledGuarantyTripAB.getStartTimeScheduled();
-
-                short abGuarantyExodusScheduled = scheduledGuarantyTripAB.getExodusNumber();
-                short baseNumber = scheduledGuarantyTripAB.getBaseNumber();
-
-                TreeMap<LocalDateTime, DetailedTripPeriod> abGpsTimetable = day.getAbGpsTimetable();
-
-                IntervalTripPeriod actualGuarantyTripAB = (IntervalTripPeriod) abGpsTimetable.pollLastEntry().getValue();
-
-                LocalDateTime abGuarantyTripStartTimeActual = actualGuarantyTripAB.getStartTimeActual();
-
-                short abGuarantyExodusActual = actualGuarantyTripAB.getExodusNumber();
-
-                if (abGuarantyTripStartTimeActual.isBefore(abGuarantyTripStartTimeScheduled)) {
-                    if (actualGuarantyTripAB.getArrivalTimeActual() != null) {
-
-                        GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
-                        guarantyTripsData.setType("ab");
-                        guarantyTripsData.setGuarantyType("საგარანტიო");
-                        guarantyTripsData.setBaseNumber(baseNumber);
-                        guarantyTripsData.setRouteNumber(route.getNumber());
-                        guarantyTripsData.setDateStamp(day.getDateStamp());
-
-                        guarantyTripsData.setExodusScheduled(abGuarantyExodusScheduled);
-                        guarantyTripsData.setGuarantyStartTimeScheduled(abGuarantyTripStartTimeScheduled);
-                        guarantyTripsData.setExodusActual(abGuarantyExodusActual);
-                        guarantyTripsData.setGuarantyStartTimeActual(abGuarantyTripStartTimeActual);
-                        returnValue.add(guarantyTripsData);
-                    }
-                }
-
-                //--------
                 TreeMap<LocalDateTime, IntervalTripPeriod> baTimetable = day.getBaTimetable();
+                TreeMap<LocalDateTime, DetailedTripPeriod> abGpsTimetable = day.getAbGpsTimetable();
+                TreeMap<LocalDateTime, DetailedTripPeriod> baGpsTimetable = day.getBaGpsTimetable();
 
-                if (baTimetable.size() > 0) {
-                    IntervalTripPeriod scheduledGuarantyTripBA = baTimetable.pollLastEntry().getValue();
+                IntervalTripPeriod scheduledGuarantyTripAB = null;
+                IntervalTripPeriod scheduledSubGuarantyTripAB = null;
+                IntervalTripPeriod actualGuarantyTripAB = null;
+                IntervalTripPeriod actualSubGuarantyTripAB = null;
 
-                    LocalDateTime baGuarantyTripStartTimeScheduled = scheduledGuarantyTripBA.getStartTimeScheduled();
-                    short baGuarantyExodusScheduled = scheduledGuarantyTripBA.getExodusNumber();
+                if (abTimetable.size() > 0) {
+                    scheduledGuarantyTripAB = abTimetable.pollLastEntry().getValue();
+                }
+                if (abTimetable.size() > 0) {
+                    scheduledSubGuarantyTripAB = abTimetable.pollLastEntry().getValue();
+                }
 
-                    TreeMap<LocalDateTime, DetailedTripPeriod> baGpsTimetable = day.getBaGpsTimetable();
+                if (abGpsTimetable.size() > 0) {
+                    actualGuarantyTripAB = (IntervalTripPeriod) abGpsTimetable.pollLastEntry().getValue();
+                }
+                if (abGpsTimetable.size() > 0) {
+                    actualSubGuarantyTripAB = (IntervalTripPeriod) abGpsTimetable.pollLastEntry().getValue();
+                }
 
-                    IntervalTripPeriod actualGuarantyTripBA = (IntervalTripPeriod) baGpsTimetable.pollLastEntry().getValue();
+                if (actualSubGuarantyTripAB != null) {
+                    GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
+                    guarantyTripsData.setType("ab");
+                    guarantyTripsData.setGuarantyType("qve-საგარანტიო");
+                    guarantyTripsData.setBaseNumber(actualSubGuarantyTripAB.getBaseNumber());
+                    guarantyTripsData.setRouteNumber(route.getNumber());
+                    guarantyTripsData.setDateStamp(day.getDateStamp());
 
-                    LocalDateTime baGuarantyTripStartTimeActual = actualGuarantyTripBA.getStartTimeActual();
+                    guarantyTripsData.setExodusScheduled(actualSubGuarantyTripAB.getExodusNumber());
+                    guarantyTripsData.setGuarantyStartTimeScheduled(actualSubGuarantyTripAB.getStartTimeScheduled());
+                    guarantyTripsData.setExodusActual(actualSubGuarantyTripAB.getExodusNumber());
+                    guarantyTripsData.setGuarantyStartTimeActual(actualSubGuarantyTripAB.getStartTimeActual());
+                    returnValue.add(guarantyTripsData);
+                }
 
-                    short baGuarantyExodusActual = actualGuarantyTripBA.getExodusNumber();
+                if (actualGuarantyTripAB != null) {
+                    GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
+                    guarantyTripsData.setType("ab");
+                    guarantyTripsData.setGuarantyType("საგარანტიო");
+                    guarantyTripsData.setBaseNumber(actualGuarantyTripAB.getBaseNumber());
+                    guarantyTripsData.setRouteNumber(route.getNumber());
+                    guarantyTripsData.setDateStamp(day.getDateStamp());
 
-                    if (baGuarantyTripStartTimeActual.isBefore(baGuarantyTripStartTimeScheduled)) {
-                        if (actualGuarantyTripAB.getArrivalTimeActual() != null) {
-                            GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
-                            guarantyTripsData.setType("ba");
-                            guarantyTripsData.setGuarantyType("საგარანტიო");
-                            guarantyTripsData.setBaseNumber(baseNumber);
-                            guarantyTripsData.setRouteNumber(route.getNumber());
-                            guarantyTripsData.setDateStamp(day.getDateStamp());
+                    guarantyTripsData.setExodusScheduled(actualGuarantyTripAB.getExodusNumber());
+                    guarantyTripsData.setGuarantyStartTimeScheduled(actualGuarantyTripAB.getStartTimeScheduled());
+                    guarantyTripsData.setExodusActual(actualGuarantyTripAB.getExodusNumber());
+                    guarantyTripsData.setGuarantyStartTimeActual(actualGuarantyTripAB.getStartTimeActual());
+                    returnValue.add(guarantyTripsData);
+                }
 
-                            guarantyTripsData.setExodusScheduled(baGuarantyExodusScheduled);
-                            guarantyTripsData.setGuarantyStartTimeScheduled(baGuarantyTripStartTimeScheduled);
-                            guarantyTripsData.setExodusActual(baGuarantyExodusActual);
-                            guarantyTripsData.setGuarantyStartTimeActual(baGuarantyTripStartTimeActual);
-                            returnValue.add(guarantyTripsData);
+                /* if (scheduledGuarantyTripAB == actualGuarantyTripAB) {
+                    if (actualGuarantyTripAB != null && scheduledGuarantyTripAB != null) {
+                        if (actualGuarantyTripAB.getArrivalTimeActual() != null) {//eseigi mivida danishnulebis adgilas da ara bazashi cavida
+                            if (actualGuarantyTripAB.getStartTimeActual().getSecond()
+                                    //actualGuarantyTripAB is same as scheduledGuarantyTripAB, so it doesnt matter which you take for calculation
+                                    - scheduledGuarantyTripAB.getStartTimeScheduled().getSecond() > -60) {
+                                GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
+                                guarantyTripsData.setType("ab");
+                                guarantyTripsData.setGuarantyType("საგარანტიო");
+                                guarantyTripsData.setBaseNumber(scheduledGuarantyTripAB.getBaseNumber());
+                                guarantyTripsData.setRouteNumber(route.getNumber());
+                                guarantyTripsData.setDateStamp(day.getDateStamp());
+
+                                guarantyTripsData.setExodusScheduled(scheduledGuarantyTripAB.getExodusNumber());
+                                guarantyTripsData.setGuarantyStartTimeScheduled(scheduledGuarantyTripAB.getStartTimeScheduled());
+                                guarantyTripsData.setExodusActual(scheduledGuarantyTripAB.getExodusNumber());
+                                guarantyTripsData.setGuarantyStartTimeActual(scheduledGuarantyTripAB.getStartTimeActual());
+                                returnValue.add(guarantyTripsData);
+                            }
+                        }
+                    }
+
+                } else {
+                    if (actualGuarantyTripAB != null && scheduledGuarantyTripAB != null) {
+                        if (actualGuarantyTripAB.getArrivalTimeActual() != null) {//eseigi mivida danishnulebis adgilas da ara bazashi cavida
+                            if (actualGuarantyTripAB.getStartTimeActual().getSecond()
+                                    - scheduledGuarantyTripAB.getStartTimeScheduled().getSecond() > -60) {
+                                GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
+                                guarantyTripsData.setType("ab");
+                                guarantyTripsData.setGuarantyType("საგარანტიო");
+                                guarantyTripsData.setBaseNumber(scheduledGuarantyTripAB.getBaseNumber());
+                                guarantyTripsData.setRouteNumber(route.getNumber());
+                                guarantyTripsData.setDateStamp(day.getDateStamp());
+
+                                guarantyTripsData.setExodusScheduled(scheduledGuarantyTripAB.getExodusNumber());
+                                guarantyTripsData.setGuarantyStartTimeScheduled(scheduledGuarantyTripAB.getStartTimeScheduled());
+                                guarantyTripsData.setExodusActual(actualGuarantyTripAB.getExodusNumber());
+                                guarantyTripsData.setGuarantyStartTimeActual(actualGuarantyTripAB.getStartTimeActual());
+                                returnValue.add(guarantyTripsData);
+                            }
                         }
                     }
                 }
-                //-------NOW SUBGUARANTIES------
-                IntervalTripPeriod scheduledSubGuarantyTripAB = abTimetable.pollLastEntry().getValue();
-
-                LocalDateTime abSubGuarantyTripStartTimeScheduled = scheduledSubGuarantyTripAB.getStartTimeScheduled();
-
-                short abSubGuarantyExodusScheduled = scheduledSubGuarantyTripAB.getExodusNumber();
-
-                IntervalTripPeriod actualSubGuarantyTripAB = (IntervalTripPeriod) abGpsTimetable.pollLastEntry().getValue();
-
-                LocalDateTime abSubGuarantyTripStartTimeActual = actualSubGuarantyTripAB.getStartTimeActual();
-
-                short abSubGuarantyExodusActual = actualSubGuarantyTripAB.getExodusNumber();
-
-                if (abSubGuarantyTripStartTimeActual.isBefore(abSubGuarantyTripStartTimeScheduled)) {
-                    if (actualSubGuarantyTripAB.getArrivalTimeActual() != null) {
-
-                        GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
-                        guarantyTripsData.setType("ab");
-                        guarantyTripsData.setGuarantyType("ქვე-საგარანტიო");
-                        guarantyTripsData.setBaseNumber(baseNumber);
-                        guarantyTripsData.setRouteNumber(route.getNumber());
-                        guarantyTripsData.setDateStamp(day.getDateStamp());
-
-                        guarantyTripsData.setExodusScheduled(abSubGuarantyExodusScheduled);
-                        guarantyTripsData.setGuarantyStartTimeScheduled(abSubGuarantyTripStartTimeScheduled);
-                        guarantyTripsData.setExodusActual(abSubGuarantyExodusActual);
-                        guarantyTripsData.setGuarantyStartTimeActual(abSubGuarantyTripStartTimeActual);
-                        returnValue.add(guarantyTripsData);
-                    }
-                }
-
-                //--------ba
-                if (baTimetable.size() > 0) {
-                    IntervalTripPeriod scheduledSubGuarantyTripBA = baTimetable.pollLastEntry().getValue();
-
-                    LocalDateTime baSubGuarantyTripStartTimeScheduled = scheduledSubGuarantyTripBA.getStartTimeScheduled();
-                    short baSubGuarantyExodusScheduled = scheduledSubGuarantyTripBA.getExodusNumber();
-
-                    TreeMap<LocalDateTime, DetailedTripPeriod> baGpsTimetable = day.getBaGpsTimetable();
-
-                    IntervalTripPeriod actualSubGuarantyTripBA = (IntervalTripPeriod) baGpsTimetable.pollLastEntry().getValue();
-
-                    LocalDateTime baSubGuarantyTripStartTimeActual = actualSubGuarantyTripBA.getStartTimeActual();
-
-                    short baSubGuarantyExodusActual = actualSubGuarantyTripBA.getExodusNumber();
-
-                    if (baSubGuarantyTripStartTimeActual.isBefore(baSubGuarantyTripStartTimeScheduled)) {
-                        if (actualSubGuarantyTripAB.getArrivalTimeActual() != null) {
-                            GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
-                            guarantyTripsData.setType("ba");
-                            guarantyTripsData.setGuarantyType("ქვე-საგარანტიო");
-                            guarantyTripsData.setBaseNumber(baseNumber);
-                            guarantyTripsData.setRouteNumber(route.getNumber());
-                            guarantyTripsData.setDateStamp(day.getDateStamp());
-
-                            guarantyTripsData.setExodusScheduled(baSubGuarantyExodusScheduled);
-                            guarantyTripsData.setGuarantyStartTimeScheduled(baSubGuarantyTripStartTimeScheduled);
-                            guarantyTripsData.setExodusActual(baSubGuarantyExodusActual);
-                            guarantyTripsData.setGuarantyStartTimeActual(baSubGuarantyTripStartTimeActual);
-                            returnValue.add(guarantyTripsData);
-                        }
-                    }
-                }
+                 */ //---------------BA-------------
+                IntervalTripPeriod scheduledGuarantyTripBA = null;
+                IntervalTripPeriod scheduledSubGuarantyTripBA = null;
+                IntervalTripPeriod actualGuarantyTripBA = null;
+                IntervalTripPeriod actualSubGuarantyTripBA = null;
 
             }
         }

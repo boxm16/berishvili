@@ -305,6 +305,9 @@ public class GuarantyTripsData extends IntervalTripPeriod {
     }
 
     public String getGuarantyStartTimeActualString() {
+        if (guarantyStartTimeActual == null) {
+            return "";
+        }
         return guarantyStartTimeActual.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
 

@@ -15,6 +15,7 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     private String misconductDuration;
     private Duration misconductDurationDuration;
     private String runOver;
+    private boolean spacialCase;
 
     public IntervalTripPeriod() {
         runOver = "";
@@ -182,5 +183,15 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     public void setDriverName(String driverName) {
         this.driverName = driverName;
     }
+
+    public boolean isSpacialCase() {
+        return spacialCase;
+    }
+
+    public void setSpacialCase(boolean spacialCase) {
+        this.spacialCase = spacialCase;
+    }
+    
+    
 
 }

@@ -27,6 +27,7 @@
 
                     <th>გეგმიური გასვლის დრო</th>
                     <th>ფაქტიური გასვლის დრო</th>
+                    <th>სხვაობა</th>
 
                     <th>გეგმიური გასვლის ნომერი</th>
                     <th>ფაქტიური გასვლის ნომერი</th>
@@ -35,22 +36,27 @@
                 </tr>
             </thead>
             <tbody>
+                <c:forEach var="dayArray" items="${guarantyData}" varStatus="loop">
+                    <c:forEach var="guarantyTripPeriod" items="${dayArray}">
+                        <tr style="background-color: ${loop.index%2==0?"inherited":"lightgrey"}">
+                            <td>${guarantyTripPeriod.baseNumber}</td>
+                            <td>${guarantyTripPeriod.routeNumber}</td>
+                            <td>${guarantyTripPeriod.dateStamp}</td>
+                            <td>${guarantyTripPeriod.getTypeG()}</td>
+                            <td>${guarantyTripPeriod.guarantyType}</td>
 
-                <c:forEach var="guarantyTripPeriod" items="${guarantyData}">
-                    <tr>
-                        <td>${guarantyTripPeriod.baseNumber}</td>
-                        <td>${guarantyTripPeriod.routeNumber}</td>
-                        <td>${guarantyTripPeriod.dateStamp}</td>
-                        <td>${guarantyTripPeriod.getTypeG()}</td>
-                        <td>${guarantyTripPeriod.guarantyType}</td>
+
+                            <td>${guarantyTripPeriod.getGuarantyStartTimeScheduledString()}</td>
+                            <td style="background-color:${guarantyTripPeriod.isSpacialCase()?"red":"inherited"} ">${guarantyTripPeriod.getGuarantyStartTimeActualString()}</td>
+                            <td style="background-color:${guarantyTripPeriod.getGuarantyDifferenceColor()} ">${guarantyTripPeriod.getGuarantyStartTimeDifferenceString()}</td>
+
+                            <td align="center"><a href="interval.htm?routeNumber=${guarantyTripPeriod.routeNumber}&dateStamp=${guarantyTripPeriod.dateStamp}&tripPeriodType=${guarantyTripPeriod.getType()}&startTimeScheduled=${guarantyTripPeriod.getGuarantyStartTimeScheduled()}" target="_blank">${guarantyTripPeriod.exodusScheduled}</a></td>
+                            <td align="center" style="background-color:${guarantyTripPeriod.exodusScheduled==guarantyTripPeriod.exodusActual?"inherited":"red"} "><a href="interval.htm?routeNumber=${guarantyTripPeriod.routeNumber}&dateStamp=${guarantyTripPeriod.dateStamp}&tripPeriodType=${guarantyTripPeriod.getType()}&startTimeScheduled=${guarantyTripPeriod.getExodusActualStartTimeScheduled()}" target="_blank">${guarantyTripPeriod.exodusActual}</a></td>
 
 
-                        <td>${guarantyTripPeriod.getGuarantyStartTimeScheduledString()}</td>
-                        <td>${guarantyTripPeriod.getGuarantyStartTimeActualString()}</td>
+                        </tr>
+                    </c:forEach>
 
-                        <td>${guarantyTripPeriod.exodusScheduled}</td>
-                        <td>${guarantyTripPeriod.exodusActual}</td>
-                    </tr>
                 </c:forEach>
             </tbody>
         </table>

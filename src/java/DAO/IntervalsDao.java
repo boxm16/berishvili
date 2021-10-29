@@ -41,7 +41,7 @@ public class IntervalsDao {
         StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT exodus_number, date_stamp, t2.number,  notes, type, start_time_scheduled, start_time_actual,start_time_difference, arrival_time_scheduled, arrival_time_actual, arrival_time_difference FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number=");
         StringBuilder queryBuilderDateStampPart = buildStringFromArrayList(detailedRoutesPager.getDateStamps());
 
-        query = queryBuilderInitialPart.append(detailedRoutesPager.getCurrentRoute()).
+        query = queryBuilderInitialPart.append("'" + detailedRoutesPager.getCurrentRoute() + "'").
                 append(" AND date_stamp IN ").append(queryBuilderDateStampPart).
                 append(" ORDER BY prefix, suffix, date_stamp, exodus_number, start_time_scheduled ;");
 

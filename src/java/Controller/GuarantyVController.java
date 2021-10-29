@@ -72,6 +72,7 @@ public class GuarantyVController {
             route.calculateIntervalsDataVVersion();
             TreeMap<Date, Day> days = route.getDays();
             for (Map.Entry<Date, Day> dayEntry : days.entrySet()) {
+                ArrayList dayArray = new ArrayList();
                 IntervalDay day = (IntervalDay) dayEntry.getValue();
 
                 TreeMap<LocalDateTime, IntervalTripPeriod> abTimetable = day.getAbTimetable();
@@ -108,9 +109,12 @@ public class GuarantyVController {
 
                     guarantyTripsData.setExodusScheduled(scheduledSubGuarantyTripAB.getExodusNumber());
                     guarantyTripsData.setGuarantyStartTimeScheduled(scheduledSubGuarantyTripAB.getStartTimeScheduled());
+
                     guarantyTripsData.setExodusActual(actualSubGuarantyTripAB.getExodusNumber());
                     guarantyTripsData.setGuarantyStartTimeActual(actualSubGuarantyTripAB.getStartTimeActual());
-                    returnValue.add(guarantyTripsData);
+                    guarantyTripsData.setExodusActualStartTimeScheduled(actualSubGuarantyTripAB.getStartTimeScheduled());
+                    guarantyTripsData.setSpacialCase(actualSubGuarantyTripAB.isSpacialCase());
+                    dayArray.add(guarantyTripsData);
                 }
 
                 if (actualGuarantyTripAB != null && scheduledGuarantyTripAB != null) {
@@ -125,7 +129,10 @@ public class GuarantyVController {
                     guarantyTripsData.setGuarantyStartTimeScheduled(scheduledGuarantyTripAB.getStartTimeScheduled());
                     guarantyTripsData.setExodusActual(actualGuarantyTripAB.getExodusNumber());
                     guarantyTripsData.setGuarantyStartTimeActual(actualGuarantyTripAB.getStartTimeActual());
-                    returnValue.add(guarantyTripsData);
+                    guarantyTripsData.setExodusActualStartTimeScheduled(actualGuarantyTripAB.getStartTimeScheduled());
+                    guarantyTripsData.setSpacialCase(actualGuarantyTripAB.isSpacialCase());
+                    dayArray.add(guarantyTripsData);
+
                 }
 
                 //---------------BA-------------
@@ -160,7 +167,9 @@ public class GuarantyVController {
                     guarantyTripsData.setGuarantyStartTimeScheduled(scheduledSubGuarantyTripBA.getStartTimeScheduled());
                     guarantyTripsData.setExodusActual(actualSubGuarantyTripBA.getExodusNumber());
                     guarantyTripsData.setGuarantyStartTimeActual(actualSubGuarantyTripBA.getStartTimeActual());
-                    returnValue.add(guarantyTripsData);
+                    guarantyTripsData.setExodusActualStartTimeScheduled(actualSubGuarantyTripBA.getStartTimeScheduled());
+                    guarantyTripsData.setSpacialCase(actualSubGuarantyTripBA.isSpacialCase());
+                    dayArray.add(guarantyTripsData);
                 }
 
                 if (actualGuarantyTripBA != null && scheduledGuarantyTripBA != null) {
@@ -175,8 +184,11 @@ public class GuarantyVController {
                     guarantyTripsData.setGuarantyStartTimeScheduled(scheduledGuarantyTripBA.getStartTimeScheduled());
                     guarantyTripsData.setExodusActual(actualGuarantyTripBA.getExodusNumber());
                     guarantyTripsData.setGuarantyStartTimeActual(actualGuarantyTripBA.getStartTimeActual());
-                    returnValue.add(guarantyTripsData);
+                    guarantyTripsData.setExodusActualStartTimeScheduled(actualGuarantyTripBA.getStartTimeScheduled());
+                    guarantyTripsData.setSpacialCase(actualGuarantyTripBA.isSpacialCase());
+                    dayArray.add(guarantyTripsData);
                 }
+                returnValue.add(dayArray);
             }
         }
         return returnValue;

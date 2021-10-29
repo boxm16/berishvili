@@ -339,13 +339,13 @@
                             </td>
                         </tr>
                         <c:forEach var="day" items="${detailedRoute.days}">
-                            <tr>
+                            <tr style="background-color:#4863A0">
                                 <td colspan='16' align="center">
                                     თარიღი: ${day.value.getDateStampWeekFormat()}
                                 </td>
                             </tr>
                             <c:forEach var="exodus" items="${day.value.exoduses}">
-                                <tr>
+                                <tr style="background-color:lightblue">
                                     <td colspan='16' align="center">
                                         გასვლა #: ${exodus.value.number}
                                     </td>
@@ -354,10 +354,11 @@
 
                                     <tr>
                                         <td colspan='16' align="center">
-                                            მარშრუტა #: ${detailedRoute.number}
-                                            თარიღი: ${day.value.dateStamp}
-                                            გასვლა #: ${exodus.value.number}
-                                            შენიშვნები: ${tripVoucher.value.notes}
+                                            მარშრუტა #: ${detailedRoute.number}.
+                                            თარიღი: ${day.value.dateStamp}.
+                                            გასვლა #: ${exodus.value.number}.
+                                            საგზურის  #: ${tripVoucher.value.number}.
+                                            შენიშვნები: ${tripVoucher.value.notes}.
                                         </td>
                                     </tr>
                                     <c:forEach var="tripPeriod" items="${tripVoucher.value.tripPeriods}">

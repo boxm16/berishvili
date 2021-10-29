@@ -5,6 +5,7 @@
  */
 package Model;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -24,6 +25,8 @@ public class GuarantyTripsData extends IntervalTripPeriod {
     private short exodusActual;
     private LocalDateTime guarantyStartTimeScheduled;
     private LocalDateTime guarantyStartTimeActual;
+    
+    private LocalDateTime exodusActualStartTimeScheduled;
 
     private LocalDateTime abSubguarantyTripStartTimeScheduled;
     private short abSubguarantyExodusScheduled;
@@ -311,4 +314,37 @@ public class GuarantyTripsData extends IntervalTripPeriod {
         return guarantyStartTimeActual.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
 
+    public Duration getGuarantyStartTimeDifference() {
+        if (guarantyStartTimeScheduled == null || guarantyStartTimeActual == null) {
+            return null;
+        }
+        return Duration.between(guarantyStartTimeScheduled, guarantyStartTimeActual);
+    }
+
+    public String getGuarantyStartTimeDifferenceString() {
+        if (guarantyStartTimeActual != null) {
+            return converter.convertDurationToString(Duration.between(guarantyStartTimeScheduled, guarantyStartTimeActual));
+        } else {
+            return "";
+        }
+    }
+
+    public String getGuarantyDifferenceColor() {
+
+        if (getGuarantyStartTimeDifference() != null && getGuarantyStartTimeDifference().getSeconds() < -120) {
+            return "red";
+        } else {
+            return "inherited";
+        }
+    }
+
+    public LocalDateTime getExodusActualStartTimeScheduled() {
+        return exodusActualStartTimeScheduled;
+    }
+
+    public void setExodusActualStartTimeScheduled(LocalDateTime exodusActualStartTimeScheduled) {
+        this.exodusActualStartTimeScheduled = exodusActualStartTimeScheduled;
+    }
+
+    
 }

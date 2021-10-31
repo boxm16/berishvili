@@ -381,7 +381,7 @@
                         <a href="#guarantySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>საგარანტიოები</h3></a>
                         <ul class="collapse list-unstyled" id="guarantySubmenu">
                             <li>
-                                <a href="#" onclick="requestRouter('guarantyTripsInitialRequest.htm')">საგარანტიო გასვლების დავალიერება</a>
+                                <a href="#" onclick="requestRouter('guarantyTripsInitialRequest.htm')"><h4>საგარანტიო გასვლების დავალიერება</h4></a>
                             </li>
                             <li>
                                 <a href="#">Home 2</a>

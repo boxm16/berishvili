@@ -102,7 +102,7 @@ public class GuarantyVController {
                 if (actualSubGuarantyTripAB != null && scheduledSubGuarantyTripAB != null) {
                     GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
                     guarantyTripsData.setType("ab");
-                    guarantyTripsData.setGuarantyType("qve-საგარანტიო");
+                    guarantyTripsData.setGuarantyType("ქვე-საგარანტიო");
                     guarantyTripsData.setBaseNumber(actualSubGuarantyTripAB.getBaseNumber());
                     guarantyTripsData.setRouteNumber(route.getNumber());
                     guarantyTripsData.setDateStamp(day.getDateStamp());
@@ -158,7 +158,7 @@ public class GuarantyVController {
                 if (actualSubGuarantyTripBA != null && scheduledSubGuarantyTripBA != null) {
                     GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
                     guarantyTripsData.setType("ba");
-                    guarantyTripsData.setGuarantyType("qve-საგარანტიო");
+                    guarantyTripsData.setGuarantyType("ქვე-საგარანტიო");
                     guarantyTripsData.setBaseNumber(actualSubGuarantyTripBA.getBaseNumber());
                     guarantyTripsData.setRouteNumber(route.getNumber());
                     guarantyTripsData.setDateStamp(day.getDateStamp());

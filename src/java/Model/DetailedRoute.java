@@ -187,7 +187,8 @@ public class DetailedRoute extends BasicRoute {
                     ArrayList<TripPeriod> tripPeriods = tripVoucherEntry.getValue().getTripPeriods();
                     for (TripPeriod tripPeriod : tripPeriods) {
                         IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) tripPeriod;
-
+                        LocalDateTime arrivalTimeActual = intervalTripPeriod.getArrivalTimeActual();
+                        if (arrivalTimeActual != null) {//first and major condition. if arrivalTimeActual==null, that mostly means that trip went to base
                             if (intervalTripPeriod.getType().equals("ab")) {
                                 //first af all putting trip into SCHEDULED TIMETABLE
                                 intervalDay.getAbTimetable().put(intervalTripPeriod.getStartTimeScheduled(), intervalTripPeriod);

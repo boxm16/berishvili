@@ -187,15 +187,17 @@ public class DetailedRoute extends BasicRoute {
                     ArrayList<TripPeriod> tripPeriods = tripVoucherEntry.getValue().getTripPeriods();
                     for (TripPeriod tripPeriod : tripPeriods) {
                         IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) tripPeriod;
-                        LocalDateTime arrivalTimeActual = intervalTripPeriod.getArrivalTimeActual();
-                        if (arrivalTimeActual != null) {//first and major condition. if arrivalTimeActual==null, that mostly means that trip went to base
-                            if (intervalTripPeriod.getType().equals("ab")) {
-                                //first af all putting trip into SCHEDULED TIMETABLE
-                                intervalDay.getAbTimetable().put(intervalTripPeriod.getStartTimeScheduled(), intervalTripPeriod);
-                                if (intervalDay.getAbTimetable().size() > 2) {
-                                    intervalDay.getAbTimetable().pollFirstEntry();
-                                    //keeping table with only two trips
-                                }
+                        if (intervalTripPeriod.getType().equals("ab")) {
+                            //first af all putting trip into SCHEDULED TIMETABLE
+                            intervalDay.getAbTimetable().put(intervalTripPeriod.getStartTimeScheduled(), intervalTripPeriod);
+                            if (intervalDay.getAbTimetable().size() > 2) {
+                                intervalDay.getAbTimetable().pollFirstEntry();
+                                //keeping table with only two trips
+                            }
+                            LocalDateTime arrivalTimeActual = intervalTripPeriod.getArrivalTimeActual();
+                            //first most condition- if arrivalTimeActual is not present that means bus went to base
+                            if (arrivalTimeActual == null) {
+                            } else {
                                 //now going for GPS (Actual) TIMETABEL
                                 LocalDateTime startTimeActual = intervalTripPeriod.getStartTimeActual();
                                 if (startTimeActual == null) {
@@ -262,16 +264,21 @@ public class DetailedRoute extends BasicRoute {
                                     intervalDay.getAbGpsTimetable().pollFirstEntry();
                                 }
                             }
+                        }
 
-                            //--------------ba-------------
-                            if (intervalTripPeriod.getType().equals("ba")) {
-                                //first af all putting trip into SCHEDULED TIMETABLE
-                                intervalDay.getBaTimetable().put(intervalTripPeriod.getStartTimeScheduled(), intervalTripPeriod);
-                                if (intervalDay.getBaTimetable().size() > 2) {
-                                    intervalDay.getBaTimetable().pollFirstEntry();
-                                    //keeping table with only two trips
-                                }
-                                //now going for GPS (Actual) TIMETABEL
+                        //--------------ba-------------
+                        if (intervalTripPeriod.getType().equals("ba")) {
+                            //first af all putting trip into SCHEDULED TIMETABLE
+                            intervalDay.getBaTimetable().put(intervalTripPeriod.getStartTimeScheduled(), intervalTripPeriod);
+                            if (intervalDay.getBaTimetable().size() > 2) {
+                                intervalDay.getBaTimetable().pollFirstEntry();
+                                //keeping table with only two trips
+                            }
+                            //now going for GPS (Actual) TIMETABEL
+                            LocalDateTime arrivalTimeActual = intervalTripPeriod.getArrivalTimeActual();
+                            //first most condition- if arrivalTimeActual is not present that means bus went to base
+                            if (arrivalTimeActual == null) {
+                            } else {
                                 LocalDateTime startTimeActual = intervalTripPeriod.getStartTimeActual();
                                 if (startTimeActual == null) {
                                     //try to deside sequence by comparing arrivalTimeActual of this trip and those trips that are inside gpsTimetable
@@ -341,6 +348,7 @@ public class DetailedRoute extends BasicRoute {
                     }
                 }
             }
+
         }
     }
 

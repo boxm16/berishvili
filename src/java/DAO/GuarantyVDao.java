@@ -114,6 +114,7 @@ public class GuarantyVDao {
         } catch (SQLException ex) {
             Logger.getLogger(RouteDao.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return intervalsRoutes;
     }
 

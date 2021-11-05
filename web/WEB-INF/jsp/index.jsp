@@ -383,7 +383,7 @@
                             <li>
                                 <a href="#" onclick="requestRouter('guarantyTripsInitialRequest.htm')"><h4>საგარანტიო გასვლების დათვალიერება</h4></a>
                             </li>
-                           
+
                             <li>
                                 <a href="guarantyTripsUploadPage.htm""><h4>ავტობუსების მარშრუტების ანალიზი</h4></a>
                             </li>
@@ -413,6 +413,11 @@
                 <ul class="list-unstyled CTAs">
                     <li>
                         <a href="routes.htm"><h3>მარშრუტები</h3></a>
+                    </li>
+                </ul>
+                <ul class="list-unstyled CTAs">
+                    <li>
+                        <a href="routeGraphical.htm"><h3>გრაფიკული გამოსახვა</h3></a>
                     </li>
                 </ul>
             </nav>

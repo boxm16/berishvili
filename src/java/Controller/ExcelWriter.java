@@ -3022,7 +3022,13 @@ public class ExcelWriter {
                         Cell abGpsTimetableHaltTimeScheduledCell = row.createCell(13);
                         if (count < abGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) abGpsTimetable.get(count);
-                            abGpsTimetableHaltTimeScheduledCell.setCellValue(intervalTripPeriod.getHaltTimeScheduledExcelFormat());
+
+                            Double haltTimeActualExcelFormat = intervalTripPeriod.getHaltTimeActualExcelFormat();
+                            if (haltTimeActualExcelFormat == null) {
+                                abGpsTimetableHaltTimeScheduledCell.setCellValue("");
+                            } else {
+                                abGpsTimetableHaltTimeScheduledCell.setCellValue(intervalTripPeriod.getHaltTimeActualExcelFormat());
+                            }
                         } else {
                             abGpsTimetableHaltTimeScheduledCell.setCellValue("");
                         }
@@ -3321,7 +3327,12 @@ public class ExcelWriter {
                         Cell baGpsTimetableHaltTimeScheduledCell = row.createCell(31);
                         if (count < baGpsTimetable.size()) {
                             IntervalTripPeriod intervalTripPeriod = (IntervalTripPeriod) baGpsTimetable.get(count);
-                            baGpsTimetableHaltTimeScheduledCell.setCellValue(intervalTripPeriod.getHaltTimeScheduledExcelFormat());
+                            Double haltTimeActualExcelFormat = intervalTripPeriod.getHaltTimeActualExcelFormat();
+                            if (haltTimeActualExcelFormat == null) {
+                                baGpsTimetableHaltTimeScheduledCell.setCellValue("");
+                            } else {
+                                baGpsTimetableHaltTimeScheduledCell.setCellValue(intervalTripPeriod.getHaltTimeActualExcelFormat());
+                            }
                         } else {
                             baGpsTimetableHaltTimeScheduledCell.setCellValue("");
                         }

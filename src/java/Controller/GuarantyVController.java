@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class GuarantyVController {
 
     @Autowired
-    private GuarantyVDao guarantyVDao;
+    private GuarantyVDao guarantyDao;
     @Autowired
     private RouteDao routeDao;
 
@@ -33,7 +33,7 @@ public class GuarantyVController {
     @RequestMapping(value = "guarantyTripsInitialRequest")
     public String guarantyTripsInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model) {
         DetailedRoutesPager guarantyRoutesPager = createDetailedRoutesPager(routeDates);
-        TreeMap<Float, DetailedRoute> routesForIntervalsForExcelExport = guarantyVDao.getRoutesForIntervalsForExcelExport(guarantyRoutesPager);
+        TreeMap<Float, DetailedRoute> routesForIntervalsForExcelExport = guarantyDao.getRoutesForIntervalsForExcelExport(guarantyRoutesPager);
         TreeMap<Float, RouteData> routesDataFromDB = routeDao.getRoutesDataFromDB();
         ArrayList guarantyData = getGuarantyDataV(routesForIntervalsForExcelExport, routesDataFromDB);
 

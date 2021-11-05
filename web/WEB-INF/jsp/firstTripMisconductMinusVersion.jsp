@@ -332,7 +332,7 @@
                         <c:forEach var="tripPeriod" items="${firstTripMisconductMinusVersion}">
                             <tr style="background-color:${tripPeriod.getColor()} ">
                                 <td align="center">${tripPeriod.dateStamp} </td>
-                              <td align="center">${tripPeriod.baseNumber} </td>
+                                <td align="center">${tripPeriod.baseNumber} </td>
                                 <td align="center">${tripPeriod.routeNumber} </td>
                                 <td align="center"><a href="exodus.htm?routeNumber=${tripPeriod.routeNumber}&dateStamp=${tripPeriod.dateStamp}&exodusNumber=${tripPeriod.getExodusNumber()}&startTimeScheduled=${tripPeriod.startTimeScheduled}"  target="_blank">${tripPeriod.exodusNumber}</a> </td>
                                 <td>${tripPeriod.busNumber}</td>
@@ -347,13 +347,6 @@
                     </tbody>
                 </table>
                 <hr>
-                <center>
-
-                    ${tripPeriodsPager.display}
-
-                </center>
-                <hr>
-
             </div>
         </div>
 

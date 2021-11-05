@@ -252,13 +252,6 @@
                     </tbody>
                 </table>
                 <hr>
-                <center>
-
-                    ${tripPeriodsPager.display}
-
-                </center>
-                <hr>
-
             </div>
         </div>
 

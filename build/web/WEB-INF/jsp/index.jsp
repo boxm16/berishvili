@@ -417,7 +417,7 @@
                 </ul>
                 <ul class="list-unstyled CTAs">
                     <li>
-                        <a href="routeGraphical.htm"><h3>გრაფიკული გამოსახვა</h3></a>
+                        <a href="graphicalRouteInitialRequest.htm"><h3>გრაფიკული გამოსახვა</h3></a>
                     </li>
                 </ul>
             </nav>

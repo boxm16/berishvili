@@ -232,7 +232,10 @@ public class MisconductsDao {
                         newTripPeriod.setArrivalTimeScheduled(converter.convertStringTimeToDate(resultSet.getString("arrival_time_scheduled")));
                         newTripPeriod.setArrivalTimeActual(converter.convertStringTimeToDate(resultSet.getString("arrival_time_actual")));
                         newTripPeriod.setArrivalTimeDifference(resultSet.getString("arrival_time_difference"));
-                        tripVoucher.getTripPeriods().add(newTripPeriod);
+                        if (!resultSet.getString("type").contains("baseReturn")) {
+                            //this is QUICK FIX, bug is baseReturn tripPeriod, When startTime is after 00:00, becaus it thinks it is less then 23:59
+                            tripVoucher.getTripPeriods().add(newTripPeriod);
+                        }
                         if (tripVoucher.getTripPeriods().size() == 2) {
                             FirstTripPeriod firstTripPeriod = calculateFirstTripPeriodAndBaseMisconduct(tripVoucher.getTripPeriods().get(0), tripVoucher.getTripPeriods().get(1), requestMisconductTimeBound);
                             if (firstTripPeriod != null) {
@@ -344,7 +347,10 @@ public class MisconductsDao {
                         newTripPeriod.setArrivalTimeScheduled(converter.convertStringTimeToDate(resultSet.getString("arrival_time_scheduled")));
                         newTripPeriod.setArrivalTimeActual(converter.convertStringTimeToDate(resultSet.getString("arrival_time_actual")));
                         newTripPeriod.setArrivalTimeDifference(resultSet.getString("arrival_time_difference"));
-                        tripVoucher.getTripPeriods().add(newTripPeriod);
+                        if (!resultSet.getString("type").contains("baseReturn")) {
+                            //this is QUICK FIX, bug is baseReturn tripPeriod, When startTime is after 00:00, becaus it thinks it is less then 23:59
+                            tripVoucher.getTripPeriods().add(newTripPeriod);
+                        }
                         if (tripVoucher.getTripPeriods().size() == 2) {
                             FirstTripPeriod firstTripPeriod = calculateFirstTripPeriodAndBaseMisconductMinusVersion(tripVoucher.getTripPeriods().get(0), tripVoucher.getTripPeriods().get(1), requestMisconductTimeBound);
                             if (firstTripPeriod != null) {

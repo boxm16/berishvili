@@ -2,6 +2,7 @@ package Controller;
 
 import graphical.Exodus;
 import graphical.Route;
+import graphical.RouteData;
 import graphical.TripPeriod;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,14 +16,48 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class GraphicalController {
 
-    @RequestMapping(value = "routeGraphical", method = RequestMethod.GET)
-    public String routeGraphical() {
-        System.out.println("lll");
-        return "routeGraphical";
+    @RequestMapping(value = "graphicalRouteInitialRequest", method = RequestMethod.GET)
+    public String graphicalRouteInitialRequest(ModelMap model) {
+
+        RouteData routeData = new RouteData();
+        model.addAttribute("route", routeData);
+
+        return "graphicalRoute";
+    }
+
+    @RequestMapping(value = "graphicalRouteVersions", method = RequestMethod.POST)
+    public String graphicalRouteVersions(ModelMap model,
+            @RequestParam(value = "roundCheckBox", required = false) String roundCheckBox,
+            @RequestParam(value = "roundInputHour", required = false) String roundInputHour,
+            @RequestParam(value = "roundInputMinute", required = false) String roundInputMinute,
+            @RequestParam(value = "roundInputSeconds", required = false) String roundInputSecond,
+            @RequestParam(value = "roundInputSeconds", required = false) String roundInputMinutes,
+            @RequestParam(value = "roundInputSeconds", required = false) String roundInputSeconds,
+            @RequestParam(value = "busCheckBox", required = false) String busCheckBox,
+            @RequestParam(value = "busInput", required = false) String busInput,
+            @RequestParam(value = "intervalCheckBox", required = false) String intervalCheckBox,
+            @RequestParam(value = "intervalInputHour", required = false) String intervalInputHour,
+            @RequestParam(value = "intervalInputMinute", required = false) String intervalInputMinute,
+            @RequestParam(value = "intervalInputSecond", required = false) String intervalInputSecond,
+            @RequestParam("plusMinusInput") String plusMinusInput,
+            @RequestParam("firstTripStartTimeInFormInput") String firstTripStartTimeInFormInput,
+            @RequestParam("lastTripStartTimeInFormInput") String lastTripStartTimeInFormInput,
+            @RequestParam(value = "starterTripInFormInput", required = false) String starterTripInFormInput,
+            @RequestParam("abTripTimeMinutesInFormInput") String abTripTimeMinutesInFormInput,
+            @RequestParam("abTripTimeSecondsInFormInput") String abTripTimeSecondsInFormInput,
+            @RequestParam("baTripTimeMinutesInFormInput") String baTripTimeMinutesInFormInput,
+            @RequestParam("baTripTimeSecondsInFormInput") String baTripTimeSecondsInFormInput,
+            @RequestParam("abBusCountInFormInput") String abBusCountInFormInput,
+            @RequestParam("baBusCountInFormInput") String baBusCountInFormInput,
+            @RequestParam("intervalTimeInFormInput") String intervalTimeInFormInput) {
+        System.out.println(roundCheckBox);
+
+        return "graphicalRoute";
     }
 
     @RequestMapping(value = "breaks", method = RequestMethod.GET)

@@ -331,7 +331,7 @@ public class GuarantyTripsData extends IntervalTripPeriod {
 
     public String getGuarantyDifferenceColor() {
 
-        if (getGuarantyStartTimeDifference() != null && getGuarantyStartTimeDifference().getSeconds() < -120) {
+        if (getGuarantyStartTimeDifference() == null || getGuarantyStartTimeDifference().getSeconds() < -120) {
             return "red";
         } else {
             return "inherited";

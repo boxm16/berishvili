@@ -147,6 +147,7 @@ public class GraphicalController {
         routeData.setBaBusCount(Integer.valueOf(baBusCountInFormInput));
 
         routeData.setIntervalTime(intervalTimeInFormInput);
+        //   ArrayList<ExodusIgnitionCode
 
         model.addAttribute("route", routeData);
 

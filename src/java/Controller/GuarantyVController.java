@@ -98,6 +98,11 @@ public class GuarantyVController {
                 if (abGpsTimetable.size() > 0) {
                     actualSubGuarantyTripAB = (IntervalTripPeriod) abGpsTimetable.pollLastEntry().getValue();
                 }
+                //-------
+                if (actualGuarantyTripAB == scheduledSubGuarantyTripAB) {
+                    actualSubGuarantyTripAB = actualGuarantyTripAB;
+                    actualGuarantyTripAB = new IntervalTripPeriod();
+                }
 
                 if (actualSubGuarantyTripAB != null && scheduledSubGuarantyTripAB != null) {
                     GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
@@ -154,7 +159,11 @@ public class GuarantyVController {
                 if (baGpsTimetable.size() > 0) {
                     actualSubGuarantyTripBA = (IntervalTripPeriod) baGpsTimetable.pollLastEntry().getValue();
                 }
-
+                //-------
+                if (actualGuarantyTripBA == scheduledSubGuarantyTripBA) {
+                    actualSubGuarantyTripBA = actualGuarantyTripBA;
+                    actualGuarantyTripBA = new IntervalTripPeriod();
+                }
                 if (actualSubGuarantyTripBA != null && scheduledSubGuarantyTripBA != null) {
                     GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
                     guarantyTripsData.setType("ba");

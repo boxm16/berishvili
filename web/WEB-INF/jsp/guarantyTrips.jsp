@@ -51,7 +51,7 @@
                             <td style="background-color:${guarantyTripPeriod.getGuarantyDifferenceColor()} ">${guarantyTripPeriod.getGuarantyStartTimeDifferenceString()}</td>
 
                             <td align="center"><a href="interval.htm?routeNumber=${guarantyTripPeriod.routeNumber}&dateStamp=${guarantyTripPeriod.dateStamp}&tripPeriodType=${guarantyTripPeriod.getType()}&startTimeScheduled=${guarantyTripPeriod.getGuarantyStartTimeScheduled()}" target="_blank">${guarantyTripPeriod.exodusScheduled}</a></td>
-                            <td align="center" style="background-color:${guarantyTripPeriod.exodusScheduled==guarantyTripPeriod.exodusActual?"inherited":"red"} "><a href="interval.htm?routeNumber=${guarantyTripPeriod.routeNumber}&dateStamp=${guarantyTripPeriod.dateStamp}&tripPeriodType=${guarantyTripPeriod.getType()}&startTimeScheduled=${guarantyTripPeriod.getExodusActualStartTimeScheduled()}" target="_blank">${guarantyTripPeriod.exodusActual}</a></td>
+                            <td align="center" style="background-color:${guarantyTripPeriod.exodusScheduled==guarantyTripPeriod.exodusActual?"inherited":"red"} "><a href="interval.htm?routeNumber=${guarantyTripPeriod.routeNumber}&dateStamp=${guarantyTripPeriod.dateStamp}&tripPeriodType=${guarantyTripPeriod.getType()}&startTimeScheduled=${guarantyTripPeriod.getExodusActualStartTimeScheduled()}" target="_blank">${guarantyTripPeriod.exodusActual==0? "" :guarantyTripPeriod.exodusActual}</a></td>
 
 
                         </tr>

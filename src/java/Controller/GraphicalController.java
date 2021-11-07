@@ -32,15 +32,15 @@ public class GraphicalController {
 
     @RequestMapping(value = "graphicalRouteVersions", method = RequestMethod.POST)
     public String graphicalRouteVersions(ModelMap model,
-            @RequestParam(value = "roundCheckBox", required = false) String roundCheckBox,
+            @RequestParam(value = "roundCheckBox", required = false) String roundCheckBoxChecked,
             @RequestParam(value = "roundInputHour", required = false) String roundInputHour,
             @RequestParam(value = "roundInputMinute", required = false) String roundInputMinute,
-            @RequestParam(value = "roundInputSeconds", required = false) String roundInputSecond,
-            @RequestParam(value = "roundInputSeconds", required = false) String roundInputMinutes,
+            @RequestParam(value = "roundInputSecond", required = false) String roundInputSecond,
+            @RequestParam(value = "roundInputMinutes", required = false) String roundInputMinutes,
             @RequestParam(value = "roundInputSeconds", required = false) String roundInputSeconds,
-            @RequestParam(value = "busCheckBox", required = false) String busCheckBox,
+            @RequestParam(value = "busCheckBox", required = false) String busCheckBoxChecked,
             @RequestParam(value = "busInput", required = false) String busInput,
-            @RequestParam(value = "intervalCheckBox", required = false) String intervalCheckBox,
+            @RequestParam(value = "intervalCheckBox", required = false) String intervalCheckBoxChecked,
             @RequestParam(value = "intervalInputHour", required = false) String intervalInputHour,
             @RequestParam(value = "intervalInputMinute", required = false) String intervalInputMinute,
             @RequestParam(value = "intervalInputSecond", required = false) String intervalInputSecond,
@@ -55,7 +55,100 @@ public class GraphicalController {
             @RequestParam("abBusCountInFormInput") String abBusCountInFormInput,
             @RequestParam("baBusCountInFormInput") String baBusCountInFormInput,
             @RequestParam("intervalTimeInFormInput") String intervalTimeInFormInput) {
-        System.out.println(roundCheckBox);
+        RouteData routeData = new RouteData();
+        if (roundCheckBoxChecked != null) {
+            routeData.setRoundCheckBoxChecked("checked");
+        }
+        if (roundInputHour == null) {
+            routeData.setRoundInputHourValue("00");
+        } else {
+            routeData.setRoundInputHourValue(roundInputHour);
+        }
+
+        if (roundInputMinute == null) {
+            routeData.setRoundInputMinuteValue("00");
+        } else {
+            routeData.setRoundInputMinuteValue(roundInputMinute);
+        }
+
+        if (roundInputMinute == null) {
+            routeData.setRoundInputMinuteValue("00");
+        } else {
+            routeData.setRoundInputMinuteValue(roundInputMinute);
+        }
+
+        if (roundInputSecond == null) {
+            routeData.setRoundInputSecondValue("00");
+        } else {
+            routeData.setRoundInputSecondValue(roundInputSecond);
+        }
+
+        if (roundInputMinutes == null) {
+            routeData.setRoundInputMinutesValue("00");
+        } else {
+            routeData.setRoundInputMinutesValue(roundInputMinutes);
+        }
+
+        if (roundInputSeconds == null) {
+            routeData.setRoundInputSecondsValue("00");
+        } else {
+            routeData.setRoundInputSecondsValue(roundInputSeconds);
+        }
+
+        if (busCheckBoxChecked != null) {
+            routeData.setBusCheckBoxChecked("checked");
+        }
+
+        if (busInput == null) {
+            routeData.setBusInputValue("");
+        } else {
+            routeData.setBusInputValue(busInput);
+        }
+
+        if (intervalCheckBoxChecked != null) {
+            routeData.setIntervalCheckBoxChecked("checked");
+        }
+
+        if (intervalInputHour == null) {
+            routeData.setIntervalInputHourValue("00:00");
+        } else {
+            routeData.setIntervalInputHourValue(intervalInputHour);
+        }
+
+        if (intervalInputMinute == null) {
+            routeData.setIntervalInputMinuteValue("00:00");
+        } else {
+            routeData.setIntervalInputMinuteValue(intervalInputMinute);
+        }
+
+        if (intervalInputSecond == null) {
+            routeData.setIntervalInputSecondValue("00:00");
+        } else {
+            routeData.setIntervalInputSecondValue(intervalInputSecond);
+        }
+
+        routeData.setPlusMinusInputValue(plusMinusInput);
+
+        routeData.setFirstTripStartTime(firstTripStartTimeInFormInput);
+
+        routeData.setLastTripStartTime(lastTripStartTimeInFormInput);
+
+        routeData.setStarterTrip(starterTripInFormInput);
+
+        routeData.setAbTripTimeMinutes(Integer.valueOf(abTripTimeMinutesInFormInput));
+
+        routeData.setAbTripTimeSeconds(Integer.valueOf(abTripTimeSecondsInFormInput));
+
+        routeData.setBaTripTimeMinutes(Integer.valueOf(baTripTimeMinutesInFormInput));
+
+        routeData.setBaTripTimeSeconds(Integer.valueOf(baTripTimeSecondsInFormInput));
+
+        routeData.setAbBusCount(Integer.valueOf(abBusCountInFormInput));
+        routeData.setBaBusCount(Integer.valueOf(baBusCountInFormInput));
+
+        routeData.setIntervalTime(intervalTimeInFormInput);
+
+        model.addAttribute("route", routeData);
 
         return "graphicalRoute";
     }

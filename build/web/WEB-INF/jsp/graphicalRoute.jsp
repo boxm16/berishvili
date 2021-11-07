@@ -294,7 +294,6 @@ $allVersions = $routeController->getRouteVersionsWithoutBreaks($starterTrip, $fi
                                 </td>
                             </tr>
                         </table>
-                                                  <input type="text" name ="t">
                     </form>
                     <h6>*ბრუნის დრო შეადგენს წირების და დგომების ჯამს ანუ ბრუნის სრული დრო= A_B წირის დრო + 5წ.დგომა + B_A წირის დრო +5წ.დგომა</h6>
                     <button onclick="hideParamatersForm()">პარამეტრების ფანჯრის აკეცვა</button>
@@ -310,7 +309,7 @@ $allVersions = $routeController->getRouteVersionsWithoutBreaks($starterTrip, $fi
         </div>
 
         <hr>
-     
+
         <!--
                 <?php
                 $routeVersionNumber = 0;

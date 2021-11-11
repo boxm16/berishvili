@@ -10,6 +10,7 @@ import Model.GuarantyTripsData;
 import Model.IntervalDay;
 import Model.IntervalTripPeriod;
 import Model.RouteData;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -100,10 +101,27 @@ public class GuarantyVController {
                 }
                 //-------
                 if (actualGuarantyTripAB == scheduledSubGuarantyTripAB) {
-                    actualSubGuarantyTripAB = actualGuarantyTripAB;
-                    actualGuarantyTripAB = new IntervalTripPeriod();
+                    if (actualGuarantyTripAB == null
+                            || scheduledGuarantyTripAB == null
+                            || actualGuarantyTripAB.getStartTimeActual() == null
+                            || scheduledGuarantyTripAB.getStartTimeScheduled() == null) {
+                        //do nothing
+                    } else {
+                        if (actualGuarantyTripAB.getStartTimeActual().isAfter(scheduledGuarantyTripAB.getStartTimeScheduled())) {
+                            //again, do nothing, keep things untouched
+                        } else {
+                            Duration durationTillGuarantyTrip = Duration.between(actualGuarantyTripAB.getStartTimeActual(), scheduledGuarantyTripAB.getStartTimeScheduled());
+                            Duration durationTillSubGuarantyTrip = Duration.between(actualGuarantyTripAB.getStartTimeActual(), scheduledSubGuarantyTripAB.getStartTimeScheduled());
+                            if (durationTillGuarantyTrip.getSeconds() <= durationTillSubGuarantyTrip.getSeconds()) {
+                                // and again, do nothing
+                            } else {
+                                actualSubGuarantyTripAB = actualGuarantyTripAB;
+                                actualGuarantyTripAB = new IntervalTripPeriod();
+                            }
+                        }
+                    }
                 }
-
+                //---------
                 if (actualSubGuarantyTripAB != null && scheduledSubGuarantyTripAB != null) {
                     GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
                     guarantyTripsData.setType("ab");
@@ -160,10 +178,34 @@ public class GuarantyVController {
                     actualSubGuarantyTripBA = (IntervalTripPeriod) baGpsTimetable.pollLastEntry().getValue();
                 }
                 //-------
+                if (actualGuarantyTripBA == scheduledSubGuarantyTripAB) {
+                    if (actualGuarantyTripBA == null
+                            || scheduledGuarantyTripBA == null
+                            || actualGuarantyTripBA.getStartTimeActual() == null
+                            || scheduledGuarantyTripBA.getStartTimeScheduled() == null) {
+                        //do nothing
+                    } else {
+                        if (actualGuarantyTripBA.getStartTimeActual().isAfter(scheduledGuarantyTripBA.getStartTimeScheduled())) {
+                            //again, do nothing, keep things untouched
+                        } else {
+                            Duration durationTillGuarantyTrip = Duration.between(actualGuarantyTripBA.getStartTimeActual(), scheduledGuarantyTripBA.getStartTimeScheduled());
+                            Duration durationTillSubGuarantyTrip = Duration.between(actualGuarantyTripBA.getStartTimeActual(), scheduledSubGuarantyTripBA.getStartTimeScheduled());
+                            if (durationTillGuarantyTrip.getSeconds() <= durationTillSubGuarantyTrip.getSeconds()) {
+                                // and again, do nothing
+                            } else {
+                                actualSubGuarantyTripBA = actualGuarantyTripAB;
+                                actualGuarantyTripBA = new IntervalTripPeriod();
+                            }
+                        }
+                    }
+                }
+                //---------
+                /*
                 if (actualGuarantyTripBA == scheduledSubGuarantyTripBA) {
                     actualSubGuarantyTripBA = actualGuarantyTripBA;
                     actualGuarantyTripBA = new IntervalTripPeriod();
                 }
+                 */
                 if (actualSubGuarantyTripBA != null && scheduledSubGuarantyTripBA != null) {
                     GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
                     guarantyTripsData.setType("ba");

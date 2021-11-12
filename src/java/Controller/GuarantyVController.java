@@ -130,40 +130,48 @@ public class GuarantyVController {
                 }
 
                 //---------
-                if (actualSubGuarantyTripAB != null && scheduledSubGuarantyTripAB != null) {
+                if (scheduledSubGuarantyTripAB != null) {
+
                     GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
                     guarantyTripsData.setType("ab");
                     guarantyTripsData.setGuarantyType("ქვე-საგარანტიო");
-                    guarantyTripsData.setBaseNumber(actualSubGuarantyTripAB.getBaseNumber());
+                    guarantyTripsData.setBaseNumber(scheduledSubGuarantyTripAB.getBaseNumber());
                     guarantyTripsData.setRouteNumber(route.getNumber());
                     guarantyTripsData.setDateStamp(day.getDateStamp());
 
                     guarantyTripsData.setExodusScheduled(scheduledSubGuarantyTripAB.getExodusNumber());
                     guarantyTripsData.setGuarantyStartTimeScheduled(scheduledSubGuarantyTripAB.getStartTimeScheduled());
+                    if (actualSubGuarantyTripAB == null) {
+                        //do nothing
+                    } else {
+                        guarantyTripsData.setExodusActual(actualSubGuarantyTripAB.getExodusNumber());
+                        guarantyTripsData.setGuarantyStartTimeActual(actualSubGuarantyTripAB.getStartTimeActual());
+                        guarantyTripsData.setExodusActualStartTimeScheduled(actualSubGuarantyTripAB.getStartTimeScheduled());
+                        guarantyTripsData.setSpacialCase(actualSubGuarantyTripAB.isSpacialCase());
 
-                    guarantyTripsData.setExodusActual(actualSubGuarantyTripAB.getExodusNumber());
-                    guarantyTripsData.setGuarantyStartTimeActual(actualSubGuarantyTripAB.getStartTimeActual());
-                    guarantyTripsData.setExodusActualStartTimeScheduled(actualSubGuarantyTripAB.getStartTimeScheduled());
-                    guarantyTripsData.setSpacialCase(actualSubGuarantyTripAB.isSpacialCase());
+                    }
                     dayArray.add(guarantyTripsData);
                 }
 
-                if (actualGuarantyTripAB != null && scheduledGuarantyTripAB != null) {
+                if (scheduledGuarantyTripAB != null) {
                     GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
                     guarantyTripsData.setType("ab");
                     guarantyTripsData.setGuarantyType("საგარანტიო");
-                    guarantyTripsData.setBaseNumber(actualGuarantyTripAB.getBaseNumber());
+                    guarantyTripsData.setBaseNumber(scheduledGuarantyTripAB.getBaseNumber());
                     guarantyTripsData.setRouteNumber(route.getNumber());
                     guarantyTripsData.setDateStamp(day.getDateStamp());
 
                     guarantyTripsData.setExodusScheduled(scheduledGuarantyTripAB.getExodusNumber());
                     guarantyTripsData.setGuarantyStartTimeScheduled(scheduledGuarantyTripAB.getStartTimeScheduled());
-                    guarantyTripsData.setExodusActual(actualGuarantyTripAB.getExodusNumber());
-                    guarantyTripsData.setGuarantyStartTimeActual(actualGuarantyTripAB.getStartTimeActual());
-                    guarantyTripsData.setExodusActualStartTimeScheduled(actualGuarantyTripAB.getStartTimeScheduled());
-                    guarantyTripsData.setSpacialCase(actualGuarantyTripAB.isSpacialCase());
+                    if (actualGuarantyTripAB == null) {
+                        //do nothing
+                    } else {
+                        guarantyTripsData.setExodusActual(actualGuarantyTripAB.getExodusNumber());
+                        guarantyTripsData.setGuarantyStartTimeActual(actualGuarantyTripAB.getStartTimeActual());
+                        guarantyTripsData.setExodusActualStartTimeScheduled(actualGuarantyTripAB.getStartTimeScheduled());
+                        guarantyTripsData.setSpacialCase(actualGuarantyTripAB.isSpacialCase());
+                    }
                     dayArray.add(guarantyTripsData);
-
                 }
 
                 //---------------BA-------------
@@ -215,43 +223,50 @@ public class GuarantyVController {
                 }
 
                 //---------
-                if (actualSubGuarantyTripBA != null && scheduledSubGuarantyTripBA != null) {
+                if (scheduledSubGuarantyTripBA != null) {
                     GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
                     guarantyTripsData.setType("ba");
                     guarantyTripsData.setGuarantyType("ქვე-საგარანტიო");
-                    guarantyTripsData.setBaseNumber(actualSubGuarantyTripBA.getBaseNumber());
+                    guarantyTripsData.setBaseNumber(scheduledSubGuarantyTripBA.getBaseNumber());
                     guarantyTripsData.setRouteNumber(route.getNumber());
                     guarantyTripsData.setDateStamp(day.getDateStamp());
 
                     guarantyTripsData.setExodusScheduled(scheduledSubGuarantyTripBA.getExodusNumber());
                     guarantyTripsData.setGuarantyStartTimeScheduled(scheduledSubGuarantyTripBA.getStartTimeScheduled());
-                    guarantyTripsData.setExodusActual(actualSubGuarantyTripBA.getExodusNumber());
-                    guarantyTripsData.setGuarantyStartTimeActual(actualSubGuarantyTripBA.getStartTimeActual());
-                    guarantyTripsData.setExodusActualStartTimeScheduled(actualSubGuarantyTripBA.getStartTimeScheduled());
-                    guarantyTripsData.setSpacialCase(actualSubGuarantyTripBA.isSpacialCase());
+                    if (actualSubGuarantyTripBA == null) {
+                        //do nothing
+                    } else {
+                        guarantyTripsData.setExodusActual(actualSubGuarantyTripBA.getExodusNumber());
+                        guarantyTripsData.setGuarantyStartTimeActual(actualSubGuarantyTripBA.getStartTimeActual());
+                        guarantyTripsData.setExodusActualStartTimeScheduled(actualSubGuarantyTripBA.getStartTimeScheduled());
+                        guarantyTripsData.setSpacialCase(actualSubGuarantyTripBA.isSpacialCase());
+                    }
                     dayArray.add(guarantyTripsData);
                 }
-
-                if (actualGuarantyTripBA != null && scheduledGuarantyTripBA != null) {
+                if (scheduledGuarantyTripBA != null) {
                     GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
                     guarantyTripsData.setType("ba");
                     guarantyTripsData.setGuarantyType("საგარანტიო");
-                    guarantyTripsData.setBaseNumber(actualGuarantyTripBA.getBaseNumber());
+                    guarantyTripsData.setBaseNumber(scheduledGuarantyTripBA.getBaseNumber());
                     guarantyTripsData.setRouteNumber(route.getNumber());
                     guarantyTripsData.setDateStamp(day.getDateStamp());
 
                     guarantyTripsData.setExodusScheduled(scheduledGuarantyTripBA.getExodusNumber());
                     guarantyTripsData.setGuarantyStartTimeScheduled(scheduledGuarantyTripBA.getStartTimeScheduled());
-                    guarantyTripsData.setExodusActual(actualGuarantyTripBA.getExodusNumber());
-                    guarantyTripsData.setGuarantyStartTimeActual(actualGuarantyTripBA.getStartTimeActual());
-                    guarantyTripsData.setExodusActualStartTimeScheduled(actualGuarantyTripBA.getStartTimeScheduled());
-                    guarantyTripsData.setSpacialCase(actualGuarantyTripBA.isSpacialCase());
-                    dayArray.add(guarantyTripsData);
+                    if (actualGuarantyTripBA == null) {
+                        //do nothing
+                    } else {
+                        guarantyTripsData.setExodusActual(actualGuarantyTripBA.getExodusNumber());
+                        guarantyTripsData.setGuarantyStartTimeActual(actualGuarantyTripBA.getStartTimeActual());
+                        guarantyTripsData.setExodusActualStartTimeScheduled(actualGuarantyTripBA.getStartTimeScheduled());
+                        guarantyTripsData.setSpacialCase(actualGuarantyTripBA.isSpacialCase());
+                        dayArray.add(guarantyTripsData);
+                    }
+                    
                 }
                 returnValue.add(dayArray);
             }
         }
         return returnValue;
     }
-
 }

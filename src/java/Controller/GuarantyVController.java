@@ -10,6 +10,7 @@ import Model.GuarantyTripsData;
 import Model.IntervalDay;
 import Model.IntervalTripPeriod;
 import Model.RouteData;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -100,11 +101,12 @@ public class GuarantyVController {
                 }
                 //-------
                 //-------
+                /*
                 if (actualGuarantyTripAB == scheduledSubGuarantyTripAB) {
                     actualSubGuarantyTripAB = actualGuarantyTripAB;
                     actualGuarantyTripAB = new IntervalTripPeriod();
                 }
-                /*
+                 */
                 if (actualGuarantyTripAB == scheduledSubGuarantyTripAB) {
                     if (actualGuarantyTripAB == null
                             || scheduledGuarantyTripAB == null
@@ -126,7 +128,7 @@ public class GuarantyVController {
                         }
                     }
                 }
-                 */
+
                 //---------
                 if (actualSubGuarantyTripAB != null && scheduledSubGuarantyTripAB != null) {
                     GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
@@ -185,12 +187,12 @@ public class GuarantyVController {
                 }
 
                 //-------
-                if (actualGuarantyTripBA == scheduledSubGuarantyTripBA) {
+                /*if (actualGuarantyTripBA == scheduledSubGuarantyTripBA) {
                     actualSubGuarantyTripBA = actualGuarantyTripBA;
                     actualGuarantyTripBA = new IntervalTripPeriod();
                 }
-                /*
-                if (actualGuarantyTripBA == scheduledSubGuarantyTripAB) {
+                 */
+                if (actualGuarantyTripBA == scheduledSubGuarantyTripBA) {
                     if (actualGuarantyTripBA == null
                             || scheduledGuarantyTripBA == null
                             || actualGuarantyTripBA.getStartTimeActual() == null
@@ -205,15 +207,14 @@ public class GuarantyVController {
                             if (durationTillGuarantyTrip.getSeconds() <= durationTillSubGuarantyTrip.getSeconds()) {
                                 // and again, do nothing
                             } else {
-                                actualSubGuarantyTripBA = actualGuarantyTripAB;
+                                actualSubGuarantyTripBA = actualGuarantyTripBA;
                                 actualGuarantyTripBA = new IntervalTripPeriod();
                             }
                         }
                     }
                 }
-                 */
-                //---------
 
+                //---------
                 if (actualSubGuarantyTripBA != null && scheduledSubGuarantyTripBA != null) {
                     GuarantyTripsData guarantyTripsData = new GuarantyTripsData();
                     guarantyTripsData.setType("ba");

@@ -1,6 +1,7 @@
 package Model;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class IntervalTripPeriod extends DetailedTripPeriod {
 
@@ -16,6 +17,7 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     private Duration misconductDurationDuration;
     private String runOver;
     private boolean spacialCase;
+    private LocalDateTime fakeStartTimeActual;
 
     public IntervalTripPeriod() {
         runOver = "";
@@ -191,7 +193,13 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     public void setSpacialCase(boolean spacialCase) {
         this.spacialCase = spacialCase;
     }
-    
-    
+
+    public LocalDateTime getFakeStartTimeActual() {
+        return fakeStartTimeActual;
+    }
+
+    public void setFakeStartTimeActual(LocalDateTime fakeStartTimeActual) {
+        this.fakeStartTimeActual = fakeStartTimeActual;
+    }
 
 }

@@ -59,4 +59,14 @@ public class DetailedDay extends Day {
             }
         }
     }
+
+    public void setAbGpsTimetable(TreeMap<LocalDateTime, DetailedTripPeriod> abGpsTimetable) {
+        this.abGpsTimetable = abGpsTimetable;
+    }
+
+    public void setBaGpsTimetable(TreeMap<LocalDateTime, DetailedTripPeriod> baGpsTimetable) {
+        this.baGpsTimetable = baGpsTimetable;
+    }
+    
+    
 }

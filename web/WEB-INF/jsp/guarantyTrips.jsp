@@ -18,10 +18,13 @@
     <body>
         <table>
             <thead>
-                <tr>
-                    <th>ა/ბაზა</th>
-                    <th>მარშრუტი</th>
+                <tr>   
                     <th>თარიღი</th>
+                    <th>ა/ბაზა</th>
+                    <th>მარშ. #</th>
+
+                    <th>"A" პუნქტი</th>
+                    <th>"Β" პუნქტი</th>
                     <th>მიმართულება</th>
                     <th>საგარანტიო<br>გასვლის<br>ტიპი</th>
 
@@ -32,6 +35,8 @@
                     <th>გეგმიური<br>გასვლის<br>ნომერი</th>
                     <th>ფაქტიური<br>გასვლის<br>ნომერი</th>
 
+                    <th>ფაქტიური<br>გასვლის<br>მძღოლი</th>
+                    <th>ფაქტიური<br>გასვლის<br>სახ. ნომერი</th>
 
                 </tr>
             </thead>
@@ -39,9 +44,13 @@
                 <c:forEach var="dayArray" items="${guarantyData}" varStatus="loop">
                     <c:forEach var="guarantyTripPeriod" items="${dayArray}">
                         <tr style="background-color: ${loop.index%2==0?"inherited":"lightgrey"}">
+                            <td  style="width: 80px;">${guarantyTripPeriod.dateStamp}</td>
                             <td>${guarantyTripPeriod.baseNumber}</td>
                             <td>${guarantyTripPeriod.routeNumber}</td>
-                            <td>${guarantyTripPeriod.dateStamp}</td>
+                            <td>${guarantyTripPeriod.aPoint}</td>
+                            <td>${guarantyTripPeriod.bPoint}</td>
+
+
                             <td>${guarantyTripPeriod.getTypeG()}</td>
                             <td>${guarantyTripPeriod.guarantyType}</td>
 
@@ -53,6 +62,8 @@
                             <td align="center"><a href="interval.htm?routeNumber=${guarantyTripPeriod.routeNumber}&dateStamp=${guarantyTripPeriod.dateStamp}&tripPeriodType=${guarantyTripPeriod.getType()}&startTimeScheduled=${guarantyTripPeriod.getGuarantyStartTimeScheduled()}" target="_blank">${guarantyTripPeriod.exodusScheduled}</a></td>
                             <td align="center" style="background-color:${guarantyTripPeriod.exodusScheduled==guarantyTripPeriod.exodusActual?"inherited":"red"} "><a href="interval.htm?routeNumber=${guarantyTripPeriod.routeNumber}&dateStamp=${guarantyTripPeriod.dateStamp}&tripPeriodType=${guarantyTripPeriod.getType()}&startTimeScheduled=${guarantyTripPeriod.getExodusActualStartTimeScheduled()}" target="_blank">${guarantyTripPeriod.exodusActual==0? "":guarantyTripPeriod.exodusActual}</a></td>
 
+                            <td>${guarantyTripPeriod.driverName}</td>
+                            <td>${guarantyTripPeriod.busNumber}</td>
 
                         </tr>
                     </c:forEach>

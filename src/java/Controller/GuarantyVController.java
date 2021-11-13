@@ -36,7 +36,7 @@ public class GuarantyVController {
         DetailedRoutesPager guarantyRoutesPager = createDetailedRoutesPager(routeDates);
         TreeMap<Float, DetailedRoute> routesForIntervalsForExcelExport = guarantyDao.getRoutesForIntervalsForExcelExport(guarantyRoutesPager);
         TreeMap<Float, RouteData> routesDataFromDB = routeDao.getRoutesDataFromDB();
-        ArrayList guarantyData = getGuarantyDataV(routesForIntervalsForExcelExport, routesDataFromDB);
+        ArrayList guarantyData = getGuarantyDataV(routesForIntervalsForExcelExport, routesDataFromDB, routesDataFromDB);
 
         model.addAttribute("guarantyData", guarantyData);
         return "guarantyTrips";
@@ -66,11 +66,16 @@ public class GuarantyVController {
         return detailedRoutesPager;
     }
 
-    private ArrayList getGuarantyDataV(TreeMap<Float, DetailedRoute> routesForIntervalsForExcelExport, TreeMap<Float, RouteData> routesDataFromDB) {
+    private ArrayList getGuarantyDataV(TreeMap<Float, DetailedRoute> routesForIntervalsForExcelExport, TreeMap<Float, RouteData> routesDataFromDB, TreeMap<Float, RouteData> routesDataFromDB2) {
         ArrayList returnValue = new ArrayList();
         for (Map.Entry<Float, DetailedRoute> intervalRouteEntry : routesForIntervalsForExcelExport.entrySet()) {
             DetailedRoute route = intervalRouteEntry.getValue();
             route.calculateIntervalsDataVVersion();
+
+            RouteData routeData = routesDataFromDB2.get(intervalRouteEntry.getKey());
+            String aPoint = routeData.getaPoint();
+            String bPoint = routeData.getbPoint();
+
             TreeMap<Date, Day> days = route.getDays();
             for (Map.Entry<Date, Day> dayEntry : days.entrySet()) {
                 ArrayList dayArray = new ArrayList();
@@ -137,6 +142,9 @@ public class GuarantyVController {
                     guarantyTripsData.setGuarantyType("ქვე-საგარანტიო");
                     guarantyTripsData.setBaseNumber(scheduledSubGuarantyTripAB.getBaseNumber());
                     guarantyTripsData.setRouteNumber(route.getNumber());
+                    guarantyTripsData.setaPoint(aPoint);
+                    guarantyTripsData.setbPoint(bPoint);
+
                     guarantyTripsData.setDateStamp(day.getDateStamp());
 
                     guarantyTripsData.setExodusScheduled(scheduledSubGuarantyTripAB.getExodusNumber());
@@ -145,6 +153,8 @@ public class GuarantyVController {
                         //do nothing
                     } else {
                         guarantyTripsData.setExodusActual(actualSubGuarantyTripAB.getExodusNumber());
+                        guarantyTripsData.setDriverName(actualSubGuarantyTripAB.getDriverName());
+                        guarantyTripsData.setBusNumber(actualSubGuarantyTripAB.getBusNumber());
                         guarantyTripsData.setGuarantyStartTimeActual(actualSubGuarantyTripAB.getStartTimeActual());
                         guarantyTripsData.setExodusActualStartTimeScheduled(actualSubGuarantyTripAB.getStartTimeScheduled());
                         guarantyTripsData.setSpacialCase(actualSubGuarantyTripAB.isSpacialCase());
@@ -160,6 +170,8 @@ public class GuarantyVController {
                     guarantyTripsData.setBaseNumber(scheduledGuarantyTripAB.getBaseNumber());
                     guarantyTripsData.setRouteNumber(route.getNumber());
                     guarantyTripsData.setDateStamp(day.getDateStamp());
+                    guarantyTripsData.setaPoint(aPoint);
+                    guarantyTripsData.setbPoint(bPoint);
 
                     guarantyTripsData.setExodusScheduled(scheduledGuarantyTripAB.getExodusNumber());
                     guarantyTripsData.setGuarantyStartTimeScheduled(scheduledGuarantyTripAB.getStartTimeScheduled());
@@ -167,6 +179,8 @@ public class GuarantyVController {
                         //do nothing
                     } else {
                         guarantyTripsData.setExodusActual(actualGuarantyTripAB.getExodusNumber());
+                        guarantyTripsData.setDriverName(actualGuarantyTripAB.getDriverName());
+                        guarantyTripsData.setBusNumber(actualGuarantyTripAB.getBusNumber());
                         guarantyTripsData.setGuarantyStartTimeActual(actualGuarantyTripAB.getStartTimeActual());
                         guarantyTripsData.setExodusActualStartTimeScheduled(actualGuarantyTripAB.getStartTimeScheduled());
                         guarantyTripsData.setSpacialCase(actualGuarantyTripAB.isSpacialCase());
@@ -230,6 +244,8 @@ public class GuarantyVController {
                     guarantyTripsData.setBaseNumber(scheduledSubGuarantyTripBA.getBaseNumber());
                     guarantyTripsData.setRouteNumber(route.getNumber());
                     guarantyTripsData.setDateStamp(day.getDateStamp());
+                    guarantyTripsData.setaPoint(aPoint);
+                    guarantyTripsData.setbPoint(bPoint);
 
                     guarantyTripsData.setExodusScheduled(scheduledSubGuarantyTripBA.getExodusNumber());
                     guarantyTripsData.setGuarantyStartTimeScheduled(scheduledSubGuarantyTripBA.getStartTimeScheduled());
@@ -237,6 +253,8 @@ public class GuarantyVController {
                         //do nothing
                     } else {
                         guarantyTripsData.setExodusActual(actualSubGuarantyTripBA.getExodusNumber());
+                        guarantyTripsData.setDriverName(actualSubGuarantyTripBA.getDriverName());
+                        guarantyTripsData.setBusNumber(actualSubGuarantyTripBA.getBusNumber());
                         guarantyTripsData.setGuarantyStartTimeActual(actualSubGuarantyTripBA.getStartTimeActual());
                         guarantyTripsData.setExodusActualStartTimeScheduled(actualSubGuarantyTripBA.getStartTimeScheduled());
                         guarantyTripsData.setSpacialCase(actualSubGuarantyTripBA.isSpacialCase());
@@ -250,6 +268,8 @@ public class GuarantyVController {
                     guarantyTripsData.setBaseNumber(scheduledGuarantyTripBA.getBaseNumber());
                     guarantyTripsData.setRouteNumber(route.getNumber());
                     guarantyTripsData.setDateStamp(day.getDateStamp());
+                    guarantyTripsData.setaPoint(aPoint);
+                    guarantyTripsData.setbPoint(bPoint);
 
                     guarantyTripsData.setExodusScheduled(scheduledGuarantyTripBA.getExodusNumber());
                     guarantyTripsData.setGuarantyStartTimeScheduled(scheduledGuarantyTripBA.getStartTimeScheduled());
@@ -257,12 +277,14 @@ public class GuarantyVController {
                         //do nothing
                     } else {
                         guarantyTripsData.setExodusActual(actualGuarantyTripBA.getExodusNumber());
+                        guarantyTripsData.setDriverName(actualGuarantyTripBA.getDriverName());
+                        guarantyTripsData.setBusNumber(actualGuarantyTripBA.getBusNumber());
                         guarantyTripsData.setGuarantyStartTimeActual(actualGuarantyTripBA.getStartTimeActual());
                         guarantyTripsData.setExodusActualStartTimeScheduled(actualGuarantyTripBA.getStartTimeScheduled());
                         guarantyTripsData.setSpacialCase(actualGuarantyTripBA.isSpacialCase());
                         dayArray.add(guarantyTripsData);
                     }
-                    
+
                 }
                 returnValue.add(dayArray);
             }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Route {
 
     private ArrayList<Exodus> exoduses;
+    private int heigth;
 
     public Route() {
         exoduses = new ArrayList();
@@ -21,6 +22,10 @@ public class Route {
 
     public void setExoduses(ArrayList<Exodus> exoduses) {
         this.exoduses = exoduses;
+    }
+
+    public int getHeight() {
+        return 30+(this.exoduses.size() * 30);
     }
 
 }

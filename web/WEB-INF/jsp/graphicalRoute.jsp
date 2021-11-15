@@ -1,9 +1,9 @@
+<%@page import="java.time.LocalTime"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="java.time.LocalDateTime"%>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<!--
-$routeController = new RouteController();
-$allVersions = $routeController->getRouteVersionsWithoutBreaks($starterTrip, $firstTripStartTime, $lastTripStartTime, $abTripTimeMinutes, $abTripTimeSeconds, $baTripTimeMinutes, $baTripTimeSeconds, $abBusCount, $baBusCount, $intervalTime);
--->
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -74,7 +74,7 @@ $allVersions = $routeController->getRouteVersionsWithoutBreaks($starterTrip, $fi
                                             <tbody>
                                                 <tr>
                                                     <td>
-                                                        <input id="roundCheckBox" name="roundCheckBox" type="checkbox" ${route.roundCheckBoxChecked} onclick="checkCheckBoxes(event)">
+                                                        <input id="roundCheckBox" name="roundCheckBox" type="checkbox" ${routeData.roundCheckBoxChecked} onclick="checkCheckBoxes(event)">
                                                     </td>
                                                     <td>
                                                         ბრუნის დრო
@@ -86,24 +86,24 @@ $allVersions = $routeController->getRouteVersionsWithoutBreaks($starterTrip, $fi
                                                             <tr id="roundTr">
                                                                 <td >
 
-                                                                    <input id="roundInputHour" name="roundInputHour" class="input" type="number" min="-1" disabled="true" value="${route.roundInputHourValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
+                                                                    <input id="roundInputHour" name="roundInputHour" class="input" type="number" min="-1" disabled="true" value="${routeData.roundInputHourValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
                                                                 </td>
                                                                 <td >
 
-                                                                    <input id="roundInputMinute" name="roundInputMinute" class="input" type="number" disabled="true" value="${route.roundInputMinuteValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
+                                                                    <input id="roundInputMinute" name="roundInputMinute" class="input" type="number" disabled="true" value="${routeData.roundInputMinuteValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
                                                                 </td>
                                                                 <td>
 
-                                                                    <input id="roundInputSecond" name="roundInputSecond" class="input" type="number" disabled="true" value="${route.roundInputSecondValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
+                                                                    <input id="roundInputSecond" name="roundInputSecond" class="input" type="number" disabled="true" value="${routeData.roundInputSecondValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
                                                                 </td>
                                                             </tr>
                                                             <tr id="roundMinutesTr">
                                                                 <td colspan="2" style="padding-top:5px; padding-left:40px">
-                                                                    <input id="roundInputMinutes"  name="roundInputMinutes" class="input" type="number" disabled="true" value="${route.roundInputMinutesValue}" style="width:50px;" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
+                                                                    <input id="roundInputMinutes"  name="roundInputMinutes" class="input" type="number" disabled="true" value="${routeData.roundInputMinutesValue}" style="width:50px;" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
                                                                 </td>
                                                                 <td style="padding-top:5px">
 
-                                                                    <input id="roundInputSeconds" name="roundInputSeconds" class="input" type="number" disabled="true" value="${route.roundInputSecondsValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
+                                                                    <input id="roundInputSeconds" name="roundInputSeconds" class="input" type="number" disabled="true" value="${routeData.roundInputSecondsValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
                                                                 </td> 
                                                             </tr>
                                                         </table>
@@ -112,13 +112,13 @@ $allVersions = $routeController->getRouteVersionsWithoutBreaks($starterTrip, $fi
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <input id="busCheckBox" name="busCheckBox" type="checkbox" ${route.busCheckBoxChecked} onclick="checkCheckBoxes(event)" >
+                                                        <input id="busCheckBox" name="busCheckBox" type="checkbox" ${routeData.busCheckBoxChecked} onclick="checkCheckBoxes(event)" >
                                                     </td>
                                                     <td>
                                                         ავტ. რაოდ.
                                                     </td>
                                                     <td colspan="3">
-                                                        <input id="busInput" name="busInput" class="input" type="number" disabled="true" style="width:135px;" max="200" min="1" value="${route.busInputValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
+                                                        <input id="busInput" name="busInput" class="input" type="number" disabled="true" style="width:135px;" max="200" min="1" value="${routeData.busInputValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
                                                     </td>
 
 
@@ -126,7 +126,7 @@ $allVersions = $routeController->getRouteVersionsWithoutBreaks($starterTrip, $fi
 
                                                 <tr >
                                                     <td>
-                                                        <input id="intervalCheckBox" name="intervalCheckBox" type="checkbox" ${route.intervalCheckBoxChecked} onclick="checkCheckBoxes(event)">
+                                                        <input id="intervalCheckBox" name="intervalCheckBox" type="checkbox" ${routeData.intervalCheckBoxChecked} onclick="checkCheckBoxes(event)">
                                                     </td>
 
                                                     <td>
@@ -136,13 +136,13 @@ $allVersions = $routeController->getRouteVersionsWithoutBreaks($starterTrip, $fi
                                                         <table>
                                                             <tr id="intervalTr">
                                                                 <td >
-                                                                    <input id="intervalInputHour" name="intervalInputHour" class="input" type="number" min="-1" disabled="true" value="${route.intervalInputHourValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
+                                                                    <input id="intervalInputHour" name="intervalInputHour" class="input" type="number" min="-1" disabled="true" value="${routeData.intervalInputHourValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
                                                                 </td>
                                                                 <td >
-                                                                    <input id="intervalInputMinute"  name="intervalInputMinute" class="input" type="number" disabled="true" value="${route.intervalInputMinuteValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
+                                                                    <input id="intervalInputMinute"  name="intervalInputMinute" class="input" type="number" disabled="true" value="${routeData.intervalInputMinuteValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
                                                                 </td>
                                                                 <td>
-                                                                    <input id="intervalInputSecond" name="intervalInputSecond"  class="input" type="number" disabled="true" value="${route.intervalInputSecondValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
+                                                                    <input id="intervalInputSecond" name="intervalInputSecond"  class="input" type="number" disabled="true" value="${routeData.intervalInputSecondValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)" onfocus="this.select()">
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -156,7 +156,7 @@ $allVersions = $routeController->getRouteVersionsWithoutBreaks($starterTrip, $fi
 
                                                                 <td style="width:40%">
                                                                     <label>+/-</label>
-                                                                    <input id="plusMinusInput" name="plusMinusInput" type="number" min="0" value="${route.plusMinusInputValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)">
+                                                                    <input id="plusMinusInput" name="plusMinusInput" type="number" min="0" value="${routeData.plusMinusInputValue}" oninput="adjastTimeInputs(event)" onkeyup="incoming(event)">
                                                                 </td>
                                                                 <td style="widht:60%">
                                                                     <button type="button"  style="width:100%; background-color:blue; color:white" onclick="checkAndCalculate()"><b>გამოთვლა</b></button>
@@ -221,25 +221,31 @@ $allVersions = $routeController->getRouteVersionsWithoutBreaks($starterTrip, $fi
                                             <tr>
                                                 <td>პერიოდი</td>
                                                 <td>      
-                                                    <input name="firstTripStartTimeInFormInput" type="time" step="1" value="${route.firstTripStartTime}">
+                                                    <input name="firstTripStartTimeInFormInput" type="time" step="1" value="${routeData.firstTripStartTime}">
                                                 </td>
                                                 <td>
-                                                    <input name="lastTripStartTimeInFormInput" type="time" step="1" value="${route.lastTripStartTime}">
+                                                    <input name="lastTripStartTimeInFormInput" type="time" step="1" value="${routeData.lastTripStartTime}">
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td>მარშრუტი წრიულია</td>
+                                                <td> არა <input type="radio" name="circularRoute" value="no" ${routeData.circularRoute==false? "checked":""}></td>
+                                                <td> კი <input type="radio" name="circularRoute"  value="yes" ${routeData.circularRoute==true? "checked":""}></td></tr>
+
+                                            <tr>
                                             <tr>
                                                 <td>
                                                     ათვლის დამწყები მარშრუტი
                                                 </td>
                                                 <td>
-                                                    A_B &nbsp;<input type="radio" name="starterTripInFormInput" value="ab" ${route.starterTrip.equals("ab")? "checked":""}>
+                                                    A_B &nbsp;<input type="radio" name="starterTripInFormInput" value="ab" ${routeData.starterTrip.equals("ab")? "checked":""}>
                                                 </td>
-                                                <td> B_A &nbsp;<input type="radio" name="starterTripInFormInput" value="ba" ${route.starterTrip.equals("ba")? "checked":""}>
+                                                <td> B_A &nbsp;<input type="radio" name="starterTripInFormInput" value="ba" ${routeData.starterTrip.equals("ba")? "checked":""}>
                                             </tr>
                                             <tr>
 
                                                 <td rowspan="2">
-                                                    ბრუნის დრო* <br><label id="roundTimeInFormLabel">${route.roundTripTime}</label>
+                                                    ბრუნის დრო* <br><label id="roundTimeInFormLabel">${routeData.roundTripTime}</label>
                                                 </td>
                                                 <td>A-B წირის დრო</td>
                                                 <td>B-A წირის დრო</td>
@@ -248,19 +254,19 @@ $allVersions = $routeController->getRouteVersionsWithoutBreaks($starterTrip, $fi
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <input name="abTripTimeMinutesInFormInput"  id="abTripTimeMinutesInFormInput" type="number" value="${route.abTripTimeMinutes}" step="any" oninput="adjastHalfRoundTimeInputsInForm(event)">
+                                                    <input name="abTripTimeMinutesInFormInput"  id="abTripTimeMinutesInFormInput" type="number" value="${routeData.abTripTimeMinutes}" step="any" oninput="adjastHalfRoundTimeInputsInForm(event)">
 
-                                                    <input name="abTripTimeSecondsInFormInput" id="abTripTimeSecondsInFormInput" type="number" value="${route.abTripTimeSeconds}" step="any" oninput="adjastHalfRoundTimeInputsInForm(event)">*
+                                                    <input name="abTripTimeSecondsInFormInput" id="abTripTimeSecondsInFormInput" type="number" value="${routeData.abTripTimeSeconds}" step="any" oninput="adjastHalfRoundTimeInputsInForm(event)">*
                                                 </td>
                                                 <td>
-                                                    <input name="baTripTimeMinutesInFormInput" id="baTripTimeMinutesInFormInput" type="number" value="${route.baTripTimeMinutes}" step="any" oninput="adjastHalfRoundTimeInputsInForm(event)">
+                                                    <input name="baTripTimeMinutesInFormInput" id="baTripTimeMinutesInFormInput" type="number" value="${routeData.baTripTimeMinutes}" step="any" oninput="adjastHalfRoundTimeInputsInForm(event)">
 
-                                                    <input name="baTripTimeSecondsInFormInput" id="baTripTimeSecondsInFormInput" type="number" value="${route.baTripTimeSeconds}" step="any" oninput="adjastHalfRoundTimeInputsInForm(event)">*
+                                                    <input name="baTripTimeSecondsInFormInput" id="baTripTimeSecondsInFormInput" type="number" value="${routeData.baTripTimeSeconds}" step="any" oninput="adjastHalfRoundTimeInputsInForm(event)">*
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td rowspan="2">
-                                                    ავტობუსების რაოდენობა <br> <label id="busCountInFormLabel"> ${route.busCount}</label>
+                                                    ავტობუსების რაოდენობა <br> <label id="busCountInFormLabel"> ${routeData.busCount}</label>
                                                 </td>
                                                 <td>
                                                     A-B ავტობუსები
@@ -272,21 +278,22 @@ $allVersions = $routeController->getRouteVersionsWithoutBreaks($starterTrip, $fi
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <input name="abBusCountInFormInput" id="abBusCountInFormInput" type="number" value="${route.abBusCount}" oninput="adjastBusCountInputsInForm(event)">
+                                                    <input name="abBusCountInFormInput" id="abBusCountInFormInput" type="number" value="${routeData.abBusCount}" oninput="adjastBusCountInputsInForm(event)">
                                                 </td>
                                                 <td>
-                                                    <input name="baBusCountInFormInput" id="baBusCountInFormInput" type="number" value="${route.baBusCount}" oninput="adjastBusCountInputsInForm(event)">
+                                                    <input name="baBusCountInFormInput" id="baBusCountInFormInput" type="number" value="${routeData.baBusCount}" oninput="adjastBusCountInputsInForm(event)">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     ინტერვალის დრო
                                                 </td>
-                                                <td><input name="intervalTimeInFormInput" id="intervalTimeInFormInput" type="text" value="${route.intervalTime}" readonly="true" style="width:80px"></td>
+                                                <td><input name="intervalTimeInFormInput" id="intervalTimeInFormInput" type="text" value="${routeData.intervalTime}" readonly="true" style="width:80px"></td>
                                                 <td>
                                                     <input type="submit" value="გამოსახვა" style="background-color:green; color:white; width:100%" >
                                                 </td>
                                             </tr>
+
 
                                         </table>
 
@@ -301,6 +308,7 @@ $allVersions = $routeController->getRouteVersionsWithoutBreaks($starterTrip, $fi
                     <br><br>
                     <br><br><br><br>
 
+
                 </div>
 
             </div> 
@@ -309,6 +317,37 @@ $allVersions = $routeController->getRouteVersionsWithoutBreaks($starterTrip, $fi
         </div>
 
         <hr>
+        <c:forEach var="route" items="${routes}">
+
+            <svg width='1500' height='${route.height}'>
+            <rect x='5' width='1530' height='20' style='fill:rgb(0,0,0);' />
+            <rect x='5' width='20' height='${route.height}' style='fill:rgb(0,0,0);' />
+            <% int x = 0;
+                LocalTime hh = LocalTime.parse("05:00:00");
+            %>
+            <c:forEach var = "i" begin = "30" end = "1260" step="60">
+                <% x++;
+                    String time = hh.format(DateTimeFormatter.ofPattern("HH:mm"));
+                %>
+
+                <line x1='${i}' y1='20' x2='${i}' y2='${route.height}'style='stroke:rgb(0,0,0);stroke-width:1' />
+                <text x='${i-18}' y='15' fill='white'> <% out.print(time);%></text>
+
+                <%  hh = hh.plusHours(1);%>
+
+            </c:forEach>
+            <c:forEach var="exodus" items="${route.exoduses}" varStatus="exodusesCount">
+                <c:forEach var="tripPeriod" items="${exodus.tripPeriods}" >
+                    <rect x='${tripPeriod.getStartPoint()}' y='${(exodusesCount.index*30)+30}' width='${tripPeriod.length}' height='20'  rx='7' style='fill:${tripPeriod.color}' />
+
+                </c:forEach>
+
+            </c:forEach>
+
+
+            </svg>
+            <hr>
+        </c:forEach>
 
         <!--
                 <?php

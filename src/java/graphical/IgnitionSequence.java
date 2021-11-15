@@ -6,10 +6,25 @@
 package graphical;
 
 import java.util.ArrayList;
- 
+
 public class IgnitionSequence {
 
+    ArrayList<ExodusIgnitionCode> ignitionSequence;
+
     public IgnitionSequence() {
-        ArrayList<ExodusIgnitionCode> ignitionSequence = new ArrayList();
+        ignitionSequence = new ArrayList();
     }
+
+    public void addExodusIgnitionCode(ExodusIgnitionCode exodusIgnitionCode) {
+        ignitionSequence.add(exodusIgnitionCode);
+    }
+
+    public ArrayList<ExodusIgnitionCode> getIgnitionSequence() {
+        return ignitionSequence;
+    }
+
+    public void setIgnitionSequence(ArrayList<ExodusIgnitionCode> ignitionSequence) {
+        this.ignitionSequence = ignitionSequence;
+    }
+    
 }

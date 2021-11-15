@@ -1,11 +1,14 @@
 package Controller;
 
 import graphical.Exodus;
+import graphical.ExodusIgnitionCode;
+import graphical.IgnitionSequence;
 import graphical.Route;
 import graphical.RouteData;
 import graphical.TripPeriod;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -21,11 +24,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class GraphicalController {
 
+    Converter converter;
+
+    public GraphicalController() {
+        converter = new Converter();
+    }
+
     @RequestMapping(value = "graphicalRouteInitialRequest", method = RequestMethod.GET)
     public String graphicalRouteInitialRequest(ModelMap model) {
 
         RouteData routeData = new RouteData();
-        model.addAttribute("route", routeData);
+        model.addAttribute("routeData", routeData);
 
         return "graphicalRoute";
     }
@@ -47,6 +56,7 @@ public class GraphicalController {
             @RequestParam("plusMinusInput") String plusMinusInput,
             @RequestParam("firstTripStartTimeInFormInput") String firstTripStartTimeInFormInput,
             @RequestParam("lastTripStartTimeInFormInput") String lastTripStartTimeInFormInput,
+            @RequestParam("circularRoute") String circularRoute,
             @RequestParam(value = "starterTripInFormInput", required = false) String starterTripInFormInput,
             @RequestParam("abTripTimeMinutesInFormInput") String abTripTimeMinutesInFormInput,
             @RequestParam("abTripTimeSecondsInFormInput") String abTripTimeSecondsInFormInput,
@@ -133,6 +143,10 @@ public class GraphicalController {
 
         routeData.setLastTripStartTime(lastTripStartTimeInFormInput);
 
+        if (circularRoute.equals("yes")) {
+            routeData.setCircularRoute(true);
+        }
+
         routeData.setStarterTrip(starterTripInFormInput);
 
         routeData.setAbTripTimeMinutes(Integer.valueOf(abTripTimeMinutesInFormInput));
@@ -145,11 +159,18 @@ public class GraphicalController {
 
         routeData.setAbBusCount(Integer.valueOf(abBusCountInFormInput));
         routeData.setBaBusCount(Integer.valueOf(baBusCountInFormInput));
+        routeData.setBusCount(Integer.valueOf(abBusCountInFormInput) + Integer.valueOf(baBusCountInFormInput));
 
         routeData.setIntervalTime(intervalTimeInFormInput);
-        //   ArrayList<ExodusIgnitionCode
+        IgnitionSequence initialIgnitionSequences = getInitialIgnitionSequence(routeData);
 
-        model.addAttribute("route", routeData);
+        ArrayList<IgnitionSequence> allPossibleIgnitionSequences = getAllPossibleIgnitionSequenves(routeData);
+
+        Route route = createtRouteWithoutBreaks(initialIgnitionSequences, routeData);
+        ArrayList<Route> routes = new ArrayList<>();
+        routes.add(route);
+        model.addAttribute("routeData", routeData);
+        model.addAttribute("routes", routes);
 
         return "graphicalRoute";
     }
@@ -184,4 +205,120 @@ public class GraphicalController {
         return "breaks";
     }
 
+    private IgnitionSequence getInitialIgnitionSequence(RouteData routeData) {
+        IgnitionSequence ignitionSequence = new IgnitionSequence();
+
+        String goTripType = routeData.getStarterTrip();
+        String returnTripType;
+
+        int goBusesCount;
+        int returnBusesCount;
+
+        Duration goTripPeriodTime;
+        Duration returnTripPeriodTime;
+
+        if (goTripType.equals("ab")) {
+            goBusesCount = routeData.getAbBusCount();
+            returnBusesCount = routeData.getBaBusCount();
+            returnTripType = "ba";
+
+            // goTripPeriodTime = Duration.ofSeconds((routeData.getAbTripTimeMinutes() * 60) + routeData.getAbTripTimeSeconds());
+            returnTripPeriodTime = Duration.ofSeconds((routeData.getBaTripTimeMinutes() * 60) + routeData.getBaTripTimeSeconds());
+
+        } else {
+            goBusesCount = routeData.getBaBusCount();
+            returnBusesCount = routeData.getAbBusCount();
+            returnTripType = "ab";
+
+            // goTripPeriodTime = Duration.ofSeconds((routeData.getBaTripTimeMinutes() * 60) + routeData.getBaTripTimeSeconds());
+            returnTripPeriodTime = Duration.ofSeconds((routeData.getAbTripTimeMinutes() * 60) + routeData.getAbTripTimeSeconds());
+
+        }
+
+        LocalDateTime startTime = converter.convertStringTimeToDate(routeData.getFirstTripStartTime());
+
+        while (goBusesCount > 0) {
+            ExodusIgnitionCode exodusIgnitionCode = new ExodusIgnitionCode();
+            exodusIgnitionCode.setType(goTripType);
+            exodusIgnitionCode.setStartTime(startTime);
+            ignitionSequence.addExodusIgnitionCode(exodusIgnitionCode);
+
+            Duration intervalTime = converter.convertStringToDuration(routeData.getIntervalTime());
+            startTime = startTime.plus(intervalTime);
+
+            goBusesCount--;
+        }
+        startTime = startTime.minus(returnTripPeriodTime).minusMinutes(5);
+        //   startTime=startTime.minus(amountToSubtract);
+        while (returnBusesCount > 0) {
+            ExodusIgnitionCode exodusIgnitionCode = new ExodusIgnitionCode();
+            exodusIgnitionCode.setType(returnTripType);
+            exodusIgnitionCode.setStartTime(startTime);
+            ignitionSequence.addExodusIgnitionCode(exodusIgnitionCode);
+
+            Duration intervalTime = converter.convertStringToDuration(routeData.getIntervalTime());
+            startTime = startTime.plus(intervalTime);
+
+            returnBusesCount--;
+        }
+        return ignitionSequence;
+    }
+
+    private ArrayList<IgnitionSequence> getAllPossibleIgnitionSequenves(RouteData routeData) {
+
+        return new ArrayList();
+    }
+
+    private Route createtRouteWithoutBreaks(IgnitionSequence ignitionSequence, RouteData routeData) {
+        ArrayList<ExodusIgnitionCode> routeIgnitionSequence = ignitionSequence.getIgnitionSequence();
+        Route route = new Route();
+        ArrayList<Exodus> exoduses = new ArrayList<>();
+        LocalDateTime lastTripPeriodStartTime = converter.convertStringTimeToDate(routeData.getLastTripStartTime());
+        Duration haltTime = Duration.ofMinutes(5);
+        for (ExodusIgnitionCode ignitionCode : routeIgnitionSequence) {
+            LocalDateTime tripPeriodStartTime = ignitionCode.getStartTime();
+            String goTripPeriodType = ignitionCode.getType();
+            String returnTripPeriodType;
+
+            Duration goTripPeriodTime;
+            Duration returnTripPeriodTime;
+
+            if (goTripPeriodType.equals("ab")) {
+                returnTripPeriodType = "ba";
+
+                goTripPeriodTime = Duration.ofSeconds((routeData.getAbTripTimeMinutes() * 60) + routeData.getAbTripTimeSeconds());
+                returnTripPeriodTime = Duration.ofSeconds((routeData.getBaTripTimeMinutes() * 60) + routeData.getBaTripTimeSeconds());
+            } else {
+
+                returnTripPeriodType = "ab";
+
+                goTripPeriodTime = Duration.ofSeconds((routeData.getBaTripTimeMinutes() * 60) + routeData.getBaTripTimeSeconds());
+                returnTripPeriodTime = Duration.ofSeconds((routeData.getAbTripTimeMinutes() * 60) + routeData.getAbTripTimeSeconds());
+            }
+
+            Exodus exodus = new Exodus();
+            int counter = 0;
+            while (tripPeriodStartTime.isBefore(lastTripPeriodStartTime)
+                    || tripPeriodStartTime.isEqual(lastTripPeriodStartTime)) {
+
+                if (counter % 2 == 0) {
+                    TripPeriod tripPeriod = new TripPeriod(tripPeriodStartTime, goTripPeriodTime, goTripPeriodType);
+                    exodus.getTripPeriods().add(tripPeriod);
+                    tripPeriodStartTime = tripPeriodStartTime.plus(goTripPeriodTime);
+                } else {
+                    TripPeriod tripPeriod = new TripPeriod(tripPeriodStartTime, returnTripPeriodTime, returnTripPeriodType);
+                    exodus.getTripPeriods().add(tripPeriod);
+                    tripPeriodStartTime = tripPeriodStartTime.plus(returnTripPeriodTime);
+                }
+                TripPeriod tripPeriod = new TripPeriod(tripPeriodStartTime, haltTime, "halt");
+                tripPeriodStartTime = tripPeriodStartTime.plus(haltTime);
+                exodus.getTripPeriods().add(tripPeriod);
+
+                counter++;
+            }
+            exoduses.add(exodus);
+        }
+        route.setExoduses(exoduses);
+        return route;
+    }
 }

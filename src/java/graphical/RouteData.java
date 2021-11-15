@@ -28,6 +28,7 @@ public class RouteData {
     private int baBusCount;
     private int busCount;
     private String intervalTime;
+    private boolean circularRoute;
 
     public RouteData() {
         roundCheckBoxChecked = "";
@@ -56,6 +57,9 @@ public class RouteData {
         baBusCount = 4;
         busCount = 8;
         intervalTime = "00:15:00";
+
+        circularRoute = false;
+
     }
 
     public String getRoundCheckBoxChecked() {
@@ -257,5 +261,15 @@ public class RouteData {
     public void setIntervalTime(String intervalTime) {
         this.intervalTime = intervalTime;
     }
+
+    public boolean isCircularRoute() {
+        return circularRoute;
+    }
+
+    public void setCircularRoute(boolean circularRoute) {
+        this.circularRoute = circularRoute;
+    }
+
+   
 
 }

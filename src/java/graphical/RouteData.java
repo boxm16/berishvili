@@ -223,11 +223,23 @@ public class RouteData {
     }
 
     public String getRoundTripTime() {
-        return roundTripTime;
-    }
+        int tripTimeInSeconds = (abTripTimeMinutes + baTripTimeMinutes + 10) * 60 + abTripTimeSeconds + baTripTimeSeconds;
+        int minutes = tripTimeInSeconds / 60;
+        int seconds = tripTimeInSeconds % 60;
+        String minutesString;
+        String secondsString;
+        if (minutes < 10) {
+            minutesString = "0" + String.valueOf(minutes);
+        } else {
+            minutesString = String.valueOf(minutes);
+        }
+        if (seconds < 10) {
+            secondsString = "0" + String.valueOf(seconds);
+        } else {
+            secondsString = String.valueOf(seconds);
+        }
+        return minutesString + ":" + secondsString;
 
-    public void setRoundTripTime(String roundTripTime) {
-        this.roundTripTime = roundTripTime;
     }
 
     public int getAbBusCount() {
@@ -269,7 +281,5 @@ public class RouteData {
     public void setCircularRoute(boolean circularRoute) {
         this.circularRoute = circularRoute;
     }
-
-   
 
 }

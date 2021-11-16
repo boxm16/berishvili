@@ -243,6 +243,11 @@
                                                 <td> B_A &nbsp;<input type="radio" name="starterTripInFormInput" value="ba" ${routeData.starterTrip.equals("ba")? "checked":""}>
                                             </tr>
                                             <tr>
+                                                <td>დგომის დრო</td>
+                                                <td><input type="number" value="05" id="haltTimeMinutes" name="haltTimeMinutes" step="any" oninput="calculateHalfRoundTimes()"></td>
+                                                <td><input type="number" value="00" id="haltTimeSeconds" name="haltTimeSeconds" step="any" oninput="adjastMinutesAndcalculateHalfRoundTimes()"></td>
+                                            </tr>
+                                            <tr>
 
                                                 <td rowspan="2">
                                                     ბრუნის დრო* <br><label id="roundTimeInFormLabel">${routeData.roundTripTime}</label>
@@ -773,6 +778,26 @@
                 copyMinutesToHours();
             }
 
+            function adjastTimeInputs_3() {
+                var second = document.getElementById("haltTimeSeconds");
+                var minute = document.getElementById("haltTimeMinutes");
+                if (second.value == 60) {
+                    second.value = 0;
+                    minute.value = parseInt(minute.value) + 1;
+                }
+                if (second.value == -1) {
+                    minute.value = parseInt(minute.value) - 1;
+                    if (minute.value == -1) {
+                        second.value = 0;
+                    } else {
+                        second.value = 59;
+                    }
+                }
+                if (minute.value == -1) {
+                    minute.value = 0;
+                }
+            }
+
             function copyMinutesToHours() {
                 var minutes = roundInputMinutes.value;
                 var hour = parseInt(minutes / 60);
@@ -916,7 +941,7 @@
                 busCountInFormLabel.innerHTML = busCounts;
                 intervalTimeInFormInput.value = interval;
                 var roundTimeArray = roundTime.split(":");
-                var roundTimeInSeconds = (roundTimeArray[0] * 60) + (roundTimeArray[1] * 1) - (10 * 60);
+                var roundTimeInSeconds = (roundTimeArray[0] * 60) + (roundTimeArray[1] * 1) - (haltTimeMinutes.value * 60) - haltTimeSeconds;
 
                 if (roundTimeInSeconds % 2 == 0) {
 
@@ -973,10 +998,43 @@
                 targetInput.value = secondValue;
             }
 
+            function calculateHalfRoundTimes() {
+                if (haltTimeMinutes.value < 0) {
+                    haltTimeMinutes.value = 0;
+                }
+                var roundTimeArray = roundTimeInFormLabel.innerHTML.split(":");
+                var roundTimeInSeconds = (roundTimeArray[0] * 60) + (roundTimeArray[1] * 1) - (haltTimeMinutes.value * 60) - haltTimeSeconds.value;
+                if (roundTimeInSeconds % 2 == 0) {
+
+                    var halfRoundTimeInSeconds = roundTimeInSeconds / 2;
+
+                    var halfRoundTimeMinutes = parseInt(halfRoundTimeInSeconds / 60);
+                    var halfRoundTimeSeconds = halfRoundTimeInSeconds % 60;
+                    abTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
+                    abTripTimeSecondsInFormInput.value = halfRoundTimeSeconds;
+                    baTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
+                    baTripTimeSecondsInFormInput.value = halfRoundTimeSeconds;
+                } else {
+                    var halfRoundTimeInSeconds = parseInt(roundTimeInSeconds / 2);
+                    var halfRoundTimeMinutes = parseInt(halfRoundTimeInSeconds / 60);
+                    var halfRoundTimeSeconds = halfRoundTimeInSeconds % 60;
+                    abTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
+                    abTripTimeSecondsInFormInput.value = halfRoundTimeSeconds + 1;
+                    baTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
+                    baTripTimeSecondsInFormInput.value = halfRoundTimeSeconds;
+                }
+            }
+
+            function adjastMinutesAndcalculateHalfRoundTimes() {
+                adjastTimeInputs_3();
+                calculateHalfRoundTimes();
+            }
+
             function adjastHalfRoundTimeInputsInForm(event) {
                 var roundTimeString = roundTimeInFormLabel.innerHTML;
+                ;
                 var roundTimeArray = roundTimeString.split(":");
-                var roundTimeInSeconds = (roundTimeArray[0] * 60) + (roundTimeArray[1] * 1) - (10 * 60);
+                var roundTimeInSeconds = (roundTimeArray[0] * 60) + (roundTimeArray[1] * 1) - (haltTimeMinutes.value * 60) - haltTimeSeconds.value;
                 var trElements = event.target.parentElement;
                 var trInputs = trElements.querySelectorAll("input");
                 var triggerInputMinutes;

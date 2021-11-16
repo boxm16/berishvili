@@ -230,7 +230,7 @@
                                             <tr>
                                                 <td> მარშრუტი წრიულია <input type="radio" name="circularRoute"  value="yes" ${routeData.circularRoute==true? "checked":""}></td>
 
-                                                <td colspan="2"> მარშრუტი არ არის წრიული <input type="radio" name="circularRoute" value="no" ${routeData.circularRoute==false? "checked":""}></td>
+                                                <td colspan="2">მარშრუტი არ არის წრიული<input type="radio" name="circularRoute" value="no" ${routeData.circularRoute==false? "checked":""}></td>
                                             </tr>
                                             <tr>
                                             <tr>

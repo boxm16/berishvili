@@ -8,7 +8,7 @@ public class TripPeriod {
 
     LocalDateTime startTime;
     Duration duration;
-    long length;
+    double length;
     String color;
     String type;
 
@@ -21,12 +21,12 @@ public class TripPeriod {
         this.type = type;
     }
 
-    public long getStartPoint() {
+    public double getStartPoint() {
 
         long a = startTime.toEpochSecond(ZoneOffset.UTC);
 
-        System.out.println(a);
-        return a / 60 - 270;
+        //  System.out.println(a);
+        return (double) a / 60 - 270;
     }
 
     public LocalDateTime getStartTime() {
@@ -53,9 +53,10 @@ public class TripPeriod {
         this.type = type;
     }
 
-    public long getLength() {
-
-        return duration.getSeconds() / 60;
+    public double getLength() {
+        //System.out.println(duration.getSeconds() / 60);
+        length = (double) duration.getSeconds() / 60;
+        return length;
 
     }
 

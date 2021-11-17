@@ -941,7 +941,7 @@
                 busCountInFormLabel.innerHTML = busCounts;
                 intervalTimeInFormInput.value = interval;
                 var roundTimeArray = roundTime.split(":");
-                var roundTimeInSeconds = (roundTimeArray[0] * 60) + (roundTimeArray[1] * 1) - (haltTimeMinutes.value * 60) - haltTimeSeconds;
+                var roundTimeInSeconds = ((roundTimeArray[0] * 60) + (roundTimeArray[1] * 1)) - (((haltTimeMinutes.value * 60) + haltTimeSeconds.value * 1) * 2);
 
                 if (roundTimeInSeconds % 2 == 0) {
 
@@ -1003,7 +1003,7 @@
                     haltTimeMinutes.value = 0;
                 }
                 var roundTimeArray = roundTimeInFormLabel.innerHTML.split(":");
-                var roundTimeInSeconds = (roundTimeArray[0] * 60) + (roundTimeArray[1] * 1) - (haltTimeMinutes.value * 60) - haltTimeSeconds.value;
+                var roundTimeInSeconds = ((roundTimeArray[0] * 60) + (roundTimeArray[1] * 1)) - (((haltTimeMinutes.value * 60) + haltTimeSeconds.value * 1) * 2);
                 if (roundTimeInSeconds % 2 == 0) {
 
                     var halfRoundTimeInSeconds = roundTimeInSeconds / 2;
@@ -1034,7 +1034,7 @@
                 var roundTimeString = roundTimeInFormLabel.innerHTML;
                 ;
                 var roundTimeArray = roundTimeString.split(":");
-                var roundTimeInSeconds = (roundTimeArray[0] * 60) + (roundTimeArray[1] * 1) - (haltTimeMinutes.value * 60) - haltTimeSeconds.value;
+                var roundTimeInSeconds = ((roundTimeArray[0] * 60) + (roundTimeArray[1] * 1)) - (((haltTimeMinutes.value * 60) + haltTimeSeconds.value * 1) * 2);
                 var trElements = event.target.parentElement;
                 var trInputs = trElements.querySelectorAll("input");
                 var triggerInputMinutes;

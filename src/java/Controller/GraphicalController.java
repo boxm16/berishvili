@@ -62,6 +62,8 @@ public class GraphicalController {
             @RequestParam("abTripTimeSecondsInFormInput") String abTripTimeSecondsInFormInput,
             @RequestParam("baTripTimeMinutesInFormInput") String baTripTimeMinutesInFormInput,
             @RequestParam("baTripTimeSecondsInFormInput") String baTripTimeSecondsInFormInput,
+            @RequestParam("haltTimeMinutes") String haltTimeMinutes,
+            @RequestParam("haltTimeSeconds") String haltTimeSeconds,
             @RequestParam("abBusCountInFormInput") String abBusCountInFormInput,
             @RequestParam("baBusCountInFormInput") String baBusCountInFormInput,
             @RequestParam("intervalTimeInFormInput") String intervalTimeInFormInput) {
@@ -148,6 +150,9 @@ public class GraphicalController {
         }
 
         routeData.setStarterTrip(starterTripInFormInput);
+
+        routeData.setHaltTimeMinutes(Integer.valueOf(haltTimeMinutes));
+        routeData.setHaltTimeSeconds(Integer.valueOf(haltTimeSeconds));
 
         routeData.setAbTripTimeMinutes(Integer.valueOf(abTripTimeMinutesInFormInput));
 
@@ -262,7 +267,8 @@ public class GraphicalController {
 
                 goBusesCount--;
             }
-            startTime = startTime.minus(returnTripPeriodTime).minusMinutes(5);
+            Duration haltTime = Duration.ofSeconds(routeData.getHaltTimeMinutes() * 60 + routeData.getHaltTimeSeconds());
+            startTime = startTime.minus(returnTripPeriodTime).minus(haltTime);
             //   startTime=startTime.minus(amountToSubtract);
             while (returnBusesCount > 0) {
                 ExodusIgnitionCode exodusIgnitionCode = new ExodusIgnitionCode();
@@ -289,7 +295,7 @@ public class GraphicalController {
         Route route = new Route();
         ArrayList<Exodus> exoduses = new ArrayList<>();
         LocalDateTime lastTripPeriodStartTime = converter.convertStringTimeToDate(routeData.getLastTripStartTime());
-        Duration haltTime = Duration.ofMinutes(5);
+        Duration haltTime = Duration.ofSeconds(routeData.getHaltTimeMinutes() * 60 + routeData.getHaltTimeSeconds());
         for (ExodusIgnitionCode ignitionCode : routeIgnitionSequence) {
             LocalDateTime tripPeriodStartTime = ignitionCode.getStartTime();
             String goTripPeriodType = ignitionCode.getType();
@@ -312,6 +318,10 @@ public class GraphicalController {
                     TripPeriod tripPeriod = new TripPeriod(tripPeriodStartTime, goTripPeriodTime, goTripPeriodType);
                     exodus.getTripPeriods().add(tripPeriod);
                     tripPeriodStartTime = tripPeriodStartTime.plus(goTripPeriodTime);
+
+                    TripPeriod haltTripPeriod = new TripPeriod(tripPeriodStartTime, haltTime, "halt");
+                    tripPeriodStartTime = tripPeriodStartTime.plus(haltTime);
+                    exodus.getTripPeriods().add(haltTripPeriod);
 
                 }
                 exoduses.add(exodus);

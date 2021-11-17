@@ -244,8 +244,8 @@
                                             </tr>
                                             <tr>
                                                 <td>დგომის დრო</td>
-                                                <td><input type="number" value="05" id="haltTimeMinutes" name="haltTimeMinutes" step="any" oninput="calculateHalfRoundTimes()"></td>
-                                                <td><input type="number" value="00" id="haltTimeSeconds" name="haltTimeSeconds" step="any" oninput="adjastMinutesAndcalculateHalfRoundTimes()"></td>
+                                                <td><input type="number" value="${routeData.haltTimeMinutes}" id="haltTimeMinutes" name="haltTimeMinutes" step="any" oninput="calculateHalfRoundTimes()"></td>
+                                                <td><input type="number" value="${routeData.haltTimeSeconds}" id="haltTimeSeconds" name="haltTimeSeconds" step="any" oninput="adjastMinutesAndcalculateHalfRoundTimes()"></td>
                                             </tr>
                                             <tr>
 

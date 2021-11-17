@@ -24,6 +24,10 @@ public class RouteData {
     private int baTripTimeMinutes;
     private int baTripTimeSeconds;
     private String roundTripTime;
+
+    private int haltTimeMinutes;
+    private int haltTimeSeconds;
+
     private int abBusCount;
     private int baBusCount;
     private int busCount;
@@ -48,6 +52,8 @@ public class RouteData {
         starterTrip = "ab";
         firstTripStartTime = "08:00:00";
         lastTripStartTime = "21:00:00";
+        haltTimeMinutes = 5;
+        haltTimeSeconds = 0;
         abTripTimeMinutes = 55;
         abTripTimeSeconds = 00;
         baTripTimeMinutes = 55;
@@ -223,7 +229,7 @@ public class RouteData {
     }
 
     public String getRoundTripTime() {
-        int tripTimeInSeconds = (abTripTimeMinutes + baTripTimeMinutes + 10) * 60 + abTripTimeSeconds + baTripTimeSeconds;
+        int tripTimeInSeconds = (abTripTimeMinutes + baTripTimeMinutes) * 60 + abTripTimeSeconds + baTripTimeSeconds + (haltTimeMinutes * 60 + haltTimeSeconds) * 2;
         int minutes = tripTimeInSeconds / 60;
         int seconds = tripTimeInSeconds % 60;
         String minutesString;
@@ -280,6 +286,23 @@ public class RouteData {
 
     public void setCircularRoute(boolean circularRoute) {
         this.circularRoute = circularRoute;
+    }
+
+    public int getHaltTimeMinutes() {
+        return haltTimeMinutes;
+    }
+
+    public void setHaltTimeMinutes(int haltTimeMinutes) {
+        this.haltTimeMinutes = haltTimeMinutes;
+    }
+
+    public int getHaltTimeSeconds() {
+
+        return haltTimeSeconds;
+    }
+
+    public void setHaltTimeSeconds(int haltTimeSeconds) {
+        this.haltTimeSeconds = haltTimeSeconds;
     }
 
 }

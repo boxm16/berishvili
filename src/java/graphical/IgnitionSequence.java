@@ -19,11 +19,11 @@ public class IgnitionSequence {
         ignitionSequence.add(exodusIgnitionCode);
     }
 
-    public ArrayList<ExodusIgnitionCode> getIgnitionSequence() {
+    public ArrayList<ExodusIgnitionCode> getSequence() {
         return ignitionSequence;
     }
 
-    public void setIgnitionSequence(ArrayList<ExodusIgnitionCode> ignitionSequence) {
+    public void setSequence(ArrayList<ExodusIgnitionCode> ignitionSequence) {
         this.ignitionSequence = ignitionSequence;
     }
     

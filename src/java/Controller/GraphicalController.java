@@ -169,11 +169,13 @@ public class GraphicalController {
         routeData.setIntervalTime(intervalTimeInFormInput);
         IgnitionSequence initialIgnitionSequences = getInitialIgnitionSequence(routeData);
 
-        ArrayList<IgnitionSequence> allPossibleIgnitionSequences = getAllPossibleIgnitionSequenves(routeData);
-
-        Route route = createtRouteWithoutBreaks(initialIgnitionSequences, routeData);
+        ArrayList<IgnitionSequence> allPossibleIgnitionSequences = getAllPossibleIgnitionSequences(initialIgnitionSequences, routeData);
         ArrayList<Route> routes = new ArrayList<>();
-        routes.add(route);
+        for (IgnitionSequence ignitionSequence : allPossibleIgnitionSequences) {
+            Route route = createtRouteWithoutBreaks(ignitionSequence, routeData);
+            routes.add(route);
+        }
+
         model.addAttribute("routeData", routeData);
         model.addAttribute("routes", routes);
 
@@ -285,13 +287,60 @@ public class GraphicalController {
         return ignitionSequence;
     }
 
-    private ArrayList<IgnitionSequence> getAllPossibleIgnitionSequenves(RouteData routeData) {
+    private ArrayList<IgnitionSequence> getAllPossibleIgnitionSequences(IgnitionSequence initialIgnitionSequence, RouteData routeData) {
 
-        return new ArrayList();
+        ArrayList<IgnitionSequence> allPossibleIgnitionSequences = new ArrayList<>();
+        if (routeData.isCircularRoute()) {
+            allPossibleIgnitionSequences.add(initialIgnitionSequence);
+            return allPossibleIgnitionSequences;
+        }
+        if ((routeData.getStarterTrip().equals("ab") && (routeData.getAbBusCount() <= routeData.getBaBusCount()))
+                || (routeData.getStarterTrip().equals("ba") && (routeData.getBaBusCount() <= routeData.getAbBusCount()))) {
+            allPossibleIgnitionSequences.add(initialIgnitionSequence);
+            return allPossibleIgnitionSequences;
+        }
+        IgnitionSequence nonChangingPart = new IgnitionSequence();
+        IgnitionSequence changingPart = new IgnitionSequence();
+        ExodusIgnitionCode firstIgnitionCode = initialIgnitionSequence.getSequence().get(0);
+        LocalDateTime firstTripStartTime = firstIgnitionCode.getStartTime();
+        int haltTimeInSeconds = (routeData.getHaltTimeMinutes() * 60) + routeData.getHaltTimeSeconds();
+        Duration haltTimeDuration = Duration.ofSeconds(haltTimeInSeconds);
+        Duration returnTripTime;
+        if (firstIgnitionCode.getType().equals("ab")) {
+            returnTripTime = Duration.ofSeconds((routeData.getBaTripTimeMinutes() * 60) + routeData.getBaTripTimeSeconds());
+        } else {
+            returnTripTime = Duration.ofSeconds((routeData.getAbTripTimeMinutes() * 60) + routeData.getAbTripTimeSeconds());
+        }
+        boolean roubikonPassed = false;
+        for (ExodusIgnitionCode exodusIgnitionCode : initialIgnitionSequence.getSequence()) {
+            // System.out.println(firstTripStartTime + ":" + exodusIgnitionCode.getStartTime().minus(haltTimeDuration).minus(returnTripTime));
+
+            if (exodusIgnitionCode.getStartTime().minus(haltTimeDuration).minus(returnTripTime).isAfter(firstTripStartTime)
+                    || exodusIgnitionCode.getStartTime().minus(haltTimeDuration).minus(returnTripTime).isEqual(firstTripStartTime)) {
+                roubikonPassed = true;
+            }
+            if (roubikonPassed) {
+                changingPart.addExodusIgnitionCode(exodusIgnitionCode);
+            } else {
+                nonChangingPart.addExodusIgnitionCode(exodusIgnitionCode);
+            }
+
+        }
+        ArrayList<IgnitionSequence> allVariationsOfChangablePart = getAllVariationsOfChangablePart(changingPart, routeData);
+
+        for (IgnitionSequence ignitionSequence : allVariationsOfChangablePart) {
+            ArrayList<ExodusIgnitionCode> newVersion = (ArrayList<ExodusIgnitionCode>) nonChangingPart.getSequence().clone();
+            newVersion.addAll(ignitionSequence.getSequence());
+            IgnitionSequence newIgnitionSequence = new IgnitionSequence();
+            newIgnitionSequence.setSequence(newVersion);
+            allPossibleIgnitionSequences.add(newIgnitionSequence);
+        }
+
+        return allPossibleIgnitionSequences;
     }
 
     private Route createtRouteWithoutBreaks(IgnitionSequence ignitionSequence, RouteData routeData) {
-        ArrayList<ExodusIgnitionCode> routeIgnitionSequence = ignitionSequence.getIgnitionSequence();
+        ArrayList<ExodusIgnitionCode> routeIgnitionSequence = ignitionSequence.getSequence();
         Route route = new Route();
         ArrayList<Exodus> exoduses = new ArrayList<>();
         LocalDateTime lastTripPeriodStartTime = converter.convertStringTimeToDate(routeData.getLastTripStartTime());
@@ -366,4 +415,67 @@ public class GraphicalController {
         route.setExoduses(exoduses);
         return route;
     }
+
+    private ArrayList<IgnitionSequence> getAllVariationsOfChangablePart(IgnitionSequence changingPart, RouteData routeData) {
+        ArrayList<IgnitionSequence> allVariations = new ArrayList<>();
+        int returnTripPeriodsCount = routeData.getStarterTrip().equals("ab") ? routeData.getBaBusCount() : routeData.getAbBusCount();
+        IgnitionSequence currentSequence = changingPart;
+
+        int shuttleIndex = currentSequence.getSequence().size() - returnTripPeriodsCount;
+        while (!reachedEnd(currentSequence, returnTripPeriodsCount, routeData)) {
+            currentSequence = crollUp(currentSequence, shuttleIndex, routeData);
+            allVariations.add(currentSequence);
+
+            if (shuttleIndex == 0) {
+                currentSequence = pullUp(currentSequence, routeData);
+                shuttleIndex = getShuttleIndexAfterPullUp(currentSequence);
+            }
+            shuttleIndex--;
+        }
+        return allVariations;
+    }
+
+    private boolean reachedEnd(IgnitionSequence ignitionSequence, int returnTripPeriodsCount, RouteData routeData) {
+        String typeZero = routeData.getStarterTrip().equals("ab") ? "ba" : "ab";
+
+        while (returnTripPeriodsCount > 0) {
+            String currentType = ignitionSequence.getSequence().get(returnTripPeriodsCount - 1).getType();
+            if (currentType.equals(typeZero)) {
+                returnTripPeriodsCount--;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private IgnitionSequence crollUp(IgnitionSequence currentSequence, int shuttleIndex, RouteData routeData) {
+        IgnitionSequence newIgnitionSequence = new IgnitionSequence();
+        ArrayList<ExodusIgnitionCode> clonedArrayList = (ArrayList<ExodusIgnitionCode>) currentSequence.getSequence().clone();
+        Duration returnTripTime;
+        if (clonedArrayList.get(shuttleIndex).getType().equals("ab")) {
+            ExodusIgnitionCode exodusIgnitionCode = new ExodusIgnitionCode();
+            exodusIgnitionCode.setType("ba");
+            returnTripTime = Duration.ofSeconds(((routeData.getBaTripTimeMinutes() + routeData.getHaltTimeMinutes()) * 60) + (routeData.getBaTripTimeSeconds() + routeData.getHaltTimeSeconds()));
+            exodusIgnitionCode.setStartTime(clonedArrayList.get(shuttleIndex).getStartTime().minus(returnTripTime));
+            clonedArrayList.set(shuttleIndex, exodusIgnitionCode);
+
+            ExodusIgnitionCode exodusIgnitionCodeZ = new ExodusIgnitionCode();
+            exodusIgnitionCodeZ.setType("ab");
+            exodusIgnitionCodeZ.setStartTime(clonedArrayList.get(shuttleIndex + 1).getStartTime().plus(returnTripTime));
+            clonedArrayList.set(shuttleIndex + 1, exodusIgnitionCodeZ);
+        } else {
+        }
+        newIgnitionSequence.setSequence(clonedArrayList);
+        return newIgnitionSequence;
+    }
+
+    private IgnitionSequence pullUp(IgnitionSequence currentSequence, RouteData routeData) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private int getShuttleIndexAfterPullUp(IgnitionSequence currentSequence) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

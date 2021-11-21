@@ -3,7 +3,7 @@ package graphical;
 import java.lang.reflect.Array;
 import java.util.*;
 
-class Permutations<E> implements Iterator<E[]> {
+public class Permutations<E> implements Iterator<E[]> {
 
     private E[] arr;
     private int[] ind;
@@ -11,7 +11,7 @@ class Permutations<E> implements Iterator<E[]> {
 
     public E[] output;//next() returns this array, make it public
 
-    Permutations(E[] arr) {
+    public Permutations(E[] arr) {
         this.arr = arr.clone();
         ind = new int[arr.length];
         //convert an array of any elements into array of integers - first occurrence is used to enumerate

@@ -3,6 +3,7 @@ package Controller;
 import graphical.Exodus;
 import graphical.ExodusIgnitionCode;
 import graphical.IgnitionSequence;
+import graphical.Permutations;
 import graphical.Route;
 import graphical.RouteData;
 import graphical.TripPeriod;
@@ -12,6 +13,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -418,64 +420,76 @@ public class GraphicalController {
 
     private ArrayList<IgnitionSequence> getAllVariationsOfChangablePart(IgnitionSequence changingPart, RouteData routeData) {
         ArrayList<IgnitionSequence> allVariations = new ArrayList<>();
-        int returnTripPeriodsCount = routeData.getStarterTrip().equals("ab") ? routeData.getBaBusCount() : routeData.getAbBusCount();
-        IgnitionSequence currentSequence = changingPart;
+        ArrayList<String[]> allPermutationsMap = getAllPermutationsMap(changingPart);
+        LocalDateTime standartStartTime = changingPart.getSequence().get(0).getStartTime();
+        String goTripType = changingPart.getSequence().get(0).getType();
+        Duration goTripTime;
+        Duration returnTripTime;
+        if (goTripType.equals("ab")) {
+            goTripTime = Duration.ofSeconds((routeData.getAbTripTimeMinutes() + routeData.getHaltTimeMinutes()) * 60 + (routeData.getAbTripTimeSeconds() + routeData.getHaltTimeSeconds()));
+            returnTripTime = Duration.ofSeconds((routeData.getBaTripTimeMinutes() + routeData.getHaltTimeMinutes()) * 60 + (routeData.getBaTripTimeSeconds() + routeData.getHaltTimeSeconds()));
+        } else {
+            goTripTime = Duration.ofSeconds((routeData.getBaTripTimeMinutes() + routeData.getHaltTimeMinutes()) * 60 + (routeData.getBaTripTimeSeconds() + routeData.getHaltTimeSeconds()));
+            returnTripTime = Duration.ofSeconds((routeData.getAbTripTimeMinutes() + routeData.getHaltTimeMinutes()) * 60 + (routeData.getAbTripTimeSeconds() + routeData.getHaltTimeSeconds()));
+        }
+        for (String[] array : allPermutationsMap) {
+            IgnitionSequence newIgnitionSequence = new IgnitionSequence();
+            for (int x = 0; x < array.length; x++) {
+                if (array[x].equals(goTripType)) {
+                    if (changingPart.getSequence().get(x).getType().equals(goTripType)) {
+                        newIgnitionSequence.addExodusIgnitionCode(changingPart.getSequence().get(x));
 
-        int shuttleIndex = currentSequence.getSequence().size() - returnTripPeriodsCount;
-        while (!reachedEnd(currentSequence, returnTripPeriodsCount, routeData)) {
-            currentSequence = crollUp(currentSequence, shuttleIndex, routeData);
-            allVariations.add(currentSequence);
-
-            if (shuttleIndex == 0) {
-                currentSequence = pullUp(currentSequence, routeData);
-                shuttleIndex = getShuttleIndexAfterPullUp(currentSequence);
+                    } else {
+                        ExodusIgnitionCode exodusIgnitonCode = new ExodusIgnitionCode();
+                        exodusIgnitonCode.setType(array[x]);
+                        LocalDateTime startTime = changingPart.getSequence().get(x).getStartTime();
+                        exodusIgnitonCode.setStartTime(startTime.plus(returnTripTime));
+                        newIgnitionSequence.addExodusIgnitionCode(exodusIgnitonCode);
+                    }
+                } else {
+                    if (changingPart.getSequence().get(x).getType().equals(goTripType)) {
+                        ExodusIgnitionCode exodusIgnitonCode = new ExodusIgnitionCode();
+                        exodusIgnitonCode.setType(array[x]);
+                        LocalDateTime startTime = changingPart.getSequence().get(x).getStartTime();
+                        exodusIgnitonCode.setStartTime(startTime.minus(goTripTime));
+                        newIgnitionSequence.addExodusIgnitionCode(exodusIgnitonCode);
+                    } else {
+                        newIgnitionSequence.addExodusIgnitionCode(changingPart.getSequence().get(x));
+                    }
+                }
             }
-            shuttleIndex--;
+            allVariations.add(newIgnitionSequence);
         }
         return allVariations;
     }
 
-    private boolean reachedEnd(IgnitionSequence ignitionSequence, int returnTripPeriodsCount, RouteData routeData) {
-        String typeZero = routeData.getStarterTrip().equals("ab") ? "ba" : "ab";
+    private ArrayList<String[]> getAllPermutationsMap(IgnitionSequence changingPart) {
+        ArrayList<ExodusIgnitionCode> sequence = changingPart.getSequence();
+        int size = sequence.size();
+        Object[] initialExodusCodeMap = new Object[size];
+        int index = 0;
+        for (ExodusIgnitionCode ignitionCode : sequence) {
+            initialExodusCodeMap[index] = ignitionCode.getType();
+            index++;
+        }
 
-        while (returnTripPeriodsCount > 0) {
-            String currentType = ignitionSequence.getSequence().get(returnTripPeriodsCount - 1).getType();
-            if (currentType.equals(typeZero)) {
-                returnTripPeriodsCount--;
-            } else {
-                return false;
+        Permutations permutator = new Permutations(initialExodusCodeMap);
+        ArrayList allPermutationsMap = new ArrayList();
+        while (permutator.hasNext()) {
+            Object[] next = permutator.next();
+            String[] array = new String[size];
+            int ind = 0;
+            for (Object ob : next) {
+                array[ind] = (String) ob;
+                ind++;
             }
+            allPermutationsMap.add(array);
         }
-        return true;
-    }
-
-    private IgnitionSequence crollUp(IgnitionSequence currentSequence, int shuttleIndex, RouteData routeData) {
-        IgnitionSequence newIgnitionSequence = new IgnitionSequence();
-        ArrayList<ExodusIgnitionCode> clonedArrayList = (ArrayList<ExodusIgnitionCode>) currentSequence.getSequence().clone();
-        Duration returnTripTime;
-        if (clonedArrayList.get(shuttleIndex).getType().equals("ab")) {
-            ExodusIgnitionCode exodusIgnitionCode = new ExodusIgnitionCode();
-            exodusIgnitionCode.setType("ba");
-            returnTripTime = Duration.ofSeconds(((routeData.getBaTripTimeMinutes() + routeData.getHaltTimeMinutes()) * 60) + (routeData.getBaTripTimeSeconds() + routeData.getHaltTimeSeconds()));
-            exodusIgnitionCode.setStartTime(clonedArrayList.get(shuttleIndex).getStartTime().minus(returnTripTime));
-            clonedArrayList.set(shuttleIndex, exodusIgnitionCode);
-
-            ExodusIgnitionCode exodusIgnitionCodeZ = new ExodusIgnitionCode();
-            exodusIgnitionCodeZ.setType("ab");
-            exodusIgnitionCodeZ.setStartTime(clonedArrayList.get(shuttleIndex + 1).getStartTime().plus(returnTripTime));
-            clonedArrayList.set(shuttleIndex + 1, exodusIgnitionCodeZ);
-        } else {
+        for (int x = 0; x < allPermutationsMap.size(); x++) {
+            String[] obj = (String[]) allPermutationsMap.get(x);
+            System.out.println(Arrays.toString(obj));
         }
-        newIgnitionSequence.setSequence(clonedArrayList);
-        return newIgnitionSequence;
-    }
-
-    private IgnitionSequence pullUp(IgnitionSequence currentSequence, RouteData routeData) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private int getShuttleIndexAfterPullUp(IgnitionSequence currentSequence) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return allPermutationsMap;
     }
 
 }

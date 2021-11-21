@@ -451,7 +451,7 @@ public class GraphicalController {
                         ExodusIgnitionCode exodusIgnitonCode = new ExodusIgnitionCode();
                         exodusIgnitonCode.setType(array[x]);
                         LocalDateTime startTime = changingPart.getSequence().get(x).getStartTime();
-                        exodusIgnitonCode.setStartTime(startTime.minus(goTripTime));
+                        exodusIgnitonCode.setStartTime(startTime.minus(returnTripTime));
                         newIgnitionSequence.addExodusIgnitionCode(exodusIgnitonCode);
                     } else {
                         newIgnitionSequence.addExodusIgnitionCode(changingPart.getSequence().get(x));

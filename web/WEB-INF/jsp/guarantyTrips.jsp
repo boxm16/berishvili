@@ -17,7 +17,7 @@
     </head>
     <body>
         <hr>
-        <a href="guarantyExplanation.htm" target="_blank">განმარტება</a>
+       <!-- <a href="guarantyExplanation.htm" target="_blank">განმარტება</a> -->
         <hr>
         <table>
             <thead>

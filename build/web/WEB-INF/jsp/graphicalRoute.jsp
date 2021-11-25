@@ -322,778 +322,821 @@
         </div>
 
         <hr>
-        <c:forEach var="route" items="${routes}">
 
-            <svg width='1500' height='${route.height}'>
-            <rect x='5' width='1530' height='20' style='fill:rgb(0,0,0);' />
-            <rect x='5' width='20' height='${route.height}' style='fill:rgb(0,0,0);' />
-            <% int x = 0;
-                LocalTime hh = LocalTime.parse("05:00:00");
+        <c:forEach var="route" items="${routes}" varStatus="loop">
+
+            <!-- template from my php program  -->
+        <center>
+            <div>
+                <form action='breaks.htm' method='POST' target="_blank">
+                    <table>
+                        <tr>
+
+                        <input name="routeVersionNumber" type='hidden' value="${loop.index}" readonly="true">
+
+                        <td>
+                            <input id="breakTimeMinutes" name="breakTimeMinutes" class="input" type="number" value="30" >შეს/ბის ხანგრძლივობა
+
+                        </td>
+                        <td>
+                            <input type='time' name="firstBreakStartTime" value ="11:00:00" step="1"> პირვლე შესვენების დაწყ. დრო
+                        </td>
+                        <td>
+                            <input type='time' name="lastBreakEndTime" value ="17:00:00" step="1" > ბოლო შესვენების დამთ. დრო
+                        </td>
+                        <td>
+                            <select name="breakStayPoint" >
+                                <option value="ab" >A წერტილში დასვენება</option>
+                                <option value="ba">B წერტილში დასვენება</option>
+                                <option value="AB">ორივე წერტილში დასვენება</option>
+                            </select>
+                        </td>
+
+
+                        <td>
+                            <input type='submit' value='შესვენებების ვარიანთების გამოსახვა' style='background-color: yellow'>
+                        </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </center>
+        <br>
+
+
+        <!-- end of template -->
+
+        <svg width='1500' height='${route.height}'>
+        <rect x='5' width='1530' height='20' style='fill:rgb(0,0,0);' />
+        <rect x='5' width='20' height='${route.height}' style='fill:rgb(0,0,0);' />
+        <% int x = 0;
+            LocalTime hh = LocalTime.parse("05:00:00");
+        %>
+        <c:forEach var = "i" begin = "30" end = "1260" step="60">
+            <% x++;
+                String time = hh.format(DateTimeFormatter.ofPattern("HH:mm"));
             %>
-            <c:forEach var = "i" begin = "30" end = "1260" step="60">
-                <% x++;
-                    String time = hh.format(DateTimeFormatter.ofPattern("HH:mm"));
-                %>
 
-                <line x1='${i}' y1='20' x2='${i}' y2='${route.height}'style='stroke:rgb(0,0,0);stroke-width:1' />
-                <text x='${i-18}' y='15' fill='white'> <% out.print(time);%></text>
+            <line x1='${i}' y1='20' x2='${i}' y2='${route.height}'style='stroke:rgb(0,0,0);stroke-width:1' />
+            <text x='${i-18}' y='15' fill='white'> <% out.print(time);%></text>
 
-                <%  hh = hh.plusHours(1);%>
+            <%  hh = hh.plusHours(1);%>
 
-            </c:forEach>
-            <c:forEach var="exodus" items="${route.exoduses}" varStatus="exodusesCount">
-                <c:forEach var="tripPeriod" items="${exodus.tripPeriods}" >
-                    <rect x='${tripPeriod.getStartPoint()}' y='${(exodusesCount.index*30)+30}' width='${tripPeriod.length}' height='20'  rx='7' style='fill:${tripPeriod.color}' />
-
-                </c:forEach>
+        </c:forEach>
+        <c:forEach var="exodus" items="${route.exoduses}" varStatus="exodusesCount">
+            <c:forEach var="tripPeriod" items="${exodus.tripPeriods}" >
+                <rect x='${tripPeriod.getStartPoint()}' y='${(exodusesCount.index*30)+30}' width='${tripPeriod.length}' height='20'  rx='7' style='fill:${tripPeriod.color}' />
 
             </c:forEach>
 
-
-            </svg>
-            <hr>
         </c:forEach>
 
-        <!--
-                <?php
-                $routeVersionNumber = 0;
-        
-                foreach ($allVersions as $route) {
-                $exoduses = $route->getExodusesWithoutBreak();
-                include 'Model/RouteTemplate.php';
-        
-                $routeVersionNumber++;
-                }
-                ?>
-        -->
+
+        </svg>
+        <hr>
+
+    </c:forEach>
+
+    <!--
+            <?php
+            $routeVersionNumber = 0;
+    
+            foreach ($allVersions as $route) {
+            $exoduses = $route->getExodusesWithoutBreak();
+            include 'Model/RouteTemplate.php';
+    
+            $routeVersionNumber++;
+            }
+            ?>
+    -->
 
 
 
 
 
-        <script>
-            var h = [];
-            var hNumber = 0;
-            //---------
-            var checkBoxes = document.querySelectorAll('input[type=checkbox]:checked');
+    <script>
+        var h = [];
+        var hNumber = 0;
+        //---------
+        var checkBoxes = document.querySelectorAll('input[type=checkbox]:checked');
 
-            for (i = 0; i < checkBoxes.length; i++) {
-                var trElement = checkBoxes[i].parentNode.parentNode;
-                var trInputs = trElement.querySelectorAll(".input");
-                for (x = 0; x < trInputs.length; x++) {
-                    trInputs[x].disabled = false;
-                }
+        for (i = 0; i < checkBoxes.length; i++) {
+            var trElement = checkBoxes[i].parentNode.parentNode;
+            var trInputs = trElement.querySelectorAll(".input");
+            for (x = 0; x < trInputs.length; x++) {
+                trInputs[x].disabled = false;
+            }
+            checkAndCalculate();
+        }
+
+
+        //------------
+
+
+
+
+
+
+        function incoming(event) {
+            zeroTableBody.innerHTML = "";
+            allTableBody.innerHTML = "";
+            if (event.keyCode === 13) {
                 checkAndCalculate();
             }
+        }
 
+        function checkCheckBoxes(event) {
+            var target = event.target;
 
-            //------------
+            zeroTableBody.innerHTML = "";
+            allTableBody.innerHTML = "";
+            var trElements = event.target.parentElement.parentElement;
+            var trInputs = trElements.querySelectorAll(".input");
+            if (selectedParametres() == 3) {
 
+                target.checked = false;
+                notes.style.color = "red";
+                notes.innerHTML = "სამივე პარამეტრის არჩევა დაუშვებელია";
 
-
-
-
-
-            function incoming(event) {
-                zeroTableBody.innerHTML = "";
-                allTableBody.innerHTML = "";
-                if (event.keyCode === 13) {
-                    checkAndCalculate();
+                //  redNotes.innerHTML = "სამივე პარამეტრის არჩევა დაუშვებელია";
+                for (i = 0; i < trInputs.length; i++) {
+                    trInputs[i].disabled = true;
                 }
-            }
-
-            function checkCheckBoxes(event) {
-                var target = event.target;
-
-                zeroTableBody.innerHTML = "";
-                allTableBody.innerHTML = "";
-                var trElements = event.target.parentElement.parentElement;
-                var trInputs = trElements.querySelectorAll(".input");
-                if (selectedParametres() == 3) {
-
-                    target.checked = false;
-                    notes.style.color = "red";
-                    notes.innerHTML = "სამივე პარამეტრის არჩევა დაუშვებელია";
-
-                    //  redNotes.innerHTML = "სამივე პარამეტრის არჩევა დაუშვებელია";
+            } else {
+                notes.innerHTML = "";
+                if (target.checked == false) {
                     for (i = 0; i < trInputs.length; i++) {
                         trInputs[i].disabled = true;
                     }
                 } else {
-                    notes.innerHTML = "";
-                    if (target.checked == false) {
-                        for (i = 0; i < trInputs.length; i++) {
-                            trInputs[i].disabled = true;
-                        }
-                    } else {
-                        for (i = 0; i < trInputs.length; i++) {
-                            trInputs[i].disabled = false;
-                        }
-                    }
-                }
-
-
-
-            }
-
-            function selectedParametres() {
-                return document.querySelectorAll('input[type=checkbox]:checked').length;
-            }
-
-
-
-            function checkAndCalculate() {
-
-                zeroTableBody.innerHTML = "";
-                allTableBody.innerHTML = "";
-
-
-                if (inputsValid()) {
-                    saveInputs();
-                    checkHistory();
-                    calculate();
-                }
-
-            }
-
-            function checkHistory() {
-                if (h.length > 0 && hNumber > 0) {
-                    backButton.disabled = false;
-                }
-                if (h.length > 0 && hNumber < h.length) {
-                    forwardButton.disabled = false;
-                }
-                if (hNumber == 1) {
-                    backButton.disabled = true;
-                }
-                if (hNumber == h.length) {
-                    forwardButton.disabled = true;
-                }
-
-            }
-
-            function saveInputs() {
-                var inputs = [];
-                inputs.push(roundCheckBox.checked);
-                inputs.push(busCheckBox.checked);
-                inputs.push(intervalCheckBox.checked);
-
-                inputs.push(roundInputHour.value);
-                inputs.push(roundInputMinute.value);
-                inputs.push(roundInputSecond.value);
-
-                inputs.push(busInput.value);
-
-                inputs.push(intervalInputHour.value);
-                inputs.push(intervalInputMinute.value);
-                inputs.push(intervalInputSecond.value);
-
-                inputs.push(plusMinusInput.value);
-
-                h.push(inputs);
-                hNumber = h.length;
-            }
-
-            function getRoundSeconds() {
-                return  (roundInputHour.value * 60 * 60) + (roundInputMinute.value * 60) + parseInt(roundInputSecond.value);
-
-            }
-
-            function getIntervalSeconds() {
-                return (intervalInputHour.value * 60 * 60) + (intervalInputMinute.value * 60) + intervalInputSecond.value * 1;
-            }
-
-            function calculate() {
-                var seconds = getRoundSeconds();
-                if (roundCheckBox.checked === true & busCheckBox.checked === true) {
-
-                    calculateInterval(seconds);
-                } else if (roundCheckBox.checked === true & intervalCheckBox.checked === true) {
-                    calculateBus(seconds);
-                } else if (busCheckBox.checked === true & intervalCheckBox.checked === true) {
-                    calculateRound();
-                }
-                copyHoursToMinutes();
-                calculateTable();
-
-            }
-            function calculateRound() {
-                var seconds = getIntervalSeconds();
-                ;
-                var result = seconds * busInput.value;
-
-                var date = new Date(0);
-                date.setSeconds(result);
-                var resultString = date.toISOString().substr(11, 8);
-                var splittedResult = resultString.split(":");
-                roundInputHour.value = splittedResult[0];
-                roundInputMinute.value = splittedResult[1];
-                roundInputSecond.value = splittedResult[2];
-                notes.style.color = "green";
-                notes.innerHTML = "შედეგი ჯერადია.";
-            }
-
-            function calculateBus(seconds) {
-                var intervalSeconds = getIntervalSeconds();
-
-                var result = seconds / intervalSeconds;
-                var nashti = result % 1;
-                busInput.value = parseInt(result);
-                if (nashti == 0) {
-                    notes.style.color = "green";
-                    notes.innerHTML = "შედეგი ჯერადია.";
-                } else {
-
-                    notes.innerHTML = "<label style='color:red;'>შედეგი არ არის ჯერადი </label>";
-                    // + "<br><label>ნაშთი= " + nashti + "</label><br>"
-                    //+ "<label>ჯერადი შედეგის მისაღებად ან დააკელი ბრუნის დრო ან გაზარდე ინტერვალის დრო</label>";
-
-                }
-            }
-
-            function calculateInterval(seconds) {
-                var result = seconds / busInput.value;
-                var date = new Date(0);
-                date.setSeconds(result);
-                var resultString = date.toISOString().substr(11, 8);
-                var splittedResult = resultString.split(":");
-                intervalInputHour.value = splittedResult[0];
-                intervalInputMinute.value = splittedResult[1];
-                intervalInputSecond.value = splittedResult[2];
-                var nashti = result % 3600 % 60 % 1;
-                if (nashti == 0) {
-                    notes.style.color = "green";
-                    notes.innerHTML = "შედეგი ჯერადია.";
-                } else {
-                    var recalculatedSeconds = (splittedResult[0] * 3600) + (splittedResult[1] * 60) + parseInt(splittedResult[2]);
-                    var recalculatedTime = recalculatedSeconds * busInput.value;
-                    var recalculatedDate = new Date(0);
-                    recalculatedDate.setSeconds(recalculatedTime);
-                    var recalculatedTime = recalculatedDate.toISOString().substr(11, 8);
-                    notes.innerHTML = "<label style='color:red;'>შედეგი არ არის ჯერადი</label>";
-                    //  + "<br><label>ნაშთი= " + nashti + "</label><br>"
-                    // + "<label>მიღებული ინტერვალისგან გადათვლილი ბრუნის დრო უდრის " + recalculatedTime + "</label>";
-                }
-            }
-
-            function calculateTable() {
-
-
-                var roundSeconds = (roundInputHour.value * 60 * 60) + (roundInputMinute.value * 60) + parseInt(roundInputSecond.value);
-                var plusMinus = plusMinusInput.value * 60;
-                var startingTime = roundSeconds + plusMinus;
-                var endingTime = roundSeconds - plusMinus;
-
-                var zeroTableRows = "";
-                var allTableRows = "";
-                var a = 0;
-                var busCounts = new Array();
-                var busCount = busInput.value;
-                if (!busCheckBox.checked && busCount > 1) {
-                    busCount--;
-                    busCounts.push(busCount);
-                    busCount++;
-                    busCounts.push(busCount);
-                    busCount++;
-                    busCounts.push(busCount);
-
-                } else if (!busCheckBox.checked && busCount == 1)
-                {
-                    busCounts.push(busCount);
-                    busCount++;
-                    busCounts.push(busCount);
-                } else {
-                    busCounts.push(busCount);
-                }
-
-
-                for (y = 0; y < busCounts.length; y++) {
-                    for (x = startingTime; x > endingTime - 1; x--) {
-                        if (x == 0) {
-                            break;
-                        }
-
-                        var result = x / busCounts[y];
-                        var roundTime = new Date(0);
-                        roundTime.setSeconds(x);
-                        var roundTimeResultString = roundTime.toISOString().substr(11, 8);
-
-                        var intervalTime = new Date(0);
-                        intervalTime.setSeconds(result);
-                        var intervalTimeResultString = intervalTime.toISOString().substr(11, 8);
-
-                        var roundTimeSplittedResult = roundTimeResultString.split(":");
-                        var roundTimeHour = roundTimeSplittedResult[0];
-                        var roundTimeMinute = roundTimeSplittedResult[1];
-                        var roundTimeMinutes = (roundTimeHour * 60) + parseInt(roundTimeMinute);
-                        var roundTimeSeconds = roundTimeSplittedResult[2];
-                        var minutesText = roundTimeMinutes + ":" + roundTimeSeconds;
-                        var interalSplittedResult = intervalTimeResultString.split(":");
-                        var intervalSeconds = interalSplittedResult[2];
-
-
-                        var nashti = result % 3600 % 60 % 1;
-                        if (nashti == 0) {
-                            allTableRows = allTableRows + "<tr><td>" + a + "</td><td>" + roundTimeResultString + "</td><td>" + minutesText + "</td><td>" + busCounts[y] + "</td><td>" + intervalTimeResultString + "</td><td><input type='button' value='არჩევა' style='background-color:blue;color:white' onclick='chooseRow(event)'></td></tr>";
-                            if (intervalSeconds == 00 || intervalSeconds == 30) {
-                                zeroTableRows = zeroTableRows + "<tr><td>" + a + "</td><td>" + roundTimeResultString + "</td><td>" + minutesText + "</td><td>" + busCounts[y] + "</td><td>" + intervalTimeResultString + "</td><td><input type='button' value='არჩევა' style='background-color:blue;color:white;' onclick='chooseRow(event)'></td></tr>";
-
-                            }
-                            a++;
-                        }
-
-                    }
-                }
-                zeroTableBody.innerHTML = zeroTableRows;
-                allTableBody.innerHTML = allTableRows;
-            }
-
-            function inputsValid() {
-                if (roundCheckBox.checked & intervalCheckBox.checked) {
-                    var seconds = (roundInputHour.value * 60 * 60) + (roundInputMinute.value * 60) + parseInt(roundInputSecond.value);
-                    var intervalSeconds = (intervalInputHour.value * 60 * 60) + (intervalInputMinute.value * 60) + parseInt(intervalInputSecond.value);
-
-                    if (intervalSeconds > seconds) {
-                        notes.style.color = "red";
-                        notes.innerHTML = "ინტერვალის დრო აღემათება ბრუნის დროს, რაც დაუშვებელია";
-                        return false;
-                        //    redNotes.innerHTML = "ინტერვალის დრო აღემათება ბრუნის დროს, რაც დაუშვებელია";
-                    }
-                }
-
-                if (selectedParametres() < 2) {
-                    notes.style.color = "red";
-                    notes.innerHTML = "არჩეულია არასაკარისი პარამეტრები. საჭიროა 2 პარამეტრის არჩევა";
-                    // redNotes.innerHTML = "არჩეულია არასაკარისი პარამეტრები. საჭიროა 2 პარამეტრის არჩევა";
-                    return false;
-                }
-                if (intervalCheckBox.checked & intervalInputHour.value == 0 & intervalInputMinute.value == 0 & intervalInputSecond.value == 0) {
-                    notes.style.color = "red";
-                    notes.innerHTML = "მითითებული ინტერვალი დაუშვებელია (0). ინტერვალი უნდა იყოს არანაკლებ 1 წამი";
-                    //  redNotes.innerHTML = "მითითებული ინტერვალი დაუშვებელია (0). ინტერვალი უნდა იყოს არანაკლებ 1 წამი";
-                    return false;
-                }
-                if (busCheckBox.checked & (busInput.value <= 0)) {
-                    notes.style.color = "red";
-                    notes.innerHTML = " ავტობუსების რაოდენობის ველში მითითებულია დაუშვებელი რიცხვი (" + busInput.value + ")";
-                    // redNotes.innerHTML = " ავტობუსების რაოდენობის ველში მითითებულია დაუშვებელი რიცხვი (0)";
-                    return false;
-                }
-                return true;
-            }
-
-            function adjastTimeInputs(event) {
-                notes.innerHTML = "";
-                zeroTableBody.innerHTML = "";
-                allTableBody.innerHTML = "";
-                var targetTR = event.target.parentNode.parentNode.id;
-                var targetInputs;
-
-                if (targetTR == "roundTr") {
-                    targetInputs = "round";
-                    adjastTimeInputs_1(targetInputs);
-                }
-                if (targetTR == "roundMinutesTr") {
-
-                    adjastTimeInputs_2();
-                }
-                if (targetTR == "intervalTr") {
-                    targetInputs = "interval";
-                    adjastTimeInputs_1(targetInputs);
-                }
-
-
-
-
-            }
-            function adjastTimeInputs_1(targetInputs) {
-
-                var second = document.getElementById(targetInputs + "InputSecond");
-                var minute = document.getElementById(targetInputs + "InputMinute");
-                var hour = document.getElementById(targetInputs + "InputHour");
-
-                if (second.value == 60) {
-                    second.value = 0;
-                    minute.value = parseInt(minute.value) + 1;
-                }
-                if (second.value == -1) {
-                    minute.value = parseInt(minute.value) - 1;
-                    if (hour.value == 0 && minute.value == -1) {
-                        second.value = 0;
-                    } else {
-                        second.value = 59;
-                    }
-                }
-
-
-                if (minute.value == 60) {
-                    minute.value = 0;
-                    timeInputHourPlusPlus(targetInputs);
-                }
-                if (minute.value == -1) {
-
-                    minute.value = 59;
-                    timeInputHourMinusMinus(targetInputs);
-                }
-
-                if (hour.value == -1) {
-                    hour.value = 0;
-                    notes.style.color = "red";
-                    notes.innerHTML = "საათების 0 ზე ქვემოთ ჩამოსვლა დაუშვებელია";
-                    //  redNotes.innerHTML = "საათების 0 ზე ქვემოთ ჩამოსვლა დაუშვებელია";
-
-                }
-
-                copyHoursToMinutes();
-            }
-
-
-            function adjastTimeInputs_2() {
-                var second = document.getElementById("roundInputSeconds");
-                var minute = document.getElementById("roundInputMinutes");
-
-
-                if (second.value == 60) {
-                    second.value = 0;
-                    minute.value = parseInt(minute.value) + 1;
-                }
-                if (second.value == -1) {
-                    minute.value = parseInt(minute.value) - 1;
-                    if (minute.value == -1) {
-                        second.value = 0;
-                    } else {
-                        second.value = 59;
-                    }
-                }
-
-
-                if (minute.value == -1) {
-
-                    minute.value = 0;
-                    notes.style.color = "red";
-                    notes.innerHTML = "წუთების 0 ზე ქვემოთ ჩამოსვლა დაუშვებელია";
-                }
-
-
-                copyMinutesToHours();
-            }
-
-            function adjastTimeInputs_3() {
-                var second = document.getElementById("haltTimeSeconds");
-                var minute = document.getElementById("haltTimeMinutes");
-                if (second.value == 60) {
-                    second.value = 0;
-                    minute.value = parseInt(minute.value) + 1;
-                }
-                if (second.value == -1) {
-                    minute.value = parseInt(minute.value) - 1;
-                    if (minute.value == -1) {
-                        second.value = 0;
-                    } else {
-                        second.value = 59;
-                    }
-                }
-                if (minute.value == -1) {
-                    minute.value = 0;
-                }
-            }
-
-            function copyMinutesToHours() {
-                var minutes = roundInputMinutes.value;
-                var hour = parseInt(minutes / 60);
-                var minute = minutes % 60;
-                if (hour < 10) {
-                    roundInputHour.value = "0" + hour;
-                } else {
-                    roundInputHour.value = hour;
-                }
-                if (minute < 10) {
-                    roundInputMinute.value = "0" + minute;
-                } else {
-                    roundInputMinute.value = minute;
-                }
-
-                roundInputSecond.value = roundInputSeconds.value;
-
-
-            }
-            function copyHoursToMinutes() {
-                var hour = roundInputHour.value;
-                var minute = roundInputMinute.value;
-                var minutes = (hour * 60) + parseInt(minute);
-                roundInputMinutes.value = minutes;
-                roundInputSeconds.value = roundInputSecond.value;
-            }
-
-            function   timeInputHourPlusPlus(targetInputs) {
-                var hour = document.getElementById(targetInputs + "InputHour");
-                var x = parseInt(hour.value) + 1
-                if (x < 10) {
-                    hour.value = "0" + x;
-                } else {
-                    hour.value = x;
-                }
-            }
-
-            function   timeInputHourMinusMinus(targetInputs) {
-                var hour = document.getElementById(targetInputs + "InputHour");
-                var minute = document.getElementById(targetInputs + "InputMinute");
-
-                var x = parseInt(hour.value) - 1
-                if (x < 0) {
-                    x = 0;
-                    hour.value = 0;
-                    minute.value = 0;
-                    notes.style.color = "red";
-                    notes.innerHTML = "საათების 0 ზე ქვემოთ ჩამოსვლა დაუშვებელია";
-                    //  redNotes.innerHTML = "საათების 0 ზე ქვემოთ ჩამოსვლა დაუშვებელია";
-                }
-                if (x < 10) {
-                    hour.value = "0" + x;
-                } else {
-                    hour.value = x;
-                }
-            }
-
-            function goBack() {
-                hNumber--;
-                var inputs = h[hNumber - 1];
-                roundCheckBox.checked = inputs[0];
-                busCheckBox.checked = inputs[1];
-                intervalCheckBox.checked = inputs[2];
-
-                checkCheckBoxHistory(roundCheckBox);
-                checkCheckBoxHistory(busCheckBox);
-                checkCheckBoxHistory(intervalCheckBox);
-
-                roundInputHour.value = inputs[3];
-                roundInputMinute.value = inputs[4];
-                roundInputSecond.value = inputs[5];
-
-                busInput.value = inputs[6];
-
-                intervalInputHour.value = inputs[7];
-                intervalInputMinute.value = inputs[8];
-                intervalInputSecond.value = inputs[9];
-
-                plusMinusInput.value = inputs[10];
-
-                checkHistory();
-
-                calculate();
-            }
-
-            function goForward() {
-                hNumber++;
-                var inputs = h[hNumber - 1];
-                roundCheckBox.checked = inputs[0];
-                busCheckBox.checked = inputs[1];
-                intervalCheckBox.checked = inputs[2];
-
-                checkCheckBoxHistory(roundCheckBox);
-                checkCheckBoxHistory(busCheckBox);
-                checkCheckBoxHistory(intervalCheckBox);
-
-
-                roundInputHour.value = inputs[3];
-                roundInputMinute.value = inputs[4];
-                roundInputSecond.value = inputs[5];
-
-                busInput.value = inputs[6];
-
-                intervalInputHour.value = inputs[7];
-                intervalInputMinute.value = inputs[8];
-                intervalInputSecond.value = inputs[9];
-
-
-                plusMinusInput.value = inputs[10];
-
-                checkHistory();
-
-                calculate();
-            }
-
-            function   checkCheckBoxHistory(checkBox) {
-                var trElements = checkBox.parentElement.parentElement;
-                var trInputs = trElements.querySelectorAll(".input");
-                if (checkBox.checked == true) {
                     for (i = 0; i < trInputs.length; i++) {
                         trInputs[i].disabled = false;
                     }
-                } else {
-                    for (i = 0; i < trInputs.length; i++) {
-                        trInputs[i].disabled = true;
+                }
+            }
+
+
+
+        }
+
+        function selectedParametres() {
+            return document.querySelectorAll('input[type=checkbox]:checked').length;
+        }
+
+
+
+        function checkAndCalculate() {
+
+            zeroTableBody.innerHTML = "";
+            allTableBody.innerHTML = "";
+
+
+            if (inputsValid()) {
+                saveInputs();
+                checkHistory();
+                calculate();
+            }
+
+        }
+
+        function checkHistory() {
+            if (h.length > 0 && hNumber > 0) {
+                backButton.disabled = false;
+            }
+            if (h.length > 0 && hNumber < h.length) {
+                forwardButton.disabled = false;
+            }
+            if (hNumber == 1) {
+                backButton.disabled = true;
+            }
+            if (hNumber == h.length) {
+                forwardButton.disabled = true;
+            }
+
+        }
+
+        function saveInputs() {
+            var inputs = [];
+            inputs.push(roundCheckBox.checked);
+            inputs.push(busCheckBox.checked);
+            inputs.push(intervalCheckBox.checked);
+
+            inputs.push(roundInputHour.value);
+            inputs.push(roundInputMinute.value);
+            inputs.push(roundInputSecond.value);
+
+            inputs.push(busInput.value);
+
+            inputs.push(intervalInputHour.value);
+            inputs.push(intervalInputMinute.value);
+            inputs.push(intervalInputSecond.value);
+
+            inputs.push(plusMinusInput.value);
+
+            h.push(inputs);
+            hNumber = h.length;
+        }
+
+        function getRoundSeconds() {
+            return  (roundInputHour.value * 60 * 60) + (roundInputMinute.value * 60) + parseInt(roundInputSecond.value);
+
+        }
+
+        function getIntervalSeconds() {
+            return (intervalInputHour.value * 60 * 60) + (intervalInputMinute.value * 60) + intervalInputSecond.value * 1;
+        }
+
+        function calculate() {
+            var seconds = getRoundSeconds();
+            if (roundCheckBox.checked === true & busCheckBox.checked === true) {
+
+                calculateInterval(seconds);
+            } else if (roundCheckBox.checked === true & intervalCheckBox.checked === true) {
+                calculateBus(seconds);
+            } else if (busCheckBox.checked === true & intervalCheckBox.checked === true) {
+                calculateRound();
+            }
+            copyHoursToMinutes();
+            calculateTable();
+
+        }
+        function calculateRound() {
+            var seconds = getIntervalSeconds();
+            ;
+            var result = seconds * busInput.value;
+
+            var date = new Date(0);
+            date.setSeconds(result);
+            var resultString = date.toISOString().substr(11, 8);
+            var splittedResult = resultString.split(":");
+            roundInputHour.value = splittedResult[0];
+            roundInputMinute.value = splittedResult[1];
+            roundInputSecond.value = splittedResult[2];
+            notes.style.color = "green";
+            notes.innerHTML = "შედეგი ჯერადია.";
+        }
+
+        function calculateBus(seconds) {
+            var intervalSeconds = getIntervalSeconds();
+
+            var result = seconds / intervalSeconds;
+            var nashti = result % 1;
+            busInput.value = parseInt(result);
+            if (nashti == 0) {
+                notes.style.color = "green";
+                notes.innerHTML = "შედეგი ჯერადია.";
+            } else {
+
+                notes.innerHTML = "<label style='color:red;'>შედეგი არ არის ჯერადი </label>";
+                // + "<br><label>ნაშთი= " + nashti + "</label><br>"
+                //+ "<label>ჯერადი შედეგის მისაღებად ან დააკელი ბრუნის დრო ან გაზარდე ინტერვალის დრო</label>";
+
+            }
+        }
+
+        function calculateInterval(seconds) {
+            var result = seconds / busInput.value;
+            var date = new Date(0);
+            date.setSeconds(result);
+            var resultString = date.toISOString().substr(11, 8);
+            var splittedResult = resultString.split(":");
+            intervalInputHour.value = splittedResult[0];
+            intervalInputMinute.value = splittedResult[1];
+            intervalInputSecond.value = splittedResult[2];
+            var nashti = result % 3600 % 60 % 1;
+            if (nashti == 0) {
+                notes.style.color = "green";
+                notes.innerHTML = "შედეგი ჯერადია.";
+            } else {
+                var recalculatedSeconds = (splittedResult[0] * 3600) + (splittedResult[1] * 60) + parseInt(splittedResult[2]);
+                var recalculatedTime = recalculatedSeconds * busInput.value;
+                var recalculatedDate = new Date(0);
+                recalculatedDate.setSeconds(recalculatedTime);
+                var recalculatedTime = recalculatedDate.toISOString().substr(11, 8);
+                notes.innerHTML = "<label style='color:red;'>შედეგი არ არის ჯერადი</label>";
+                //  + "<br><label>ნაშთი= " + nashti + "</label><br>"
+                // + "<label>მიღებული ინტერვალისგან გადათვლილი ბრუნის დრო უდრის " + recalculatedTime + "</label>";
+            }
+        }
+
+        function calculateTable() {
+
+
+            var roundSeconds = (roundInputHour.value * 60 * 60) + (roundInputMinute.value * 60) + parseInt(roundInputSecond.value);
+            var plusMinus = plusMinusInput.value * 60;
+            var startingTime = roundSeconds + plusMinus;
+            var endingTime = roundSeconds - plusMinus;
+
+            var zeroTableRows = "";
+            var allTableRows = "";
+            var a = 0;
+            var busCounts = new Array();
+            var busCount = busInput.value;
+            if (!busCheckBox.checked && busCount > 1) {
+                busCount--;
+                busCounts.push(busCount);
+                busCount++;
+                busCounts.push(busCount);
+                busCount++;
+                busCounts.push(busCount);
+
+            } else if (!busCheckBox.checked && busCount == 1)
+            {
+                busCounts.push(busCount);
+                busCount++;
+                busCounts.push(busCount);
+            } else {
+                busCounts.push(busCount);
+            }
+
+
+            for (y = 0; y < busCounts.length; y++) {
+                for (x = startingTime; x > endingTime - 1; x--) {
+                    if (x == 0) {
+                        break;
                     }
+
+                    var result = x / busCounts[y];
+                    var roundTime = new Date(0);
+                    roundTime.setSeconds(x);
+                    var roundTimeResultString = roundTime.toISOString().substr(11, 8);
+
+                    var intervalTime = new Date(0);
+                    intervalTime.setSeconds(result);
+                    var intervalTimeResultString = intervalTime.toISOString().substr(11, 8);
+
+                    var roundTimeSplittedResult = roundTimeResultString.split(":");
+                    var roundTimeHour = roundTimeSplittedResult[0];
+                    var roundTimeMinute = roundTimeSplittedResult[1];
+                    var roundTimeMinutes = (roundTimeHour * 60) + parseInt(roundTimeMinute);
+                    var roundTimeSeconds = roundTimeSplittedResult[2];
+                    var minutesText = roundTimeMinutes + ":" + roundTimeSeconds;
+                    var interalSplittedResult = intervalTimeResultString.split(":");
+                    var intervalSeconds = interalSplittedResult[2];
+
+
+                    var nashti = result % 3600 % 60 % 1;
+                    if (nashti == 0) {
+                        allTableRows = allTableRows + "<tr><td>" + a + "</td><td>" + roundTimeResultString + "</td><td>" + minutesText + "</td><td>" + busCounts[y] + "</td><td>" + intervalTimeResultString + "</td><td><input type='button' value='არჩევა' style='background-color:blue;color:white' onclick='chooseRow(event)'></td></tr>";
+                        if (intervalSeconds == 00 || intervalSeconds == 30) {
+                            zeroTableRows = zeroTableRows + "<tr><td>" + a + "</td><td>" + roundTimeResultString + "</td><td>" + minutesText + "</td><td>" + busCounts[y] + "</td><td>" + intervalTimeResultString + "</td><td><input type='button' value='არჩევა' style='background-color:blue;color:white;' onclick='chooseRow(event)'></td></tr>";
+
+                        }
+                        a++;
+                    }
+
+                }
+            }
+            zeroTableBody.innerHTML = zeroTableRows;
+            allTableBody.innerHTML = allTableRows;
+        }
+
+        function inputsValid() {
+            if (roundCheckBox.checked & intervalCheckBox.checked) {
+                var seconds = (roundInputHour.value * 60 * 60) + (roundInputMinute.value * 60) + parseInt(roundInputSecond.value);
+                var intervalSeconds = (intervalInputHour.value * 60 * 60) + (intervalInputMinute.value * 60) + parseInt(intervalInputSecond.value);
+
+                if (intervalSeconds > seconds) {
+                    notes.style.color = "red";
+                    notes.innerHTML = "ინტერვალის დრო აღემათება ბრუნის დროს, რაც დაუშვებელია";
+                    return false;
+                    //    redNotes.innerHTML = "ინტერვალის დრო აღემათება ბრუნის დროს, რაც დაუშვებელია";
                 }
             }
 
-            function chooseRow(event) {
+            if (selectedParametres() < 2) {
+                notes.style.color = "red";
+                notes.innerHTML = "არჩეულია არასაკარისი პარამეტრები. საჭიროა 2 პარამეტრის არჩევა";
+                // redNotes.innerHTML = "არჩეულია არასაკარისი პარამეტრები. საჭიროა 2 პარამეტრის არჩევა";
+                return false;
+            }
+            if (intervalCheckBox.checked & intervalInputHour.value == 0 & intervalInputMinute.value == 0 & intervalInputSecond.value == 0) {
+                notes.style.color = "red";
+                notes.innerHTML = "მითითებული ინტერვალი დაუშვებელია (0). ინტერვალი უნდა იყოს არანაკლებ 1 წამი";
+                //  redNotes.innerHTML = "მითითებული ინტერვალი დაუშვებელია (0). ინტერვალი უნდა იყოს არანაკლებ 1 წამი";
+                return false;
+            }
+            if (busCheckBox.checked & (busInput.value <= 0)) {
+                notes.style.color = "red";
+                notes.innerHTML = " ავტობუსების რაოდენობის ველში მითითებულია დაუშვებელი რიცხვი (" + busInput.value + ")";
+                // redNotes.innerHTML = " ავტობუსების რაოდენობის ველში მითითებულია დაუშვებელი რიცხვი (0)";
+                return false;
+            }
+            return true;
+        }
+
+        function adjastTimeInputs(event) {
+            notes.innerHTML = "";
+            zeroTableBody.innerHTML = "";
+            allTableBody.innerHTML = "";
+            var targetTR = event.target.parentNode.parentNode.id;
+            var targetInputs;
+
+            if (targetTR == "roundTr") {
+                targetInputs = "round";
+                adjastTimeInputs_1(targetInputs);
+            }
+            if (targetTR == "roundMinutesTr") {
+
+                adjastTimeInputs_2();
+            }
+            if (targetTR == "intervalTr") {
+                targetInputs = "interval";
+                adjastTimeInputs_1(targetInputs);
+            }
 
 
-                var trElements = event.target.parentElement.parentElement;
 
-                var trTexts = trElements.querySelectorAll("td");
-                var roundTime = trTexts[2].innerHTML;
-                var busCounts = trTexts[3].innerHTML;
-                var interval = trTexts[4].innerHTML;
-                //alert(roundTripTime + "-" + busCounts + "-" + interval);
-                roundTimeInFormLabel.innerHTML = roundTime;
-                busCountInFormLabel.innerHTML = busCounts;
-                intervalTimeInFormInput.value = interval;
-                var roundTimeArray = roundTime.split(":");
-                var roundTimeInSeconds = ((roundTimeArray[0] * 60) + (roundTimeArray[1] * 1)) - (((haltTimeMinutes.value * 60) + haltTimeSeconds.value * 1) * 2);
 
-                if (roundTimeInSeconds % 2 == 0) {
+        }
+        function adjastTimeInputs_1(targetInputs) {
 
-                    var halfRoundTimeInSeconds = roundTimeInSeconds / 2;
-                    var halfRoundTimeMinutes = parseInt(halfRoundTimeInSeconds / 60);
-                    var halfRoundTimeSeconds = halfRoundTimeInSeconds % 60;
-                    abTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
-                    abTripTimeSecondsInFormInput.value = halfRoundTimeSeconds;
-                    baTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
-                    baTripTimeSecondsInFormInput.value = halfRoundTimeSeconds;
+            var second = document.getElementById(targetInputs + "InputSecond");
+            var minute = document.getElementById(targetInputs + "InputMinute");
+            var hour = document.getElementById(targetInputs + "InputHour");
+
+            if (second.value == 60) {
+                second.value = 0;
+                minute.value = parseInt(minute.value) + 1;
+            }
+            if (second.value == -1) {
+                minute.value = parseInt(minute.value) - 1;
+                if (hour.value == 0 && minute.value == -1) {
+                    second.value = 0;
                 } else {
-                    var halfRoundTimeInSeconds = parseInt(roundTimeInSeconds / 2);
-                    var halfRoundTimeMinutes = parseInt(halfRoundTimeInSeconds / 60);
-                    var halfRoundTimeSeconds = halfRoundTimeInSeconds % 60;
-                    abTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
-                    abTripTimeSecondsInFormInput.value = halfRoundTimeSeconds + 1;
-                    baTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
-                    baTripTimeSecondsInFormInput.value = halfRoundTimeSeconds;
+                    second.value = 59;
                 }
+            }
 
-                if (busCounts % 2 == 0) {
-                    abBusCountInFormInput.value = busCounts / 2;
-                    baBusCountInFormInput.value = busCounts / 2;
+
+            if (minute.value == 60) {
+                minute.value = 0;
+                timeInputHourPlusPlus(targetInputs);
+            }
+            if (minute.value == -1) {
+
+                minute.value = 59;
+                timeInputHourMinusMinus(targetInputs);
+            }
+
+            if (hour.value == -1) {
+                hour.value = 0;
+                notes.style.color = "red";
+                notes.innerHTML = "საათების 0 ზე ქვემოთ ჩამოსვლა დაუშვებელია";
+                //  redNotes.innerHTML = "საათების 0 ზე ქვემოთ ჩამოსვლა დაუშვებელია";
+
+            }
+
+            copyHoursToMinutes();
+        }
+
+
+        function adjastTimeInputs_2() {
+            var second = document.getElementById("roundInputSeconds");
+            var minute = document.getElementById("roundInputMinutes");
+
+
+            if (second.value == 60) {
+                second.value = 0;
+                minute.value = parseInt(minute.value) + 1;
+            }
+            if (second.value == -1) {
+                minute.value = parseInt(minute.value) - 1;
+                if (minute.value == -1) {
+                    second.value = 0;
                 } else {
-                    abBusCountInFormInput.value = parseInt(busCounts / 2) + 1;
-                    baBusCountInFormInput.value = parseInt(busCounts / 2);
+                    second.value = 59;
                 }
-
-
-
             }
 
-            function adjastBusCountInputsInForm(event) {
-                var busCountSum = 1 * (busCountInFormLabel.innerHTML);
 
-                var firstValue = 1 * (event.target.value);
+            if (minute.value == -1) {
 
-                if (firstValue > busCountSum) {
-                    firstValue = busCountSum;
-                    event.target.value = firstValue;
-                }
+                minute.value = 0;
+                notes.style.color = "red";
+                notes.innerHTML = "წუთების 0 ზე ქვემოთ ჩამოსვლა დაუშვებელია";
+            }
 
-                if (firstValue < 0) {
-                    firstValue = 0;
-                    event.target.value = 0;
-                }
-                var targetInput;
-                if (event.target.id == "abBusCountInFormInput") {
-                    targetInput = baBusCountInFormInput;
+
+            copyMinutesToHours();
+        }
+
+        function adjastTimeInputs_3() {
+            var second = document.getElementById("haltTimeSeconds");
+            var minute = document.getElementById("haltTimeMinutes");
+            if (second.value == 60) {
+                second.value = 0;
+                minute.value = parseInt(minute.value) + 1;
+            }
+            if (second.value == -1) {
+                minute.value = parseInt(minute.value) - 1;
+                if (minute.value == -1) {
+                    second.value = 0;
                 } else {
-                    targetInput = abBusCountInFormInput;
-                }
-                var secondValue = busCountSum - firstValue;
-                targetInput.value = secondValue;
-            }
-
-            function calculateHalfRoundTimes() {
-                if (haltTimeMinutes.value < 0) {
-                    haltTimeMinutes.value = 0;
-                }
-                var roundTimeArray = roundTimeInFormLabel.innerHTML.split(":");
-                var roundTimeInSeconds = ((roundTimeArray[0] * 60) + (roundTimeArray[1] * 1)) - (((haltTimeMinutes.value * 60) + haltTimeSeconds.value * 1) * 2);
-                if (roundTimeInSeconds % 2 == 0) {
-
-                    var halfRoundTimeInSeconds = roundTimeInSeconds / 2;
-
-                    var halfRoundTimeMinutes = parseInt(halfRoundTimeInSeconds / 60);
-                    var halfRoundTimeSeconds = halfRoundTimeInSeconds % 60;
-                    abTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
-                    abTripTimeSecondsInFormInput.value = halfRoundTimeSeconds;
-                    baTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
-                    baTripTimeSecondsInFormInput.value = halfRoundTimeSeconds;
-                } else {
-                    var halfRoundTimeInSeconds = parseInt(roundTimeInSeconds / 2);
-                    var halfRoundTimeMinutes = parseInt(halfRoundTimeInSeconds / 60);
-                    var halfRoundTimeSeconds = halfRoundTimeInSeconds % 60;
-                    abTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
-                    abTripTimeSecondsInFormInput.value = halfRoundTimeSeconds + 1;
-                    baTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
-                    baTripTimeSecondsInFormInput.value = halfRoundTimeSeconds;
+                    second.value = 59;
                 }
             }
+            if (minute.value == -1) {
+                minute.value = 0;
+            }
+        }
 
-            function adjastMinutesAndcalculateHalfRoundTimes() {
-                adjastTimeInputs_3();
-                calculateHalfRoundTimes();
+        function copyMinutesToHours() {
+            var minutes = roundInputMinutes.value;
+            var hour = parseInt(minutes / 60);
+            var minute = minutes % 60;
+            if (hour < 10) {
+                roundInputHour.value = "0" + hour;
+            } else {
+                roundInputHour.value = hour;
+            }
+            if (minute < 10) {
+                roundInputMinute.value = "0" + minute;
+            } else {
+                roundInputMinute.value = minute;
             }
 
-            function adjastHalfRoundTimeInputsInForm(event) {
-                var roundTimeString = roundTimeInFormLabel.innerHTML;
-                ;
-                var roundTimeArray = roundTimeString.split(":");
-                var roundTimeInSeconds = ((roundTimeArray[0] * 60) + (roundTimeArray[1] * 1)) - (((haltTimeMinutes.value * 60) + haltTimeSeconds.value * 1) * 2);
-                var trElements = event.target.parentElement;
-                var trInputs = trElements.querySelectorAll("input");
-                var triggerInputMinutes;
-                var triggerInputSeconds;
-                var targetInputMinutes;
-                var targetInputSeconds;
-                if (trInputs[0].id == "abTripTimeMinutesInFormInput") {
-                    triggerInputMinutes = abTripTimeMinutesInFormInput;
-                    triggerInputSeconds = abTripTimeSecondsInFormInput;
+            roundInputSecond.value = roundInputSeconds.value;
 
-                    targetInputMinutes = baTripTimeMinutesInFormInput;
-                    targetInputSeconds = baTripTimeSecondsInFormInput;
-                } else {
-                    triggerInputMinutes = baTripTimeMinutesInFormInput;
-                    triggerInputSeconds = baTripTimeSecondsInFormInput;
 
-                    targetInputMinutes = abTripTimeMinutesInFormInput;
-                    targetInputSeconds = abTripTimeSecondsInFormInput;
+        }
+        function copyHoursToMinutes() {
+            var hour = roundInputHour.value;
+            var minute = roundInputMinute.value;
+            var minutes = (hour * 60) + parseInt(minute);
+            roundInputMinutes.value = minutes;
+            roundInputSeconds.value = roundInputSecond.value;
+        }
+
+        function   timeInputHourPlusPlus(targetInputs) {
+            var hour = document.getElementById(targetInputs + "InputHour");
+            var x = parseInt(hour.value) + 1
+            if (x < 10) {
+                hour.value = "0" + x;
+            } else {
+                hour.value = x;
+            }
+        }
+
+        function   timeInputHourMinusMinus(targetInputs) {
+            var hour = document.getElementById(targetInputs + "InputHour");
+            var minute = document.getElementById(targetInputs + "InputMinute");
+
+            var x = parseInt(hour.value) - 1
+            if (x < 0) {
+                x = 0;
+                hour.value = 0;
+                minute.value = 0;
+                notes.style.color = "red";
+                notes.innerHTML = "საათების 0 ზე ქვემოთ ჩამოსვლა დაუშვებელია";
+                //  redNotes.innerHTML = "საათების 0 ზე ქვემოთ ჩამოსვლა დაუშვებელია";
+            }
+            if (x < 10) {
+                hour.value = "0" + x;
+            } else {
+                hour.value = x;
+            }
+        }
+
+        function goBack() {
+            hNumber--;
+            var inputs = h[hNumber - 1];
+            roundCheckBox.checked = inputs[0];
+            busCheckBox.checked = inputs[1];
+            intervalCheckBox.checked = inputs[2];
+
+            checkCheckBoxHistory(roundCheckBox);
+            checkCheckBoxHistory(busCheckBox);
+            checkCheckBoxHistory(intervalCheckBox);
+
+            roundInputHour.value = inputs[3];
+            roundInputMinute.value = inputs[4];
+            roundInputSecond.value = inputs[5];
+
+            busInput.value = inputs[6];
+
+            intervalInputHour.value = inputs[7];
+            intervalInputMinute.value = inputs[8];
+            intervalInputSecond.value = inputs[9];
+
+            plusMinusInput.value = inputs[10];
+
+            checkHistory();
+
+            calculate();
+        }
+
+        function goForward() {
+            hNumber++;
+            var inputs = h[hNumber - 1];
+            roundCheckBox.checked = inputs[0];
+            busCheckBox.checked = inputs[1];
+            intervalCheckBox.checked = inputs[2];
+
+            checkCheckBoxHistory(roundCheckBox);
+            checkCheckBoxHistory(busCheckBox);
+            checkCheckBoxHistory(intervalCheckBox);
+
+
+            roundInputHour.value = inputs[3];
+            roundInputMinute.value = inputs[4];
+            roundInputSecond.value = inputs[5];
+
+            busInput.value = inputs[6];
+
+            intervalInputHour.value = inputs[7];
+            intervalInputMinute.value = inputs[8];
+            intervalInputSecond.value = inputs[9];
+
+
+            plusMinusInput.value = inputs[10];
+
+            checkHistory();
+
+            calculate();
+        }
+
+        function   checkCheckBoxHistory(checkBox) {
+            var trElements = checkBox.parentElement.parentElement;
+            var trInputs = trElements.querySelectorAll(".input");
+            if (checkBox.checked == true) {
+                for (i = 0; i < trInputs.length; i++) {
+                    trInputs[i].disabled = false;
                 }
+            } else {
+                for (i = 0; i < trInputs.length; i++) {
+                    trInputs[i].disabled = true;
+                }
+            }
+        }
 
-                if (triggerInputSeconds.value < 0) {
-                    triggerInputSeconds.value = 59;
-                    triggerInputMinutes.value = triggerInputMinutes.value * 1 - 1;
-                }
-                if (triggerInputSeconds.value > 59) {
-                    triggerInputSeconds.value = "00";
-                    triggerInputMinutes.value = triggerInputMinutes.value * 1 + 1;
-                }
-
-                var halfTimeInSecondsTrigger = trInputs[0].value * 60 + trInputs[1].value * 1;
-                if (halfTimeInSecondsTrigger > roundTimeInSeconds) {
-                    halfTimeInSecondsTrigger = roundTimeInSeconds;
-                    triggerInputMinutes.value = parseInt(roundTimeInSeconds / 60);
-                    triggerInputSeconds.value = roundTimeInSeconds % 60;
-                    targetInputMinutes.value = 0;
-                    targetInputSeconds.value = 0;
-                }
-                if (halfTimeInSecondsTrigger < 0) {
-                    halfTimeInSecondsTrigger = 0;
-                    triggerInputMinutes.value = 0;
-                    triggerInputSeconds.value = 0;
-                    targetInputMinutes.value = parseInt(roundTimeInSeconds / 60);
-                    targetInputSeconds.value = roundTimeInSeconds % 60;
-                }
-                var halfTimeInSecondsTarget = roundTimeInSeconds - halfTimeInSecondsTrigger;
-                targetInputMinutes.value = parseInt(halfTimeInSecondsTarget / 60);
-                targetInputSeconds.value = halfTimeInSecondsTarget % 60;
+        function chooseRow(event) {
 
 
+            var trElements = event.target.parentElement.parentElement;
+
+            var trTexts = trElements.querySelectorAll("td");
+            var roundTime = trTexts[2].innerHTML;
+            var busCounts = trTexts[3].innerHTML;
+            var interval = trTexts[4].innerHTML;
+            //alert(roundTripTime + "-" + busCounts + "-" + interval);
+            roundTimeInFormLabel.innerHTML = roundTime;
+            busCountInFormLabel.innerHTML = busCounts;
+            intervalTimeInFormInput.value = interval;
+            var roundTimeArray = roundTime.split(":");
+            var roundTimeInSeconds = ((roundTimeArray[0] * 60) + (roundTimeArray[1] * 1)) - (((haltTimeMinutes.value * 60) + haltTimeSeconds.value * 1) * 2);
+
+            if (roundTimeInSeconds % 2 == 0) {
+
+                var halfRoundTimeInSeconds = roundTimeInSeconds / 2;
+                var halfRoundTimeMinutes = parseInt(halfRoundTimeInSeconds / 60);
+                var halfRoundTimeSeconds = halfRoundTimeInSeconds % 60;
+                abTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
+                abTripTimeSecondsInFormInput.value = halfRoundTimeSeconds;
+                baTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
+                baTripTimeSecondsInFormInput.value = halfRoundTimeSeconds;
+            } else {
+                var halfRoundTimeInSeconds = parseInt(roundTimeInSeconds / 2);
+                var halfRoundTimeMinutes = parseInt(halfRoundTimeInSeconds / 60);
+                var halfRoundTimeSeconds = halfRoundTimeInSeconds % 60;
+                abTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
+                abTripTimeSecondsInFormInput.value = halfRoundTimeSeconds + 1;
+                baTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
+                baTripTimeSecondsInFormInput.value = halfRoundTimeSeconds;
+            }
+
+            if (busCounts % 2 == 0) {
+                abBusCountInFormInput.value = busCounts / 2;
+                baBusCountInFormInput.value = busCounts / 2;
+            } else {
+                abBusCountInFormInput.value = parseInt(busCounts / 2) + 1;
+                baBusCountInFormInput.value = parseInt(busCounts / 2);
             }
 
 
 
-            function   showParamatersForm() {
-                document.getElementById("subnav-content").style.display = "block";
+        }
+
+        function adjastBusCountInputsInForm(event) {
+            var busCountSum = 1 * (busCountInFormLabel.innerHTML);
+
+            var firstValue = 1 * (event.target.value);
+
+            if (firstValue > busCountSum) {
+                firstValue = busCountSum;
+                event.target.value = firstValue;
             }
-            function   hideParamatersForm() {
-                document.getElementById("subnav-content").style.display = "none";
+
+            if (firstValue < 0) {
+                firstValue = 0;
+                event.target.value = 0;
             }
-        </script>
-    </body>
+            var targetInput;
+            if (event.target.id == "abBusCountInFormInput") {
+                targetInput = baBusCountInFormInput;
+            } else {
+                targetInput = abBusCountInFormInput;
+            }
+            var secondValue = busCountSum - firstValue;
+            targetInput.value = secondValue;
+        }
+
+        function calculateHalfRoundTimes() {
+            if (haltTimeMinutes.value < 0) {
+                haltTimeMinutes.value = 0;
+            }
+            var roundTimeArray = roundTimeInFormLabel.innerHTML.split(":");
+            var roundTimeInSeconds = ((roundTimeArray[0] * 60) + (roundTimeArray[1] * 1)) - (((haltTimeMinutes.value * 60) + haltTimeSeconds.value * 1) * 2);
+            if (roundTimeInSeconds % 2 == 0) {
+
+                var halfRoundTimeInSeconds = roundTimeInSeconds / 2;
+
+                var halfRoundTimeMinutes = parseInt(halfRoundTimeInSeconds / 60);
+                var halfRoundTimeSeconds = halfRoundTimeInSeconds % 60;
+                abTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
+                abTripTimeSecondsInFormInput.value = halfRoundTimeSeconds;
+                baTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
+                baTripTimeSecondsInFormInput.value = halfRoundTimeSeconds;
+            } else {
+                var halfRoundTimeInSeconds = parseInt(roundTimeInSeconds / 2);
+                var halfRoundTimeMinutes = parseInt(halfRoundTimeInSeconds / 60);
+                var halfRoundTimeSeconds = halfRoundTimeInSeconds % 60;
+                abTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
+                abTripTimeSecondsInFormInput.value = halfRoundTimeSeconds + 1;
+                baTripTimeMinutesInFormInput.value = halfRoundTimeMinutes;
+                baTripTimeSecondsInFormInput.value = halfRoundTimeSeconds;
+            }
+        }
+
+        function adjastMinutesAndcalculateHalfRoundTimes() {
+            adjastTimeInputs_3();
+            calculateHalfRoundTimes();
+        }
+
+        function adjastHalfRoundTimeInputsInForm(event) {
+            var roundTimeString = roundTimeInFormLabel.innerHTML;
+            ;
+            var roundTimeArray = roundTimeString.split(":");
+            var roundTimeInSeconds = ((roundTimeArray[0] * 60) + (roundTimeArray[1] * 1)) - (((haltTimeMinutes.value * 60) + haltTimeSeconds.value * 1) * 2);
+            var trElements = event.target.parentElement;
+            var trInputs = trElements.querySelectorAll("input");
+            var triggerInputMinutes;
+            var triggerInputSeconds;
+            var targetInputMinutes;
+            var targetInputSeconds;
+            if (trInputs[0].id == "abTripTimeMinutesInFormInput") {
+                triggerInputMinutes = abTripTimeMinutesInFormInput;
+                triggerInputSeconds = abTripTimeSecondsInFormInput;
+
+                targetInputMinutes = baTripTimeMinutesInFormInput;
+                targetInputSeconds = baTripTimeSecondsInFormInput;
+            } else {
+                triggerInputMinutes = baTripTimeMinutesInFormInput;
+                triggerInputSeconds = baTripTimeSecondsInFormInput;
+
+                targetInputMinutes = abTripTimeMinutesInFormInput;
+                targetInputSeconds = abTripTimeSecondsInFormInput;
+            }
+
+            if (triggerInputSeconds.value < 0) {
+                triggerInputSeconds.value = 59;
+                triggerInputMinutes.value = triggerInputMinutes.value * 1 - 1;
+            }
+            if (triggerInputSeconds.value > 59) {
+                triggerInputSeconds.value = "00";
+                triggerInputMinutes.value = triggerInputMinutes.value * 1 + 1;
+            }
+
+            var halfTimeInSecondsTrigger = trInputs[0].value * 60 + trInputs[1].value * 1;
+            if (halfTimeInSecondsTrigger > roundTimeInSeconds) {
+                halfTimeInSecondsTrigger = roundTimeInSeconds;
+                triggerInputMinutes.value = parseInt(roundTimeInSeconds / 60);
+                triggerInputSeconds.value = roundTimeInSeconds % 60;
+                targetInputMinutes.value = 0;
+                targetInputSeconds.value = 0;
+            }
+            if (halfTimeInSecondsTrigger < 0) {
+                halfTimeInSecondsTrigger = 0;
+                triggerInputMinutes.value = 0;
+                triggerInputSeconds.value = 0;
+                targetInputMinutes.value = parseInt(roundTimeInSeconds / 60);
+                targetInputSeconds.value = roundTimeInSeconds % 60;
+            }
+            var halfTimeInSecondsTarget = roundTimeInSeconds - halfTimeInSecondsTrigger;
+            targetInputMinutes.value = parseInt(halfTimeInSecondsTarget / 60);
+            targetInputSeconds.value = halfTimeInSecondsTarget % 60;
+
+
+        }
+
+
+
+        function   showParamatersForm() {
+            document.getElementById("subnav-content").style.display = "block";
+        }
+        function   hideParamatersForm() {
+            document.getElementById("subnav-content").style.display = "none";
+        }
+    </script>
+</body>
 </html>

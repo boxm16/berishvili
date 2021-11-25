@@ -68,6 +68,8 @@ public class TripPeriod {
                 return "green";
             case "halt":
                 return "black";
+            case "break":
+                return "yellow";
             default:
                 return "white";
         }

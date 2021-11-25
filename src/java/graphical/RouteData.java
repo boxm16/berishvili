@@ -34,6 +34,11 @@ public class RouteData {
     private String intervalTime;
     private boolean circularRoute;
 
+    private int breakTimeMinutes;
+    private String firstBreakStartTime;
+    private String lastBreakEndTime;
+    private String breakStayPoint;
+
     public RouteData() {
         roundCheckBoxChecked = "";
         roundInputHourValue = "00";
@@ -304,5 +309,39 @@ public class RouteData {
     public void setHaltTimeSeconds(int haltTimeSeconds) {
         this.haltTimeSeconds = haltTimeSeconds;
     }
+
+    public int getBreakTimeMinutes() {
+        return breakTimeMinutes;
+    }
+
+    public void setBreakTimeMinutes(int breakTimeMinutes) {
+        this.breakTimeMinutes = breakTimeMinutes;
+    }
+
+    public String getFirstBreakStartTime() {
+        return firstBreakStartTime;
+    }
+
+    public void setFirstBreakStartTime(String firstBreakStartTime) {
+        this.firstBreakStartTime = firstBreakStartTime;
+    }
+
+    public String getLastBreakEndTime() {
+        return lastBreakEndTime;
+    }
+
+    public void setLastBreakEndTime(String lastBreakEndTime) {
+        this.lastBreakEndTime = lastBreakEndTime;
+    }
+
+    public String getBreakStayPoint() {
+        return breakStayPoint;
+    }
+
+    public void setBreakStayPoint(String breakStayPoint) {
+        this.breakStayPoint = breakStayPoint;
+    }
+    
+    
 
 }

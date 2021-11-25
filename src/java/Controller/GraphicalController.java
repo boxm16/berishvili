@@ -7,16 +7,12 @@ import graphical.Permutations;
 import graphical.Route;
 import graphical.RouteData;
 import graphical.TripPeriod;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import graphical.TwoDimArrayCombinations;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +38,7 @@ public class GraphicalController {
     }
 
     @RequestMapping(value = "graphicalRouteVersions", method = RequestMethod.POST)
-    public String graphicalRouteVersions(ModelMap model,
+    public String graphicalRouteVersions(ModelMap model, HttpSession session,
             @RequestParam(value = "roundCheckBox", required = false) String roundCheckBoxChecked,
             @RequestParam(value = "roundInputHour", required = false) String roundInputHour,
             @RequestParam(value = "roundInputMinute", required = false) String roundInputMinute,
@@ -181,35 +177,57 @@ public class GraphicalController {
         model.addAttribute("routeData", routeData);
         model.addAttribute("routes", routes);
 
+        session.setAttribute("routeData", routeData);
+        session.setAttribute("routes", routes);
         return "graphicalRoute";
     }
 
-    @RequestMapping(value = "breaks", method = RequestMethod.GET)
-    public String breaks(ModelMap model) {
-        ArrayList<Route> routes = new ArrayList();
-        for (int x = 0; x < 10; x++) {
-            Route route = new Route();
-            for (int y = 0; y < 5; y++) {
-                Exodus exodus = new Exodus();
-                for (int z = 0; z < 10; z++) {
-                    TripPeriod tripPeriod = new TripPeriod();
-                    try {
-                        SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("HH:mm:ss");
-                        String stringTime = "21:00:00";
-                        Date dateTime = dateTimeFormatter.parse(stringTime);
-                        LocalDateTime startTime = dateTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-                        tripPeriod.setStartTime(startTime);
-                        exodus.getTripPeriods().add(tripPeriod);
-                    } catch (ParseException ex) {
-                        Logger.getLogger(GraphicalController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                route.getExoduses().add(exodus);
-            }
-            routes.add(route);
+    @RequestMapping(value = "breaks", method = RequestMethod.POST)
+    public String breaks(ModelMap model, HttpSession session,
+            @RequestParam("routeVersionNumber") String routeVersionNumber,
+            @RequestParam("breakTimeMinutes") String breakTimeMinutes,
+            @RequestParam("firstBreakStartTime") String firstBreakStartTime,
+            @RequestParam("lastBreakEndTime") String lastBreakEndTime,
+            @RequestParam("breakStayPoint") String breakStayPoint) {
+
+        ArrayList<Route> routeBreakVersions = new ArrayList();
+
+        ArrayList<Route> routeWithoutBreakVersion = (ArrayList<Route>) session.getAttribute("routes");
+
+        Route choosedRoute = routeWithoutBreakVersion.get(Integer.valueOf(routeVersionNumber));
+
+        IgnitionSequence ignitionSequence = new IgnitionSequence();
+        for (Exodus exodus : choosedRoute.getExoduses()) {
+            TripPeriod firstTripPeriodOfExodus = exodus.getTripPeriods().get(0);
+            ExodusIgnitionCode exodusIgnitionCode = new ExodusIgnitionCode();
+            exodusIgnitionCode.setStartTime(firstTripPeriodOfExodus.getStartTime());
+            exodusIgnitionCode.setType(firstTripPeriodOfExodus.getType());
+            ignitionSequence.addExodusIgnitionCode(exodusIgnitionCode);
         }
 
-        model.addAttribute("routes", routes);
+        RouteData routeData = (RouteData) session.getAttribute("routeData");
+        routeData.setFirstBreakStartTime(firstBreakStartTime);
+        routeData.setLastBreakEndTime(lastBreakEndTime);
+        routeData.setBreakTimeMinutes(Integer.valueOf(breakTimeMinutes));
+        routeData.setBreakStayPoint(breakStayPoint);
+
+        ArrayList<ArrayList<Integer>> findBreaksPossiblePoints = findBreaksPossiblePoints(choosedRoute, routeData);
+
+        TwoDimArrayCombinations twoDimArrayCombinator = new TwoDimArrayCombinations();
+        List<ArrayList> breakSequences = twoDimArrayCombinator.getIntegerCombinations(findBreaksPossiblePoints);
+
+        for (ArrayList breakSequence : breakSequences) {
+            Route routeWithBreakVersion = createRouteWithBreaks(ignitionSequence, routeData, breakSequence);
+            routeBreakVersions.add(routeWithBreakVersion);
+        }
+/*
+        for (ArrayList ar : breakSequences) {
+
+            System.out.println(ar);
+        }*/
+        System.out.println("Versions :" + breakSequences.size());
+
+        model.addAttribute("routes", routeBreakVersions);
 
         return "breaks";
     }
@@ -420,6 +438,11 @@ public class GraphicalController {
 
     private ArrayList<IgnitionSequence> getAllVariationsOfChangablePart(IgnitionSequence changingPart, RouteData routeData) {
         ArrayList<IgnitionSequence> allVariations = new ArrayList<>();
+        if (changingPart.getSequence().size() == 0) {
+            allVariations.add(changingPart);
+            return allVariations;
+        }
+
         ArrayList<String[]> allPermutationsMap = getAllPermutationsMap(changingPart);
         LocalDateTime standartStartTime = changingPart.getSequence().get(0).getStartTime();
         String goTripType = changingPart.getSequence().get(0).getType();
@@ -485,11 +508,133 @@ public class GraphicalController {
             }
             allPermutationsMap.add(array);
         }
-        for (int x = 0; x < allPermutationsMap.size(); x++) {
-            String[] obj = (String[]) allPermutationsMap.get(x);
-            System.out.println(Arrays.toString(obj));
-        }
+
         return allPermutationsMap;
     }
 
+    private ArrayList<ArrayList<Integer>> findBreaksPossiblePoints(Route choosedRoute, RouteData routeData) {
+        ArrayList<ArrayList<Integer>> breakPointsMap = new ArrayList();
+
+        LocalDateTime firstBreakStartTime = converter.convertStringTimeToDate(routeData.getFirstBreakStartTime());
+        LocalDateTime lastBreakEndTime = converter.convertStringTimeToDate(routeData.getLastBreakEndTime());
+        String breakStayPoint = routeData.getBreakStayPoint();
+        ArrayList<Exodus> exoduses = choosedRoute.getExoduses();
+
+        for (Exodus exodus : exoduses) {
+            ArrayList breakPossiblePointsArray = new ArrayList();
+            ArrayList<TripPeriod> tripPeriods = exodus.getTripPeriods();
+            int breakPoint = 0;
+            for (TripPeriod tripPeriod : tripPeriods) {
+                if (tripPeriod.getType().equals("halt")) {
+                    //do nothing
+                } else {
+                    if (breakPoint > 0
+                            && (tripPeriod.getStartTime().isAfter(firstBreakStartTime) || tripPeriod.getStartTime().isEqual(firstBreakStartTime))
+                            && (tripPeriod.getStartTime().isBefore(lastBreakEndTime) || tripPeriod.getStartTime().isEqual(lastBreakEndTime))
+                            && (tripPeriod.getType().equals(breakStayPoint) || breakStayPoint.equals("AB"))) {
+                        breakPossiblePointsArray.add(breakPoint);
+
+                    }
+                    breakPoint++;
+                }
+            }
+            breakPointsMap.add(breakPossiblePointsArray);
+        }
+
+        return breakPointsMap;
+
+    }
+
+    private Route createRouteWithBreaks(IgnitionSequence ignitionSequence, RouteData routeData, ArrayList breakSequence) {
+
+        ArrayList<ExodusIgnitionCode> routeIgnitionSequence = ignitionSequence.getSequence();
+        Route route = new Route();
+        ArrayList<Exodus> exoduses = new ArrayList<>();
+        LocalDateTime lastTripPeriodStartTime = converter.convertStringTimeToDate(routeData.getLastTripStartTime());
+        Duration haltTime = Duration.ofSeconds(routeData.getHaltTimeMinutes() * 60 + routeData.getHaltTimeSeconds());
+        int exodusCounter = 0;
+        for (ExodusIgnitionCode ignitionCode : routeIgnitionSequence) {
+            int breakPointInExodus = (int) breakSequence.get(exodusCounter);
+            LocalDateTime tripPeriodStartTime = ignitionCode.getStartTime();
+            String goTripPeriodType = ignitionCode.getType();
+            String returnTripPeriodType;
+
+            Duration goTripPeriodTime;
+            Duration returnTripPeriodTime;
+            if (routeData.isCircularRoute()) {
+                int tripPeriodTimeInSeconds
+                        = (routeData.getAbTripTimeMinutes() + routeData.getBaTripTimeMinutes()) * 60
+                        + routeData.getAbTripTimeSeconds()
+                        + routeData.getBaTripTimeSeconds();
+                goTripPeriodTime = Duration.ofSeconds(tripPeriodTimeInSeconds);
+                goTripPeriodTime = goTripPeriodTime.plus(Duration.ofMinutes(10));//of not existing halt time
+                Exodus exodus = new Exodus();
+
+                while (tripPeriodStartTime.isBefore(lastTripPeriodStartTime)
+                        || tripPeriodStartTime.isEqual(lastTripPeriodStartTime)) {
+
+                    TripPeriod tripPeriod = new TripPeriod(tripPeriodStartTime, goTripPeriodTime, goTripPeriodType);
+                    exodus.getTripPeriods().add(tripPeriod);
+                    tripPeriodStartTime = tripPeriodStartTime.plus(goTripPeriodTime);
+
+                    TripPeriod haltTripPeriod = new TripPeriod(tripPeriodStartTime, haltTime, "halt");
+                    tripPeriodStartTime = tripPeriodStartTime.plus(haltTime);
+                    exodus.getTripPeriods().add(haltTripPeriod);
+
+                }
+                exoduses.add(exodus);
+            } else {
+
+                if (goTripPeriodType.equals("ab")) {
+                    returnTripPeriodType = "ba";
+
+                    goTripPeriodTime = Duration.ofSeconds((routeData.getAbTripTimeMinutes() * 60) + routeData.getAbTripTimeSeconds());
+                    returnTripPeriodTime = Duration.ofSeconds((routeData.getBaTripTimeMinutes() * 60) + routeData.getBaTripTimeSeconds());
+                } else {
+
+                    returnTripPeriodType = "ab";
+
+                    goTripPeriodTime = Duration.ofSeconds((routeData.getBaTripTimeMinutes() * 60) + routeData.getBaTripTimeSeconds());
+                    returnTripPeriodTime = Duration.ofSeconds((routeData.getAbTripTimeMinutes() * 60) + routeData.getAbTripTimeSeconds());
+                }
+
+                Exodus exodus = new Exodus();
+                int counter = 0;
+                while (tripPeriodStartTime.isBefore(lastTripPeriodStartTime)
+                        || tripPeriodStartTime.isEqual(lastTripPeriodStartTime)) {
+
+                    if (counter % 2 == 0) {
+                        TripPeriod tripPeriod = new TripPeriod(tripPeriodStartTime, goTripPeriodTime, goTripPeriodType);
+                        exodus.getTripPeriods().add(tripPeriod);
+                        tripPeriodStartTime = tripPeriodStartTime.plus(goTripPeriodTime);
+                    } else {
+                        TripPeriod tripPeriod = new TripPeriod(tripPeriodStartTime, returnTripPeriodTime, returnTripPeriodType);
+                        exodus.getTripPeriods().add(tripPeriod);
+                        tripPeriodStartTime = tripPeriodStartTime.plus(returnTripPeriodTime);
+                    }
+                    counter++;
+
+                    if (counter == breakPointInExodus) {
+                        Duration breakDuration = Duration.ofMinutes(routeData.getBreakTimeMinutes());
+                        TripPeriod tripPeriod = new TripPeriod(tripPeriodStartTime, breakDuration, "break");
+                        exodus.getTripPeriods().add(tripPeriod);
+                        tripPeriodStartTime = tripPeriodStartTime.plus(breakDuration);
+
+                        TripPeriod haltTripPeriod = new TripPeriod(tripPeriodStartTime, haltTime, "halt");
+                        tripPeriodStartTime = tripPeriodStartTime.plus(haltTime);
+                        exodus.getTripPeriods().add(haltTripPeriod);
+
+                    } else {
+                        TripPeriod tripPeriod = new TripPeriod(tripPeriodStartTime, haltTime, "halt");
+                        tripPeriodStartTime = tripPeriodStartTime.plus(haltTime);
+                        exodus.getTripPeriods().add(tripPeriod);
+                    }
+                }
+                exoduses.add(exodus);
+            }
+            exodusCounter++;
+        }
+        route.setExoduses(exoduses);
+        return route;
+    }
 }

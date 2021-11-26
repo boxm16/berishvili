@@ -215,12 +215,13 @@ public class GraphicalController {
 
         TwoDimArrayCombinations twoDimArrayCombinator = new TwoDimArrayCombinations();
         List<ArrayList> breakSequences = twoDimArrayCombinator.getIntegerCombinations(findBreaksPossiblePoints);
-
+        MemoryUsage mu = new MemoryUsage();
         for (ArrayList breakSequence : breakSequences) {
             Route routeWithBreakVersion = createRouteWithBreaks(ignitionSequence, routeData, breakSequence);
+            mu.printMemoryUsage();
             routeBreakVersions.add(routeWithBreakVersion);
         }
-/*
+        /*
         for (ArrayList ar : breakSequences) {
 
             System.out.println(ar);

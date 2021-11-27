@@ -11,6 +11,7 @@ import graphical.TwoDimArrayCombinations;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -218,17 +219,19 @@ public class GraphicalController {
         MemoryUsage mu = new MemoryUsage();
         for (ArrayList breakSequence : breakSequences) {
             Route routeWithBreakVersion = createRouteWithBreaks(ignitionSequence, routeData, breakSequence);
-            mu.printMemoryUsage();
-            routeBreakVersions.add(routeWithBreakVersion);
+            if (routeWithBreakVersion != null) {
+                routeBreakVersions.add(routeWithBreakVersion);
+            }
         }
-        /*
-        for (ArrayList ar : breakSequences) {
+        if (routeBreakVersions.size() > 200) {
+            List l = routeBreakVersions.subList(0, 200);
+            model.addAttribute("routes", l);
+        } else {
+            model.addAttribute("routes", routeBreakVersions);
+        }
 
-            System.out.println(ar);
-        }*/
-        System.out.println("Versions :" + breakSequences.size());
-
-        model.addAttribute("routes", routeBreakVersions);
+        System.out.println("All Possible Breaks Versions Count:" + breakSequences.size());
+        System.out.println("All Clear Breaks Versions Count:" + routeBreakVersions.size());
 
         return "breaks";
     }
@@ -553,7 +556,9 @@ public class GraphicalController {
         ArrayList<Exodus> exoduses = new ArrayList<>();
         LocalDateTime lastTripPeriodStartTime = converter.convertStringTimeToDate(routeData.getLastTripStartTime());
         Duration haltTime = Duration.ofSeconds(routeData.getHaltTimeMinutes() * 60 + routeData.getHaltTimeSeconds());
+
         int exodusCounter = 0;
+        HashSet<TripPeriod> breaksPool = new HashSet();
         for (ExodusIgnitionCode ignitionCode : routeIgnitionSequence) {
             int breakPointInExodus = (int) breakSequence.get(exodusCounter);
             LocalDateTime tripPeriodStartTime = ignitionCode.getStartTime();
@@ -562,6 +567,7 @@ public class GraphicalController {
 
             Duration goTripPeriodTime;
             Duration returnTripPeriodTime;
+
             if (routeData.isCircularRoute()) {
                 int tripPeriodTimeInSeconds
                         = (routeData.getAbTripTimeMinutes() + routeData.getBaTripTimeMinutes()) * 60
@@ -575,6 +581,10 @@ public class GraphicalController {
                         || tripPeriodStartTime.isEqual(lastTripPeriodStartTime)) {
 
                     TripPeriod tripPeriod = new TripPeriod(tripPeriodStartTime, goTripPeriodTime, goTripPeriodType);
+                    if (breakCrossesOtherBreak(tripPeriod, breaksPool)) {
+                        return null;
+                    }
+                    breaksPool.add(tripPeriod);
                     exodus.getTripPeriods().add(tripPeriod);
                     tripPeriodStartTime = tripPeriodStartTime.plus(goTripPeriodTime);
 
@@ -618,6 +628,12 @@ public class GraphicalController {
                     if (counter == breakPointInExodus) {
                         Duration breakDuration = Duration.ofMinutes(routeData.getBreakTimeMinutes());
                         TripPeriod tripPeriod = new TripPeriod(tripPeriodStartTime, breakDuration, "break");
+
+                        if (breakCrossesOtherBreak(tripPeriod, breaksPool)) {
+                            return null;
+                        }
+                        breaksPool.add(tripPeriod);
+
                         exodus.getTripPeriods().add(tripPeriod);
                         tripPeriodStartTime = tripPeriodStartTime.plus(breakDuration);
 
@@ -637,5 +653,25 @@ public class GraphicalController {
         }
         route.setExoduses(exoduses);
         return route;
+    }
+
+    private boolean breakCrossesOtherBreak(TripPeriod breakTripPeriod, HashSet<TripPeriod> breaksPool) {
+
+        LocalDateTime breakEndTime = breakTripPeriod.getStartTime().plus(breakTripPeriod.getDuration());
+        for (TripPeriod breakInPoolTripPeriod : breaksPool) {
+            LocalDateTime poolBreakEndTime = breakInPoolTripPeriod.getStartTime().plus(breakInPoolTripPeriod.getDuration());
+            if (breakTripPeriod.getStartTime().isEqual(breakInPoolTripPeriod.getStartTime())) {
+                return true;
+            }
+            if (breakTripPeriod.getStartTime().isAfter(breakInPoolTripPeriod.getStartTime())
+                    && breakTripPeriod.getStartTime().isBefore(poolBreakEndTime)) {
+                return true;
+            }
+            if (breakEndTime.isAfter(breakInPoolTripPeriod.getStartTime())
+                    && breakEndTime.isBefore(poolBreakEndTime)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -576,21 +576,36 @@ public class GraphicalController {
                 goTripPeriodTime = Duration.ofSeconds(tripPeriodTimeInSeconds);
                 goTripPeriodTime = goTripPeriodTime.plus(Duration.ofMinutes(10));//of not existing halt time
                 Exodus exodus = new Exodus();
-
+                int counter = 0;
                 while (tripPeriodStartTime.isBefore(lastTripPeriodStartTime)
                         || tripPeriodStartTime.isEqual(lastTripPeriodStartTime)) {
 
                     TripPeriod tripPeriod = new TripPeriod(tripPeriodStartTime, goTripPeriodTime, goTripPeriodType);
-                    if (breakCrossesOtherBreak(tripPeriod, breaksPool)) {
-                        return null;
-                    }
-                    breaksPool.add(tripPeriod);
                     exodus.getTripPeriods().add(tripPeriod);
                     tripPeriodStartTime = tripPeriodStartTime.plus(goTripPeriodTime);
+                    counter++;
 
-                    TripPeriod haltTripPeriod = new TripPeriod(tripPeriodStartTime, haltTime, "halt");
-                    tripPeriodStartTime = tripPeriodStartTime.plus(haltTime);
-                    exodus.getTripPeriods().add(haltTripPeriod);
+                    if (counter == breakPointInExodus) {
+                        Duration breakDuration = Duration.ofMinutes(routeData.getBreakTimeMinutes());
+                        TripPeriod breakTripPeriod = new TripPeriod(tripPeriodStartTime, breakDuration, "break");
+
+                        if (breakCrossesOtherBreak(breakTripPeriod, breaksPool)) {
+                            return null;
+                        }
+                        breaksPool.add(breakTripPeriod);
+
+                        exodus.getTripPeriods().add(breakTripPeriod);
+                        tripPeriodStartTime = tripPeriodStartTime.plus(breakDuration);
+
+                        TripPeriod haltTripPeriod = new TripPeriod(tripPeriodStartTime, haltTime, "halt");
+                        tripPeriodStartTime = tripPeriodStartTime.plus(haltTime);
+                        exodus.getTripPeriods().add(haltTripPeriod);
+
+                    } else {
+                        TripPeriod haltTripPeriod = new TripPeriod(tripPeriodStartTime, haltTime, "halt");
+                        tripPeriodStartTime = tripPeriodStartTime.plus(haltTime);
+                        exodus.getTripPeriods().add(haltTripPeriod);
+                    }
 
                 }
                 exoduses.add(exodus);

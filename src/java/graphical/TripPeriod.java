@@ -3,6 +3,7 @@ package graphical;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 public class TripPeriod {
 
@@ -76,4 +77,15 @@ public class TripPeriod {
 
     }
 
+    public String getStartTimeString() {
+        return startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
+
+    public String getDescription() {
+        String startTimeString = startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        LocalDateTime endTime = startTime.plus(duration);
+        String endTimeString = endTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+
+        return startTimeString + "-" + endTimeString;
+    }
 }

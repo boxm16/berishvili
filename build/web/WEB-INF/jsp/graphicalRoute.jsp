@@ -386,7 +386,6 @@
         <c:forEach var="exodus" items="${route.exoduses}" varStatus="exodusesCount">
             <c:forEach var="tripPeriod" items="${exodus.tripPeriods}" >
                 <rect x='${tripPeriod.getStartPoint()}' y='${(exodusesCount.index*30)+30}' width='${tripPeriod.length}' height='20'  rx='7' style='fill:${tripPeriod.color}' />
-
             </c:forEach>
 
         </c:forEach>

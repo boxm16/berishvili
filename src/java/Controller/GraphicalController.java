@@ -1,5 +1,6 @@
 package Controller;
 
+import graphical.BreaksPager;
 import graphical.Exodus;
 import graphical.ExodusIgnitionCode;
 import graphical.IgnitionSequence;
@@ -223,16 +224,21 @@ public class GraphicalController {
                 routeBreakVersions.add(routeWithBreakVersion);
             }
         }
-        if (routeBreakVersions.size() > 200) {
-            List l = routeBreakVersions.subList(0, 200);
-            model.addAttribute("routes", l);
-        } else {
-            model.addAttribute("routes", routeBreakVersions);
-        }
 
         System.out.println("All Possible Breaks Versions Count:" + breakSequences.size());
         System.out.println("All Clear Breaks Versions Count:" + routeBreakVersions.size());
 
+        BreaksPager breaksPager = new BreaksPager(routeBreakVersions, 50);
+        breaksPager.setCurrentPage(1);
+        model.addAttribute("breaksPager", breaksPager);
+        session.setAttribute("breaksPager", breaksPager);
+        return "breaks";
+    }
+
+    @RequestMapping(value = "breaksPageRequest", method = RequestMethod.GET)
+    public String breaksPageRequest(@RequestParam("requestedPage") String requestedPage, HttpSession session) {
+        BreaksPager breaksPager = (BreaksPager) session.getAttribute("breaksPager");
+        breaksPager.setCurrentPage(Integer.valueOf(requestedPage));
         return "breaks";
     }
 
@@ -382,7 +388,7 @@ public class GraphicalController {
                         + routeData.getAbTripTimeSeconds()
                         + routeData.getBaTripTimeSeconds();
                 goTripPeriodTime = Duration.ofSeconds(tripPeriodTimeInSeconds);
-                goTripPeriodTime = goTripPeriodTime.plus(Duration.ofMinutes(10));//of not existing halt time
+                goTripPeriodTime = goTripPeriodTime.plus(Duration.ofMinutes(routeData.getHaltTimeMinutes())).plusSeconds(routeData.getHaltTimeSeconds());//of not existing halt time
                 Exodus exodus = new Exodus();
 
                 while (tripPeriodStartTime.isBefore(lastTripPeriodStartTime)
@@ -574,7 +580,7 @@ public class GraphicalController {
                         + routeData.getAbTripTimeSeconds()
                         + routeData.getBaTripTimeSeconds();
                 goTripPeriodTime = Duration.ofSeconds(tripPeriodTimeInSeconds);
-                goTripPeriodTime = goTripPeriodTime.plus(Duration.ofMinutes(10));//of not existing halt time
+                goTripPeriodTime = goTripPeriodTime.plusMinutes(routeData.getHaltTimeMinutes()).plusSeconds(routeData.getHaltTimeSeconds());//of not existing halt time
                 Exodus exodus = new Exodus();
                 int counter = 0;
                 while (tripPeriodStartTime.isBefore(lastTripPeriodStartTime)
@@ -689,4 +695,5 @@ public class GraphicalController {
         }
         return false;
     }
+
 }

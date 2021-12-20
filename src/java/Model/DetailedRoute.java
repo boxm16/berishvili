@@ -172,14 +172,14 @@ public class DetailedRoute extends BasicRoute {
     }
 
     public void calculateIntervalsDataVVersion() {
-        TreeMap<LocalDateTime, DetailedTripPeriod> abGpsTimetable = new TreeMap<>();
-        TreeMap<LocalDateTime, DetailedTripPeriod> baGpsTimetable = new TreeMap<>();
-
-        ArrayList<IntervalTripPeriod> abStartTimeActualNullTripPeriods = new ArrayList();
-        ArrayList<IntervalTripPeriod> baStartTimeActualNullTripPeriods = new ArrayList();
 
         TreeMap<Date, Day> days = super.getDays();
         for (Map.Entry<Date, Day> dayEntry : days.entrySet()) {
+            TreeMap<LocalDateTime, DetailedTripPeriod> abGpsTimetable = new TreeMap<>();
+            TreeMap<LocalDateTime, DetailedTripPeriod> baGpsTimetable = new TreeMap<>();
+
+            ArrayList<IntervalTripPeriod> abStartTimeActualNullTripPeriods = new ArrayList();
+            ArrayList<IntervalTripPeriod> baStartTimeActualNullTripPeriods = new ArrayList();
             IntervalDay intervalDay = (IntervalDay) dayEntry.getValue();
 
             TreeMap<Short, Exodus> exoduses = intervalDay.getExoduses();

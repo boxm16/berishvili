@@ -296,4 +296,5 @@ public class DetailedRoute extends BasicRoute {
         }
         return gpsTimetable;
     }
+
 }

@@ -7,6 +7,8 @@ package Model;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -67,6 +69,51 @@ public class DetailedDay extends Day {
     public void setBaGpsTimetable(TreeMap<LocalDateTime, DetailedTripPeriod> baGpsTimetable) {
         this.baGpsTimetable = baGpsTimetable;
     }
-    
-    
+
+    public HashMap<String, TreeMap> getHaltTimeTables() {
+        HashMap<String, TreeMap> haltTimeTables = new HashMap();
+        TreeMap<LocalDateTime, Halt> aPointHaltTimetable = new TreeMap<>();
+        TreeMap<LocalDateTime, Halt> bPointHaltTimetable = new TreeMap<>();
+
+        TreeMap<Short, Exodus> exoduses = super.getExoduses();
+        for (Map.Entry<Short, Exodus> exodusEntry
+                : exoduses.entrySet()) {
+            TreeMap<String, TripVoucher> tripVouchers = exodusEntry.getValue().getTripVouchers();
+
+            for (Map.Entry<String, TripVoucher> tripVoucherEntry : tripVouchers.entrySet()) {
+                ArrayList<TripPeriod> tripPeriods = tripVoucherEntry.getValue().getTripPeriods();
+                LocalDateTime previousTripPeriodArrivalTimeActual = tripPeriods.get(0).getArrivalTimeActual();
+                int index = 0;
+                for (TripPeriod tripPeriod : tripPeriods) {
+                    DetailedTripPeriod detailedTripPeriod = (DetailedTripPeriod) tripPeriod;
+                    if (index > 0) {
+
+                        if (previousTripPeriodArrivalTimeActual == null || tripPeriod.getStartTimeActual() == null) {
+
+                        } else {
+                            Halt halt = new Halt();
+                            halt.setStartTime(previousTripPeriodArrivalTimeActual);
+                            halt.setEndTime(tripPeriod.getStartTimeActual());
+                            if (tripPeriod.getType().equals("ab")) {
+                                halt.setPoint("a");
+                                aPointHaltTimetable.put(previousTripPeriodArrivalTimeActual, halt);
+                            }
+                            if (tripPeriod.getType().equals("ba")) {
+                                halt.setPoint("b");
+                                bPointHaltTimetable.put(previousTripPeriodArrivalTimeActual, halt);
+                            }
+                        }
+                        previousTripPeriodArrivalTimeActual = tripPeriod.getArrivalTimeActual();
+                    }
+                    index++;
+                }
+            }
+
+        }
+        haltTimeTables.put("aPoint", aPointHaltTimetable);
+        haltTimeTables.put("bPoint", bPointHaltTimetable);
+        return haltTimeTables;
+
+    }
+
 }

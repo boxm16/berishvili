@@ -402,16 +402,16 @@
                                 <a href="#" onclick="requestRouter('firstTripMisconductMinusVersionInitialRequest.htm')"><h4>ა/ბ დარღვევების დათვალიერება (ნაადრევად გასვლების ჩათვლით)</h4></a>
                             </li>
                             <li>
-                                <a href="#" onclick="requestRouter('haltMisconducts.htm')"><h4>პუნკტში ერთად დგომის შემთხვევები</h4></a>
-                            </li>
-
-                            <li>
                                 <a href="#" onclick="requestRouter('misconductsExcelExportInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
                             </li>
 
                         </ul>
                     </li>
+                    <li>
+                        <a href="#" onclick="requestRouter('haltMisconducts.htm')"><h4>პუნკტში ერთად დგომის შემთხვევები</h4></a>
+                    </li>
                 </ul>
+
 
 
                 <ul class="list-unstyled CTAs">

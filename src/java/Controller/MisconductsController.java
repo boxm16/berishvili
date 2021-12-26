@@ -250,7 +250,7 @@ public class MisconductsController {
         System.out.println("---Writing Excel File Started---");
         memoryUsage.printMemoryUsage();
         //excelWriter.exportTripPeriodsAndRoutesAverages(tripPeriods, routesAveragesTreeMap, percents, fileName);
-        excelWriter.SXSSF_Misconducts(misconductTripPeriods,  misconductedFirstTripPeriods,misconductedFirstTripPeriodsMinusVersion, fileName, request);
+        excelWriter.SXSSF_Misconducts(misconductTripPeriods, misconductedFirstTripPeriods, misconductedFirstTripPeriodsMinusVersion, fileName, request);
 
         model.addAttribute("fileName", fileName);
         model.addAttribute("excelExportLink", "exportMisconducts.htm");
@@ -292,5 +292,4 @@ public class MisconductsController {
 
         return "redirect:/misconductsExcelExportDashboard.htm";
     }
-
 }

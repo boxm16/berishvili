@@ -23,6 +23,9 @@
                 routeNumber
             </th>
             <th>
+                Point
+            </th>
+            <th>
                 date Stamp
             </th>
             <th>
@@ -33,6 +36,7 @@
             <c:forEach var="halt" items="${haltMisconudct.participantHalts}" varStatus="loop">
                 <tr >
                     <td>${haltMisconudct.routeNumber}</td>
+                    <td>${haltMisconudct.point}</td>
                     <td>${haltMisconudct.dateStamp}</td>
                     <td>${halt.getStartTimeString()}</td>
                     <td>${halt.getEndTimeString()}</td>
@@ -40,7 +44,7 @@
                 </tr>
 
             </c:forEach>
-            <tr><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+            <tr><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
         </c:forEach>
     </table>
 </body>

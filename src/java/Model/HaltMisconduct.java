@@ -11,6 +11,7 @@ public class HaltMisconduct {
     private String dateStamp;
     private LocalDateTime startTime;
     private ArrayList<Halt> participantHalts;
+    private String point;
     private Converter converter;
 
     public HaltMisconduct() {
@@ -52,4 +53,13 @@ public class HaltMisconduct {
     public ArrayList<Halt> getParticipantHalts() {
         return participantHalts;
     }
+
+    public String getPoint() {
+        return point;
+    }
+
+    public void setPoint(String point) {
+        this.point = point;
+    }
+    
 }

@@ -81,11 +81,13 @@ public class HaltMisconductsController {
 
                 HashMap<String, TreeMap> haltTimeTables = detailedDay.getHaltTimeTables();
                 TreeMap<LocalDateTime, Halt> aPointHaltTimetable = haltTimeTables.get("aPoint");
-                //System.out.println("A POINT SIZE:" + aPointTimetable.size());
+                TreeMap<LocalDateTime, Halt> bPointHaltTimetable = haltTimeTables.get("bPoint");
 
-                ArrayList<Halt> aPointHaltsArryList = new ArrayList<Halt>(aPointHaltTimetable.values());
+                //System.out.println("A POINT SIZE:" + aPointTimetable.size());
                 HaltFilter haltFilter = null;
                 HaltMisconduct haltMisconductCandidate = null;
+
+                ArrayList<Halt> aPointHaltsArryList = new ArrayList<Halt>(aPointHaltTimetable.values());
                 for (int x = 0; x < aPointHaltsArryList.size() - 1; x++) {
                     Halt halt = aPointHaltsArryList.get(x);
                     if (x == 0) {
@@ -95,6 +97,40 @@ public class HaltMisconductsController {
                     if (sizeBeforeSifting >= 2) {
                         if (sizeBeforeSifting == 2) {
                             haltMisconductCandidate = new HaltMisconduct();
+                            haltMisconductCandidate.setPoint("A");
+                            haltMisconductCandidate.setParticipantHalts(haltFilter.getParticipantHalts());
+                        } else {
+                            haltMisconductCandidate.setParticipantHalts(haltFilter.getParticipantHalts());
+
+                        }
+                    }
+                    if (x > 0) {
+                        haltFilter.siftOutParticipantHaltsForGivenTime(halt.getStartTime());
+                    }
+                    int sizeAfterSifting = haltFilter.getParticipantHalts().size();
+                    if (sizeBeforeSifting > 2 && sizeAfterSifting <= 2) {
+                        haltMisconductCandidate.setRouteNumber(detailedRoute.getNumber());
+                        haltMisconductCandidate.setDateStamp(detailedDay.getDateStamp());
+                        haltMisconductCandidate.setStartTime(haltFilter.getStartTime());
+                        haltMisconductsList.add(haltMisconductCandidate);
+                        haltFilter = new HaltFilter();
+                    }
+                    haltFilter.addHalt(halt);
+                }
+                //----------------------B point-----------
+
+                ArrayList<Halt> bPointHaltsArryList = new ArrayList<Halt>(bPointHaltTimetable.values());
+                for (int x = 0; x < bPointHaltsArryList.size() - 1; x++) {
+                    Halt halt = bPointHaltsArryList.get(x);
+                    if (x == 0) {
+                        haltFilter = new HaltFilter();
+                    }
+                    int sizeBeforeSifting = haltFilter.getParticipantHalts().size();
+                    if (sizeBeforeSifting >= 2) {
+                        if (sizeBeforeSifting == 2) {
+                            haltMisconductCandidate = new HaltMisconduct();
+                            haltMisconductCandidate.setPoint("B");
+                            haltMisconductCandidate.setParticipantHalts(haltFilter.getParticipantHalts());
                         } else {
                             haltMisconductCandidate.setParticipantHalts(haltFilter.getParticipantHalts());
 

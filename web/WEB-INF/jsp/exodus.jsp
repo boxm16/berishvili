@@ -147,7 +147,7 @@
 
             </nav>
             <div >
-                <table style="text-align: center;">
+                <table id="mainTable" style="text-align: center;">
                     <thead>
                         <tr>
                             <th>გეგმიუირი<br>გასვლის<br>დრო</th>
@@ -200,21 +200,21 @@
                                         <tr style="background-color:${tripPeriod.getStartTimeScheduled()==anchor ? "lightgreen" : "inherited" };">
 
 
-                                            <td align="center">${tripPeriod.getStartTimeScheduledString()} </td>
-                                            <td align="center">${tripPeriod.getStartTimeActualString()} </td>
-                                            <td align="center" style='background-color: ${tripPeriod.getStartTimeDifferenceColor()}'>${tripPeriod.getStartTimeDifference()}</td>
+                                            <td name='startTimeScheduled' align="center">${tripPeriod.getStartTimeScheduledString()} </td>
+                                            <td name='startTimeActual' align="center">${tripPeriod.getStartTimeActualString()} </td>
+                                            <td name='startTimeDifference' align="center" style='background-color: ${tripPeriod.getStartTimeDifferenceColor()}'>${tripPeriod.getStartTimeDifference()}</td>
                                             <td align="center">${tripPeriod.typeG} </td>
-                                            <td align="center">${tripPeriod.getArrivalTimeScheduledString()} </td>
-                                            <td align="center">${tripPeriod.getArrivalTimeActualString()} </td>
-                                            <td align="center" style='background-color: ${tripPeriod.getArrivalTimeDifferenceColor()}'>${tripPeriod.getArrivalTimeDifference()}</td>
+                                            <td name='arrivalTimeScheduled' align="center">${tripPeriod.getArrivalTimeScheduledString()} </td>
+                                            <td name='arrivalTimeActual' align="center">${tripPeriod.getArrivalTimeActualString()} </td>
+                                            <td name='startTimeDifference' align="center" style='background-color: ${tripPeriod.getArrivalTimeDifferenceColor()}'>${tripPeriod.getArrivalTimeDifference()}</td>
 
                                             <td align="center">link</td>
-                                            <td align="center">${tripPeriod.getTripPeriodTimeScheduledString()} </td>
-                                            <td align="center">${tripPeriod.getTripPeriodTimeActualString()} </td>
-                                            <td align="center" style="background-color: ${tripPeriod.getTripPeriodTimeDifferenceColor()}">${tripPeriod.getTripPeriodTimeDifferenceString()} </td>
-                                            <td align="center">${tripPeriod.getHaltTimeScheduledString()}</td>
-                                            <td align="center">${tripPeriod.getHaltTimeActualString()}</td>
-                                            <td align="center" style="background-color:${tripPeriod.getLostTimeColor()} ">${tripPeriod.lostTimeString}</td>
+                                            <td name='tripPeriodScheduledTime' align="center">${tripPeriod.getTripPeriodTimeScheduledString()} </td>
+                                            <td name='tripPeriodActualTime' align="center">${tripPeriod.getTripPeriodTimeActualString()} </td>
+                                            <td name='tripPeriodDifferenceTime'align="center" style="background-color: ${tripPeriod.getTripPeriodTimeDifferenceColor()}">${tripPeriod.getTripPeriodTimeDifferenceString()} </td>
+                                            <td name='haltTimeScheduled' align="center">${tripPeriod.getHaltTimeScheduledString()}</td>
+                                            <td name='haltTimeActual' align="center">${tripPeriod.getHaltTimeActualString()}</td>
+                                            <td name='lostTime' align="center" style="background-color:${tripPeriod.getLostTimeColor()} ">${tripPeriod.lostTimeString}</td>
                                             <td align="center"><a href="interval.htm?routeNumber=${detailedRoute.number}&dateStamp=${day.value.dateStamp}&tripPeriodType=${tripPeriod.type}&startTimeScheduled=${tripPeriod.getStartTimeScheduled()}" target="_blank">${tripPeriod.getGpsIntervalString()}</a></td>
                                         </tr>
                                     </c:forEach>
@@ -256,6 +256,126 @@
                 });
             });
 
+//-------------- this part is for cell marking -------------
+            var chosenRow = null
+            var cells = document.getElementById("mainTable").querySelectorAll("tr");
+            for (var cell of cells) {
+                // cell.addEventListener('click', markRow);
+                cell.addEventListener('dblclick', markCells);
+            }
+            var previousCells = new Array();
+            function markCells(event) {
+                if (previousCells.length > 0) {
+                    for (let x = 0; x < previousCells.length; x++) {
+                        var loc = previousCells[x];
+                        var el = loc.element;
+                        el.style.backgroundColor = loc.originalColor;
+                    }
+                }
+                var targetCell = event.target;
+                var cellName = targetCell.getAttribute('name');
+                if (cellName == "tripPeriodScheduledTime") {
+                    var targetRow = event.target.parentNode;
+                    var cellOne = targetRow.querySelector("td[name=startTimeScheduled]");
+                    var cellTwo = targetRow.querySelector("td[name=arrivalTimeScheduled");
+
+                    saveElementColor(targetCell, cellOne, cellTwo);
+
+                    targetCell.style.backgroundColor = "violet";
+                    cellOne.style.backgroundColor = "violet";
+                    cellTwo.style.backgroundColor = "violet";
+
+
+                }
+                if (cellName == "tripPeriodActualTime") {
+                    var targetRow = event.target.parentNode;
+                    var cellOne = targetRow.querySelector("td[name=startTimeActual]");
+                    var cellTwo = targetRow.querySelector("td[name=arrivalTimeActual");
+
+                    saveElementColor(targetCell, cellOne, cellTwo);
+
+                    targetCell.style.backgroundColor = "violet";
+                    cellOne.style.backgroundColor = "violet";
+                    cellTwo.style.backgroundColor = "violet";
+                }
+                if (cellName == "tripPeriodDifferenceTime") {
+                    var targetRow = event.target.parentNode;
+                    var cellOne = targetRow.querySelector("td[name=tripPeriodScheduledTime]");
+                    var cellTwo = targetRow.querySelector("td[name=tripPeriodActualTime");
+
+                    saveElementColor(targetCell, cellOne, cellTwo);
+
+                    targetCell.style.backgroundColor = "violet";
+                    cellOne.style.backgroundColor = "violet";
+                    cellTwo.style.backgroundColor = "violet";
+                }
+
+
+                if (cellName == "haltTimeScheduled") {
+
+                    var targetRow = event.target.parentNode;
+                    var previousRow = targetRow.previousElementSibling;
+                    var cellOne = targetRow.querySelector("td[name=startTimeScheduled]");
+                    var cellTwo = previousRow.querySelector("td[name=arrivalTimeScheduled");
+                    if (cellTwo != null) {
+
+                        saveElementColor(targetCell, cellOne, cellTwo);
+
+                        targetCell.style.backgroundColor = "violet";
+                        cellOne.style.backgroundColor = "violet";
+                        cellTwo.style.backgroundColor = "violet";
+                    }
+                }
+                if (cellName == "haltTimeActual") {
+                    var targetRow = event.target.parentNode;
+                    var previousRow = targetRow.previousElementSibling;
+                    var cellOne = targetRow.querySelector("td[name=startTimeActual]");
+                    var cellTwo = previousRow.querySelector("td[name=arrivalTimeActual");
+                    if (cellTwo != null) {
+
+                        saveElementColor(targetCell, cellOne, cellTwo);
+
+                        targetCell.style.backgroundColor = "violet";
+                        cellOne.style.backgroundColor = "violet";
+                        cellTwo.style.backgroundColor = "violet";
+                    }
+                }
+
+                if (cellName == "lostTime") {
+                    /*
+                     var targetRow = event.target.parentNode;
+                     
+                     var cellOne = targetRow.querySelector("td[name=startTimeDifference]");
+                     var cellTwo = targetRow.querySelector("td[name=haltTimeActual");
+                     if (cellTwo != null) {
+                     
+                     saveElementColor(targetCell, cellOne, cellTwo);
+                     
+                     if (targetCell.innerText == cellOne.innerText) {
+                     cellOne.style.backgroundColor = "violet";
+                     }
+                     if (targetCell.innerText == cellTwo.innerText) {
+                     cellTwo.style.backgroundColor = "violet";
+                     }
+                     targetCell.style.backgroundColor = "violet";
+                     
+                     } 
+                     */
+                }
+            }
+
+
+            function saveElementColor(targetCell, cellOne, cellTwo) {
+                var loc_0 = {element: targetCell, originalColor: targetCell.style.backgroundColor};
+                var loc_1 = {element: cellOne, originalColor: cellOne.style.backgroundColor};
+                var loc_2 = {element: cellTwo, originalColor: cellTwo.style.backgroundColor};
+
+
+                previousCells.push(loc_0);
+                previousCells.push(loc_1);
+                previousCells.push(loc_2);
+            }
+            //------------------------------------------------------
 
 
         </script>

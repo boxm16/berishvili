@@ -36,6 +36,7 @@
                     <td>${haltMisconudct.dateStamp}</td>
                     <td>${halt.getStartTimeString()}</td>
                     <td>${halt.getEndTimeString()}</td>
+                    <td><a href="exodus.htm?routeNumber=${haltMisconudct.routeNumber}&dateStamp=${haltMisconudct.dateStamp}&exodusNumber=${halt.exodusNumber}&startTimeScheduled=${halt.tripPeriodStartTimeScheduled}"  target="_blank">link</a></td>
                 </tr>
 
             </c:forEach>

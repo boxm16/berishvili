@@ -12,6 +12,8 @@ public class Halt {
 
     private String point;
     private LocalDateTime startTime;
+    private short exodusNumber;
+    private LocalDateTime tripPeriodStartTimeScheduled;
     private LocalDateTime fakeStartTime;
     private LocalDateTime endTime;
     protected Converter converter;
@@ -59,5 +61,23 @@ public class Halt {
     public String getEndTimeString() {
         return this.endTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
+
+    public LocalDateTime getTripPeriodStartTimeScheduled() {
+        return tripPeriodStartTimeScheduled;
+    }
+
+    public void setTripPeriodStartTimeScheduled(LocalDateTime tripPeriodStartTimeScheduled) {
+        this.tripPeriodStartTimeScheduled = tripPeriodStartTimeScheduled;
+    }
+
+    public short getExodusNumber() {
+        return exodusNumber;
+    }
+
+    public void setExodusNumber(short exodusNumber) {
+        this.exodusNumber = exodusNumber;
+    }
+    
+    
 
 }

@@ -4,14 +4,20 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Upload Page</title>
+        <title>ფაილის ატვირთვა</title>
     </head>
     <body>
-        ${uploadStatus}<br>${errorMessage}
-        <form action="savefile.htm" method="post" enctype="multipart/form-data">  
-            Select File: <input type="file" name="file"/>  
-            <input type="submit" value="Upload File"/>  
-        </form>  
 
-    </body>
+    <center>
+        <a href="index.htm">საწყის გვერდზე გადასვლა</a>
+        <hr>
+        <h1>  ფაილის ატვირთვა</h1>
+        <h2 style="color:red">${uploadStatus}<br>${errorMessage}</h2>
+        <form action="savefile.htm" method="post" enctype="multipart/form-data">  
+            <h2>შეარჩიეთ ასატვირთი ფაილი: </h2>
+            <input type="file" name="file"/>  
+            <input type="submit" value="ატვირთვა"/>  
+        </form>  
+    </center>
+</body>
 </html>

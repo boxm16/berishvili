@@ -154,7 +154,7 @@ public class ExcelWriter {
     public void exportGuarantyRoutes(TreeMap<Float, GuarantyRoute> guarantyRoutes, String fileName) {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet("საგარანტიო გასვლების ანალიზი");
+        XSSFSheet sheet = workbook.createSheet("მარშრუტების ანალიზი");
 
         int rowIndex = 0;
         int columnIndex = 0;

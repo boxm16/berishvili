@@ -11,15 +11,19 @@ import Model.IntervalDay;
 import Model.IntervalTripPeriod;
 import Model.RouteData;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -29,15 +33,21 @@ public class GuarantyVController {
     private GuarantyVDao guarantyDao;
     @Autowired
     private RouteDao routeDao;
+    private MemoryUsage memoryUsage;
+
+    public GuarantyVController() {
+        memoryUsage = new MemoryUsage();
+    }
 
     //----------
     @RequestMapping(value = "guarantyTripsInitialRequest")
-    public String guarantyTripsInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model) {
-        DetailedRoutesPager guarantyRoutesPager = createDetailedRoutesPager(routeDates);
-        TreeMap<Float, DetailedRoute> routesForIntervalsForExcelExport = guarantyDao.getRoutesForIntervalsForExcelExport(guarantyRoutesPager);
+    public String guarantyTripsInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model, HttpSession session) {
+        DetailedRoutesPager guarantyTrisPager = createDetailedRoutesPager(routeDates);
+        TreeMap<Float, DetailedRoute> routesForIntervalsForExcelExport = guarantyDao.getRoutesForIntervalsForExcelExport(guarantyTrisPager);
         TreeMap<Float, RouteData> routesDataFromDB = routeDao.getRoutesDataFromDB();
         ArrayList guarantyData = getGuarantyDataV(routesForIntervalsForExcelExport, routesDataFromDB, routesDataFromDB);
 
+        session.setAttribute("guarantyTrisPager", guarantyTrisPager);
         model.addAttribute("guarantyData", guarantyData);
         return "guarantyTrips";
     }
@@ -325,5 +335,56 @@ public class GuarantyVController {
                 + "                </h3>";
         model.addAttribute("explanation", explanation);
         return "explanations";
+    }
+
+    //-------------------------excel export==-----------------------------
+    @RequestMapping(value = "guarantyTripsExcelExportDashboardInitialRequest")
+    public String guarantyTripsExcelExportDashboardInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model, HttpSession session) {
+        DetailedRoutesPager guarantyTrisPager = createDetailedRoutesPager(routeDates);
+        guarantyTrisPager.setCurrentRoute("initial");
+        session.setAttribute("guarantyTrisPager", guarantyTrisPager);
+        model.addAttribute("excelExportLink", "exportGuarantyTrips.htm");
+        model.addAttribute("message", "");
+        return "excelExportDashboard";
+    }
+
+    @RequestMapping(value = "guarantyTripsExcelExportDashboard")
+    public String guarantyTripsExcelExportDashboard(ModelMap model, HttpSession session) {
+
+        DetailedRoutesPager guarantyTrisPager = (DetailedRoutesPager) session.getAttribute("guarantyTrisPager");
+        if (guarantyTrisPager == null) {
+            return "errorPage";
+        }
+        model.addAttribute("excelExportLink", "exportGuarantyTrips.htm");
+        model.addAttribute("message", "");
+        return "excelExportDashboard";
+    }
+
+    @RequestMapping(value = "exportGuarantyTrips", method = RequestMethod.POST)
+    public String exportGuarantyTrips(String fileName, ModelMap model, HttpSession session, HttpServletRequest request) {
+        System.out.println("---------------Guaranty Trips Excel Export Starting ------------------------------");
+        Instant start = Instant.now();
+//first get data
+        DetailedRoutesPager guarantyTrisPager = (DetailedRoutesPager) session.getAttribute("guarantyTrisPager");
+
+        TreeMap<Float, DetailedRoute> routesForIntervalsForExcelExport = guarantyDao.getRoutesForIntervalsForExcelExport(guarantyTrisPager);
+        TreeMap<Float, RouteData> routesDataFromDB = routeDao.getRoutesDataFromDB();
+        ArrayList guarantyData = getGuarantyDataV(routesForIntervalsForExcelExport, routesDataFromDB, routesDataFromDB);
+        System.out.println("---Guaranty Trips Excel Export Data Created------");
+
+        //now write the results
+        ExcelWriter excelWriter = new ExcelWriter();
+
+        System.out.println("---Writing Excel File Started---");
+        memoryUsage.printMemoryUsage();
+        //excelWriter.exportTripPeriodsAndRoutesAverages(tripPeriods, routesAveragesTreeMap, percents, fileName);
+        excelWriter.SXSSF_GuarantyTrips(guarantyData, fileName, request);
+
+        model.addAttribute("excelExportLink", "exportGuarantyTrips.htm");
+        model.addAttribute("fileName", fileName);
+        Instant end = Instant.now();
+        System.out.println("++++++++Guaranty Trips Excel Export completed. Time needed:" + Duration.between(start, end) + "+++++++++++");
+        model.addAttribute("message", "");
+        return "excelExportDashboard";
     }
 }

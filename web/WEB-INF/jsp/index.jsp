@@ -383,6 +383,9 @@
                             <li>
                                 <a href="#" onclick="requestRouter('guarantyTripsInitialRequest.htm')"><h4>საგარანტიო გასვლების დათვალიერება</h4></a>
                             </li>
+                            <li>
+                                <a href="#" onclick="requestRouter('guarantyTripsExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
+                            </li>
 
                             <li>
                                 <a href="guarantyTripsUploadPage.htm""><h4>ავტობუსების მარშრუტების ანალიზი</h4></a>

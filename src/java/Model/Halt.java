@@ -1,6 +1,7 @@
 package Model;
 
 import Controller.Converter;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -12,10 +13,12 @@ public class Halt {
 
     private String point;
     private LocalDateTime startTime;
-    private short exodusNumber;
-    private LocalDateTime tripPeriodStartTimeScheduled;
     private LocalDateTime fakeStartTime;
     private LocalDateTime endTime;
+    private Duration duration;
+    private short exodusNumber;
+    private LocalDateTime tripPeriodStartTimeScheduled;
+
     protected Converter converter;
 
     public Halt() {
@@ -77,7 +80,10 @@ public class Halt {
     public void setExodusNumber(short exodusNumber) {
         this.exodusNumber = exodusNumber;
     }
-    
-    
+
+    public String getDurationString() {
+        Duration duration = Duration.between(startTime, endTime);
+        return this.converter.convertDurationToString(duration);
+    }
 
 }

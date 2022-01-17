@@ -381,15 +381,12 @@
                         <a href="#guarantySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>საგარანტიოები</h3></a>
                         <ul class="collapse list-unstyled" id="guarantySubmenu">
                             <li>
-                                <a href="#" onclick="requestRouter('guarantyTripsInitialRequest.htm')"><h4>საგარანტიო გასვლების დათვალიერება</h4></a>
+                                <a href="#" onclick="requestRouter('guarantyTripsInitialRequest.htm')"><h4>დათვალიერება</h4></a>
                             </li>
                             <li>
                                 <a href="#" onclick="requestRouter('guarantyTripsExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
                             </li>
 
-                            <li>
-                                <a href="guarantyTripsUploadPage.htm""><h4>ავტობუსების მარშრუტების ანალიზი</h4></a>
-                            </li>
                         </ul>
                     </li>
                     <li>
@@ -410,9 +407,16 @@
 
                         </ul>
                     </li>
+                    <hr>
                     <li>
                         <a href="#" onclick="requestRouter('haltMisconducts.htm')"><h4>პუნკტში ერთად დგომის შემთხვევები</h4></a>
                     </li>
+                    <hr>
+                    <li>
+                        <a href="guarantyTripsUploadPage.htm""><h4>ავტობუსების მარშრუტების ანალიზი</h4></a>
+                    </li>
+
+
                 </ul>
 
 

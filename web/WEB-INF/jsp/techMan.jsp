@@ -44,6 +44,9 @@
         <hr>
         <a href="createTables.htm" >Create Tables </a>
         <br>${routeTableCreationStatus}
+        <hr>
+        <a href="deleteTables.htm" >Delete Tables </a>
+        <br>${routeTableDeletionStatus}
 
         <hr><hr>
         <h1>Create ConfigXML file</h1>

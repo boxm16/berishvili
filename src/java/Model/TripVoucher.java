@@ -1,5 +1,6 @@
 package Model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class TripVoucher {
@@ -10,6 +11,14 @@ public class TripVoucher {
     private String busType;
     private String driverNumber;
     private String driverName;
+    private LocalDateTime baseLeavingTimeScheduled;
+    private LocalDateTime baseLeavingTimeActual;
+    private LocalDateTime baseLeavingTimeRedacted;
+
+    private LocalDateTime baseReturnTimeScheduled;
+    private LocalDateTime baseReturnTimeActual;
+    private LocalDateTime baseReturnTimeRedacted;
+
     private String notes;
     private ArrayList<TripPeriod> tripPeriods;
 
@@ -80,8 +89,54 @@ public class TripVoucher {
     public void setBaseNumber(short baseNumber) {
         this.baseNumber = baseNumber;
     }
-   
-    //here i will write tripPeriodsArrayList sorting method
-    
 
+    public LocalDateTime getBaseLeavingTimeScheduled() {
+        return baseLeavingTimeScheduled;
+    }
+
+    public void setBaseLeavingTimeScheduled(LocalDateTime baseLeavingTimeScheduled) {
+        this.baseLeavingTimeScheduled = baseLeavingTimeScheduled;
+    }
+
+    public LocalDateTime getBaseLeavingTimeActual() {
+        return baseLeavingTimeActual;
+    }
+
+    public void setBaseLeavingTimeActual(LocalDateTime baseLeavingTimeActual) {
+        this.baseLeavingTimeActual = baseLeavingTimeActual;
+    }
+
+    public LocalDateTime getBaseLeavingTimeRedacted() {
+        return baseLeavingTimeRedacted;
+    }
+
+    public void setBaseLeavingTimeRedacted(LocalDateTime baseLeavingTimeRedacted) {
+        this.baseLeavingTimeRedacted = baseLeavingTimeRedacted;
+    }
+
+    public LocalDateTime getBaseReturnTimeScheduled() {
+        return baseReturnTimeScheduled;
+    }
+
+    public void setBaseReturnTimeScheduled(LocalDateTime baseReturnTimeScheduled) {
+        this.baseReturnTimeScheduled = baseReturnTimeScheduled;
+    }
+
+    public LocalDateTime getBaseReturnTimeActual() {
+        return baseReturnTimeActual;
+    }
+
+    public void setBaseReturnTimeActual(LocalDateTime baseReturnTimeActual) {
+        this.baseReturnTimeActual = baseReturnTimeActual;
+    }
+
+    public LocalDateTime getBaseReturnTimeRedacted() {
+        return baseReturnTimeRedacted;
+    }
+
+    public void setBaseReturnTimeRedacted(LocalDateTime baseReturnTimeRedacted) {
+        this.baseReturnTimeRedacted = baseReturnTimeRedacted;
+    }
+
+//here i will write tripPeriodsArrayList sorting method
 }

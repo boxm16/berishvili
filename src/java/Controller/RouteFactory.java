@@ -170,6 +170,24 @@ public class RouteFactory {
             String driverNameLocationInTheRow = new StringBuilder("E").append(String.valueOf(rowIndex)).toString();
             String driverName = data.remove(driverNameLocationInTheRow);
 
+            String baseLeavingTimeScheduledLocationInTheRow = new StringBuilder("J").append(String.valueOf(rowIndex)).toString();
+            LocalDateTime baseLeavingTimeScheduled = this.converter.convertStringTimeToDate(data.remove(baseLeavingTimeScheduledLocationInTheRow));
+
+            String baseLeavingTimeActualLocationInTheRow = new StringBuilder("K").append(String.valueOf(rowIndex)).toString();
+            LocalDateTime baseLeavingTimeActual = this.converter.convertStringTimeToDate(data.remove(baseLeavingTimeActualLocationInTheRow));
+
+            String baseLeavingTimeRedactedLocationInTheRow = new StringBuilder("L").append(String.valueOf(rowIndex)).toString();
+            LocalDateTime baseLeavingTimeRedacted = this.converter.convertStringTimeToDate(data.remove(baseLeavingTimeRedactedLocationInTheRow));
+
+            String baseReturnTimeScheduledLocationInTheRow = new StringBuilder("M").append(String.valueOf(rowIndex)).toString();
+            LocalDateTime baseReturnTimeScheduled = this.converter.convertStringTimeToDate(data.remove(baseReturnTimeScheduledLocationInTheRow));
+
+            String baseRetrunTimeActualLocationInTheRow = new StringBuilder("N").append(String.valueOf(rowIndex)).toString();
+            LocalDateTime baseRetrunTimeActual = this.converter.convertStringTimeToDate(data.remove(baseRetrunTimeActualLocationInTheRow));
+
+            String baseReturnTimeRedactedLocationInTheRow = new StringBuilder("O").append(String.valueOf(rowIndex)).toString();
+            LocalDateTime baseReturnTimeRedacted = this.converter.convertStringTimeToDate(data.remove(baseReturnTimeRedactedLocationInTheRow));
+
             String notesLocationInTheRow = new StringBuilder("AC").append(String.valueOf(rowIndex)).toString();
             String notes = data.remove(notesLocationInTheRow);
             tripVoucher.setBusNumber(busrNumber);
@@ -177,6 +195,12 @@ public class RouteFactory {
             tripVoucher.setBusType(busType);
             tripVoucher.setDriverNumber(driverNumber);
             tripVoucher.setDriverName(driverName);
+            tripVoucher.setBaseLeavingTimeScheduled(baseLeavingTimeScheduled);
+            tripVoucher.setBaseLeavingTimeActual(baseLeavingTimeActual);
+            tripVoucher.setBaseLeavingTimeRedacted(baseLeavingTimeRedacted);
+            tripVoucher.setBaseReturnTimeScheduled(baseReturnTimeScheduled);
+            tripVoucher.setBaseReturnTimeActual(baseRetrunTimeActual);
+            tripVoucher.setBaseReturnTimeRedacted(baseReturnTimeRedacted);
             tripVoucher.setNotes(notes);
 
         }

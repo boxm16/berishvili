@@ -163,7 +163,7 @@ public class RouteDao {
             connection.setAutoCommit(false);
             //Statements to insert records
             PreparedStatement deletePreparedStatement = connection.prepareStatement("DELETE FROM trip_voucher WHERE number=?");
-            PreparedStatement tripVoucherInsertionPreparedStatement = connection.prepareStatement("INSERT INTO trip_voucher (number, route_number, date_stamp, base_number, exodus_number, driver_number, driver_name, bus_number, bus_type, notes) VALUES(?,?,?,?,?,?,?,?,?,?);");
+            PreparedStatement tripVoucherInsertionPreparedStatement = connection.prepareStatement("INSERT INTO trip_voucher (number, route_number, date_stamp, base_number, exodus_number, driver_number, driver_name, bus_number, bus_type, base_leaving_time_scheduled, base_leaving_time_actual, base_leaving_time_redacted, base_return_time_scheduled, base_return_time_actual, base_return_time_redacted, notes) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
             PreparedStatement tripPeriodInsertionPreparedStatement = connection.prepareStatement("INSERT INTO trip_period (trip_voucher_number, type, start_time_scheduled, start_time_actual, start_time_difference, arrival_time_scheduled, arrival_time_actual, arrival_time_difference) VALUES (?,?,?,?,?,?,?,?);");
 
             for (Map.Entry<Float, BasicRoute> routeEntry : basicRoutes.entrySet()) {
@@ -189,7 +189,15 @@ public class RouteDao {
                             tripVoucherInsertionPreparedStatement.setString(8, tripVoucherEntry.getValue().getBusNumber());
                             tripVoucherInsertionPreparedStatement.setString(9, tripVoucherEntry.getValue().getBusType());
 
-                            tripVoucherInsertionPreparedStatement.setString(10, tripVoucherEntry.getValue().getNotes());
+                            tripVoucherInsertionPreparedStatement.setObject(10, tripVoucherEntry.getValue().getBaseLeavingTimeScheduled());
+                            tripVoucherInsertionPreparedStatement.setObject(11, tripVoucherEntry.getValue().getBaseLeavingTimeActual());
+                            tripVoucherInsertionPreparedStatement.setObject(12, tripVoucherEntry.getValue().getBaseLeavingTimeRedacted());
+
+                            tripVoucherInsertionPreparedStatement.setObject(13, tripVoucherEntry.getValue().getBaseReturnTimeScheduled());
+                            tripVoucherInsertionPreparedStatement.setObject(14, tripVoucherEntry.getValue().getBaseReturnTimeActual());
+                            tripVoucherInsertionPreparedStatement.setObject(15, tripVoucherEntry.getValue().getBaseReturnTimeRedacted());
+
+                            tripVoucherInsertionPreparedStatement.setString(16, tripVoucherEntry.getValue().getNotes());
                             tripVoucherInsertionPreparedStatement.addBatch();
                             //now trip Period
                             ArrayList<TripPeriod> tripPeriods = tripVoucherEntry.getValue().getTripPeriods();

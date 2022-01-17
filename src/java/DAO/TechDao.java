@@ -104,6 +104,12 @@ public class TechDao {
                 + "`driver_name` VARCHAR(45) NULL, "
                 + "`bus_number` VARCHAR(15) NULL, "
                 + "`bus_type` VARCHAR(35) NULL, "
+                + "`base_leaving_time_scheduled` TIME(0) NULL  DEFAULT NULL, "
+                + "`base_leaving_time_actual` TIME(0) NULL  DEFAULT NULL, "
+                + "`base_leaving_time_redacted` TIME(0) NULL  DEFAULT NULL, "
+                + "`base_return_time_scheduled` TIME(0) NULL  DEFAULT NULL, "
+                + "`base_return_time_actual` TIME(0) NULL  DEFAULT NULL, "
+                + "`base_return_time_redacted` TIME(0) NULL  DEFAULT NULL, "
                 + "`notes` VARCHAR(2000) NULL, "
                 + "PRIMARY KEY (`number`), "
                 + "CONSTRAINT `route_number` "
@@ -235,6 +241,54 @@ public class TechDao {
             return ex.getMessage();
         }
         return "Data from excel file has been inserted successfully into database";
+    }
+
+    public String deleteRouteTable() {
+        try {
+            connection = dataBaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            String sql = "DROP TABLE route";
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Table route deleted successfully";
+    }
+
+    public String deleteLastUploadTable() {
+        try {
+            connection = dataBaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            String sql = "DROP TABLE last_upload";
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Table last_upload deleted successfully";
+    }
+
+    public String deleteTripVoucherTable() {
+        try {
+            connection = dataBaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            String sql = "DROP TABLE trip_voucher";
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Table trip_voucher deleted successfully";
+    }
+
+    public String deleteTripPeriodTable() {
+        try {
+            connection = dataBaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            String sql = "DROP TABLE trip_period";
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Table trip_period deleted successfully";
     }
 
 }

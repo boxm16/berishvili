@@ -386,7 +386,17 @@
                             <li>
                                 <a href="#" onclick="requestRouter('guarantyTripsExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
                             </li>
-
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#baseReturnsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>შესვლების ანალიზი</h3></a>
+                        <ul class="collapse list-unstyled" id="baseReturnsSubmenu">
+                            <li>
+                                <a href="#" onclick="requestRouter('baseReturnsInitialRequest.htm')"><h4>დათვალიერება</h4></a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="requestRouter('baseReturnsExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
+                            </li>
                         </ul>
                     </li>
                     <li>

@@ -33,7 +33,7 @@ public class DetailedRouteDao {
         converter = new Converter();
     }
 
-    public DetailedRoute getDetailedRoute(DetailedRoutesPager detailedRoutesPager) {
+     public DetailedRoute getDetailedRoute(DetailedRoutesPager detailedRoutesPager) {
         DetailedRoute detailedRoute = new DetailedRoute();
         detailedRoute.setNumber(detailedRoutesPager.getCurrentRoute());
 

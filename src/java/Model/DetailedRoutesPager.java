@@ -117,6 +117,34 @@ public class DetailedRoutesPager {
             stringBuilder = stringBuilder.append("</div>");
             return stringBuilder.toString();
         }
+        if (type.equals("baseReturns")) {
+            int currentRouteIndex = routeNumbers.indexOf(currentRoute);
+
+            StringBuilder previousRouteNumberHTML = new StringBuilder();
+            StringBuilder nextRouteNumberHTML = new StringBuilder();
+
+            String previosRouteNumber = "";
+            if (currentRouteIndex - 1 >= 0) {
+                previosRouteNumber = routeNumbers.get(currentRouteIndex - 1);
+                previousRouteNumberHTML = previousRouteNumberHTML.append("<a href=\"baseReturnsRequest.htm?requestedRoute=").append(previosRouteNumber).append("\">").append(previosRouteNumber).append("</a>");
+            }
+
+            StringBuilder currentRouteNumberHTML = new StringBuilder("<a class=\"active\">").append(currentRoute).append("</a>");
+
+            String nextRouteNumber = "";
+            if (currentRouteIndex + 1 <= routeNumbers.size() - 1) {
+                nextRouteNumber = routeNumbers.get(currentRouteIndex + 1);
+                nextRouteNumberHTML = nextRouteNumberHTML.append("<a href=\"baseReturnsRequest.htm?requestedRoute=").append(nextRouteNumber).append("\">").append(nextRouteNumber).append("</a>");
+            }
+
+            StringBuilder stringBuilder = new StringBuilder("<div class=\"pagination\">");
+            stringBuilder = stringBuilder.append(previousRouteNumberHTML);
+            stringBuilder = stringBuilder.append(currentRouteNumberHTML);
+            stringBuilder = stringBuilder.append(nextRouteNumberHTML);
+
+            stringBuilder = stringBuilder.append("</div>");
+            return stringBuilder.toString();
+        }
         return "";
     }
 

@@ -11,6 +11,7 @@ public class TripVoucher {
     private String busType;
     private String driverNumber;
     private String driverName;
+
     private LocalDateTime baseLeavingTimeScheduled;
     private LocalDateTime baseLeavingTimeActual;
     private LocalDateTime baseLeavingTimeRedacted;

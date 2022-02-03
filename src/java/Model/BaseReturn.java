@@ -25,6 +25,7 @@ public class BaseReturn extends TripVoucher {
     private LocalDateTime baseReturnTripStartTimeGPS;
     private LocalDateTime baseReturnTripArrivalTimeScheduled;
     private LocalDateTime baseReturnTripArrivalTimeGPS;
+    private LocalDateTime baseReturnTripTimeFakeGPSString;
     private String misconduct;
     private Converter converter;
 
@@ -209,7 +210,10 @@ public class BaseReturn extends TripVoucher {
 
     public String getBaseReturGPSAndConfirmedTimeDifferenceString() {
         if (baseReturnTripArrivalTimeGPS == null) {
-            return "";
+            if (getBaseReturnTripArrivalTimeFakeGPSString().equals("")) {
+                return "";
+            }
+
         }
         LocalDateTime baseReturnConfirmedTime = null;
         if (super.getBaseReturnTimeRedacted() != null) {
@@ -221,6 +225,10 @@ public class BaseReturn extends TripVoucher {
         }
         if (baseReturnConfirmedTime == null) {
             return "";
+        }
+        if (baseReturnTripArrivalTimeGPS == null) {
+            return converter.convertDurationToString(Duration.between(getBaseReturnTripArrivalTimeFakeGPS(), baseReturnConfirmedTime));
+
         }
         return converter.convertDurationToString(Duration.between(baseReturnTripArrivalTimeGPS, baseReturnConfirmedTime));
     }
@@ -257,6 +265,31 @@ public class BaseReturn extends TripVoucher {
 
     public void setMisconduct(String misconduct) {
         this.misconduct = misconduct;
+    }
+
+    //-----------------------fake -----------
+    public LocalDateTime getBaseReturnTripArrivalTimeFakeGPS() {
+        if (baseReturnTripStartTimeGPS == null) {
+            return null;
+        }
+
+        if (baseReturnTripStartTimeGPS == null || baseReturnTripStartTimeScheduled == null || baseReturnTripArrivalTimeScheduled == null) {
+            return null;
+        }
+
+        return baseReturnTripStartTimeGPS.plus(getBaseReturnTripTimeScheduled());
+    }
+
+    public String getBaseReturnTripArrivalTimeFakeGPSString() {
+        if (baseReturnTripArrivalTimeGPS != null) {
+            return "";
+        }
+
+        if (baseReturnTripStartTimeGPS == null || baseReturnTripStartTimeScheduled == null || baseReturnTripArrivalTimeScheduled == null) {
+            return "";
+        }
+
+        return baseReturnTripStartTimeGPS.plus(getBaseReturnTripTimeScheduled()).format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
 
 }

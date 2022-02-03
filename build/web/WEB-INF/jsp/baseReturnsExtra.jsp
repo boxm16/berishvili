@@ -73,47 +73,9 @@
                 width: 100%;
             }
 
-            #sidebar {
-                width: 150px;
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100vh;
-                z-index: 999;
-                background: #7386D5;
-                color: #fff;
-                transition: all 0.3s;
-            }
 
-            #sidebar.active {
-                margin-left: -150px;
-            }
 
-            #sidebar .sidebar-header {
-                padding: 20px;
-                background: #6d7fcc;
-            }
 
-            #sidebar ul.components {
-                padding: 20px 0;
-                border-bottom: 1px solid #47748b;
-            }
-
-            #sidebar ul p {
-                color: #fff;
-                padding: 10px;
-            }
-
-            #sidebar ul li a {
-                padding: 10px;
-                font-size: 1.1em;
-                display: block;
-            }
-
-            #sidebar ul li a:hover {
-                color: #7386D5;
-                background: #fff;
-            }
 
             #sidebar ul li.active>a,
             a[aria-expanded="true"] {
@@ -167,7 +129,7 @@
             ----------------------------------------------------- */
 
             #content {
-                width: calc(100% - 150px);
+                width: 100% ;
                 padding: 5px;
                 min-height: 100vh;
                 transition: all 0.3s;
@@ -277,29 +239,14 @@
     <body>
 
         <div class="wrapper">
-            <nav id="sidebar">
-                <div class="sidebar-header">
-                    <center><h5>მარშრუტები</h5></center>
-                </div>
-                <ul class="list-unstyled components">
-                    <c:forEach var="routeNumber" items="${baseReturnsPager.routeNumbers}"  >
-                        <li >
-                            <a href="baseReturnsRequest.htm?requestedRoute=${routeNumber}">${routeNumber}</a>
-                        </li>
-                    </c:forEach>
-                </ul>
-            </nav>
+
             <div id="content">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
                     <div class="container-fluid">
                         <div>
                             <span><!-- this div is just to maintain centered the next text --> </span>
                         </div>
-                        <span style="background-color:red"><h2> <a href="baseReturnsExtra.htm">ყველა მონიშნული მარშრუტის ნახვა</a></h2></span>
 
-                        <center>
-                            ${baseReturnsPager.display}
-                        </center>
 
                         <button type="button" class="btn btn-warning">
                             <span> <a href="baseReturnsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>

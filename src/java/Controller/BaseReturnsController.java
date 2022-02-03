@@ -176,7 +176,7 @@ public class BaseReturnsController {
         System.out.println("---Writing Excel File Started---");
         memoryUsage.printMemoryUsage();
         //excelWriter.exportTripPeriodsAndRoutesAverages(tripPeriods, routesAveragesTreeMap, percents, fileName);
-        excelWriter.SXSSF_BaseReturns(routeWithCalculatedbaseReturnsData, fileName);
+        excelWriter.SXSSF_BaseReturns(routeWithCalculatedbaseReturnsData, fileName, request);
 
         model.addAttribute("excelExportLink", "exportBaseReturns.htm");
         model.addAttribute("fileName", fileName);
@@ -185,5 +185,19 @@ public class BaseReturnsController {
         model.addAttribute("message", "");
         return "excelExportDashboard";
     }
+//--------------------
 
+    @RequestMapping(value = "baseReturnsExtra")
+    public String baseReturnsExtra(ModelMap model, HttpSession session) {
+        DetailedRoutesPager baseReturnsPager = (DetailedRoutesPager) session.getAttribute("baseReturnsPager");
+        if (baseReturnsPager == null) {
+            return "errorPage";
+        }
+
+        TreeMap<Float, DetailedRoute> baseReturnsData = baseReturnsDao.getBaseReturnData(baseReturnsPager);
+        TreeMap<Float, DetailedRoute> routeWithCalculatedbaseReturnsData = calculateBaseReturns(baseReturnsData);
+        model.addAttribute("baseReturnsPager", baseReturnsPager);
+        model.addAttribute("routeWithCalculatedbaseReturnsData", routeWithCalculatedbaseReturnsData);
+        return "baseReturnsExtra";
+    }
 }

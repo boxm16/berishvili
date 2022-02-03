@@ -295,6 +295,8 @@
                         <div>
                             <span><!-- this div is just to maintain centered the next text --> </span>
                         </div>
+                        <span style="background-color:red"><h2> <a href="baseReturnsExtra.htm">ყველა მონიშნული მარშრუტის ნახვა</a></h2></span>
+
                         <center>
                             ${baseReturnsPager.display}
                         </center>
@@ -326,6 +328,7 @@
 
                             <th>ბაზაში წასვლის<br> GPS დრო</th>
                             <th>ბაზაში მისვლის <br>GPS დრო</th>
+                            <th style="background-color:green">ბაზაში მისვლის <br>Fake(სავარაუდო)<br> GPS დრო</th>
                             <th>GPS ხანგრძლივობა</th>
 
                             <th>რეისის გეგმიური და <br>GPS ხანგრძლივობის სხვაობა</th>
@@ -363,6 +366,7 @@
 
                                             <td style="background-color:#d5e378">${tripVoucher.value.getBaseReturnTripStartTimeGPSString()}</td>
                                             <td style="background-color:#d5e378">${tripVoucher.value.getBaseReturnTripArrivalTimeGPSString()}</td>
+                                            <td style="background-color:#d5e378">${tripVoucher.value.getBaseReturnTripArrivalTimeFakeGPSString()}</td>
                                             <td style="background-color:#d5e378">${tripVoucher.value.getBaseReturnTripTimeGPSString()}</td>
 
                                             <td style="background-color:${tripVoucher.value.getBaseReturTripTimeDifferenceColor()}">${tripVoucher.value.getBaseReturTripTimeDifferenceString()}</td>

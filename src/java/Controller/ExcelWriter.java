@@ -4668,50 +4668,51 @@ public class ExcelWriter {
                         cell_10.setCellValue("გეგმიური ხანგრძლივობ");
                         cell_10.setCellStyle(headerStyleVertical);
                         break;
-
-                    case 11:
+                        case 11:
                         Cell cell_11 = headerRow.createCell(columnIndex);
-                        cell_11.setCellValue("ბაზაში მისვლის GPS დრო");
+                        cell_11.setCellValue(" ბაზაში წასვლის GPS დრო");
                         cell_11.setCellStyle(headerStyleVertical);
                         break;
+                       
+
                     case 12:
                         Cell cell_12 = headerRow.createCell(columnIndex);
-                        cell_12.setCellValue("ბაზაში მისვლის Fake(სავარაუდო) GPS დრო");
+                        cell_12.setCellValue("ბაზაში მისვლის GPS დრო");
                         cell_12.setCellStyle(headerStyleVertical);
                         break;
                     case 13:
                         Cell cell_13 = headerRow.createCell(columnIndex);
-                        cell_13.setCellValue("GPS ხანგრძლივობა");
+                        cell_13.setCellValue("ბაზაში მისვლის Fake(სავარაუდო) GPS დრო");
                         cell_13.setCellStyle(headerStyleVertical);
                         break;
                     case 14:
                         Cell cell_14 = headerRow.createCell(columnIndex);
-                        cell_14.setCellValue("რეისის გეგმიური და GPS ხანგრძლივობის სხვაობა");
+                        cell_14.setCellValue("GPS ხანგრძლივობა");
                         cell_14.setCellStyle(headerStyleVertical);
                         break;
                     case 15:
                         Cell cell_15 = headerRow.createCell(columnIndex);
-                        cell_15.setCellValue("შესვლის გეგმიური დრო");
+                        cell_15.setCellValue("რეისის გეგმიური და GPS ხანგრძლივობის სხვაობა");
                         cell_15.setCellStyle(headerStyleVertical);
                         break;
                     case 16:
                         Cell cell_16 = headerRow.createCell(columnIndex);
-                        cell_16.setCellValue("შესვლის დამოწმებული დრო");
+                        cell_16.setCellValue("შესვლის გეგმიური დრო");
                         cell_16.setCellStyle(headerStyleVertical);
                         break;
                     case 17:
                         Cell cell_17 = headerRow.createCell(columnIndex);
-                        cell_17.setCellValue("სხვაობა");
+                        cell_17.setCellValue("შესვლის დამოწმებული დრო");
                         cell_17.setCellStyle(headerStyleVertical);
                         break;
                     case 18:
                         Cell cell_18 = headerRow.createCell(columnIndex);
-                        cell_18.setCellValue("ბაზაში მისვლის GPS დროს და დამოწმებული დროს შორის სხვაობა");
+                        cell_18.setCellValue("სხვაობა");
                         cell_18.setCellStyle(headerStyleVertical);
                         break;
                     case 19:
                         Cell cell_19 = headerRow.createCell(columnIndex);
-                        cell_19.setCellValue("დახარვეზებულები");
+                        cell_19.setCellValue("ბაზაში მისვლის GPS დროს და დამოწმებული დროს შორის სხვაობა");
                         cell_19.setCellStyle(headerStyleVertical);
                         break;
                     case 20:
@@ -4719,6 +4720,7 @@ public class ExcelWriter {
                         cell_20.setCellValue("დახარვეზებულები");
                         cell_20.setCellStyle(headerStyleVertical);
                         break;
+                  
                 }
                 columnIndex++;
             }

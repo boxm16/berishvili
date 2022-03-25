@@ -197,7 +197,7 @@ public class RouteDao {
                             tripVoucherInsertionPreparedStatement.setObject(14, tripVoucherEntry.getValue().getBaseReturnTimeActual());
                             tripVoucherInsertionPreparedStatement.setObject(15, tripVoucherEntry.getValue().getBaseReturnTimeRedacted());
 
-                            tripVoucherInsertionPreparedStatement.setString(16 , tripVoucherEntry.getValue().getNotes());
+                            tripVoucherInsertionPreparedStatement.setString(16, tripVoucherEntry.getValue().getNotes());
                             tripVoucherInsertionPreparedStatement.addBatch();
                             //now trip Period
                             ArrayList<TripPeriod> tripPeriods = tripVoucherEntry.getValue().getTripPeriods();

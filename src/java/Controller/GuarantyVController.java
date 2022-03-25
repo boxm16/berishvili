@@ -292,9 +292,8 @@ public class GuarantyVController {
                         guarantyTripsData.setGuarantyStartTimeActual(actualGuarantyTripBA.getStartTimeActual());
                         guarantyTripsData.setExodusActualStartTimeScheduled(actualGuarantyTripBA.getStartTimeScheduled());
                         guarantyTripsData.setSpacialCase(actualGuarantyTripBA.isSpacialCase());
-                        dayArray.add(guarantyTripsData);
                     }
-
+                    dayArray.add(guarantyTripsData);
                 }
                 returnValue.add(dayArray);
             }

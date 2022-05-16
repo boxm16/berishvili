@@ -196,8 +196,17 @@ public class RouteDao {
                             tripVoucherInsertionPreparedStatement.setObject(13, tripVoucherEntry.getValue().getBaseReturnTimeScheduled());
                             tripVoucherInsertionPreparedStatement.setObject(14, tripVoucherEntry.getValue().getBaseReturnTimeActual());
                             tripVoucherInsertionPreparedStatement.setObject(15, tripVoucherEntry.getValue().getBaseReturnTimeRedacted());
+                            //here i cut notes lenght if they are more then 2000 letters, because i have that liit in mysql
 
-                            tripVoucherInsertionPreparedStatement.setString(16, tripVoucherEntry.getValue().getNotes());
+                            String notes = tripVoucherEntry.getValue().getNotes();
+                            if (notes != null && notes.length() > 2000) {
+                                System.out.println("Notes:" + notes);
+                                System.out.println("LENGTH:" + notes.length());
+                                String cuttedNotes = notes.substring(0, 1950);
+                                notes = cuttedNotes + "(ტექსტი შეკვეცილია)";
+                            }
+                            tripVoucherInsertionPreparedStatement.setString(16, notes);
+
                             tripVoucherInsertionPreparedStatement.addBatch();
                             //now trip Period
                             ArrayList<TripPeriod> tripPeriods = tripVoucherEntry.getValue().getTripPeriods();

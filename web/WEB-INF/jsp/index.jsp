@@ -373,6 +373,9 @@
                                 <a href="#" onclick="requestRouter('tripPeriodsCalculationsInitialRequest.htm')"><h4>გამოთვლები</h4></a>
                             </li>
                             <li>
+                                <a href="#" onclick="requestRouter('tripPeriodsCalculationsPerDriver.htm')"><h4>გამოთვლები მძღოლების მიხედვით</h4></a>
+                            </li>
+                            <li>
                                 <a href="#" onclick="requestRouter('tripPeriodsExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
                             </li>
                         </ul>

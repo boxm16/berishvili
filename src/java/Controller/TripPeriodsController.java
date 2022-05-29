@@ -464,4 +464,11 @@ public class TripPeriodsController {
         return "countedTripPeriods";
     }
 
+    //-------------------FOR CALCULATION PER DRIVER----------------
+    @RequestMapping(value = "tripPeriodsCalculationsPerDriver")
+    public String tripPeriodsCalculationsPerDriver(HttpSession session) {
+        int percents = (Integer) session.getAttribute("percents");
+        return "tripPeriodsCalculationsPerDriver";
+    }
+
 }

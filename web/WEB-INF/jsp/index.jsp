@@ -366,14 +366,12 @@
                     <li>
                         <a href="#routeTimesSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><h3>ბრუნების დროები</h3></a>
                         <ul class="collapse list-unstyled" id="routeTimesSubmenu">
+                            <!--    <li>
+                                    <a href="#" onclick="requestRouter('tripPeriodsInitialRequest.htm')"><h4>დათვალიერება</h4></a>
+                                </li>
+                            -->
                             <li>
-                                <a href="#" onclick="requestRouter('tripPeriodsInitialRequest.htm')"><h4>დათვალიერება</h4></a>
-                            </li>
-                            <li>
-                                <a href="#" onclick="requestRouter('tripPeriodsCalculationsInitialRequest.htm')"><h4>გამოთვლები</h4></a>
-                            </li>
-                            <li>
-                                <a href="#" onclick="requestRouter('tripPeriodsCalculationsPerDriver.htm')"><h4>გამოთვლები მძღოლების მიხედვით</h4></a>
+                                <a href="#" onclick="requestRouter('tripPeriodsCalculationsInitialRequest.htm')"><h4>გამოთვლების მენიუ</h4></a>
                             </li>
                             <li>
                                 <a href="#" onclick="requestRouter('tripPeriodsExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>

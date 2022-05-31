@@ -300,15 +300,11 @@
                             <i class="fas fa-align-left"></i>
                             <span>< ></span>
                         </button>
-                        <button type="button" class="btn btn-outline-success">
-                            <span> <a href="tripPeriodsCalculations.htm">გამოთვლები</a> </span>
-                        </button>
                         <center>
                             ${tripPeriodsPager.display}
                         </center>
-                        <button type="button" class="btn btn-warning">
-                            <span> <a href="tripPeriodsExcelExportDashboard.htm">ექსელში ექსპორტი</a> </span>
-                        </button>
+                        <div></div>
+                        <div></div>
                     </div>
                 </nav>
 

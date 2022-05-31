@@ -33,11 +33,8 @@ public class TripPeriodsController {
     }
 
     @RequestMapping(value = "tripPeriodsInitialRequest")
-    public String tripPeriodInitialRequest(@RequestParam("routes:dates") String routeDates, ModelMap model, HttpSession session) {
-
-        TripPeriodsFilter tripPeriodsInitialFilter = convertSelectedRoutesToTripPeriodFilter(routeDates);
-        session.setAttribute("tripPeriodsInitialFilter", tripPeriodsInitialFilter);
-
+    public String tripPeriodInitialRequest(HttpSession session, ModelMap model) {
+        TripPeriodsFilter tripPeriodsInitialFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsInitialFilter");
         ArrayList<TripPeriod2X> initialTripPeriods = routeDao.getInitialTripPeriods(tripPeriodsInitialFilter);
 
         int rowLimit = 200;
@@ -45,12 +42,15 @@ public class TripPeriodsController {
         tripPeriodsPager.setCurrentPage(1);
         model.addAttribute("tripPeriods", initialTripPeriods);
         model.addAttribute("tripPeriodsPager", tripPeriodsPager);
+        /*
         session.setAttribute("tripPeriodsPager", tripPeriodsPager);
         session.setAttribute("tripPeriodsInitialFilter", tripPeriodsInitialFilter);
         session.setAttribute("rowLimit", rowLimit);
         if (session.getAttribute("percents") == null) {
             session.setAttribute("percents", 20);
         }
+         */
+        //----------
         /*
         TripPeriodsFilter tripPeriodsFullInitialFilter = routeDao.getTripPeriodsFullInitialFilter(tripPeriodsInitialFilter);
         session.setAttribute("tripPeriodsFullInitialFilter", tripPeriodsFullInitialFilter);
@@ -366,10 +366,12 @@ public class TripPeriodsController {
 
     //--------excel export-------------------
     //---------------------------------------
-    @RequestMapping(value = "tripPeriodsExcelExportDashboard", method = RequestMethod.GET)
-    public String tripPeriodsExcelExportDashboard(ModelMap model, HttpSession session) {
+    @RequestMapping(value = "tripPeriodsExcelExportDashboard", method = RequestMethod.POST)
+    public String tripPeriodsExcelExportDashboard(@RequestParam("percents") String percents, ModelMap model, HttpSession session) {
+        int percentsInteger = Integer.valueOf(percents);
+        session.setAttribute("percents", percentsInteger);
         model.addAttribute("excelExportLink", "exportTripPeriods.htm");
-        session.setAttribute("message", "გამოთვლებისთვის დაფიქსირებულია " + session.getAttribute("percents") + " პროცენტიანი ზღვარი. <a href=\"tripPeriodsCalculations.htm\">შეცვალე პროცენტი</a>  ");
+        session.setAttribute("message", "გამოთვლებისთვის დაფიქსირებულია " + session.getAttribute("percents") + " პროცენტიანი ზღვარი. <a href=\"tripPeriodsCalculationsDashboard.htm\">შეცვალე პროცენტი</a>  ");
         return "excelExportDashboard";
     }
 
@@ -421,7 +423,7 @@ public class TripPeriodsController {
         if (session.getAttribute("percents") == null) {
             session.setAttribute("percents", 20);
         }
-        return "tripPeriodsCalculations";
+        return "tripPeriodsCalculationsDashboard";
     }
 
     @RequestMapping(value = "tripPeriodsCalculations")
@@ -471,4 +473,8 @@ public class TripPeriodsController {
         return "tripPeriodsCalculationsPerDriver";
     }
 
+    @RequestMapping(value = "tripPeriodsCalculationsDashboard", method = RequestMethod.GET)
+    public String tripPeriodsCalculationsDashboard(HttpSession session, ModelMap model) {
+        return "tripPeriodsCalculationsDashboard";
+    }
 }

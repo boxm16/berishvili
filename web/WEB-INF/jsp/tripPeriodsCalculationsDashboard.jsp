@@ -31,14 +31,22 @@
                             <tbody>
                                 <tr>
                                     <td>
-                            <center>  <h2>  ჩაწერე სასურველი პროცენტი </h2></center>
+                            <center>  <h2>  ჩაწერე სასურველი კრიტერიუმები </h2></center>
                             </td>
                             </tr>
                             <tr>
-                                <td> <form id="form" action="" method="POST" >
-                                        <h2> 
-                                            <input name="percents" class="form-control" type="number" style="font-size: 30px" value="${percents}" >  
-                                        </h2>
+                                <td> 
+                                    <form id="form" action="" method="POST" >
+                                        <table>
+                                            <tr>
+
+                                                <td>      <input name="percents" type="number" style="font-size: 30px; width:150px" value="${percents}" ></td><td><h2> %</h2></td>
+                                                <td><h2> დროის პერიოდის მონიშვნა </h2></td>
+                                                <td><input type="checkbox" style="width:30px; height:30px;" onclick="timeControl()"> </td>
+                                                <td><h2> <input type="time" step="1" name='fromTime' id='fromTime' disabled>-დან</h2></td>
+                                                <td><h2><input type="time"  step="1" name='tillTime' id='tillTime' disabled>-მდე</h2></td>
+                                            </tr>
+                                        </table>
                                     </form>
 
                                 </td>
@@ -50,7 +58,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h3>  <button class="btn btn-success "  style="dispaly:block;  width:100%;" onclick="requestRouter('tripPeriodsCalculatePercentagePerDriver.htm')"><h2>გამოთვალე მძღოლების მიხედვით</h2></button> </h3>
+                                    <h3>  <button class="btn btn-success "  style="dispaly:block;  width:100%;" onclick="requestRouter('tripPeriodsAnaliticCalculatations.htm')"><h2>გამოთვალე მძღოლების მიხედვით</h2></button> </h3>
                                 </td>
                             </tr>
                             <tr>
@@ -86,6 +94,16 @@
                                             form.target = "_blank";
                                             form.action = requestTarget;
                                             form.submit();
+                                        }
+
+                                        function timeControl() {
+                                            if (fromTime.disabled) {
+                                                fromTime.disabled = false;
+                                                tillTime.disabled = false;
+                                            } else {
+                                                fromTime.disabled = true;
+                                                tillTime.disabled = true;
+                                            }
                                         }
         </script>
     </body>

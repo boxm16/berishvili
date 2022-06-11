@@ -25,11 +25,15 @@ public class RouteAverages {
 
     private Converter converter;
 
+    HashMap<Integer, DriverAverage> driverAverages;
+
     public RouteAverages() {
         abTripPeriodTimes = new HashMap<>();
         baTripPeriodTimes = new HashMap<>();
 
         converter = new Converter();
+
+        driverAverages = new HashMap<>();
     }
 
     public String getRouteNumber() {
@@ -286,9 +290,63 @@ public class RouteAverages {
     }
 
     public void setDateStamps(String dateStamps) {
-       // dateStamps = dateStamps.replaceAll("'", "%27");
+        // dateStamps = dateStamps.replaceAll("'", "%27");
 
         this.dateStamps = dateStamps;
+    }
+
+    public void addAbHighTripPeriod(int driverNumber, String driverName, TripPeriod2X tripPeriod) {
+        DriverAverage driverAverage = this.driverAverages.get(driverNumber);
+        if (driverAverage == null) {
+            driverAverage = new DriverAverage();
+            driverAverage.setDriverNumber(driverNumber);
+            driverAverage.setDriverName(driverName);
+        }
+        driverAverage.addAbHighTripPeriod(tripPeriod);
+        this.driverAverages.put(driverNumber, driverAverage);
+    }
+
+    public void addAbLowTripPeriod(int driverNumber, String driverName, TripPeriod2X tripPeriod) {
+
+        DriverAverage driverAverage = this.driverAverages.get(driverNumber);
+        if (driverAverage == null) {
+            driverAverage = new DriverAverage();
+            driverAverage.setDriverNumber(driverNumber);
+            driverAverage.setDriverName(driverName);
+        }
+        driverAverage.addAbLowTripPeriod(tripPeriod);
+        this.driverAverages.put(driverNumber, driverAverage);
+    }
+
+    //---------- 
+    public void addBaHighTripPeriod(int driverNumber, String driverName, TripPeriod2X tripPeriod) {
+        DriverAverage driverAverage = this.driverAverages.get(driverNumber);
+        if (driverAverage == null) {
+            driverAverage = new DriverAverage();
+            driverAverage.setDriverNumber(driverNumber);
+            driverAverage.setDriverName(driverName);
+        }
+        driverAverage.addBaHighTripPeriod(tripPeriod);
+        this.driverAverages.put(driverNumber, driverAverage);
+    }
+
+    public void addBaLowTripPeriod(int driverNumber, String driverName, TripPeriod2X tripPeriod) {
+        DriverAverage driverAverage = this.driverAverages.get(driverNumber);
+        if (driverAverage == null) {
+            driverAverage = new DriverAverage();
+            driverAverage.setDriverNumber(driverNumber);
+            driverAverage.setDriverName(driverName);
+        }
+        driverAverage.addBaLowTripPeriod(tripPeriod);
+        this.driverAverages.put(driverNumber, driverAverage);
+    }
+
+    public HashMap<Integer, DriverAverage> getDriverAverages() {
+        return driverAverages;
+    }
+
+    public void setDriversAverages(HashMap<Integer, DriverAverage> driverAverages) {
+        this.driverAverages = driverAverages;
     }
 
 }

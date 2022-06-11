@@ -374,7 +374,7 @@
                                 <a href="#" onclick="requestRouter('tripPeriodsCalculationsInitialRequest.htm')"><h4>გამოთვლების მენიუ</h4></a>
                             </li>
                             <li>
-                                <a href="#" onclick="requestRouter('tripPeriodsExcelExportDashboardInitialRequest.htm')"><h4>ექსელში ექსპორტი</h4></a>
+                                <a href="#" onclick="requestRouter('tripPeriodsExcelExportDashboardInitialRequest.htm')"><h4>ექსელში dექსპორტი</h4></a>
                             </li>
                         </ul>
                     </li>

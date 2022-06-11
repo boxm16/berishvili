@@ -6,7 +6,9 @@ public class TripPeriod2X extends TripPeriod {
     private String dateStamp;
     private String busNumber;
     private short exodusNumber;
+    private int driverNumber;
     private String driverName;
+    
 
     public String getRouteNumber() {
         return routeNumber;
@@ -46,6 +48,14 @@ public class TripPeriod2X extends TripPeriod {
 
     public void setDriverName(String driverName) {
         this.driverName = driverName;
+    }
+
+    public int getDriverNumber() {
+        return driverNumber;
+    }
+
+    public void setDriverNumber(int driverNumber) {
+        this.driverNumber = driverNumber;
     }
 
    

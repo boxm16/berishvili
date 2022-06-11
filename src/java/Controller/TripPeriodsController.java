@@ -7,6 +7,7 @@ import Model.TripPeriodsFilter;
 import Model.TripPeriodsPager;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -444,13 +445,16 @@ public class TripPeriodsController {
     }
 
     @RequestMapping(value = "tripPeriodsExcelExportDashboardInitialRequest", method = RequestMethod.POST)
-    public String tripPeriodsExcelExportDashboardInitialRequest(@RequestParam("routes:dates") String routeDates, HttpSession session) {
+    public String tripPeriodsExcelExportDashboardInitialRequest(@RequestParam("routes:dates") String routeDates, HttpSession session, ModelMap model) {
         TripPeriodsFilter tripPeriodsInitialFilter = convertSelectedRoutesToTripPeriodFilter(routeDates);
         session.setAttribute("tripPeriodsInitialFilter", tripPeriodsInitialFilter);
         if (session.getAttribute("percents") == null) {
             session.setAttribute("percents", 20);
         }
-        return "redirect:/tripPeriodsExcelExportDashboard.htm";
+
+        model.addAttribute("excelExportLink", "exportTripPeriods.htm");
+        session.setAttribute("message", "გამოთვლებისთვის დაფიქსირებულია " + session.getAttribute("percents") + " პროცენტიანი ზღვარი. <a href=\"tripPeriodsCalculationsDashboard.htm\">შეცვალე პროცენტი</a>  ");
+        return "excelExportDashboard";
     }
 
     @RequestMapping(value = "countedTripPeriods", method = RequestMethod.GET)
@@ -466,15 +470,39 @@ public class TripPeriodsController {
         return "countedTripPeriods";
     }
 
-    //-------------------FOR CALCULATION PER DRIVER----------------
-    @RequestMapping(value = "tripPeriodsCalculationsPerDriver")
-    public String tripPeriodsCalculationsPerDriver(HttpSession session) {
-        int percents = (Integer) session.getAttribute("percents");
-        return "tripPeriodsCalculationsPerDriver";
+    //-------------------FOR CALCULATION ANALITICA----------------
+    @RequestMapping(value = "tripPeriodsAnaliticCalculatations", method = RequestMethod.POST)
+    public String tripPeriodsAnaliticCalculatations(HttpSession session, ModelMap model,
+            @RequestParam("percents") String percents,
+            @RequestParam(name = "fromTime", required = false) String fromTimeString,
+            @RequestParam(name = "tillTime", required = false) String tillTimeString) {
+        int percentsInteger = Integer.valueOf(percents);
+        session.setAttribute("percents", percentsInteger);
+
+        if (fromTimeString == null || tillTimeString == null) {
+            TripPeriodsFilter tripPeriodsInitialFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsInitialFilter");
+            TreeMap<Float, RouteAverages> routesAveragesTreeMap = routeDao.getRoutesAnalitica(tripPeriodsInitialFilter, percentsInteger, LocalDateTime.MIN, LocalDateTime.MAX);
+            model.addAttribute("routesAverages", routesAveragesTreeMap);
+            model.addAttribute("errorMessage", "");
+        } else {
+
+            Converter converter = new Converter();
+            LocalDateTime fromTime = converter.convertStringTimeToDate(fromTimeString);
+            LocalDateTime tillTime = converter.convertStringTimeToDate(tillTimeString);
+
+            if (fromTime == null || tillTime == null) {
+                String errorMessage = "დროის მონაკვეთი არ არის შეყვანილი სრულად<br>შეასწორე და სცადე თავიდან";
+                model.addAttribute("errorMessage", errorMessage);
+
+            } else {
+
+                TripPeriodsFilter tripPeriodsInitialFilter = (TripPeriodsFilter) session.getAttribute("tripPeriodsInitialFilter");
+                TreeMap<Float, RouteAverages> routesAveragesTreeMap = routeDao.getRoutesAnalitica(tripPeriodsInitialFilter, percentsInteger, fromTime, tillTime);
+                model.addAttribute("routesAverages", routesAveragesTreeMap);
+                model.addAttribute("errorMessage", "");
+            }
+        }
+        return "tripPeriodsAnaliticCalculatations";
     }
 
-    @RequestMapping(value = "tripPeriodsCalculationsDashboard", method = RequestMethod.GET)
-    public String tripPeriodsCalculationsDashboard(HttpSession session, ModelMap model) {
-        return "tripPeriodsCalculationsDashboard";
-    }
 }

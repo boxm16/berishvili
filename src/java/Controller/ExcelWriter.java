@@ -4660,7 +4660,7 @@ public class ExcelWriter {
                         break;
                     case 9:
                         Cell cell_9 = headerRow.createCell(columnIndex);
-                        cell_9.setCellValue("ბაზაში მისვლის გეგმიური დრო");
+                        cell_9.setCellValue("ბაზაში შესვლის გეგმიური დრო");
                         cell_9.setCellStyle(headerStyleVertical);
                         break;
                     case 10:
@@ -4764,7 +4764,9 @@ public class ExcelWriter {
                             }
 
                             Cell cell_3 = row.createCell(3);
-                            cell_3.setCellValue(this.converter.convertRouteNumber(baseReturn.getDriverNumber()));
+                            if(baseReturn.getDriverNumber()==null){
+                                System.out.println("DRIVER NUMBER NOT PRESENT AT ROUTE NUMBER:"+routeEntry.getValue().getNumber());}
+                            cell_3.setCellValue(baseReturn.getDriverNumber());
                             if (dayIndex % 2 == 0) {
                                 cell_3.setCellStyle(rowStyleWhiteRegular);
                             } else {

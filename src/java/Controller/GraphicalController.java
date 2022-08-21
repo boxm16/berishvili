@@ -696,4 +696,149 @@ public class GraphicalController {
         return false;
     }
 
+    //---------------------------for interval change
+    @RequestMapping(value = "graphicalRouteVersionsForIntervalChange", method = RequestMethod.POST)
+    public String graphicalRouteVersionsForIntervalChange(ModelMap model, HttpSession session,
+            @RequestParam(value = "roundCheckBox", required = false) String roundCheckBoxChecked,
+            @RequestParam(value = "roundInputHour", required = false) String roundInputHour,
+            @RequestParam(value = "roundInputMinute", required = false) String roundInputMinute,
+            @RequestParam(value = "roundInputSecond", required = false) String roundInputSecond,
+            @RequestParam(value = "roundInputMinutes", required = false) String roundInputMinutes,
+            @RequestParam(value = "roundInputSeconds", required = false) String roundInputSeconds,
+            @RequestParam(value = "busCheckBox", required = false) String busCheckBoxChecked,
+            @RequestParam(value = "busInput", required = false) String busInput,
+            @RequestParam(value = "intervalCheckBox", required = false) String intervalCheckBoxChecked,
+            @RequestParam(value = "intervalInputHour", required = false) String intervalInputHour,
+            @RequestParam(value = "intervalInputMinute", required = false) String intervalInputMinute,
+            @RequestParam(value = "intervalInputSecond", required = false) String intervalInputSecond,
+            @RequestParam("plusMinusInput") String plusMinusInput,
+            @RequestParam("firstTripStartTimeInFormInput") String firstTripStartTimeInFormInput,
+            @RequestParam("lastTripStartTimeInFormInput") String lastTripStartTimeInFormInput,
+            @RequestParam("circularRoute") String circularRoute,
+            @RequestParam(value = "starterTripInFormInput", required = false) String starterTripInFormInput,
+            @RequestParam("abTripTimeMinutesInFormInput") String abTripTimeMinutesInFormInput,
+            @RequestParam("abTripTimeSecondsInFormInput") String abTripTimeSecondsInFormInput,
+            @RequestParam("baTripTimeMinutesInFormInput") String baTripTimeMinutesInFormInput,
+            @RequestParam("baTripTimeSecondsInFormInput") String baTripTimeSecondsInFormInput,
+            @RequestParam("haltTimeMinutes") String haltTimeMinutes,
+            @RequestParam("haltTimeSeconds") String haltTimeSeconds,
+            @RequestParam("abBusCountInFormInput") String abBusCountInFormInput,
+            @RequestParam("baBusCountInFormInput") String baBusCountInFormInput,
+            @RequestParam("intervalTimeInFormInput") String intervalTimeInFormInput) {
+        RouteData routeData = new RouteData();
+        if (roundCheckBoxChecked != null) {
+            routeData.setRoundCheckBoxChecked("checked");
+        }
+        if (roundInputHour == null) {
+            routeData.setRoundInputHourValue("00");
+        } else {
+            routeData.setRoundInputHourValue(roundInputHour);
+        }
+
+        if (roundInputMinute == null) {
+            routeData.setRoundInputMinuteValue("00");
+        } else {
+            routeData.setRoundInputMinuteValue(roundInputMinute);
+        }
+
+        if (roundInputMinute == null) {
+            routeData.setRoundInputMinuteValue("00");
+        } else {
+            routeData.setRoundInputMinuteValue(roundInputMinute);
+        }
+
+        if (roundInputSecond == null) {
+            routeData.setRoundInputSecondValue("00");
+        } else {
+            routeData.setRoundInputSecondValue(roundInputSecond);
+        }
+
+        if (roundInputMinutes == null) {
+            routeData.setRoundInputMinutesValue("00");
+        } else {
+            routeData.setRoundInputMinutesValue(roundInputMinutes);
+        }
+
+        if (roundInputSeconds == null) {
+            routeData.setRoundInputSecondsValue("00");
+        } else {
+            routeData.setRoundInputSecondsValue(roundInputSeconds);
+        }
+
+        if (busCheckBoxChecked != null) {
+            routeData.setBusCheckBoxChecked("checked");
+        }
+
+        if (busInput == null) {
+            routeData.setBusInputValue("");
+        } else {
+            routeData.setBusInputValue(busInput);
+        }
+
+        if (intervalCheckBoxChecked != null) {
+            routeData.setIntervalCheckBoxChecked("checked");
+        }
+
+        if (intervalInputHour == null) {
+            routeData.setIntervalInputHourValue("00:00");
+        } else {
+            routeData.setIntervalInputHourValue(intervalInputHour);
+        }
+
+        if (intervalInputMinute == null) {
+            routeData.setIntervalInputMinuteValue("00:00");
+        } else {
+            routeData.setIntervalInputMinuteValue(intervalInputMinute);
+        }
+
+        if (intervalInputSecond == null) {
+            routeData.setIntervalInputSecondValue("00:00");
+        } else {
+            routeData.setIntervalInputSecondValue(intervalInputSecond);
+        }
+
+        routeData.setPlusMinusInputValue(plusMinusInput);
+
+        routeData.setFirstTripStartTime(firstTripStartTimeInFormInput);
+
+        routeData.setLastTripStartTime(lastTripStartTimeInFormInput);
+
+        if (circularRoute.equals("yes")) {
+            routeData.setCircularRoute(true);
+        }
+
+        routeData.setStarterTrip(starterTripInFormInput);
+
+        routeData.setHaltTimeMinutes(Integer.valueOf(haltTimeMinutes));
+        routeData.setHaltTimeSeconds(Integer.valueOf(haltTimeSeconds));
+
+        routeData.setAbTripTimeMinutes(Integer.valueOf(abTripTimeMinutesInFormInput));
+
+        routeData.setAbTripTimeSeconds(Integer.valueOf(abTripTimeSecondsInFormInput));
+
+        routeData.setBaTripTimeMinutes(Integer.valueOf(baTripTimeMinutesInFormInput));
+
+        routeData.setBaTripTimeSeconds(Integer.valueOf(baTripTimeSecondsInFormInput));
+
+        routeData.setAbBusCount(Integer.valueOf(abBusCountInFormInput));
+        routeData.setBaBusCount(Integer.valueOf(baBusCountInFormInput));
+        routeData.setBusCount(Integer.valueOf(abBusCountInFormInput) + Integer.valueOf(baBusCountInFormInput));
+
+        routeData.setIntervalTime(intervalTimeInFormInput);
+        IgnitionSequence initialIgnitionSequences = getInitialIgnitionSequence(routeData);
+
+        ArrayList<IgnitionSequence> allPossibleIgnitionSequences = getAllPossibleIgnitionSequences(initialIgnitionSequences, routeData);
+        ArrayList<Route> routes = new ArrayList<>();
+        for (IgnitionSequence ignitionSequence : allPossibleIgnitionSequences) {
+            Route route = createtRouteWithoutBreaks(ignitionSequence, routeData);
+            routes.add(route);
+        }
+
+        model.addAttribute("routeData", routeData);
+        model.addAttribute("routes", routes);
+
+        session.setAttribute("routeData", routeData);
+        session.setAttribute("routes", routes);
+        return "routeVersionsForIntervalChange";
+    }
 }

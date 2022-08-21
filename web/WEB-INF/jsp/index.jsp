@@ -442,6 +442,11 @@
                         <a href="graphicalRouteInitialRequest.htm" target="_blank"><h3>გრაფიკული გამოსახვა</h3></a>
                     </li>
                 </ul>
+                <ul class="list-unstyled CTAs">
+                    <li>
+                        <a href="intervalChangeInitialRequest.htm" target="_blank"><h3>ინტერვალის შეცვლა</h3></a>
+                    </li>
+                </ul>
             </nav>
         </div>
         <form id="form" action="#" method="POST">

@@ -1,6 +1,15 @@
 package Controller;
 
+import Model.IntervalTripPeriod;
+import graphical.Exodus;
+import graphical.Route;
 import graphical.RouteData;
+import graphical.TripPeriod;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,10 +30,46 @@ public class IntervalChangeController {
     }
 
     @RequestMapping(value = "showTimeTable", method = RequestMethod.POST)
-    public String showTimeTable(ModelMap model) {
+    public String showTimeTable(ModelMap model, HttpSession session,
+            @RequestParam("routeVersionNumber") String routeVersionNumber,
+            @RequestParam("newIntervalMinutes") String newIntervalMinutes,
+            @RequestParam("newIntervalStartTime") String newIntervalStartTime) {
 
-     
+        ArrayList<Route> routeWithoutBreakVersion = (ArrayList<Route>) session.getAttribute("routes");
 
+        Route choosedRoute = routeWithoutBreakVersion.get(Integer.valueOf(routeVersionNumber));
+        TreeMap<LocalDateTime, IntervalTripPeriod> abTimetable = new TreeMap<>();
+        TreeMap<LocalDateTime, IntervalTripPeriod> baTimetable = new TreeMap<>();
+        ArrayList<Exodus> exoduses = choosedRoute.getExoduses();
+        short exodusIndex = 1;
+        for (Exodus exodus : exoduses) {
+            ArrayList<TripPeriod> tripPeriods = exodus.getTripPeriods();
+            for (TripPeriod tripPeriod : tripPeriods) {
+                if (tripPeriod.getType().equals("ab")) {
+                    IntervalTripPeriod intervalTripPeriod = new IntervalTripPeriod();
+                    intervalTripPeriod.setExodusNumber(exodusIndex);
+                    intervalTripPeriod.setStartTimeScheduled(tripPeriod.getStartTime());
+                    intervalTripPeriod.setArrivalTimeScheduled(tripPeriod.getStartTime().plus(tripPeriod.getDuration()));
+
+                    abTimetable.put(tripPeriod.getStartTime(), intervalTripPeriod);
+                }
+                if (tripPeriod.getType().equals("ba")) {
+                    IntervalTripPeriod intervalTripPeriod = new IntervalTripPeriod();
+                    intervalTripPeriod.setExodusNumber(exodusIndex);
+                    intervalTripPeriod.setStartTimeScheduled(tripPeriod.getStartTime());
+                    intervalTripPeriod.setArrivalTimeScheduled(tripPeriod.getStartTime().plus(tripPeriod.getDuration()));
+
+                    baTimetable.put(tripPeriod.getStartTime(), intervalTripPeriod);
+                }
+            }
+            exodusIndex++;
+        }
+
+        abTimetable = calculateIntervals(abTimetable);
+        baTimetable = calculateIntervals(baTimetable);
+
+        model.addAttribute("abTimetable", abTimetable);
+        model.addAttribute("baTimetable", baTimetable);
         return "timeTable";
     }
 
@@ -32,49 +77,45 @@ public class IntervalChangeController {
     public String newIterval(ModelMap model, HttpSession session,
             @RequestParam("routeVersionNumber") String routeVersionNumber,
             @RequestParam("newIntervalMinutes") String newIntervalMinutes,
-            @RequestParam("newIntervalStartTime") String newIntervalStartTime) {
-        /*
-        ArrayList<Route> routeBreakVersions = new ArrayList();
+            @RequestParam("newIntervalStartTime") String newIntervalStartTimeString) {
 
         ArrayList<Route> routeWithoutBreakVersion = (ArrayList<Route>) session.getAttribute("routes");
-
         Route choosedRoute = routeWithoutBreakVersion.get(Integer.valueOf(routeVersionNumber));
-
-        IgnitionSequence ignitionSequence = new IgnitionSequence();
-        for (Exodus exodus : choosedRoute.getExoduses()) {
-            TripPeriod firstTripPeriodOfExodus = exodus.getTripPeriods().get(0);
-            ExodusIgnitionCode exodusIgnitionCode = new ExodusIgnitionCode();
-            exodusIgnitionCode.setStartTime(firstTripPeriodOfExodus.getStartTime());
-            exodusIgnitionCode.setType(firstTripPeriodOfExodus.getType());
-            ignitionSequence.addExodusIgnitionCode(exodusIgnitionCode);
-        }
-
-        RouteData routeData = (RouteData) session.getAttribute("routeData");
-        routeData.setFirstBreakStartTime(firstBreakStartTime);
-        routeData.setLastBreakEndTime(lastBreakEndTime);
-        routeData.setBreakTimeMinutes(Integer.valueOf(breakTimeMinutes));
-        routeData.setBreakStayPoint(breakStayPoint);
-
-        ArrayList<ArrayList<Integer>> findBreaksPossiblePoints = findBreaksPossiblePoints(choosedRoute, routeData);
-
-        TwoDimArrayCombinations twoDimArrayCombinator = new TwoDimArrayCombinations();
-        List<ArrayList> breakSequences = twoDimArrayCombinator.getIntegerCombinations(findBreaksPossiblePoints);
-        MemoryUsage mu = new MemoryUsage();
-        for (ArrayList breakSequence : breakSequences) {
-            Route routeWithBreakVersion = createRouteWithBreaks(ignitionSequence, routeData, breakSequence);
-            if (routeWithBreakVersion != null) {
-                routeBreakVersions.add(routeWithBreakVersion);
+        Converter converter = new Converter();
+        LocalDateTime newIntervalStartTime = converter.convertStringTimeToDate(newIntervalStartTimeString);
+        ArrayList<Exodus> exoduses = choosedRoute.getExoduses();
+        for (Exodus exodus : exoduses) {
+            ArrayList<TripPeriod> tripPeriods = exodus.getTripPeriods();
+            for (int i = tripPeriods.size() - 1; i >= 0; --i) {
+                if (tripPeriods.get(i).getStartTime().isBefore(newIntervalStartTime)) {
+                    //do nothing    
+                } else {
+                    tripPeriods.remove(i);
+                }
             }
         }
 
-        System.out.println("All Possible Breaks Versions Count:" + breakSequences.size());
-        System.out.println("All Clear Breaks Versions Count:" + routeBreakVersions.size());
-
-        BreaksPager breaksPager = new BreaksPager(routeBreakVersions, 50);
-        breaksPager.setCurrentPage(1);
-        model.addAttribute("breaksPager", breaksPager);
-        session.setAttribute("breaksPager", breaksPager);
-         */
+        model.addAttribute("route", choosedRoute);
         return "newIntervalVersions";
+    }
+
+    private TreeMap<LocalDateTime, IntervalTripPeriod> calculateIntervals(TreeMap<LocalDateTime, IntervalTripPeriod> abTimetable) {
+        LocalDateTime previousTripPeriodStartTime = null;
+        for (Map.Entry<LocalDateTime, IntervalTripPeriod> entry : abTimetable.entrySet()) {
+            if (previousTripPeriodStartTime == null) {
+                previousTripPeriodStartTime = entry.getKey();
+            } else {
+                IntervalTripPeriod intervalTripPeriod = entry.getValue();
+                LocalDateTime tripPeriodStartTimeScheduled = intervalTripPeriod.getStartTimeScheduled();
+                Duration interval = Duration.between(previousTripPeriodStartTime, tripPeriodStartTimeScheduled);
+                intervalTripPeriod.setScheduledInterval(interval);
+
+                previousTripPeriodStartTime = entry.getKey();
+            }
+
+        }
+
+        return abTimetable;
+
     }
 }

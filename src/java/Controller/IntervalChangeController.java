@@ -140,6 +140,25 @@ public class IntervalChangeController {
 
     private void getAvailableBus(Route choosedRoute, LocalDateTime currentTime, Duration newInterval) {
         ArrayList<Exodus> exoduses = choosedRoute.getExoduses();
+        Duration tripDuration = Duration.ZERO;
+        Duration abTripDuration = Duration.ZERO;
+        Duration baTripDuration = Duration.ZERO;
+        ArrayList<TripPeriod> tps = choosedRoute.getExoduses().get(0).getTripPeriods();
+        int indx = 0;
+        while (abTripDuration == Duration.ZERO|| baTripDuration == Duration.ZERO) {
+
+            TripPeriod tp = tps.get(indx);
+            if (tp.getType().equals("ab")) {
+                abTripDuration = tp.getDuration();
+            }
+            if (tp.getType().equals("ba")) {
+                baTripDuration = tp.getDuration();
+            }
+            if (indx > tps.size() - 1) {
+                break;
+            }
+            indx++;
+        }
 
         int exodusIndex = 1;
         for (Exodus exodus : exoduses) {
@@ -149,30 +168,38 @@ public class IntervalChangeController {
             if (lastTripPeriodEndTime.isAfter(currentTime)) {
             } else {
                 String type = lastTripPeriod.getType();
-                Duration tripDuration = lastTripPeriod.getDuration();
+
                 if (type.equals("halt")) {
                     type = tripPeriods.get(tripPeriods.size() - 2).getType();
-                    tripDuration = tripPeriods.get(tripPeriods.size() - 2).getDuration();
+
                 }
 
                 if (type.equals("ab")) {
                     type = "ba";
+
                 } else {
                     type = "ab";
+
                 }
                 TreeMap<LocalDateTime, IntervalTripPeriod> directionTimeTable = getDirectionTimeTable(choosedRoute, type);
                 LocalDateTime lastBusStartTimeFromDIrectionTimeTable = directionTimeTable.lastKey();
                 LocalDateTime nextBusStartTime = lastBusStartTimeFromDIrectionTimeTable.plus(newInterval);
                 if (nextBusStartTime.isEqual(currentTime)) {
-                    System.out.println("CurrentTime:" + currentTime);
-                    System.out.println("exodus number:" + exodusIndex + "LastTripEndTime" + lastTripPeriodEndTime + "TYPE:" + type);
+                    // System.out.println("CurrentTime:" + currentTime);
+                    //System.out.println("exodus number:" + exodusIndex + "LastTripEndTime" + lastTripPeriodEndTime + "TYPE:" + type);
 
-                    System.out.println("TYPE: " + type + "LAST TRIP PERIOD START TIME IN TIMETABLE" + lastBusStartTimeFromDIrectionTimeTable);
-                    System.out.println("should go ");
+                    // System.out.println("TYPE: " + type + "LAST TRIP PERIOD START TIME IN TIMETABLE" + lastBusStartTimeFromDIrectionTimeTable);
+                    //  System.out.println("should go ");
                     TripPeriod tripPeriod = new TripPeriod();
                     tripPeriod.setType(type);
                     tripPeriod.setStartTime(currentTime);
-                    tripPeriod.setDuration(tripDuration);
+                    if (type.equals("ab")) {
+                        tripPeriod.setDuration(abTripDuration);
+                    }
+                    if (type.equals("ba")) {
+                        tripPeriod.setDuration(baTripDuration);
+                    }
+
                     exodus.getTripPeriods().add(tripPeriod);
                 }
             }
@@ -205,7 +232,7 @@ public class IntervalChangeController {
 
     @RequestMapping(value = "timeTable2", method = RequestMethod.GET)
     public String newIterval(ModelMap model, HttpSession session) {
-        System.out.println("lalsllaslalslasl");
+
         Route routeWithNewInterval = (Route) session.getAttribute("routeWithNewInterval");
         TreeMap<LocalDateTime, IntervalTripPeriod> abTimetable = new TreeMap<>();
         TreeMap<LocalDateTime, IntervalTripPeriod> baTimetable = new TreeMap<>();

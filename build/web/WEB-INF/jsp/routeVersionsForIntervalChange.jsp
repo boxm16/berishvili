@@ -8,7 +8,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>NEW INTERVALS</title>
         <style>
             input[type="number"] {
                 width:45px;
@@ -34,7 +34,9 @@
                         <input name="routeVersionNumber" type='hidden' value="${loop.index}" readonly="true">
 
                         <td>
-                            <input id="newIntervalMinutes" name="newIntervalMinutes" class="input" type="number" value="30" >ახალი ინტერვალის  ხანგრძლივობა
+                            H<input id="newIntervalHours" name="newIntervalHours" class="input" type="number" value="00" >
+                            M<input id="newIntervalMinutes" name="newIntervalMinutes" class="input" type="number" value="30" > 
+                            S<input id="newIntervalSeconds" name="newIntervalSeconds" class="input" type="number" value="00" > ახალი ინტერვალის  ხანგრძლივობა
 
                         </td>
                         <td>
@@ -101,12 +103,12 @@
         function   showNewIntervals() {
             let form = document.getElementById("form");
             form.action = "newInterval.htm";
-          
+
         }
         function   showTimeTable() {
             let form = document.getElementById("form");
             form.action = "showTimeTable.htm";
-           
+
         }
     </script>
 </body>

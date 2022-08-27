@@ -8,7 +8,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>-------</title>
         <style>
             input[type="number"] {
                 width:45px;
@@ -23,7 +23,8 @@
     </head>
     <body>
        
-
+        <a href="timeTable2.htm" target="_blank">SHOW TIMETABLE</a>
+        <hr>
 
             <!-- end of template -->
 

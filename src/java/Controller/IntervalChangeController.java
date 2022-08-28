@@ -140,12 +140,13 @@ public class IntervalChangeController {
 
     private void getAvailableBus(Route choosedRoute, LocalDateTime currentTime, Duration newInterval) {
         ArrayList<Exodus> exoduses = choosedRoute.getExoduses();
-        Duration tripDuration = Duration.ZERO;
+
+        //first find ab and ba durations
         Duration abTripDuration = Duration.ZERO;
         Duration baTripDuration = Duration.ZERO;
         ArrayList<TripPeriod> tps = choosedRoute.getExoduses().get(0).getTripPeriods();
         int indx = 0;
-        while (abTripDuration == Duration.ZERO|| baTripDuration == Duration.ZERO) {
+        while (abTripDuration == Duration.ZERO || baTripDuration == Duration.ZERO) {
 
             TripPeriod tp = tps.get(indx);
             if (tp.getType().equals("ab")) {
@@ -159,53 +160,102 @@ public class IntervalChangeController {
             }
             indx++;
         }
+        //------------------------------
+        //
+        TreeMap<LocalDateTime, IntervalTripPeriod> abDirectionTimeTable = getDirectionTimeTable(choosedRoute, "ab");
+        LocalDateTime abLastBusStartTimeFromDIrectionTimeTable = abDirectionTimeTable.lastKey();
+        LocalDateTime abNextBusStartTime = abLastBusStartTimeFromDIrectionTimeTable.plus(newInterval);
 
-        int exodusIndex = 1;
+        TreeMap<LocalDateTime, IntervalTripPeriod> baDirectionTimeTable = getDirectionTimeTable(choosedRoute, "ba");
+        LocalDateTime baLastBusStartTimeFromDIrectionTimeTable = baDirectionTimeTable.lastKey();
+        LocalDateTime baNextBusStartTime = baLastBusStartTimeFromDIrectionTimeTable.plus(newInterval);
+
+        // now we are estimating which bus as ended its last trip at current time 
+        //and sending him in corresponding waiting room
+        TreeMap<Short, Exodus> abWaitingRoom = new TreeMap<>();
+        TreeMap<Short, Exodus> baWaitingRoom = new TreeMap<>();
+
+        short exodusIndex = 1;
+       // System.out.println("CurrentTime:" + currentTime);
+
         for (Exodus exodus : exoduses) {
             ArrayList<TripPeriod> tripPeriods = exodus.getTripPeriods();
             TripPeriod lastTripPeriod = tripPeriods.get(tripPeriods.size() - 1);
-            LocalDateTime lastTripPeriodEndTime = lastTripPeriod.getStartTime().plus(lastTripPeriod.getDuration());
+            //skip "halt" timePeriod
+            if (lastTripPeriod.getType().equals("halt")) {
+                lastTripPeriod = tripPeriods.get(tripPeriods.size() - 2);
+            }
+            LocalDateTime lastTripPeriodEndTime = lastTripPeriod.getStartTime().plus(lastTripPeriod.getDuration()).plusMinutes(5);
             if (lastTripPeriodEndTime.isAfter(currentTime)) {
             } else {
                 String type = lastTripPeriod.getType();
 
-                if (type.equals("halt")) {
-                    type = tripPeriods.get(tripPeriods.size() - 2).getType();
-
+                if (type.equals("ba")) {
+                    abWaitingRoom.put(exodusIndex, exodus);
                 }
-
                 if (type.equals("ab")) {
-                    type = "ba";
-
-                } else {
-                    type = "ab";
-
+                    baWaitingRoom.put(exodusIndex, exodus);
                 }
-                TreeMap<LocalDateTime, IntervalTripPeriod> directionTimeTable = getDirectionTimeTable(choosedRoute, type);
-                LocalDateTime lastBusStartTimeFromDIrectionTimeTable = directionTimeTable.lastKey();
-                LocalDateTime nextBusStartTime = lastBusStartTimeFromDIrectionTimeTable.plus(newInterval);
-                if (nextBusStartTime.isEqual(currentTime)) {
-                    // System.out.println("CurrentTime:" + currentTime);
-                    //System.out.println("exodus number:" + exodusIndex + "LastTripEndTime" + lastTripPeriodEndTime + "TYPE:" + type);
 
-                    // System.out.println("TYPE: " + type + "LAST TRIP PERIOD START TIME IN TIMETABLE" + lastBusStartTimeFromDIrectionTimeTable);
-                    //  System.out.println("should go ");
-                    TripPeriod tripPeriod = new TripPeriod();
-                    tripPeriod.setType(type);
-                    tripPeriod.setStartTime(currentTime);
-                    if (type.equals("ab")) {
-                        tripPeriod.setDuration(abTripDuration);
-                    }
-                    if (type.equals("ba")) {
-                        tripPeriod.setDuration(baTripDuration);
-                    }
-
-                    exodus.getTripPeriods().add(tripPeriod);
-                }
+                // System.out.println("exodus number:" + exodusIndex + "LastTripEndTime" + lastTripPeriodEndTime + "TYPE:" + type);
             }
             exodusIndex++;
         }
+        if (abNextBusStartTime.isEqual(currentTime)) {
 
+            // System.out.println("TYPE: " + type + "LAST TRIP PERIOD START TIME IN TIMETABLE" + lastBusStartTimeFromDIrectionTimeTable);
+            //  System.out.println("should go ");
+            TripPeriod tripPeriod = new TripPeriod();
+            tripPeriod.setType("ab");
+            tripPeriod.setStartTime(currentTime);
+            tripPeriod.setDuration(abTripDuration);
+            Exodus exodus = getClosestBus(abWaitingRoom, currentTime);
+
+            exodus.getTripPeriods().add(tripPeriod);
+        }
+        if (baNextBusStartTime.isEqual(currentTime)) {
+
+            // System.out.println("TYPE: " + type + "LAST TRIP PERIOD START TIME IN TIMETABLE" + lastBusStartTimeFromDIrectionTimeTable);
+            //  System.out.println("should go ");
+            TripPeriod tripPeriod = new TripPeriod();
+            tripPeriod.setType("ba");
+            tripPeriod.setStartTime(currentTime);
+            tripPeriod.setDuration(baTripDuration);
+            Exodus exodus = getClosestBus(baWaitingRoom, currentTime);
+
+            exodus.getTripPeriods().add(tripPeriod);
+        }
+
+    }
+
+    private Exodus getClosestBus(TreeMap<Short, Exodus> waitingRoom, LocalDateTime currentTime) {
+        System.out.println("waitingRoom SIZE:"+waitingRoom.size());
+        if (waitingRoom.size() == 1) {
+            Map.Entry<Short, Exodus> lastEntry = waitingRoom.pollLastEntry();
+            return lastEntry.getValue();
+        } else {
+            Exodus katalliloExodus = null;
+            Duration differenceTime = Duration.ofDays(15);
+            for (Map.Entry<Short, Exodus> entry : waitingRoom.entrySet()) {
+                Exodus exodus = entry.getValue();
+                ArrayList<TripPeriod> tripPeriods = exodus.getTripPeriods();
+                TripPeriod lastTripPeriod = tripPeriods.get(tripPeriods.size() - 1);
+                if (lastTripPeriod.getType().equals("halt")) {
+                    lastTripPeriod = tripPeriods.get(tripPeriods.size() - 2);
+                }
+                LocalDateTime lastTripPeriodEndTimeWithHaltTime = lastTripPeriod.getStartTime().plus(lastTripPeriod.getDuration()).plusMinutes(5);
+                Duration differenceBetweenCurrentTimeAndLastPeriodEndTimeWithHalt = Duration.between(lastTripPeriodEndTimeWithHaltTime, currentTime );
+                System.out.println("DIFFEREN:" + differenceBetweenCurrentTimeAndLastPeriodEndTimeWithHalt);
+                int val = differenceBetweenCurrentTimeAndLastPeriodEndTimeWithHalt.compareTo(differenceTime);
+                if (val > 0) {
+
+                } else {
+                    differenceTime = differenceBetweenCurrentTimeAndLastPeriodEndTimeWithHalt;
+                    katalliloExodus = exodus;
+                }
+            }
+            return katalliloExodus;
+        }
     }
 
     private TreeMap<LocalDateTime, IntervalTripPeriod> getDirectionTimeTable(Route choosedRoute, String direction) {
@@ -268,4 +318,5 @@ public class IntervalChangeController {
         model.addAttribute("baTimetable", baTimetable);
         return "timeTableWithNewIntervals";
     }
+
 }

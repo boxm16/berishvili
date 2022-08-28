@@ -176,7 +176,7 @@ public class IntervalChangeController {
         TreeMap<Short, Exodus> baWaitingRoom = new TreeMap<>();
 
         short exodusIndex = 1;
-       // System.out.println("CurrentTime:" + currentTime);
+        // System.out.println("CurrentTime:" + currentTime);
 
         for (Exodus exodus : exoduses) {
             ArrayList<TripPeriod> tripPeriods = exodus.getTripPeriods();
@@ -205,11 +205,22 @@ public class IntervalChangeController {
 
             // System.out.println("TYPE: " + type + "LAST TRIP PERIOD START TIME IN TIMETABLE" + lastBusStartTimeFromDIrectionTimeTable);
             //  System.out.println("should go ");
+            Exodus exodus = getClosestBus(abWaitingRoom, currentTime);
+            ArrayList<TripPeriod> tripPeriods = exodus.getTripPeriods();
+            TripPeriod lastTripPeriodInExodus = tripPeriods.get(tripPeriods.size() - 1);
+            LocalDateTime startTime = lastTripPeriodInExodus.getStartTime();
+            LocalDateTime endTime = startTime.plus(lastTripPeriodInExodus.getDuration());
+            Duration haltTimeDuration = Duration.between(endTime, currentTime);
+            TripPeriod halt = new TripPeriod();
+            halt.setType("halt");
+            halt.setStartTime(endTime);
+            halt.setDuration(haltTimeDuration);
+            exodus.getTripPeriods().add(halt);
+
             TripPeriod tripPeriod = new TripPeriod();
             tripPeriod.setType("ab");
             tripPeriod.setStartTime(currentTime);
             tripPeriod.setDuration(abTripDuration);
-            Exodus exodus = getClosestBus(abWaitingRoom, currentTime);
 
             exodus.getTripPeriods().add(tripPeriod);
         }
@@ -217,11 +228,23 @@ public class IntervalChangeController {
 
             // System.out.println("TYPE: " + type + "LAST TRIP PERIOD START TIME IN TIMETABLE" + lastBusStartTimeFromDIrectionTimeTable);
             //  System.out.println("should go ");
+            Exodus exodus = getClosestBus(baWaitingRoom, currentTime);
+
+            ArrayList<TripPeriod> tripPeriods = exodus.getTripPeriods();
+            TripPeriod lastTripPeriodInExodus = tripPeriods.get(tripPeriods.size() - 1);
+            LocalDateTime startTime = lastTripPeriodInExodus.getStartTime();
+            LocalDateTime endTime = startTime.plus(lastTripPeriodInExodus.getDuration());
+            Duration haltTimeDuration = Duration.between(endTime, currentTime);
+            TripPeriod halt = new TripPeriod();
+            halt.setType("halt");
+            halt.setStartTime(endTime);
+            halt.setDuration(haltTimeDuration);
+            exodus.getTripPeriods().add(halt);
+
             TripPeriod tripPeriod = new TripPeriod();
             tripPeriod.setType("ba");
             tripPeriod.setStartTime(currentTime);
             tripPeriod.setDuration(baTripDuration);
-            Exodus exodus = getClosestBus(baWaitingRoom, currentTime);
 
             exodus.getTripPeriods().add(tripPeriod);
         }
@@ -229,9 +252,14 @@ public class IntervalChangeController {
     }
 
     private Exodus getClosestBus(TreeMap<Short, Exodus> waitingRoom, LocalDateTime currentTime) {
-        System.out.println("waitingRoom SIZE:"+waitingRoom.size());
+        System.out.println("waitingRoom SIZE:" + waitingRoom.size());
         if (waitingRoom.size() == 1) {
             Map.Entry<Short, Exodus> lastEntry = waitingRoom.pollLastEntry();
+            ArrayList<TripPeriod> tripPeriods = lastEntry.getValue().getTripPeriods();
+            TripPeriod lastTripPeriod = tripPeriods.get(tripPeriods.size() - 1);
+            if (lastTripPeriod.getType().equals("halt")) {
+                tripPeriods.remove(tripPeriods.size() - 1);
+            }
             return lastEntry.getValue();
         } else {
             Exodus katalliloExodus = null;
@@ -244,7 +272,7 @@ public class IntervalChangeController {
                     lastTripPeriod = tripPeriods.get(tripPeriods.size() - 2);
                 }
                 LocalDateTime lastTripPeriodEndTimeWithHaltTime = lastTripPeriod.getStartTime().plus(lastTripPeriod.getDuration()).plusMinutes(5);
-                Duration differenceBetweenCurrentTimeAndLastPeriodEndTimeWithHalt = Duration.between(lastTripPeriodEndTimeWithHaltTime, currentTime );
+                Duration differenceBetweenCurrentTimeAndLastPeriodEndTimeWithHalt = Duration.between(lastTripPeriodEndTimeWithHaltTime, currentTime);
                 System.out.println("DIFFEREN:" + differenceBetweenCurrentTimeAndLastPeriodEndTimeWithHalt);
                 int val = differenceBetweenCurrentTimeAndLastPeriodEndTimeWithHalt.compareTo(differenceTime);
                 if (val > 0) {
@@ -253,6 +281,12 @@ public class IntervalChangeController {
                     differenceTime = differenceBetweenCurrentTimeAndLastPeriodEndTimeWithHalt;
                     katalliloExodus = exodus;
                 }
+            }
+
+            ArrayList<TripPeriod> tripPeriods = katalliloExodus.getTripPeriods();
+            TripPeriod lastTripPeriod = tripPeriods.get(tripPeriods.size() - 1);
+            if (lastTripPeriod.getType().equals("halt")) {
+                tripPeriods.remove(tripPeriods.size() - 1);
             }
             return katalliloExodus;
         }

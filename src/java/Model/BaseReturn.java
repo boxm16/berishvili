@@ -244,7 +244,7 @@ public class BaseReturn extends TripVoucher {
         // if (differenceDuration.getSeconds() < 61 && differenceDuration.getSeconds() > -61) {
         //   return "inherited";
         // }
-        if (differenceDuration.getSeconds() < 600) {
+        if (differenceDuration.getSeconds() < 15*60) {
             return "inherited";
         }
         misconduct = "red";

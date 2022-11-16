@@ -313,6 +313,7 @@
                     <thead>
                         <tr>   
                             <th>მარშრუტი </th>
+                            <th>ავტობაზის #</th>
                             <th>თარიღი</th>
                             <th>გასვლის #</th>
                             <th>მძღოლის ტაბელი</th>
@@ -323,12 +324,12 @@
                             <th>ბოლო დგომის<br>სხვაობა</th>
 
                             <th>ბაზაში წასვლის<br> გეგმიური დრო</th>
-                            <th>ბაზაში მისვლის <br>გეგმიური დრო</th>
+                            <th>ბაზაში შესვლის <br>გეგმიური დრო</th>
                             <th>გეგმიური ხანგრძლივობა</th>
 
                             <th>ბაზაში წასვლის<br> GPS დრო</th>
-                            <th>ბაზაში მისვლის <br>GPS დრო</th>
-                            <th style="background-color:green">ბაზაში მისვლის <br>Fake(სავარაუდო)<br> GPS დრო</th>
+                            <th>ბაზაში შესვლის <br>GPS დრო</th>
+                            <th style="background-color:green">ბაზაში შესვლის <br>Fake(სავარაუდო)<br> GPS დრო</th>
                             <th>GPS ხანგრძლივობა</th>
 
                             <th>რეისის გეგმიური და <br>GPS ხანგრძლივობის სხვაობა</th>
@@ -336,7 +337,7 @@
                             <th>შესვლის გეგმიური დრო </th>
                             <th>შესვლის დამოწმებული დრო </th>
                             <th>სხვაობა </th>
-                            <th>ბაზაში მისვლის GPS დროს 
+                            <th>ბაზაში შესვლის GPS დროს 
                                 <br>და დამოწმებული
                                 <br>დროს შორის სხვაობა</th>
                             <th>დახარვეზებულები</th>
@@ -350,6 +351,7 @@
                                     <c:forEach var="tripVoucher" items="${exodus.value.tripVouchers}">
                                         <tr>
                                             <td>${route.value.number}</td>
+                                            <td>${tripVoucher.value.getBaseNumber()}</td>
                                             <td>${day.value.dateStamp}</td>
                                             <td><a href="exodus.htm?routeNumber=${route.value.number}&dateStamp=${day.value.dateStamp}&exodusNumber=${exodus.value.number}&startTimeScheduled=${tripVoucher.value.baseReturnTripStartTimeScheduled}"  target="_blank">${exodus.value.number}</a></td>
                                             <td>${tripVoucher.value.getDriverNumber()}</td>

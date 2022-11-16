@@ -4522,19 +4522,19 @@ public class ExcelWriter {
                         columnWidth = 1500;
                         break;
                     case 1:
-                        columnWidth = 4000;
-                        break;
-                    case 2:
                         columnWidth = 1000;
                         break;
+                    case 2:
+                        columnWidth = 4000;
+                        break;
                     case 3:
-                        columnWidth = 2500;
+                        columnWidth = 1000;
                         break;
                     case 4:
-                        columnWidth = 7000;
+                        columnWidth = 2500;
                         break;
                     case 5:
-                        columnWidth = 2500;
+                        columnWidth = 7000;
                         break;
                     case 6:
                         columnWidth = 2500;
@@ -4582,6 +4582,9 @@ public class ExcelWriter {
                         columnWidth = 2500;
                         break;
                     case 21:
+                        columnWidth = 2500;
+                        break;
+                    case 22:
                         columnWidth = 100;
                         break;
 
@@ -4619,108 +4622,113 @@ public class ExcelWriter {
                         break;
                     case 1:
                         Cell cell_1 = headerRow.createCell(columnIndex);
-                        cell_1.setCellValue("თარიღი");
-                        cell_1.setCellStyle(headerStyle);
-                        break;
-                    case 2:
-                        Cell cell_2 = headerRow.createCell(columnIndex);
-                        cell_2.setCellValue("გასვლის #");
-                        cell_2.setCellStyle(headerStyleVertical);
+                        cell_1.setCellValue(" ავტობაზის #");
+                        cell_1.setCellStyle(headerStyleVertical);
                         break;
 
+                    case 2:
+                        Cell cell_2 = headerRow.createCell(columnIndex);
+                        cell_2.setCellValue("თარიღი");
+                        cell_2.setCellStyle(headerStyle);
+                        break;
                     case 3:
                         Cell cell_3 = headerRow.createCell(columnIndex);
-                        cell_3.setCellValue("მძღოლის ტაბელი");
+                        cell_3.setCellValue("გასვლის #");
                         cell_3.setCellStyle(headerStyleVertical);
                         break;
+
                     case 4:
                         Cell cell_4 = headerRow.createCell(columnIndex);
-                        cell_4.setCellValue("მძღოლის სახელი/გვარი");
-                        cell_4.setCellStyle(headerStyle);
+                        cell_4.setCellValue("მძღოლის ტაბელი");
+                        cell_4.setCellStyle(headerStyleVertical);
                         break;
                     case 5:
                         Cell cell_5 = headerRow.createCell(columnIndex);
-                        cell_5.setCellValue("ბოლო დგომის გეგმიური დრო");
-                        cell_5.setCellStyle(headerStyleVertical);
+                        cell_5.setCellValue("მძღოლის სახელი/გვარი");
+                        cell_5.setCellStyle(headerStyle);
                         break;
                     case 6:
                         Cell cell_6 = headerRow.createCell(columnIndex);
-                        cell_6.setCellValue("ბოლო დგომის ფაქთიური დრო");
+                        cell_6.setCellValue("ბოლო დგომის გეგმიური დრო");
                         cell_6.setCellStyle(headerStyleVertical);
                         break;
                     case 7:
                         Cell cell_7 = headerRow.createCell(columnIndex);
-                        cell_7.setCellValue("ბოლო დგომის სხვაობა");
+                        cell_7.setCellValue("ბოლო დგომის ფაქთიური დრო");
                         cell_7.setCellStyle(headerStyleVertical);
                         break;
                     case 8:
                         Cell cell_8 = headerRow.createCell(columnIndex);
-                        cell_8.setCellValue("ბაზაში წასვლის გეგმიური დრო");
+                        cell_8.setCellValue("ბოლო დგომის სხვაობა");
                         cell_8.setCellStyle(headerStyleVertical);
                         break;
                     case 9:
                         Cell cell_9 = headerRow.createCell(columnIndex);
-                        cell_9.setCellValue("ბაზაში შესვლის გეგმიური დრო");
+                        cell_9.setCellValue("ბაზაში წასვლის გეგმიური დრო");
                         cell_9.setCellStyle(headerStyleVertical);
                         break;
                     case 10:
                         Cell cell_10 = headerRow.createCell(columnIndex);
-                        cell_10.setCellValue("გეგმიური ხანგრძლივობ");
+                        cell_10.setCellValue("ბაზაში შესვლის გეგმიური დრო");
                         cell_10.setCellStyle(headerStyleVertical);
                         break;
-                        case 11:
+                    case 11:
                         Cell cell_11 = headerRow.createCell(columnIndex);
-                        cell_11.setCellValue(" ბაზაში წასვლის GPS დრო");
+                        cell_11.setCellValue("გეგმიური ხანგრძლივობ");
                         cell_11.setCellStyle(headerStyleVertical);
                         break;
-                       
-
                     case 12:
                         Cell cell_12 = headerRow.createCell(columnIndex);
-                        cell_12.setCellValue("ბაზაში მისვლის GPS დრო");
+                        cell_12.setCellValue(" ბაზაში წასვლის GPS დრო");
                         cell_12.setCellStyle(headerStyleVertical);
                         break;
+
                     case 13:
                         Cell cell_13 = headerRow.createCell(columnIndex);
-                        cell_13.setCellValue("ბაზაში მისვლის Fake(სავარაუდო) GPS დრო");
+                        cell_13.setCellValue("ბაზაში შესვლის GPS დრო");
                         cell_13.setCellStyle(headerStyleVertical);
                         break;
                     case 14:
                         Cell cell_14 = headerRow.createCell(columnIndex);
-                        cell_14.setCellValue("GPS ხანგრძლივობა");
+                        cell_14.setCellValue("ბაზაში შესვლის Fake(სავარაუდო) GPS დრო");
                         cell_14.setCellStyle(headerStyleVertical);
                         break;
                     case 15:
                         Cell cell_15 = headerRow.createCell(columnIndex);
-                        cell_15.setCellValue("რეისის გეგმიური და GPS ხანგრძლივობის სხვაობა");
+                        cell_15.setCellValue("GPS ხანგრძლივობა");
                         cell_15.setCellStyle(headerStyleVertical);
                         break;
                     case 16:
                         Cell cell_16 = headerRow.createCell(columnIndex);
-                        cell_16.setCellValue("შესვლის გეგმიური დრო");
+                        cell_16.setCellValue("რეისის გეგმიური და GPS ხანგრძლივობის სხვაობა");
                         cell_16.setCellStyle(headerStyleVertical);
                         break;
                     case 17:
                         Cell cell_17 = headerRow.createCell(columnIndex);
-                        cell_17.setCellValue("შესვლის დამოწმებული დრო");
+                        cell_17.setCellValue("შესვლის გეგმიური დრო");
                         cell_17.setCellStyle(headerStyleVertical);
                         break;
                     case 18:
                         Cell cell_18 = headerRow.createCell(columnIndex);
-                        cell_18.setCellValue("სხვაობა");
+                        cell_18.setCellValue("შესვლის დამოწმებული დრო");
                         cell_18.setCellStyle(headerStyleVertical);
                         break;
                     case 19:
                         Cell cell_19 = headerRow.createCell(columnIndex);
-                        cell_19.setCellValue("ბაზაში მისვლის GPS დროს და დამოწმებული დროს შორის სხვაობა");
+                        cell_19.setCellValue("სხვაობა");
                         cell_19.setCellStyle(headerStyleVertical);
                         break;
                     case 20:
                         Cell cell_20 = headerRow.createCell(columnIndex);
-                        cell_20.setCellValue("დახარვეზებულები");
+                        cell_20.setCellValue("ბაზაში შესვლის GPS დროს და დამოწმებული დროს შორის სხვაობა");
                         cell_20.setCellStyle(headerStyleVertical);
                         break;
-                  
+                    case 21:
+                        Cell cell_21 = headerRow.createCell(columnIndex);
+                        cell_21.setCellValue("დახარვეზებულები");
+                        cell_21.setCellStyle(headerStyleVertical);
+                        break;
+
                 }
                 columnIndex++;
             }
@@ -4748,7 +4756,7 @@ public class ExcelWriter {
                             }
 
                             Cell cell_1 = row.createCell(1);
-                            cell_1.setCellValue(dayEntry.getValue().getDateStamp());
+                            cell_1.setCellValue(baseReturn.getBaseNumber());
                             if (dayIndex % 2 == 0) {
                                 cell_1.setCellStyle(rowStyleWhiteRegular);
                             } else {
@@ -4756,7 +4764,7 @@ public class ExcelWriter {
                             }
 
                             Cell cell_2 = row.createCell(2);
-                            cell_2.setCellValue(exodusEntry.getValue().getNumber());
+                            cell_2.setCellValue(dayEntry.getValue().getDateStamp());
                             if (dayIndex % 2 == 0) {
                                 cell_2.setCellStyle(rowStyleWhiteRegular);
                             } else {
@@ -4764,9 +4772,7 @@ public class ExcelWriter {
                             }
 
                             Cell cell_3 = row.createCell(3);
-                            if(baseReturn.getDriverNumber()==null){
-                                System.out.println("DRIVER NUMBER NOT PRESENT AT ROUTE NUMBER:"+routeEntry.getValue().getNumber());}
-                            cell_3.setCellValue(baseReturn.getDriverNumber());
+                            cell_3.setCellValue(exodusEntry.getValue().getNumber());
                             if (dayIndex % 2 == 0) {
                                 cell_3.setCellStyle(rowStyleWhiteRegular);
                             } else {
@@ -4774,7 +4780,10 @@ public class ExcelWriter {
                             }
 
                             Cell cell_4 = row.createCell(4);
-                            cell_4.setCellValue(baseReturn.getDriverName());
+                            if (baseReturn.getDriverNumber() == null) {
+                                System.out.println("DRIVER NUMBER NOT PRESENT AT ROUTE NUMBER:" + routeEntry.getValue().getNumber());
+                            }
+                            cell_4.setCellValue(baseReturn.getDriverNumber());
                             if (dayIndex % 2 == 0) {
                                 cell_4.setCellStyle(rowStyleWhiteRegular);
                             } else {
@@ -4782,15 +4791,15 @@ public class ExcelWriter {
                             }
 
                             Cell cell_5 = row.createCell(5);
-                            cell_5.setCellValue(baseReturn.getLastHaltTimeScheduledString());
+                            cell_5.setCellValue(baseReturn.getDriverName());
                             if (dayIndex % 2 == 0) {
-                                cell_5.setCellStyle(rowStyleWhiteTimeHHmmss);
+                                cell_5.setCellStyle(rowStyleWhiteRegular);
                             } else {
-                                cell_5.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
+                                cell_5.setCellStyle(rowStyleWhiteRegularLightOn);
                             }
 
                             Cell cell_6 = row.createCell(6);
-                            cell_6.setCellValue(baseReturn.getLastHaltTimeActualString());
+                            cell_6.setCellValue(baseReturn.getLastHaltTimeScheduledString());
                             if (dayIndex % 2 == 0) {
                                 cell_6.setCellStyle(rowStyleWhiteTimeHHmmss);
                             } else {
@@ -4798,26 +4807,26 @@ public class ExcelWriter {
                             }
 
                             Cell cell_7 = row.createCell(7);
-                            cell_7.setCellValue(baseReturn.getLastHaltTimeDifferenceString());
+                            cell_7.setCellValue(baseReturn.getLastHaltTimeActualString());
                             if (dayIndex % 2 == 0) {
                                 cell_7.setCellStyle(rowStyleWhiteTimeHHmmss);
                             } else {
                                 cell_7.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                             }
-                            if (baseReturn.getLastHaltTimeDifferenceColor().equals("red")) {
-                                cell_7.setCellStyle(rowStyleRedTimeHHmmss);
-                            }
 
                             Cell cell_8 = row.createCell(8);
-                            cell_8.setCellValue(baseReturn.getBaseReturnTripStartTimeScheduledString());
+                            cell_8.setCellValue(baseReturn.getLastHaltTimeDifferenceString());
                             if (dayIndex % 2 == 0) {
                                 cell_8.setCellStyle(rowStyleWhiteTimeHHmmss);
                             } else {
                                 cell_8.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                             }
+                            if (baseReturn.getLastHaltTimeDifferenceColor().equals("red")) {
+                                cell_8.setCellStyle(rowStyleRedTimeHHmmss);
+                            }
 
                             Cell cell_9 = row.createCell(9);
-                            cell_9.setCellValue(baseReturn.getBaseReturnTripArrivalTimeScheduledString());
+                            cell_9.setCellValue(baseReturn.getBaseReturnTripStartTimeScheduledString());
                             if (dayIndex % 2 == 0) {
                                 cell_9.setCellStyle(rowStyleWhiteTimeHHmmss);
                             } else {
@@ -4825,7 +4834,7 @@ public class ExcelWriter {
                             }
 
                             Cell cell_10 = row.createCell(10);
-                            cell_10.setCellValue(baseReturn.getBaseReturnTripTimeScheduledString());
+                            cell_10.setCellValue(baseReturn.getBaseReturnTripArrivalTimeScheduledString());
                             if (dayIndex % 2 == 0) {
                                 cell_10.setCellStyle(rowStyleWhiteTimeHHmmss);
                             } else {
@@ -4833,7 +4842,7 @@ public class ExcelWriter {
                             }
 
                             Cell cell_11 = row.createCell(11);
-                            cell_11.setCellValue(baseReturn.getBaseReturnTripStartTimeGPSString());
+                            cell_11.setCellValue(baseReturn.getBaseReturnTripTimeScheduledString());
                             if (dayIndex % 2 == 0) {
                                 cell_11.setCellStyle(rowStyleWhiteTimeHHmmss);
                             } else {
@@ -4841,7 +4850,7 @@ public class ExcelWriter {
                             }
 
                             Cell cell_12 = row.createCell(12);
-                            cell_12.setCellValue(baseReturn.getBaseReturnTripArrivalTimeGPSString());
+                            cell_12.setCellValue(baseReturn.getBaseReturnTripStartTimeGPSString());
                             if (dayIndex % 2 == 0) {
                                 cell_12.setCellStyle(rowStyleWhiteTimeHHmmss);
                             } else {
@@ -4849,7 +4858,7 @@ public class ExcelWriter {
                             }
 
                             Cell cell_13 = row.createCell(13);
-                            cell_13.setCellValue(baseReturn.getBaseReturnTripArrivalTimeFakeGPSString());
+                            cell_13.setCellValue(baseReturn.getBaseReturnTripArrivalTimeGPSString());
                             if (dayIndex % 2 == 0) {
                                 cell_13.setCellStyle(rowStyleWhiteTimeHHmmss);
                             } else {
@@ -4857,7 +4866,7 @@ public class ExcelWriter {
                             }
 
                             Cell cell_14 = row.createCell(14);
-                            cell_14.setCellValue(baseReturn.getBaseReturnTripTimeGPSString());
+                            cell_14.setCellValue(baseReturn.getBaseReturnTripArrivalTimeFakeGPSString());
                             if (dayIndex % 2 == 0) {
                                 cell_14.setCellStyle(rowStyleWhiteTimeHHmmss);
                             } else {
@@ -4865,26 +4874,26 @@ public class ExcelWriter {
                             }
 
                             Cell cell_15 = row.createCell(15);
-                            cell_15.setCellValue(baseReturn.getBaseReturTripTimeDifferenceString());
+                            cell_15.setCellValue(baseReturn.getBaseReturnTripTimeGPSString());
                             if (dayIndex % 2 == 0) {
                                 cell_15.setCellStyle(rowStyleWhiteTimeHHmmss);
                             } else {
                                 cell_15.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                             }
-                            if (baseReturn.getBaseReturTripTimeDifferenceColor().equals("red")) {
-                                cell_15.setCellStyle(rowStyleRedTimeHHmmss);
-                            }
 
                             Cell cell_16 = row.createCell(16);
-                            cell_16.setCellValue(baseReturn.getBaseReturnTimeScheduledString());
+                            cell_16.setCellValue(baseReturn.getBaseReturTripTimeDifferenceString());
                             if (dayIndex % 2 == 0) {
                                 cell_16.setCellStyle(rowStyleWhiteTimeHHmmss);
                             } else {
                                 cell_16.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                             }
+                            if (baseReturn.getBaseReturTripTimeDifferenceColor().equals("red")) {
+                                cell_16.setCellStyle(rowStyleRedTimeHHmmss);
+                            }
 
                             Cell cell_17 = row.createCell(17);
-                            cell_17.setCellValue(baseReturn.getBaseReturnTimeConfirmedString());
+                            cell_17.setCellValue(baseReturn.getBaseReturnTimeScheduledString());
                             if (dayIndex % 2 == 0) {
                                 cell_17.setCellStyle(rowStyleWhiteTimeHHmmss);
                             } else {
@@ -4892,7 +4901,7 @@ public class ExcelWriter {
                             }
 
                             Cell cell_18 = row.createCell(18);
-                            cell_18.setCellValue(baseReturn.getBaseReturnTimeDifferenceString());
+                            cell_18.setCellValue(baseReturn.getBaseReturnTimeConfirmedString());
                             if (dayIndex % 2 == 0) {
                                 cell_18.setCellStyle(rowStyleWhiteTimeHHmmss);
                             } else {
@@ -4900,26 +4909,34 @@ public class ExcelWriter {
                             }
 
                             Cell cell_19 = row.createCell(19);
-                            cell_19.setCellValue(baseReturn.getBaseReturGPSAndConfirmedTimeDifferenceString());
+                            cell_19.setCellValue(baseReturn.getBaseReturnTimeDifferenceString());
                             if (dayIndex % 2 == 0) {
                                 cell_19.setCellStyle(rowStyleWhiteTimeHHmmss);
                             } else {
                                 cell_19.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
                             }
-                            if (baseReturn.getBaseReturGPSAndConfirmedTimeDifferenceColor().equals("red")) {
-                                cell_19.setCellStyle(rowStyleRedTimeHHmmss);
-                            }
 
                             Cell cell_20 = row.createCell(20);
-                            cell_20.setCellValue("-");
+                            cell_20.setCellValue(baseReturn.getBaseReturGPSAndConfirmedTimeDifferenceString());
                             if (dayIndex % 2 == 0) {
-                                cell_20.setCellStyle(rowStyleWhiteRegular);
+                                cell_20.setCellStyle(rowStyleWhiteTimeHHmmss);
                             } else {
-                                cell_20.setCellStyle(rowStyleWhiteRegular);
+                                cell_20.setCellStyle(rowStyleWhiteTimeHHmmssLightOn);
+                            }
+                            if (baseReturn.getBaseReturGPSAndConfirmedTimeDifferenceColor().equals("red")) {
+                                cell_20.setCellStyle(rowStyleRedTimeHHmmss);
+                            }
+
+                            Cell cell_21 = row.createCell(21);
+                            cell_21.setCellValue("-");
+                            if (dayIndex % 2 == 0) {
+                                cell_21.setCellStyle(rowStyleWhiteRegular);
+                            } else {
+                                cell_21.setCellStyle(rowStyleWhiteRegular);
                             }
                             if (baseReturn.getMisconduct().equals("red")) {
 
-                                cell_20.setCellStyle(rowStyleRedNumber);
+                                cell_21.setCellStyle(rowStyleRedNumber);
                             }
 
                             rowIndex++;

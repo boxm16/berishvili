@@ -34,13 +34,12 @@ public class BaseReturnsDao {
         converter = new Converter();
     }
 
-    
     public TreeMap<Float, DetailedRoute> getBaseReturnRoute(DetailedRoutesPager baseRerturnsPager) {
         //this function is the same as in detailedROuteDao, 'getDetailedRoutes' , just some little changes, , may be this will be the way this method will look in V_3.0
         TreeMap<Float, DetailedRoute> detailedRoutes = new TreeMap<>();
 
         StringBuilder query = new StringBuilder();
-        StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT route_number, exodus_number, date_stamp, t2.number, driver_number, driver_name, notes, type, start_time_scheduled, start_time_actual,start_time_difference, arrival_time_scheduled, arrival_time_actual, arrival_time_difference, base_leaving_time_scheduled, base_leaving_time_actual, base_leaving_time_redacted, base_return_time_scheduled, base_return_time_actual, base_return_time_redacted FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number =");
+        StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT route_number, base_number, exodus_number, date_stamp, t2.number, driver_number, driver_name, notes, type, start_time_scheduled, start_time_actual,start_time_difference, arrival_time_scheduled, arrival_time_actual, arrival_time_difference, base_leaving_time_scheduled, base_leaving_time_actual, base_leaving_time_redacted, base_return_time_scheduled, base_return_time_actual, base_return_time_redacted FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number =");
         StringBuilder queryBuilderDateStampPart = buildStringFromArrayList(baseRerturnsPager.getDateStamps());
 
         query = queryBuilderInitialPart.append("'" + baseRerturnsPager.getCurrentRoute() + "'").
@@ -86,6 +85,7 @@ public class BaseReturnsDao {
                     newTripVoucher.setDriverNumber(resultSet.getString("driver_number"));
                     newTripVoucher.setDriverName(resultSet.getString("driver_name"));
                     newTripVoucher.setNotes(resultSet.getString("notes"));
+                    newTripVoucher.setBaseNumber(resultSet.getShort("base_number"));
 
                     newTripVoucher.setBaseLeavingTimeScheduled(converter.convertStringTimeToDate(resultSet.getString("base_leaving_time_scheduled")));
                     newTripVoucher.setBaseLeavingTimeActual(converter.convertStringTimeToDate(resultSet.getString("base_leaving_time_actual")));
@@ -123,14 +123,13 @@ public class BaseReturnsDao {
         }
         return detailedRoutes;
     }
-    
-    
+
     public TreeMap<Float, DetailedRoute> getBaseReturnData(DetailedRoutesPager baseRerturnsPager) {
         //this function is the same as in detailedROuteDao, 'getDetailedRoutes' , just some little changes, , may be this will be the way this method will look in V_3.0
         TreeMap<Float, DetailedRoute> detailedRoutes = new TreeMap<>();
 
         StringBuilder query = new StringBuilder();
-        StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT route_number, exodus_number, date_stamp, t2.number, driver_number, driver_name, notes, type, start_time_scheduled, start_time_actual,start_time_difference, arrival_time_scheduled, arrival_time_actual, arrival_time_difference, base_leaving_time_scheduled, base_leaving_time_actual, base_leaving_time_redacted, base_return_time_scheduled, base_return_time_actual, base_return_time_redacted FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number IN ");
+        StringBuilder queryBuilderInitialPart = new StringBuilder("SELECT route_number,base_number, exodus_number, date_stamp, t2.number, driver_number, driver_name, notes, type, start_time_scheduled, start_time_actual,start_time_difference, arrival_time_scheduled, arrival_time_actual, arrival_time_difference, base_leaving_time_scheduled, base_leaving_time_actual, base_leaving_time_redacted, base_return_time_scheduled, base_return_time_actual, base_return_time_redacted FROM route t1 INNER JOIN trip_voucher t2 ON t1.number=t2.route_number INNER JOIN trip_period t3 ON t2.number=t3.trip_voucher_number WHERE route_number IN ");
 
         StringBuilder queryBuilderRouteNumberPart = buildStringFromArrayList(baseRerturnsPager.getRouteNumbers());
         StringBuilder queryBuilderDateStampPart = buildStringFromArrayList(baseRerturnsPager.getDateStamps());
@@ -178,6 +177,7 @@ public class BaseReturnsDao {
                     newTripVoucher.setDriverNumber(resultSet.getString("driver_number"));
                     newTripVoucher.setDriverName(resultSet.getString("driver_name"));
                     newTripVoucher.setNotes(resultSet.getString("notes"));
+                    newTripVoucher.setBaseNumber(resultSet.getShort("base_number"));
 
                     newTripVoucher.setBaseLeavingTimeScheduled(converter.convertStringTimeToDate(resultSet.getString("base_leaving_time_scheduled")));
                     newTripVoucher.setBaseLeavingTimeActual(converter.convertStringTimeToDate(resultSet.getString("base_leaving_time_actual")));

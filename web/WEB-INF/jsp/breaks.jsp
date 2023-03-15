@@ -59,6 +59,7 @@
     </head>
     <body>
         <h4>ვერსიების მთლიანი რაოდენობა:${breaksPager.getVersionsCount()}</h4>
+        <h1 style="background-color:red">${message}</h1>
     <center>  ${breaksPager.display}</center>
 
     <div id="tooltip" display="none" style="position: absolute; display: none;"></div>

@@ -18,6 +18,8 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
     private String runOver;
     private boolean spacialCase;
     private LocalDateTime fakeStartTimeActual;
+    
+    
 
     public IntervalTripPeriod() {
         runOver = "";
@@ -103,6 +105,8 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
                 misconduct = "+";
                 misconductDuration = converter.convertDurationToString(lostTimeDuration);
                 misconductDurationDuration = lostTimeDuration;
+               
+                  
             } else {
                 misconduct = "";
             }
@@ -200,6 +204,8 @@ public class IntervalTripPeriod extends DetailedTripPeriod {
 
     public void setFakeStartTimeActual(LocalDateTime fakeStartTimeActual) {
         this.fakeStartTimeActual = fakeStartTimeActual;
+        
+       
     }
 
 }

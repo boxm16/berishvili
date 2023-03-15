@@ -9,6 +9,8 @@ public class BasementController {
         // String rootDirectory = new File("").getAbsolutePath();
         if (getApplicationHostName().equals("LAPTOP")) {
             return "C:\\Users\\Michail Sitmalidis\\berishvili";
+        } else if (getApplicationHostName().equals("DESKTOP-O61QDDT")) {
+            return "D:\\berishvili";
         } else {
             return "/home/admin/basement";
         }

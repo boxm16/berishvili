@@ -103,4 +103,16 @@ public class MisconductTripPeriod extends IntervalTripPeriod {
         this.previousBusStartTimeActual = previousBusStartTimeActual;
     }
 
+    //-----------------------------------
+    public LocalDateTime getShouldStartTime() {
+        LocalDateTime shouldStartTime = this.getPreviousBusStartTimeActual().plus(this.getScheduledInterval());
+        return shouldStartTime;
+    }
+
+    public LocalDateTime getCouldStartTime() {
+        LocalDateTime couldStartTime = this.getArrivalTimeActual().plus(this.getHaltTimeScheduled());
+        return couldStartTime;
+    }
+
+    
 }

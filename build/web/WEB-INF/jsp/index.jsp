@@ -333,7 +333,7 @@
             </div>
             <nav id="sidebar">
                 <div class="sidebar-header" style="background-color: coral">
-                    <h3> <a href="http://berishvili.eu5.org">ძველ სერვერზე გადასვლა</a> </h3>
+                    <h3> <a href="http://ec2-54-74-154-166.eu-west-1.compute.amazonaws.com:8080/berishvili_3.0/index.htm">მე-3 ვერსიაზე გადასვლა</a> </h3>
                 </div>
                 <div class="sidebar-header">
                     <!--- <h3>ფუნქციები</h3> ---->

@@ -214,24 +214,45 @@ public class GraphicalController {
         routeData.setBreakStayPoint(breakStayPoint);
 
         ArrayList<ArrayList<Integer>> findBreaksPossiblePoints = findBreaksPossiblePoints(choosedRoute, routeData);
+        System.out.println("ALL BREAKS POSSIBLE POINTS:" + findBreaksPossiblePoints);
+        System.out.println("-------------------------------------------------");
+        //  System.out.println("-------" + findBreaksPossiblePoints.size());
 
         TwoDimArrayCombinations twoDimArrayCombinator = new TwoDimArrayCombinations();
         List<ArrayList> breakSequences = twoDimArrayCombinator.getIntegerCombinations(findBreaksPossiblePoints);
-        MemoryUsage mu = new MemoryUsage();
+        //MemoryUsage mu = new MemoryUsage();
+        if (breakSequences == null) {
+             model.addAttribute("message", "მოცემული მონაცემების გამოთვლა გამოიწვევს სისტემის გადატვირთვას. გამოთვლა გაუქმებულია.");
+             return "breaks";
+        }
+        // mu.printMemoryUsage();
+        int indx = 0;
         for (ArrayList breakSequence : breakSequences) {
             Route routeWithBreakVersion = createRouteWithBreaks(ignitionSequence, routeData, breakSequence);
+
             if (routeWithBreakVersion != null) {
                 routeBreakVersions.add(routeWithBreakVersion);
             }
+            if (indx % 1000 == 0) {
+                System.out.println("INDEX:" + indx + " SIZE:" + routeBreakVersions.size());
+
+                //   mu.printMemoryUsage();
+            }
+
+            indx++;
         }
 
         System.out.println("All Possible Breaks Versions Count:" + breakSequences.size());
         System.out.println("All Clear Breaks Versions Count:" + routeBreakVersions.size());
 
+        breakSequences.clear();
+        System.out.println("AFTER Emptying arraList with breakSequences with clear() method:" + breakSequences.size());
+
         BreaksPager breaksPager = new BreaksPager(routeBreakVersions, 50);
         breaksPager.setCurrentPage(1);
         model.addAttribute("breaksPager", breaksPager);
         session.setAttribute("breaksPager", breaksPager);
+
         return "breaks";
     }
 

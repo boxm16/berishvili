@@ -223,6 +223,12 @@
                             <th>დარღვევა</th>
                             <th>შესადავებელი<br>დრო</th>
                             <th>runOver</th>
+
+                            <th>Should GO Time</th>
+                            <th>Could GO Time</th>
+                            <th>LOST Time</th>
+                            <th>Misconduct Period</th>
+                            <th>Misconduct Duration</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -246,6 +252,11 @@
                                 <td align="center"><a href="interval.htm?routeNumber=${tripPeriod.routeNumber}&dateStamp=${tripPeriod.dateStamp}&tripPeriodType=${tripPeriod.type}&startTimeScheduled=${tripPeriod.startTimeScheduled}"  target="_blank">${tripPeriod.misconduct}</a></td>
                                 <td align="center">${tripPeriod.misconductDuration}</a></td>
                                 <td align="center"><a href="interval.htm?routeNumber=${tripPeriod.routeNumber}&dateStamp=${tripPeriod.dateStamp}&tripPeriodType=${tripPeriod.type}&startTimeScheduled=${tripPeriod.startTimeScheduled}"  target="_blank">${tripPeriod.runOver}</a> </td>
+
+
+                                <td align="center">${tripPeriod.getShoudStartTime()}</a></td>
+                                <td align="center">${tripPeriod.getCoudStartTime()}</a></td>
+                                <td align="center">${tripPeriod.getLostTime()}</a></td>
 
                             </tr>
                         </c:forEach>

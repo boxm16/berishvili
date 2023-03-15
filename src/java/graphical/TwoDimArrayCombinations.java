@@ -33,7 +33,8 @@ public class TwoDimArrayCombinations {
             sizeArray[i] = twoDimStringArray[i].length;
             totalCombinationCount *= twoDimStringArray[i].length;
         }
-
+        System.out.println("TOTAL COMBINATIONS COUNT: " + totalCombinationCount);
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
         // Store the combinations in a List of String objects
         List<String> combinationList = new ArrayList<String>(totalCombinationCount);
 
@@ -85,7 +86,14 @@ public class TwoDimArrayCombinations {
             sizeArray[i] = twoDimIntArray.get(i).size();
             totalCombinationCount *= twoDimIntArray.get(i).size();
         }
-
+        if (totalCombinationCount > 4000000) {
+            System.out.println("TOTAL COMBINATIONS TOO MANY FOR COUNTING: " + totalCombinationCount);
+            System.out.println("------------------ABORTING----------------------");
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
+            return null;
+        }
+        System.out.println("TOTAL COMBINATIONS COUNT: " + totalCombinationCount);
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
         // Store the combinations in a List of ArrayList objects
         List<ArrayList> integerCombinationList = new ArrayList<ArrayList>(totalCombinationCount);
 
@@ -99,7 +107,13 @@ public class TwoDimArrayCombinations {
                 al.add(twoDimIntArray.get(i).get(counterArray[i]));
             }
             integerCombinationList.add(al);  // add new combination to list
+            if (integerCombinationList.size() % 10000 == 0) {
+                System.out.println("PERMUTATIONS INDEX:" + integerCombinationList.size());
 
+            }
+            if (integerCombinationList.size() > 15000000) {
+                return integerCombinationList;
+            }
             // Now we need to increment the counterArray so that the next
             // combination is taken on the next iteration of this loop.
             for (int incIndex = twoDimIntArray.size() - 1; incIndex >= 0; --incIndex) {

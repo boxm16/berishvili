@@ -66,7 +66,7 @@ public class TechController {
         System.out.println(bool);
         String status = "Uploads directory could not been created.";
         if (bool) {
-            status = "Uploads directroy has just been created";
+            status = "Uploads directory has just been created";
         }
         model.addAttribute("uploadsDirectoryExists", status);
         model.addAttribute("directoryPath", this.basementDirectory);

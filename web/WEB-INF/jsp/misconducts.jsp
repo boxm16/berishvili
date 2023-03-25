@@ -206,29 +206,30 @@
                         <tr>
                             <th>თარიღი</th>
                             <th>ავტობაზა</th>
-
                             <th>მარშრუ-<br>ტის #</th>
                             <th>გასვლის<br>#</th>
-
                             <th>ავტობუსის #</th>
-
                             <th>მძღოლის<br>ტაბელი</th>
                             <th>მძღოლი</th>
 
-                            <th>პუნქტში<br>მისვლის<br> დრო</th>
-                            <th>ხაზზე გასვლის<br>დრო გეგმიური</th>
-                            <th>ხაზზე გასვლის<br>დრო ფაქტიური</th>
-                            <th>წინა მანქანის<br>ხაზზე<br>გასვლის დრო</th>
-
                             <th>დარღვევა</th>
-                            <th>შესადავებელი<br>დრო</th>
-                            <th>runOver</th>
+                            <th>გადასწრება</th>
+                            <th>გეგმიური ინტერვალი</th>
+                            <th>ფაქტობრივი ინტერვალი</th>
+                            <th>პუნქტში მისვლის დრო</th>
+                            <th>ხაზზე გასვლის<br> დრო გეგმიური</th>
+                            <th>წინა მანქანის<br> ხაზზე <br>გასვლის დრო</th>
+                            <th>გასვლა ინტერვალით<br> წინა მანქანასთან <br>შეფარდებით</th>
+                            <th>ხაზზე შესაძლო გასვლა<br> დგომის გათვალისწინებით<br> (პუნქტში მისვლის დრო + <br>პუნქტში დგომის <br>გეგმიური დრო)</th>
+                            <th>ხაზზე გასვლის<br> დრო ფაქტიური</th>
+                            <th>პუნქტში ფაქტობრივი<br> დგომის დრო</th>
+                            <th>შესადავებელი დრო</th>
+                            <th>შესადავებელი დრო<br> ინტერვალთან</th>
+                            
 
-                            <th>Should GO Time</th>
-                            <th>Could GO Time</th>
-                            <th>LOST Time</th>
-                            <th>Misconduct Period</th>
-                            <th>Misconduct Duration</th>
+
+
+
                         </tr>
                     </thead>
                     <tbody>
@@ -244,19 +245,22 @@
                                 <td align="center">${tripPeriod.driverNumber} </td>
                                 <td align="center">${tripPeriod.driverName} </td>
 
-                                <td> ${tripPeriod.getPreviousTripPeriodArrvialTimeActualString()} </td>
-                                <td> ${tripPeriod.getStartTimeScheduledString()}</td>
-                                <td> ${tripPeriod.getStartTimeActualString()}</td>
-                                <td align="center">${tripPeriod.getPreviousBusStartTimeActualString()} </td>
 
                                 <td align="center"><a href="interval.htm?routeNumber=${tripPeriod.routeNumber}&dateStamp=${tripPeriod.dateStamp}&tripPeriodType=${tripPeriod.type}&startTimeScheduled=${tripPeriod.startTimeScheduled}"  target="_blank">${tripPeriod.misconduct}</a></td>
-                                <td align="center">${tripPeriod.misconductDuration}</a></td>
                                 <td align="center"><a href="interval.htm?routeNumber=${tripPeriod.routeNumber}&dateStamp=${tripPeriod.dateStamp}&tripPeriodType=${tripPeriod.type}&startTimeScheduled=${tripPeriod.startTimeScheduled}"  target="_blank">${tripPeriod.runOver}</a> </td>
+                                <td align="center">${tripPeriod.getScheduledIntervalString()} </td>
+                                <td align="center">${tripPeriod.getGpsIntervalString()} </td>
+                                <td> ${tripPeriod.getPreviousTripPeriodArrvialTimeActualString()} </td>
+                                <td> ${tripPeriod.getStartTimeScheduledString()}</td>
+                                <td align="center">${tripPeriod.getPreviousBusStartTimeActualString()} </td>
+                                <td align="center">${tripPeriod.getShouldStartTimeString()}</td>
+                                <td align="center">${tripPeriod.getCouldStartTimeString()}</td>
+                                <td> ${tripPeriod.getStartTimeActualString()}</td>
+                                <td> ${tripPeriod.getHaltTimeActualString()}</td>
+                                <td> ${tripPeriod.getLostTimeString()}</td>
+                               
+                                <td align="center">${tripPeriod.getMisconductTimeDurationString()}</td>
 
-
-                                <td align="center">${tripPeriod.getShoudStartTime()}</a></td>
-                                <td align="center">${tripPeriod.getCoudStartTime()}</a></td>
-                                <td align="center">${tripPeriod.getLostTime()}</a></td>
 
                             </tr>
                         </c:forEach>

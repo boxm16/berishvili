@@ -1,5 +1,6 @@
 package Model;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -105,14 +106,62 @@ public class MisconductTripPeriod extends IntervalTripPeriod {
 
     //-----------------------------------
     public LocalDateTime getShouldStartTime() {
+        if (this.getPreviousBusStartTimeActual() == null) {
+            System.out.println("PREVIOUS NULL"+this.getRouteNumber() + ":" + this.getDateStamp() + ":" + super.getStartTimeScheduledString());
+            return null;
+        }
+        if (this.getScheduledInterval() == null) {
+            System.out.println("THIS NULL"+this.getRouteNumber() + ":" + this.getDateStamp() + ":" + super.getStartTimeScheduledString());
+            return null;
+        }
         LocalDateTime shouldStartTime = this.getPreviousBusStartTimeActual().plus(this.getScheduledInterval());
         return shouldStartTime;
     }
 
-    public LocalDateTime getCouldStartTime() {
-        LocalDateTime couldStartTime = this.getArrivalTimeActual().plus(this.getHaltTimeScheduled());
-        return couldStartTime;
+    public String getShouldStartTimeString() {
+
+        if (getShouldStartTime() == null) {
+            return "";
+
+        }
+        return getShouldStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
 
-    
+    public LocalDateTime getCouldStartTime() {
+        if (getPreviousTripPeriodArrvialTimeActual() != null) {
+            return this.getPreviousTripPeriodArrvialTimeActual().plus(this.getHaltTimeScheduled());
+        } else {
+            return null;
+        }
+    }
+
+    public String getCouldStartTimeString() {
+
+        if (getCouldStartTime() == null) {
+            return "";
+
+        }
+        return getCouldStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
+
+    public String getMisconductTimeDurationString() {
+        LocalDateTime startTimeActual = this.getStartTimeActual();
+        LocalDateTime couldStartTime = this.getCouldStartTime();
+        LocalDateTime shouldStartTime = this.getShouldStartTime();
+        if (startTimeActual != null && couldStartTime != null && shouldStartTime != null) {
+            if (super.getStartTimeScheduled().isAfter(couldStartTime)) {
+                couldStartTime = super.getStartTimeScheduled();
+            }
+
+            if (shouldStartTime.isAfter(couldStartTime)) {
+
+                return converter.convertDurationToString(Duration.between(shouldStartTime, startTimeActual));
+
+            }
+            return converter.convertDurationToString(Duration.between(couldStartTime, startTimeActual));
+        } else {
+            return "";
+        }
+    }
+
 }

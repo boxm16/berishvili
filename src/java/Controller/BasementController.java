@@ -11,6 +11,9 @@ public class BasementController {
             return "C:\\Users\\Michail Sitmalidis\\berishvili";
         } else if (getApplicationHostName().equals("DESKTOP-O61QDDT")) {
             return "D:\\berishvili";
+        } 
+        else if (getApplicationHostName().equals("amazon-server")) {
+            return "C:\\berishvili";
         } else {
             return "/home/admin/basement";
         }

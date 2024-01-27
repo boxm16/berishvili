@@ -334,7 +334,7 @@
             <nav id="sidebar">
                 <div class="sidebar-header" style="background-color: coral">
                     <h3> 
-                        <a href="http://ec2-13-50-236-239.eu-north-1.compute.amazonaws.com:8080/berishvili_3.0/index.htm">მე-3 ვერსიაზე გადასვლა</a>
+                        <a href="http://ec2-34-247-136-97.eu-west-1.compute.amazonaws.com:8080/berishvili_3.0/index.htm">მე-3 ვერსიაზე გადასვლა</a>
 
                     </h3>
                
